@@ -211,7 +211,7 @@
       <param name="sc" value="false" />
       <param name="careful" value="false" />
       <param name="kmers" value="33,55" />
-      <param name="type" value="pairedend" />
+      <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
       <output name="out_contigs" file="reference_1K.fa" ftype="fasta" compare="re_match" lines_diff="1" />
