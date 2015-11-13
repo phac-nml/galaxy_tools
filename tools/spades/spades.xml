@@ -224,10 +224,6 @@ SPAdes – St. Petersburg genome assembler – is intended for both standard iso
 
 This wrapper runs SPAdes 3.6.1, collects the output, and throws away all the temporary files. It also produces a tab file with contig names, length and coverage. 
 
-**SPAdes citation**
-
-Anton Bankevich, Sergey Nurk, Dmitry Antipov, Alexey A. Gurevich, Mikhail Dvorkin, Alexander S. Kulikov, Valery M. Lesin, Sergey I. Nikolenko, Son Pham, Andrey D. Prjibelski, Alexey V. Pyshkin, Alexander V. Sirotkin, Nikolay Vyahhi, Glenn Tesler, Max A. Alekseyev, and Pavel A. Pevzner. Journal of Computational Biology. May 2012, 19(5): 455-477. doi:10.1089/cmb.2012.0021. 
-  
 **License**
 
 SPAdes is developed by and copyrighted to Saint-Petersburg Academic University, and is released under GPLv2.
@@ -246,4 +242,7 @@ Anton Korobeynikov greatlty helped understanding how SPAdes work, and integrated
 
 Nicola Soranzo fixed various bugs.
   </help>
+    <citations>
+        <citation type="doi">10.1089/cmb.2012.0021</citation>
+    </citations>
 </tool>
