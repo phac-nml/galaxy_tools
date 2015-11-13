@@ -1,0 +1,40 @@
+1.1
+===
+ - Supports SPades 3.6.1
+
+1.0
+===
+- Supports SPAdes 3.5.0
+- New MismatchCorrector module.
+- Support for Oxford Nanopore long reads.
+- Support for Lucigen NxMate mate-pair libraries.
+- Possibility to specify coverage cutoff: automatic and manual.
+- CHANGE: Better running time.
+- CHANGE: Improved RAM consumption.
+- CHANGE: High-quality mate-pairs are now assumed to have forward-revers orientation (same as paired-end).
+
+FIX: Fixed FASTG format.
+0.9
+===
+- Supports SPAdes 3.1.1
+- Supports Mate-pair only assembly with high-quality libraries
+- Added support for List Paired Collection for files in a library.
+- Renaming of contig names in scaffolds and contig files if List Paired Collection given
+
+0.7
+===
+(thanks to Nicola Soranzo for fixing these bugs)
+- spades.pl doesn't die when NODE number is 0
+- removed the --rectangles option (will be deprecated in SPAdes 2.6), because it uses a different seqid format
+- switched the --threads parameter to $GALAXY_SLOTS
+- a few minor improvements
+
+0.6
+===
+- Supports SPAdes 2.5.1
+- Disables gzipped output for corrected reads
+- Removes the hack that was necessary to accept .dat files (thanks to SPAdes
+  new input format
+- Adds licensing information
+
+(started at version 0.6)

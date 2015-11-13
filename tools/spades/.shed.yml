@@ -1,0 +1,4 @@
+categories: [Assembly]
+description: Genome assembler for regular and single-cell projects
+name: spades
+owner: nml
