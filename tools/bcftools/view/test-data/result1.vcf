@@ -1,0 +1,60 @@
+##fileformat=VCFv4.1
+##FILTER=<ID=PASS,Description="All filters passed">
+##contig=<ID=gi|360034408|ref|NC_016445.1|_2000000_2400000,length=400001>
+##fileDate=20150323
+##source=freeBayes version 0.9.8
+##reference=/home/phil/cholera-files-subsample/test/reference/3554-08.2010EL-1786-c1_2000_2400kb.fasta
+##phasing=none
+##commandline="/share/apps/freebayes/bin/freebayes --bam /home/phil/cholera-files-subsample/test/bam/3554-08.bam --vcf /home/phil/cholera-files-subsample/test/vcf/3554-08.vcf --fasta-reference /home/phil/cholera-files-subsample/test/reference/3554-08.2010EL-1786-c1_2000_2400kb.fasta --min-coverage 15 --pvar 0 --ploidy 1 --left-align-indels --min-mapping-quality 30 --min-base-quality 30 --min-alternate-fraction 0.75"
+##INFO=<ID=NS,Number=1,Type=Integer,Description="Number of samples with data">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Total read depth at the locus">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Total number of alternate alleles in called genotypes">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1]">
+##INFO=<ID=RO,Number=1,Type=Integer,Description="Reference allele observations">
+##INFO=<ID=AO,Number=A,Type=Integer,Description="Alternate allele observations">
+##INFO=<ID=SRP,Number=1,Type=Float,Description="Strand balance probability for the reference allele: Phred-scaled upper-bounds estimate of the probability of observing the deviation between SRF and SRR given E(SRF/SRR) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=SAP,Number=A,Type=Float,Description="Strand balance probability for the alternate allele: Phred-scaled upper-bounds estimate of the probability of observing the deviation between SAF and SAR given E(SAF/SAR) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=AB,Number=A,Type=Float,Description="Allele balance at heterozygous sites: a number between 0 and 1 representing the ratio of reads showing the reference allele to all reads, considering only reads from individuals called as heterozygous">
+##INFO=<ID=ABP,Number=A,Type=Float,Description="Allele balance probability at heterozygous sites: Phred-scaled upper-bounds estimate of the probability of observing the deviation between ABR and ABA given E(ABR/ABA) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=RUN,Number=A,Type=Integer,Description="Run length: the number of consecutive repeats of the alternate allele in the reference genome">
+##INFO=<ID=RPP,Number=A,Type=Float,Description="Read Placement Probability: Phred-scaled upper-bounds estimate of the probability of observing the deviation between RPL and RPR given E(RPL/RPR) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=RPPR,Number=1,Type=Float,Description="Read Placement Probability for reference observations: Phred-scaled upper-bounds estimate of the probability of observing the deviation between RPL and RPR given E(RPL/RPR) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=EPP,Number=A,Type=Float,Description="End Placement Probability: Phred-scaled upper-bounds estimate of the probability of observing the deviation between EL and ER given E(EL/ER) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=EPPR,Number=1,Type=Float,Description="End Placement Probability for reference observations: Phred-scaled upper-bounds estimate of the probability of observing the deviation between EL and ER given E(EL/ER) ~ 0.5, derived using Hoeffding's inequality">
+##INFO=<ID=DPRA,Number=A,Type=Float,Description="Alternate allele depth ratio.  Ratio between depth in samples with each called alternate allele and those without.">
+##INFO=<ID=XRM,Number=1,Type=Float,Description="Reference allele read mismatch rate: The rate of SNPs + MNPs + INDELs in reads supporting the reference allele.">
+##INFO=<ID=XRS,Number=1,Type=Float,Description="Reference allele read SNP rate: The rate of per-base mismatches (SNPs + MNPs) in reads supporting the reference allele.">
+##INFO=<ID=XRI,Number=1,Type=Float,Description="Reference allele read INDEL rate: The rate of INDELs (gaps) in reads supporting the reference allele.">
+##INFO=<ID=XAM,Number=A,Type=Float,Description="Alternate allele read mismatch rate: The rate of SNPs + MNPs + INDELs in reads supporting the alternate allele, excluding the called variant.">
+##INFO=<ID=XAS,Number=A,Type=Float,Description="Alternate allele read SNP rate: The rate of per-base mismatches (SNPs + MNPs) in reads supporting the alternate allele, excluding the called variant.">
+##INFO=<ID=XAI,Number=A,Type=Float,Description="Alternate allele read INDEL rate: The rate of INDELs (gaps) in reads supporting the alternate allele, excluding the called variant.">
+##INFO=<ID=ODDS,Number=1,Type=Float,Description="The log odds ratio of the best genotype combination to the second-best.">
+##INFO=<ID=BVAR,Number=0,Type=Flag,Description="The best genotype combination in the posterior is variant (non homozygous).">
+##INFO=<ID=CpG,Number=0,Type=Flag,Description="CpG site (either CpG, TpG or CpA)">
+##INFO=<ID=TYPE,Number=A,Type=String,Description="The type of allele, either snp, mnp, ins, del, or complex.">
+##INFO=<ID=CIGAR,Number=A,Type=String,Description="The extended CIGAR representation of each alternate allele, with the exception that '=' is replaced by 'M' to ease VCF parsing.  Note that INDEL alleles do not have the first matched base (which is provided by default, per the spec) referred to by the CIGAR.">
+##INFO=<ID=NUMALT,Number=1,Type=Integer,Description="Number of unique non-reference alleles in called genotypes at this position.">
+##INFO=<ID=MEANALT,Number=A,Type=Float,Description="Mean number of unique non-reference allele observations per sample with the corresponding alternate alleles.">
+##INFO=<ID=HWE,Number=1,Type=Float,Description="Phred-scaled discrete HWE prior probability of the genotyping across all samples.">
+##INFO=<ID=LEN,Number=A,Type=Integer,Description="allele length">
+##INFO=<ID=MQM,Number=A,Type=Float,Description="Mean mapping quality of observed alternate alleles">
+##INFO=<ID=MQMR,Number=1,Type=Float,Description="Mean mapping quality of observed reference alleles">
+##INFO=<ID=PAIRED,Number=A,Type=Float,Description="Proportion of observed alternate alleles which are supported by properly paired read fragments">
+##INFO=<ID=PAIREDR,Number=1,Type=Float,Description="Proportion of observed reference alleles which are supported by properly paired read fragments">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GQ,Number=1,Type=Float,Description="Genotype Quality, the Phred-scaled marginal (or unconditional) probability of the called genotype">
+##FORMAT=<ID=GL,Number=G,Type=Float,Description="Genotype Likelihood, log10-scaled likelihoods of the data given the called genotype for each possible genotype generated from the reference and alternate alleles given the sample ploidy">
+##FORMAT=<ID=GLE,Number=1,Type=String,Description="Genotype Likelihood Explicit, same as GL, but with tags to indicate the specific genotype.  For instance, 0^-75.22|1^-223.42|0/0^-323.03|1/0^-99.29|1/1^-802.53 represents both haploid and diploid genotype likilehoods in a biallelic context">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">
+##FORMAT=<ID=RO,Number=1,Type=Integer,Description="Reference allele observation count">
+##FORMAT=<ID=QR,Number=1,Type=Integer,Description="Sum of quality of the reference observations">
+##FORMAT=<ID=AO,Number=A,Type=Integer,Description="Alternate allele observation count">
+##FORMAT=<ID=QA,Number=A,Type=Integer,Description="Sum of quality of the alternate observations">
+##bcftools_viewVersion=1.2+htslib-1.2.1
+##bcftools_viewCommand=view -O b -o /home/phil/cholera-files-subsample/test/vcf-split/3554-08.bcf.gz
+##bcftools_viewCommand=view input.bcf.gz
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	unknown
+gi|360034408|ref|NC_016445.1|_2000000_2400000	149638	.	T	C	4549.55	.	AB=0;ABP=0;AC=1;AF=1;AN=1;AO=83;CIGAR=1X;DP=84;DPRA=0;EPP=5.12945;EPPR=0;HWE=-0;LEN=1;MEANALT=2;MQM=54.1084;MQMR=0;NS=1;NUMALT=1;ODDS=1047.57;PAIRED=0;PAIREDR=0;RO=0;RPP=7.43173;RPPR=0;RUN=1;SAP=3.24576;SRP=0;TYPE=snp;XAI=0.00379215;XAM=0.0144638;XAS=0.0106717;XRI=0;XRM=0;XRS=0;BVAR	GT:GQ:DP:RO:QR:AO:QA:GL	1:50000:84:0:0:83:5052:-458.255,-3.3
+gi|360034408|ref|NC_016445.1|_2000000_2400000	151395	.	A	G	2231.3	.	AB=0;ABP=0;AC=1;AF=1;AN=1;AO=50;CIGAR=1X;DP=62;DPRA=0;EPP=3.70517;EPPR=3.87889;HWE=-0;LEN=1;MEANALT=3;MQM=54.06;MQMR=54;NS=1;NUMALT=1;ODDS=513.775;PAIRED=0;PAIREDR=0;RO=10;RPP=5.78978;RPPR=16.9077;RUN=1;SAP=7.35324;SRP=6.48466;TYPE=snp;XAI=0.00378432;XAM=0.0186315;XAS=0.0148472;XRI=0.00625034;XRM=0.0151692;XRS=0.00891891;BVAR	GT:GQ:DP:RO:QR:AO:QA:GL	1:50000:62:10:636:50:3115:-287.894,-64.7642
+gi|360034408|ref|NC_016445.1|_2000000_2400000	151608	.	A	G	2818.36	.	AB=0;ABP=0;AC=1;AF=1;AN=1;AO=65;CIGAR=1X;DP=83;DPRA=0;EPP=3.31097;EPPR=3.63072;HWE=-0;LEN=1;MEANALT=5;MQM=54.8308;MQMR=54.8571;NS=1;NUMALT=1;ODDS=648.95;PAIRED=0;PAIREDR=0;RO=14;RPP=4.64726;RPPR=33.4109;RUN=1;SAP=23.8898;SRP=3.63072;TYPE=snp;XAI=0.00600565;XAM=0.0269139;XAS=0.0209083;XRI=0.00934969;XRM=0.017822;XRS=0.00847229;BVAR	GT:GQ:DP:RO:QR:AO:QA:GL	1:50000:83:14:850:65:3981:-371.848,-90.0122

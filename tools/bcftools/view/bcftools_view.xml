@@ -1,0 +1,311 @@
+<tool id="bcftools_view" name="bcftools_view" version="0.1.0">
+  <description>Convert VCF/BCF file formats</description>
+  <macros>
+    <import>macros.xml</import>
+  </macros>
+  <expand macro="requirements" />
+  <expand macro="stdio" />
+  <expand macro="version_command" />
+  <command>
+      
+           #if str($input.ext) == 'vcf':
+
+           cp $input input.vcf &amp;&amp; bgzip input.vcf &amp;&amp;
+           #set $input="input.vcf.gz"
+           
+           #elif str($input.ext) == 'vcf_bgzip':
+           
+           ln -s  $input input.vcf.gz  &amp;&amp;
+           #set $input="input.vcf.gz"
+           
+           #elif str($input.ext) == 'bcf':
+           
+           cp $input input.bcf &amp;&amp;
+           #set $input="input.bcf"
+           
+           #elif str($input.ext) == 'bcf_bgzip':
+           
+           ln -s  $input input.bcf.gz  &amp;&amp;
+           #set $input="input.bcf.gz"
+           
+           #end if
+
+           bcftools index $input &amp;&amp; 
+
+           bcftools view
+
+           -O ${output_format}
+                       
+
+        #if str($header_option) == 'header_only':
+         --header-only
+        #elif str($header_option) == 'no_header':
+        --no-header
+        #end if
+        
+ 	-o $output
+	$input
+        
+        #if str($region):
+         -r $region
+        #end if
+
+          
+        #if str($trim_alt_alleles) == "True" then "-a" else "" #
+        
+        #if str($sites_no_genotype) == "True":
+        "-u"
+        elif str($sites_no_genotype) == "False":
+        "-U" 
+        #end if
+        
+        #if $min_nref:
+        --min-ac "$min_nref"
+        #end if
+
+        #if $max_nref:
+        --max-ac "$max_nref"
+        #end if
+
+        #if $samples:
+        -s "$samples"
+        #end if
+
+       #if $include_types:
+       -v "$include_types"
+       #end if
+
+        #if $filters:
+        --apply-filters "$filters"
+        #end if
+
+
+       #if $select_sites:
+       #set $list = str($select_sites).split(',')
+       #for $i, $s in enumerate( $list )
+           #if str($s) == "known":
+          -k
+          #elif str($s) == "novel":
+          -n 
+          #end if
+        #end for
+       #end if
+
+       #if $private:
+       #set $list = str($private).split(',')
+       #for $i, $s in enumerate( $list )
+           #if str($s) == "private":
+          -x
+          #elif str($s) == "exclude":
+          -X 
+          #end if
+        #end for
+       #end if
+
+
+        
+    </command>
+    <inputs>
+      <expand macro="vcf_input" />
+      <expand macro="output_format_selector" />
+        <param label="Choose the output everything, only header or no header" name="header_option" type="select">
+            <option selected="true" value="all">Print All</option>
+            <option value="header_only">Header only</option>
+            <option value="no_header">No Header</option>
+        </param>
+        <param help="Accept following format: CHROM:START-END" label="Region to view" name="region" size="30" type="text" value="" />
+        <param help="trim alternate alleles not seen in the subset" label="Trim alternate alleles" name="trim_alt_alleles" optional="true" type="select">
+            <option value="False">False</option>
+            <option value="True">True</option>
+        </param>
+        <param help="select/exclude sites without a called genotype" label="Sites without a called genotype" name="sites_no_genotype" optional="true" type="select">
+            <option value="off">Turn off completely</option>
+            <option value="False">False</option>
+            <option value="True">True</option>
+        </param>
+        <param help="minimum count for non-reference (nref), 1st alternate (alt1), least frequent (minor), most frequent (major) or sum of all but most frequent (nonmajor) alleles [nref]" label="Minimum count for non reference" name="min_nref" optional="true" type="integer" value="" />
+        <param help="Maximum count for non-reference (nref), 1st alternate (alt1), least frequent (minor), most frequent (major) or sum of all but most frequent (nonmajor) alleles [nref]" label="Maximum count for non reference" name="max_nref" optional="true" type="integer" value="" />
+        <param help="file of samples to include (or exclude with &quot;^&quot; prefix)" label="Samples to include or exclude" name="samples" optional="true" type="text" value="" />
+        <param help="select comma-separated list of variant types: snps,indels,mnps,other" label="Select variant types" multiple="true" name="include_types" optional="true" type="select">
+            <option value="snps">snps</option>
+            <option value="indels">indels</option>
+            <option value="mnps">mnps</option>
+            <option value="other">other</option>
+        </param>
+        <param help="Listed FILTER strings (e.g. &quot;PASS, . &quot;)" label="FILTER strings" name="filters" optional="true" type="text" value="" />
+        <param help="select known/novel sites only (ID is not/is '.')" label="Select known/novel sites" multiple="true" name="select_sites" optional="true" type="select">
+            <option value="known">Known</option>
+            <option value="novel">novel</option>
+        </param>
+        <param label="select/exclude sites where the non-reference alleles are exclusive (private) to the subset samples" multiple="true" name="private" optional="true" type="select">
+            <option value="private">private</option>
+            <option value="exclude">Exclude private</option>
+        </param>
+    </inputs>
+    <outputs>
+      <expand macro="output_dataset" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="input1.bcf.gz" />
+            <param name="output_format" value="v" />
+            <output file="result1.vcf" ftype="vcf" lines_diff="2" name="output" />
+        </test>
+        <test>
+            <param name="input" value="result1.vcf" />
+            <param name="output_format" value="b" />
+            <output compare="sim_size" delta="100" file="result3.bcf.gz" ftype="bcf_bgzip" name="output" />
+        </test>
+        <test>
+            <param name="input" value="input1.bcf.gz" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="z" />
+            <output file="result2.vcf.gz" ftype="vcf_bgzip" lines_diff="2" name="output" />
+        </test>
+        <test>
+            <param name="input" value="merge.a.bcf" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="2:3199812-3199812" />
+            <output file="tabix.2.3199812.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="merge.a.bcf" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="1:3000151-3000151" />
+            <output file="tabix.1.3000151.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="large_chrom_tbi_limit.bcf" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="chr11:1-536870912" />
+            <output file="large_chrom_tbi_limit.20.1.536870912.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="large_chrom_csi_limit.vcf.gz" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="chr20:1-2147483647" />
+            <output file="large_chrom_csi_limit.20.1.2147483647.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="large_chrom_tbi_limit.vcf.gz" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="chr11:1-536870912" />
+            <output file="large_chrom_tbi_limit.20.1.536870912.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="large_chrom_csi_limit.bcf" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="chr20:1-2147483647" />
+            <output file="large_chrom_csi_limit.20.1.2147483647.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="large_chrom_csi_limit.bcf" />
+            <param name="header_option" value="no_header" />
+            <param name="output_format" value="v" />
+            <param name="region" value="chr20" />
+            <output file="large_chrom.20.1.2147483647.out" ftype="vcf" name="output" />
+        </test>
+        <test>
+            <param name="input" value="view.vcf.gz" />
+            <param name="trim_alt_alleles" value="True" />
+            <param name="sites_no_genotype" value="False" />
+            <param name="samples" value="NA00002" />
+            <param name="min_nref" value="1" />
+            <param name="max_nref" value="1" />
+            <param name="include_types" value="snps" />
+            <param name="output_format" value="v" />
+            <output file="view.1.out" ftype="vcf" lines_diff="2" name="output" />
+        </test>
+        <test>
+            <param name="input" value="view.vcf.gz" />
+            <param name="filters" value="PASS" />
+            <param name="select_sites" value="known" />
+            <param name="private" value="exclude" />
+            <param name="samples" value="NA00003" />
+            <param name="region" value="20" />
+            <param name="output_format" value="v" />
+            <output file="view.2.out" ftype="vcf" lines_diff="2" name="output" />
+        </test>
+        <test>
+            <param name="input" value="view.vcf.gz" />
+            <param name="private" value="private" />
+            <param name="samples" value="NA00003" />
+            <param name="output_format" value="v" />
+            <output file="view.3.out" ftype="vcf" lines_diff="2" name="output" />
+        </test>
+    </tests>
+    <help>
+            
+About:   VCF/BCF conversion, view, subset and filter VCF/BCF files.
+
+Usage:   bcftools view [options] &lt;in.vcf.gz&gt;; [region1 [...]]
+
+**Output options:**
+
+    -G,   --drop-genotypes              drop individual genotype information (after subsetting if -s option set)
+
+    -h/H, --header-only/--no-header     print the header only/suppress the header in VCF output
+
+    -l,   --compression-level [0-9]     compression level: 0 uncompressed, 1 best speed, 9 best compression [-1]
+
+    -o,   --output-file &lt;file&gt;;          output file name [stdout]
+
+    -O,   --output-type &lt;b|u|z|v&gt;;       b: compressed BCF, u: uncompressed BCF, z: compressed VCF, v: uncompressed VCF [v]
+
+    -r, --regions &lt;region&gt;;              restrict to comma-separated list of regions
+
+    -R, --regions-file &lt;file&gt;;           restrict to regions listed in a file
+
+    -t, --targets [^]&lt;region&gt;;           similar to -r but streams rather than index-jumps. Exclude regions with "^" prefix
+
+    -T, --targets-file [^]&lt;file&gt;;        similar to -R but streams rather than index-jumps. Exclude regions with "^" prefix
+
+
+**Subset options:**
+
+
+    -a,   --trim-alt-alleles            trim alternate alleles not seen in the subset
+
+    -I,   --no-update                   do not (re)calculate INFO fields for the subset (currently INFO/AC and INFO/AN)
+
+    -s, --samples [^]&lt;list&gt;;       comma separated list of samples to include (or exclude with "^" prefix)
+
+    --force-samples           only warn about unknown subset samples
+    -S, --samples-file [^]&lt;file&gt;;  file of samples to include (or exclude with "^" prefix)
+
+
+
+
+**Filter options:**
+
+    -c/C, --min-ac/--max-ac &lt;int&gt;;[:&lt;type&gt;;]      minimum/maximum count for non-reference (nref), 1st alternate (alt1), least frequent (minor), most frequent (major) or sum of all but most frequent (nonmajor) alleles [nref]
+
+    -f,   --apply-filters &lt;list&gt;;                require at least one of the listed FILTER strings (e.g. "PASS,.")
+
+    -g,   --genotype [^]&lt;hom|het|miss&gt;;          require one or more hom/het/missing genotype or, if prefixed with "^", exclude sites with hom/het/missing genotypes
+
+    -i/e, --include/--exclude &lt;expr&gt;;            select/exclude sites for which the expression is true (see man page for details)
+
+    -k/n, --known/--novel                       select known/novel sites only (ID is not/is '.')
+
+    -m/M, --min-alleles/--max-alleles &lt;int&gt;;     minimum/maximum number of alleles listed in REF and ALT (e.g. -m2 -M2 for biallelic sites)
+
+    -p/P, --phased/--exclude-phased             select/exclude sites where all samples are phased
+
+    -q/Q, --min-af/--max-af &lt;float&gt;;[:&lt;type&gt;;]    minimum/maximum frequency for non-reference (nref), 1st alternate (alt1), least frequent (minor), most frequent (major) or sum of all but most frequent (nonmajor) alleles [nref]
+
+    -u/U, --uncalled/--exclude-uncalled         select/exclude sites without a called genotype
+
+    -v/V, --types/--exclude-types &lt;list&gt;;        select/exclude comma-separated list of variant types: snps,indels,mnps,other [null]
+
+    -x/X, --private/--exclude-private           select/exclude sites where the non-reference alleles are exclusive (private) to the subset samples
+        
+    </help>
+    <expand macro="citations" />
+</tool>
