@@ -1,8 +1,11 @@
 language: python
+sudo: required
 python: 2.7
 install:
   - pip install git+git://github.com/galaxyproject/planemo.git@master
   - mkdir `pwd`/cache ; mkdir `pwd`/install ;export DOWNLOAD_CACHE=`pwd`/cache; export INSTALL_DIR=`pwd`/install;planemo  dependency_script -r
+  - ln -s bcftools/view/test-data/ . && wget https://depot.galaxyproject.org/package/linux/x86_64/bcftools/bcftools-1.2-Linux-x86_64.tgz && tar -zxvf bcftools-1.2-Linux-x86_64.tgz && export PATH=`pwd`/bin:$PATH && sudo apt-get install tabix
 script:
   - planemo shed_lint --report_level warn --tools --fail_level error --recursive .
   - bash dep_install.sh && source env.sh && planemo test tools/spades/
+  - planemo test tools/bcftools/view
