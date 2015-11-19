@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="spades" version="3.6.2">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">http://spades.bioinf.spbau.ru/release3.6.2/SPAdes-3.6.2-Linux.tar.gz</action>
+                <!-- Copying the whole bin folder -->
+		<action type="make_directory">$INSTALL_DIR/bin</action>
+		<action type="make_directory">$INSTALL_DIR/share</action>
+		<action type="move_directory_files">
+		  <source_directory>bin</source_directory>
+		  <destination_directory>$INSTALL_DIR/bin</destination_directory>
+		</action>
+                <action type="move_directory_files">
+		  <source_directory>share</source_directory>
+		  <destination_directory>$INSTALL_DIR/share</destination_directory>
+		</action>
+                <action type="set_environment">
+                <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
+                </action>
+            </actions>
+        </install>
+        <readme>
+This installs SPAdes 3.6.2.
+
+See manual here http://spades.bioinf.spbau.ru/release3.6.2/manual.html
+See also here http://bioinf.spbau.ru/en/spades
+        </readme>
+    </package>
+</tool_dependency>
+
