@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Tool to bundle up list collection into a single zip to be download
+name: bundle_collections
+owner: nml
