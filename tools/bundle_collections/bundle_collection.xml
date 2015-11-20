@@ -1,0 +1,28 @@
+<tool id="bundle_collection" name="Bundle Collection" version="1.0.1">
+	<description>Download a collection of files</description>
+	<command interpreter="perl">bundle_collection.pl -h $html_file -p $html_file.files_path
+		#for $f in $input.keys
+			-i "$f,$input[$f].ext=$input[$f]" 
+			#if $input[$f].metadata.bam_index and $input[$f].metadata.bam_index != "None"
+				#set $bamind = $f+","+$input[$f].ext+".bai="+$input[$f].metadata.bam_index
+				-i "$bamind"
+			#end if
+		#end for
+	</command>
+
+	<inputs>
+		<param name="input" type="data_collection" label="Data Collection" collection_type="list"/>
+	</inputs>
+
+	<outputs>
+		<data name="html_file" format="html" label="Bundled Collection" />
+	</outputs>
+	<help>
+		***What it does**
+		
+		This tool will bundle up files in a list collection into a downloadable zip file
+
+		Author: Mariam Iskander and Jen Cabral
+	</help>
+
+</tool>
