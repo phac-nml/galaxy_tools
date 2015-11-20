@@ -25,6 +25,8 @@ This installs SPAdes 3.6.1.
 
 See manual here http://spades.bioinf.spbau.ru/release3.6.1/manual.html
 See also here http://bioinf.spbau.ru/en/spades
+Author : Philip Mabon
+Original author : Lionel Guy
         </readme>
     </package>
 </tool_dependency>
