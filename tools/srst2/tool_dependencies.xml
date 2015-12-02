@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="vfdb" version="08-07-2014">
+        <install version="1.0">
+            <actions_group>
+                <actions>
+                    <action type="download_by_url">https://github.com/mariamiskander/VirulenceFactorsDB/archive/master.zip</action>
+                    <action type="make_directory">$INSTALL_DIR/vfdb</action>
+                    <action type="move_directory_files">
+                        <source_directory>vfdb</source_directory>
+                        <destination_directory>$INSTALL_DIR/vfdb</destination_directory>
+                    </action>
+                    <action type="set_environment">
+                        <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                        <environment_variable name="VF_PATH" action="set_to">$INSTALL_DIR</environment_variable>
+                    </action>
+                    <action type="shell_command">ls -lrt</action>
+                    <action type="shell_command">echo $INSTALL_DIR</action>
+                    <action type="shell_command">echo $PATH</action>
+                </actions>
+            </actions_group>
+        </install>
+    </package>
+    <package name="srst2" version="0.1.4.5">
+    	<repository changeset_revision="932ab889eaa6" name="package_srst2_0_1_4_5" owner="nml" />
+    </package>
+	<package name="samtools" version="0.1.18">
+		<repository changeset_revision="0d5ed90e986c" name="package_samtools_0_18" owner="nml" />
+	</package>
+	<package name="bowtie2" version="2.1.0">
+		<repository changeset_revision="4d2e1aa00129" name="package_bowtie_2_1_0" owner="nml" />
+	</package>
+</tool_dependency>

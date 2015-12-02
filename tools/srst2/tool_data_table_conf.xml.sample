@@ -1,0 +1,5 @@
+   <!-- Location of VFDB files -->
+   <table name="vfdb_fasta_files" comment_char="#">
+      <columns>value,dbkey,name,path</columns>
+      <file path="tool-data/vfdb_files.loc" />
+   </table>

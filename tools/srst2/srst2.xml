@@ -1,0 +1,336 @@
+<tool id="srst2" name="SRST2" version="0.3.2">
+    <description>Short Read Sequence Typing for Bacterial Pathogens</description>
+    <command interpreter="perl">
+        srst2.pl \$BASE/srst2.py $bam_results $scores $pileup
+
+        #if $mlst_or_genedb.job_type == "mlst_only"
+            m $txt_results $alleles
+            #if ($mlst_or_genedb.allele_choice.allele_report=="all")
+                allstring
+            #else if ($mlst_or_genedb.allele_choice.allele_report=="new")
+                new
+            #end if
+        #else if $mlst_or_genedb.job_type == "custom_only"
+            g $genes_results $fullgenes_results
+    #*
+    to allow multiple custom databases join all db names into comma separated variable then send that variable to the perl script to be parsed
+    make the database names an array and then join
+    *#
+            #set $dbs = ','.join([$database.gene_db.name for $database in ( $mlst_or_genedb.databases )])
+            "$dbs"
+        #else if $mlst_or_genedb.job_type == "vfdb_only"
+            g $genes_results $fullgenes_results $mlst_or_genedb.vfdb_in.name
+        #else if $mlst_or_genedb.job_type == "mlst_custom"
+            b $txt_results $genes_results $fullgenes_results
+            #set $dbs = ','.join([$database.gene_db.name for $database in ( $mlst_or_genedb.databases )])
+            "$dbs"
+        #else if $mlst_or_genedb.job_type == "mlst_vfdb"
+            b $txt_results $genes_results $fullgenes_results $mlst_or_genedb.vfdb_in.name
+        #end if
+
+        #if $single_or_paired.type == "single"
+            "$single_or_paired.input_se.name"
+            --input_se "$input_se"
+        #elif $single_or_paired.type == "paired"
+            "$single_or_paired.forward_pe.name"
+            --input_pe "$single_or_paired.forward_pe" "$single_or_paired.reverse_pe"
+        #else
+            "$single_or_paired.fastq_collection.forward.name"
+            --input_pe "$single_or_paired.fastq_collection.forward" "$single_or_paired.fastq_collection.reverse"
+        #end if
+
+        #if ($mlst_or_genedb.job_type=="mlst_only")
+            --mlst_db $mlst_db
+            --mlst_definition $mlst_defs
+            --mlst_delimiter "'$mlst_or_genedb.mlst_delim'"
+            --mlst_max_mismatch $mlst_or_genedb.mlst_max_mismatch
+            --report_all_consensus
+        #else if ($mlst_or_genedb.job_type=="mlst_vfdb")
+            --mlst_db $mlst_db
+            --mlst_definition $mlst_defs
+            --mlst_delimiter "'$mlst_or_genedb.mlst_delim'"
+            --mlst_max_mismatch $mlst_or_genedb.mlst_max_mismatch
+            --gene_max_mismatch $mlst_or_genedb.gene_max_mismatch
+            --gene_db \$VF_PATH/${mlst_or_genedb.vfdb_in.fields.path}
+        #else if ($mlst_or_genedb.job_type=="mlst_custom")
+            --gene_db
+            #for $i, $database in enumerate( $mlst_or_genedb.databases )
+                $database.gene_db
+            #end for
+            --mlst_db $mlst_db
+            --mlst_delimiter "'$mlst_or_genedb.mlst_delim'"
+            --mlst_max_mismatch $mlst_or_genedb.mlst_max_mismatch
+            --gene_max_mismatch $mlst_or_genedb.gene_max_mismatch
+            --mlst_definition $mlst_defs
+        #else if ($mlst_or_genedb.job_type=="vfdb_only")
+            --gene_db \$VF_PATH/${mlst_or_genedb.vfdb_in.fields.path}
+            --gene_max_mismatch $mlst_or_genedb.gene_max_mismatch
+        #else if ($mlst_or_genedb.job_type=="custom_only")
+            --gene_db
+            #for $i, $database in enumerate( $mlst_or_genedb.databases )
+                $database.gene_db
+            #end for
+            --gene_max_mismatch $mlst_or_genedb.gene_max_mismatch
+        #end if
+
+        --read_type q
+
+        --save_scores
+
+        #if $options.select == "advanced"
+            #if $options.min_coverage
+                --min_coverage $options.min_coverage
+            #end if
+            #if $options.max_divergence
+                --max_divergence $options.max_divergence
+            #end if
+            #if $options.min_depth
+                --min_depth $options.min_depth
+            #end if
+            #if $options.min_edge_depth
+                --min_edge_depth $options.min_edge_depth
+            #end if
+            #if $options.prob_err
+                --prob_err $options.prob_err
+            #end if
+            #if $options.stop_after
+                --stop_after $options.stop_after
+            #end if
+                --other "'-p \${GALAXY_SLOTS:-1}'"
+            #if $options.mapq
+                --mapq $options.mapq
+            #end if
+            #if $options.baseq
+                --baseq $options.baseq
+            #end if
+        #else
+            --other "'-p \${GALAXY_SLOTS:-1}'"
+        #end if
+
+        --output out
+    </command>
+    <inputs>
+        <conditional name="single_or_paired">
+            <param name="type" type="select" label="Read type">
+                <option value="single">Single-end</option>
+                <option value="paired">Paired-end</option>
+                <option value="collection">Collection Paired-end</option>
+                </param>
+            <when value="single">
+                <param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
+            </when>
+            <when value="paired">
+                <param name="forward_pe" type="data" format="fastqsanger" label="Forward paired-end read file"/>
+                <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
+            </when>
+            <when value="collection">
+                <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="txt" collection_type="paired" />
+            </when>
+        </conditional>
+
+        <conditional name="mlst_or_genedb">
+            <param name="job_type" type="select" label="Job type">
+                <option value="mlst_only">MLST only</option>
+                <option value="mlst_vfdb">MLST and VFDB</option>
+                <option value="mlst_custom">MLST and custom database</option>
+                <option value="vfdb_only">VFDB only</option>
+                <option value="custom_only">Custom database only</option>
+            </param>
+            <when value="mlst_only">
+                <param name="mlst_defs" type="data" format="tabular" label="ST definitions for MLST scheme"/>
+                <param name="mlst_db" type="data" format="fasta" label="Fasta file of MLST alleles"/>
+                <param name="mlst_max_mismatch" type="integer" label="Maximum number of mismatches per read for MLST allele calling" value="" help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <conditional name="allele_choice">
+                    <param name="allele_report" type="select" label="Reported Alleles" >
+                        <option value="all">All</option>
+                        <option value="new">Only New</option>
+                    </param>
+                </conditional>
+                <param name="mlst_delim" type="text" label="Character(s) separating gene name from allele number in MLST database" value="" help="Typically _ or -" optional="false" >
+                    <validator type="expression" message="Must enter a delimiter.">len(value) >= 1</validator>
+                </param>
+            </when>
+            <when value="mlst_vfdb">
+                <param name="mlst_defs" type="data" format="tabular"  label="ST definitions for MLST scheme"/>
+                <param name="mlst_db" type="data" format="fasta" label="Fasta file of MLST alleles"/>
+                <param name="vfdb_in" type="select" label="Choose a VFDB strain">
+                <options from_data_table="vfdb_fasta_files" />
+                </param>
+                <param name="mlst_max_mismatch" type="integer" label="Maximum number of mismatches per read for MLST allele calling" value=""  help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <param name="gene_max_mismatch" type="integer" label="Maximum number of mismatches per read for gene allele calling" value=""  help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <param name="mlst_delim" type="text" label="Character(s) separating gene name from allele number in MLST database" value="" help="Typically _ or -" optional="false" >
+                    <validator type="expression" message="Must enter a delimiter.">len(value) >= 1</validator>
+                </param>
+            </when>
+            <when value="mlst_custom">
+                <param name="mlst_defs" type="data" format="tabular" label="ST definitions for MLST scheme"/>
+                <param name="mlst_db" type="data" format="fasta" label="Fasta file of MLST alleles"/>
+                <repeat name="databases" title="Databases" min="1">
+                    <param name="gene_db" type="data" format="fasta" label="Fasta file for gene database" />
+                </repeat>
+                <param name="mlst_max_mismatch" type="integer" label="Maximum number of mismatches per read for MLST allele calling" value="" help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <param name="gene_max_mismatch" type="integer" label="Maximum number of mismatches per read for gene allele calling" value="" help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <param name="mlst_delim" type="text" label="Character(s) separating gene name from allele number in MLST database" value="" help="Typically _ or -" optional="false" >
+                    <validator type="expression" message="Must enter a delimiter.">len(value) >= 1</validator>
+                </param>
+            </when>
+            <when value="vfdb_only">
+                <param name="vfdb_in" type="select" label="Choose a VFDB strain">
+                    <options from_data_table="vfdb_fasta_files" >
+                        <filter type="sort_by" column="2" />
+                        <validator type="no_options" message="No strains are available" />
+                    </options>
+                </param>
+                <param name="gene_max_mismatch" type="integer" label="Maximum number of mismatches per read for gene allele calling" value="" help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+            </when>
+            <when value="custom_only">
+                <param name="gene_max_mismatch" type="integer" label="Maximum number of mismatches per read for gene allele calling" value="" help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
+                <repeat name="databases" title="Databases" min="1">
+                    <param name="gene_db" type="data" format="fasta" label="Fasta file for gene database" />
+                </repeat>
+            </when>
+        </conditional>
+        <conditional name="options">
+            <param name="select" type="select" label="Options Type">
+                <option value="basic">Basic</option>
+                <option value="advanced">Advanced</option>
+            </param>
+            <when value="advanced">
+                <param name="min_coverage" type="integer" label="Minimum %coverage cutoff for gene reporting" value="90"/>
+                <param name="max_divergence" type="integer" label="Maximum %divergence cutoff for gene reporting" value="10"/>
+                <param name="min_depth" type="integer" label="Minimum mean depth to flag as dubious allele call" value="5"/>
+                <param name="min_edge_depth" type="integer" label="Minimum edge depth to flag as dubious allele call" value="2"/>
+                <param name="prob_err" type="float" label="Probability of sequencing error" value="0.01"/>
+                <param name="stop_after" type="integer" label="Stop mapping after this number of reads have been mapped (otherwise map all)" optional="true"/>
+                <param name="mapq" type="integer" label="Samtools -q parameter" value="1"/>
+                <param name="baseq" type="integer" label="Samtools -Q parameter" value="20"/>
+            </when>
+        </conditional>
+    </inputs>
+
+    <stdio>
+        <exit_code range="1:"  level="fatal"   description="Error running code."/>
+    </stdio>
+
+    <outputs>
+        <data format="bam" name="bam_results" label="Bam Results"/>
+        <data format="tabular" name="scores" label="Scores"/>
+        <data format="tabular" name="pileup" label="Pileup"/>
+        <data format="fasta" name="alleles" label="Alleles">
+            <filter>mlst_or_genedb['job_type']=="mlst_only"</filter>
+        </data>
+        <data format="tabular" name="txt_results" label="Text Results" >
+            <filter>mlst_or_genedb['job_type']!="vfdb_only"</filter>
+            <filter>mlst_or_genedb['job_type']!="custom_only"</filter>
+        </data>
+        <data format="tabular" name="genes_results" label="Genes Results" >
+            <filter>mlst_or_genedb['job_type']!="mlst_only"</filter>
+        </data>
+        <data format="tabular" name="fullgenes_results" label="Full Genes Results" >
+            <filter>mlst_or_genedb['job_type']!= "mlst_only"</filter>
+        </data>
+    </outputs>
+
+    <requirements>
+        <requirement type="package" version="0.1.18">samtools</requirement>
+        <requirement type="package" version="2.1.0">bowtie2</requirement>
+        <requirement type="package" version="0.1.4.5">srst2</requirement>
+        <requirement type="package" version="08-07-2014">vfdb</requirement>
+    </requirements>
+
+    <help>
+What it does
+============
+
+Short Read Sequence Typing for Bacterial Pathogens
+
+This program is designed to take Illumina sequence data, a MLST database and/or a database of gene sequences (e.g. resistance genes, virulence genes, etc) and report the presence of STs and/or reference genes. The tool has a database of virulence factors that was extracted from http://www.mgc.ac.cn/VFs/ .
+
+For more information about SRST2 and for instructions on how to format custom databases, visit https://github.com/katholt/srst2
+
+
+Usage
+=====
+
+Basic Options
+-------------
+
+**Read Type**
+   - Single-end: Single end read file(s) for analysing (--input_se)
+   - Paired-end: Paired end read file(s) for analysing (--input_pe)
+
+**Job Type**
+    - MLST only: Reports Sequence Types
+    - MLST and VFDB: Reports Sequence Types and user can choose one of the built-in Virulence Factor Datebase (VFDB) strains
+    - MLST and custom database: Reports Sequence Types and user can upload their own custom database
+    - VFDB only: Use can choose one of the built-in Virulence Factor Databasse (VFDB) strains
+    - Custom database only: Use can upload their own custom database
+
+**ST definitions for MLST scheme:**
+    - Required if you want to calculate STs (--mlst_definitions)
+
+**Fasta file of MLST alleles:**
+    - Required if you want to calculate STs (--mlst_db)
+
+**Fasta file for gene database:**
+    - Required if you want details of the sequences. The user must provide their own database (--gene_db)
+
+**VFDB strain:**
+    - Required if you want details of the sequences. The use may choose one of the listed strains (--gene_db)
+
+**Read file type:**
+    - fastq
+    - solexa
+    - fasta
+
+**Character(s) separating gene name from allele number in MLST database:**
+    - Required for all MLST job types
+    - Typically either _ or -
+    - The output from getMLST will identify the delimiter.
+
+**Maximum number of mismatches per read for MLST allele calling:**
+    - Required for all MLST job types
+    - For MLST schemas with inserts this number should be set to a high value (recommended: 250)
+
+**Maximum number of mismatches per read for gene allele calling:**
+    - Required for all VDFB or custom database job types
+    - For genes with inserts this number should be set to a high value (recommended: 250).
+
+**Option Type:**
+    - Basic: Includes only the options listed above
+    - Advanced: Includes the options listed below
+
+-------------------------------
+
+Advanced Options
+----------------
+
+**Minimum %coverage cutoff for gene reporting:**
+    - Default is 90 (--min_coverage)
+
+**Maximum %divergence cutoff for gene reporting:**
+    - Default is 10 (--max_divergence)
+
+**Minimum mean depth to flag as dubious allele call:**
+    - Default is 5 (--min_depth)
+
+**Minimum edge depth to flag as dubious allele call:**
+    - Default is 2 (--min_edge_depth)
+
+**Probability of sequencing error:**
+    - Default is 0.01 (--prob_err)
+
+**Stop mapping after this number of reads have been mapped (otherwise map all):**
+    - Default maps all (--stop_after)
+
+**Other arguments to pass to bowtie2:**
+    --other
+
+**Samtools -q parameter:**
+    - Default is 1 (--mapq)
+
+**Samtools -Q parameter:**
+    - Default is 20 (--baseq)
+
+    </help>
+</tool>
