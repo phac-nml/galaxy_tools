@@ -1,5 +1,14 @@
-<tool id="srst2" name="SRST2" version="0.3.3">
+<tool id="srst2" name="SRST2" version="0.3.2">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
+    <requirements>
+        <requirement type="package" version="0.1.18">samtools</requirement>
+        <requirement type="package" version="2.1.0">bowtie2</requirement>
+        <requirement type="package" version="0.1.4.5">srst2</requirement>
+        <requirement type="package" version="08-07-2014">vfdb</requirement>
+    </requirements>
+    <stdio>
+      <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+    </stdio>
     <command interpreter="perl">
         srst2.pl \$BASE/srst2.py $bam_results $scores $pileup
 
@@ -145,6 +154,8 @@
                         <option value="all">All</option>
                         <option value="new">Only New</option>
                     </param>
+                    <when value="all"/>
+                    <when value="new"/>
                 </conditional>
                 <param name="mlst_delim" type="text" label="Character(s) separating gene name from allele number in MLST database" value="" help="Typically _ or -" optional="false" >
                     <validator type="expression" message="Must enter a delimiter.">len(value) >= 1</validator>
@@ -205,12 +216,9 @@
                 <param name="mapq" type="integer" label="Samtools -q parameter" value="1"/>
                 <param name="baseq" type="integer" label="Samtools -Q parameter" value="20"/>
             </when>
+            <when value="basic"/>
         </conditional>
     </inputs>
-
-    <stdio>
-        <exit_code range="1:"  level="fatal"   description="Error running code."/>
-    </stdio>
 
     <outputs>
         <data format="bam" name="bam_results" label="Bam Results"/>
@@ -231,12 +239,13 @@
         </data>
     </outputs>
 
-    <requirements>
-        <requirement type="package" version="0.1.18">samtools</requirement>
-        <requirement type="package" version="2.1.0">bowtie2</requirement>
-        <requirement type="package" version="0.1.4.5">srst2</requirement>
-        <requirement type="package" version="08-07-2014">vfdb</requirement>
-    </requirements>
+    <tests>
+      <test>
+        <param/>
+        <output/>
+      </test>
+    </tests>
+
 
     <help>
 What it does
@@ -333,4 +342,7 @@ Advanced Options
     - Default is 20 (--baseq)
 
     </help>
+    
+    <citations>
+    </citations>
 </tool>
