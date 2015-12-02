@@ -1,4 +1,4 @@
-<tool id="srst2" name="SRST2" version="0.3.2">
+<tool id="srst2" name="SRST2" version="0.3.3">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <command interpreter="perl">
         srst2.pl \$BASE/srst2.py $bam_results $scores $pileup
