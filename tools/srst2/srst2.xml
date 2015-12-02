@@ -341,8 +341,15 @@ Advanced Options
 **Samtools -Q parameter:**
     - Default is 20 (--baseq)
 
+** Acknowledgments **
+Original Author: Mariam Iskander
+
+Jen Cabral
+Philip Mabon
+Mark Iskander
+
     </help>
-    
+
     <citations>
     </citations>
 </tool>
