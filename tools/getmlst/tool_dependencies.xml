@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="srst2" version="0.1.4.5">
+    	<repository name="package_srst2_0_1_4_5" owner="nml" />
+    </package>
+</tool_dependency>

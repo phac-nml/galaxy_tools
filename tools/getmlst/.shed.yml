@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Download MLST datasets by species from pubmlst.org
+name: getmlst
+owner: nml
