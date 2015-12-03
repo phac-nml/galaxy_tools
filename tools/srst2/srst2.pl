@@ -133,8 +133,7 @@ if ($job_type eq 'g' | $job_type eq 'b')
   }
 }
 
-#my $command = "python $binary @ARGV";
-my $command = "/usr/bin/python $binary @ARGV";
+my $command = "python $binary @ARGV";
 
 my $exit_code = system($command);
 
@@ -233,16 +232,16 @@ if (@pileupfiles > 1){
 }
 
 # perform find-replace to restore original user-specified file names
-for (my $i= 0; $i < @genefiles; $i++){
-  my $data = read_file($genefiles[$i]);
+foreach my $gene (@genefiles){
+  my $data = read_file($gene);
   $data =~ s/temp_file_name/$file_name[0]/g;
-  write_file($genefiles[$i], $data);
+  write_file($gene, $data);
 }
 
-for (my $i= 0; $i < @fullgenefiles; $i++){
-  my $data = read_file($fullgenefiles[$i]);
+foreach my $gene (@fullgenefiles){
+  my $data = read_file($gene);
   $data =~ s/temp_file_name/$file_name[0]/g;
-  write_file($fullgenefiles[$i], $data);
+  write_file($gene, $data);
 }
 
 # concatenate gene files with a space separating each file
