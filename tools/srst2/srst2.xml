@@ -349,6 +349,7 @@ Philip Mabon
 Mark Iskander
 
     </help>
-
-    <citation type="doi">10.1128/AAC.01310-13</citation>
+    <citations>
+      <citation type="doi">10.1128/AAC.01310-13</citation>
+    </citations>
 </tool>
