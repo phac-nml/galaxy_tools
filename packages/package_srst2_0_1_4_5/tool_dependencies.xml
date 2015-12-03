@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="srst2" version="0.1.4.5">
+	    <install version="1.0">
+	         <actions_group>
+	            <actions>
+	                <action type="shell_command">git clone https://github.com/katholt/srst2.git</action>
+	                <action type="shell_command">git checkout 267ddc088b2da445b7217365aed3bf6e21b875f5</action>
+					<action type="shell_command">cp ./scripts/getmlst.py $INSTALL_DIR</action>
+					<action type="shell_command">cp ./scripts/srst2.py $INSTALL_DIR</action>
+                    <action type="chmod"><file mode="777">$INSTALL_DIR/getmlst.py</file></action>
+					<action type="chmod"><file mode="777">$INSTALL_DIR/srst2.py</file></action>
+                    <action type="shell_command">ls -lrt</action>
+                    <action type="shell_command">echo $INSTALL_DIR</action>
+                    <action type="set_environment">
+	                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+	                    <environment_variable name="BASE" action="set_to">$INSTALL_DIR</environment_variable>
+                    </action>
+	            </actions>
+	       	</actions_group>
+	    </install>
+	</package>
+	
+</tool_dependency>
