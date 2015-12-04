@@ -108,8 +108,8 @@
 
   <tests>
     <test>
-      <param/>
-      <output/>
+      <param name="data" value="avian_ovomucoids.nex"/>
+      <output name="outfile" file="output.txt"/>
     </test>
   </tests>
 
