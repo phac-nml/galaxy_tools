@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<tool id="mrbayes" name="MrBayes">
+  <description>with options and commands</description>
+  <command> mb $command_file > $outfile
+## print list of avaialble variables
+#silent sys.stderr.write("\n \n \n ======== Cheetah template variables ========\n") 
+#for k,v in $searchList[2].items() 
+#silent   sys.stderr.write(" %s = %s\n" % (str(k), str(v) )) 
+#end for 
+#silent sys.stderr.write("======== End of Cheetah template variables ========\n \n \n") 
+  </command>
+  <inputs>
+    <param name="data" type="data" format="nex" label="Nexus input file"/>
+    
+    <param name="filename" type="text" label="Output filename" size="10" value=""
+      help="Output files will be named this with .p, .t, .mcmc extensions. Use to avoid overwriting files when running repeated analyses on the same dataset." />
+    
+    <param name="ngen" type="integer" label="&lt;hr&gt;Number of generations" value="10000" >
+      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+    </param>
+    <param name="nchain" type="integer" label="Number of chains" value="2" >
+       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+    </param>
+    <param name="nrun" type="integer" label="Number of runs" value="2" >    
+      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+    </param>
+    
+    <param name="outgroup" type="text" label="&lt;hr&gt;Outgroup" size="10" value="1"
+      help="The name or number identifying one taxon from the data." />
+    <param name="model" type="select" label="Choose model">
+      <sanitizer sanitize="False" />
+      <option value="lset nst=6"                                >GRT</option>
+      <option value="lset nst=6; prset statefreqpr=fixed(equal)">SYM</option>
+      <option value="lset nst=2"                                >HKY</option>
+      <option value="lset nst=2; prset statefreqpr=fixed(equal)">K2P</option>
+      <option value="lset nst=1"                                >F81</option>
+      <option value="lset nst=1; prset statefreqpr=fixed(equal)">JC </option>
+      <option value="lset nst=mixed"                            >Mixed </option>
+      <help>Models are defined below and are only valid for nucleotide data.</help>
+    </param>
+    <param name="rates" type="select" label="Choose rates">
+      <option value="equal"/>
+      <option value="gamma"/>
+      <option value="propinv"/>
+      <option value="invgamma"/>
+      <option value="adgamma"/>
+    </param>
+    <param name="samplefreq" type="integer" label="&lt;hr&gt;Sample frequency" value="500" >
+       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+       <help>Frequency with which output it written to files." </help>
+    </param>
+    <param name="printfreq" type="integer" label="Print frequency" value="500" >
+       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+       <help>Frequency with which output is printed to the screen.</help>
+    </param>
+    <param name="burninfrac" type="float" label="Burn-in fraction" value="0.25">
+      <validator type="in_range" min="0.01" max=".50" message="Must be between 0.01 and .50"/>
+      <help>Fraction of samples to discard when summarizing. </help>
+    </param>
+    <param name="stoprule" type="select" label="Stop rule?" >
+      <option value="no">No</option> 
+      <option value="yes">Yes</option> 
+    </param>
+
+    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="&lt;hr&gt;Include sump?"
+        help="Summarizes sampled parameter value."/>
+    <param name="sumt" type="boolean" truevalue="sumt;" falsevalue="" label="Include sumt?" 
+        help="Summarizes the trees."/>
+    <param name="plot" type="boolean" truevalue="plot" falsevalue="" label="Include plot?"
+        help="Creates an x-y graph of the parameter over the course of the chain."/>
+
+    <param name="checkfreq" type="integer" label="&lt;hr&gt;Checkpoint frequency" value="100000" >
+       <validator type="in_range" min="100" max="inf" message="Must be greater than or equal to 100"/>
+       <help>Frequency with which checkpoints are written. Used for continuing analysis with append.</help>
+    </param>
+    <param name="append" type="boolean" truevalue="mcmcp append=yes" falsevalue="mcmcp append=no" label="Append to last checkpoint?"
+        help="Requires .ckp file (i.e. that number of generations > checkpoint frequency for previous analysis)." />   
+  
+  </inputs>
+
+  <configfiles>
+    <configfile name="command_file">
+        begin mrbayes;
+        set quitonerror=no;
+        execute $data;
+        outgroup $outgroup;
+        $model;
+        lset rates=$rates;
+#if str($filename) != ""
+    mcmcp filename=$filename;
+#end if#
+        mcmcp ngen=$ngen nrun=$nrun nchain=$nchain checkfreq=$checkfreq samplefreq=$samplefreq printfreq=$printfreq stoprule=$stoprule burninfrac=$burninfrac;
+#if int($ngen) >= int($checkfreq)
+    $append;
+#end if#       
+        mcmc;
+        $sump
+        $sumt
+#if str($plot) == "plot"
+    plot;  
+#end if#
+        end;    
+    </configfile>
+  </configfiles>
+
+  <outputs>
+    <data name="outfile" format="txt"/>
+  </outputs>
+
+  <requirements>
+    <requirement version="3.2.1" type="binary">mb</requirement>
+  </requirements>
+<help>
+
+.. class:: warningmark
+
+This tool takes as input a Nexus file (.nex), described here_, that should only contain a data block, without commands. If a command block exists in the file, it will be executed first, followed by the ones specified above. 
+
+.. _here: http://en.wikipedia.org/wiki/Nexus_file. 
+
+-----
+
+**What it does**
+
+MrBayes is a program for Bayesian inference and model choice across a wide range of phylogenetic and evolutionary models. MrBayes uses Markov chain Monte Carlo (MCMC) methods to estimate the posterior distribution of model parameters.
+
+See the manual_ or the `command reference`_ for more information.  
+
+.. _manual: http://mrbayes.sourceforge.net/manual.php
+.. _command reference: http://mrbayes.sourceforge.net/commref_mb3.2.pdf
+
+-----
+
+**Model Definitions**
+
+Models are defined by the following MrBayes options::
+
+ GRT: lset nst=6;
+ SYM: lset nst=6; prset statefreqpr=fixed(equal);
+ HKY: lset nst=2;
+ K2P: lset nst=2; prset statefreqpr=fixed(equal);
+ F81: lset nst=1;
+ JC: lset nst=1; prset statefreqpr=fixed(equal);
+ Mixed: lset nst=mixed;
+
+Each model makes different assumptions about nucelotide substitution rates and state frequencies. 
+
+The mixed model performs Markov chain sampling over the space of all possible reversible substitution models, by grouping the six rates in various combinations. 
+ 
+-----
+
+.. class:: infomark
+
+**Tip for repetitive analyses**
+
+Note that running the same analysis  on the same dataset in Galaxy will overwrite .p, .t, and .mcmc files for that dataset. This can be avoided by copying the dataset or re-uploading it, or by specifying a new filename. 
+
+.. class:: infomark
+
+**Tip for using append**
+
+If you want to use the append functionality, all parameters will have to be identical to your initial analysis. The easiest way to ensure this is by using the blue "Run this job again" arrow on the dataset, and checking the additional append box. Note also that ngen will be the total number of generations, not the number of generations to add, so you should increase this value except if a run was interrupted. Selecting append while checkfreq > ngen will have no effect. 
+</help>
+</tool>
+
