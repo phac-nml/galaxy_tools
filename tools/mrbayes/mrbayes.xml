@@ -180,6 +180,9 @@ Note that running the same analysis  on the same dataset in Galaxy will overwrit
 **Tip for using append**
 
 If you want to use the append functionality, all parameters will have to be identical to your initial analysis. The easiest way to ensure this is by using the blue "Run this job again" arrow on the dataset, and checking the additional append box. Note also that ngen will be the total number of generations, not the number of generations to add, so you should increase this value except if a run was interrupted. Selecting append while checkfreq > ngen will have no effect.
+
+-----
+
 Wrapper originally created by AAFC-MBB -> https://github.com/AAFC-MBB/
 </help>
 <citations>
