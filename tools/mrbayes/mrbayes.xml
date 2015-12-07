@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<tool id="mrbayes" name="MrBayes" version="3.2.6">
+<tool id="mrbayes" name="MrBayes" version="1.0.0">
   <description>with options and commands</description>
   <requirements>
-    <requirement version="3.2.1" type="binary">mb</requirement>
+    <requirement type="package" version="3.2.6">mrbayes</requirement>
   </requirements>
   <command> mb $command_file > $outfile
 ## print list of avaialble variables
