@@ -11,6 +11,11 @@
   <outputs>
     <data name="output" format_source="input_list" ></data>
   </outputs>
+  <tests>
+  </tests>
   <help>
+	Single tool that combines a list collection into a single file
   </help>
+  <citations>
+  </citations>
 </tool>
