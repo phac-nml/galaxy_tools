@@ -1,0 +1,101 @@
+<tool id="getmlst" name="getmlst" version="0.1.4">
+  <description>Download MLST datasets by species from pubmlst.org</description>
+  <requirements>
+    <requirement type="package" version="0.1.4.5">srst2</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="2"  level="fatal"   description="Please be more specific."/>
+    <exit_code range="1"  level="fatal"   description="No species matched your query."/>
+  </stdio>
+  <command interpreter="perl">
+    getmlst.pl \$BASE/getmlst.py $mlst_db $mlst_defs '$species'
+  </command>
+  <inputs>
+    <param name="species" type="text" label="The name of the genus, or genus and species that you want to download." help="Please note you will receive an error if multiple results are returned."/>
+  </inputs>
+  <outputs>
+    <data format="fasta" name="mlst_db" label="MLST Database"/>
+    <data format="tabular" name="mlst_defs" label="MLST Definitions"/>
+  </outputs>
+  <tests>
+    <test>
+      <param name="species" value="Listeria monocytogenes"/>
+      <output name="mlst_db" file="mlst_database_test.fasta" ftype="fasta"/>
+      <output name="mlst_defs" file="mlst_definitions_test.tabular" ftype="tabular"/>
+    </test>
+  </tests>
+  <help>
+
+**GetMLST**
+
+GetMLST_ downloads MLST datasets from pubmlst.org.
+
+Data is downloaded for a species determined by the users
+
+  - profiles (maps STs to allele numbers)
+  - numbered sequences for each locus in the scheme
+
+In addition, the alleles are concatenated together for use with SRST2.
+
+.. _`GetMLST`: https://github.com/katholt/srst2
+
+-----
+
+**What it does**
+
+Searches a database for a given organism and returns the MLST Database(fasta) and MLST Definitions(tabular).
+
+**Usage**
+
+Enter the genus and species of the organism to search and press Execute
+
+**Tips**
+
+1. To produce a list of all species avaialble for a specific genus, enter the genus name and press "Execute".
+
+  - *Helicobacter* will not generate MLST Database or MLST Definition files and an error will occur however the following output will be generated:
+
+  - *The following 3 species match your query, please be more specific:*
+  - Helicobacter cinaedi
+  - Helicobacter pylori
+  - Helicobacter suis
+
+  -
+
+2. To return a list of all species available from a database leave the name blank and press "Execute".
+
+  - Leaving the text field blank will not generate MLST Database or MLST Definition files and an error will occur however the following output will be generated:
+
+  - *The following 114 species match your query, please be more specific:*
+  - Achromobacter spp.
+  - Acinetobacter baumannii#1
+  - Acinetobacter baumannii#2
+  - Aeromonas spp.
+  - Anaplasma phagocytophilum
+  - Arcobacter spp.
+  - Aspergillus fumigatus
+  - Bacillus cereus
+  - Bacillus licheniformis
+  - Bacillus subtilis
+  - Bifidobacterium
+  - Bordetella spp.
+  - Borrelia spp.
+  - Brachyspira hampsonii
+  - Brachyspira hyodysenteriae
+  - Brachyspira intermedia
+  - Brachyspira pilosicoli
+  - Brachyspira spp.
+  - Burkholderia cepacia complex
+  - Burkholderia pseudomallei
+  - Campylobacter concisus/curvus
+  - Campylobacter fetus
+  - Campylobacter helveticus
+  - Campylobacter hyointestinalis
+  - ...
+
+  </help>
+
+  <citations>
+    <citation type="doi">10.1186/s13073-014-0090-6</citation>
+  </citations>
+</tool>
