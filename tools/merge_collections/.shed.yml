@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Collection tool that merges a list of files into a single datasset in order of appears in collection 
+name: merge_collections
+owner: nml
