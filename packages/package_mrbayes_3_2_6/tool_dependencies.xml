@@ -24,9 +24,9 @@
                 </action>
 
                 <action type="shell_command">(cd $INSTALL_DIR/src; autoconf)</action>
-                <action type="shell_command">(cd $INSTALL_DIR/src; ./configure --with-beagle=no)</action>
+                <action type="shell_command">(cd $INSTALL_DIR/src; ./configure --prefix=$INSTALL_DIR --with-beagle=no)</action>
                 <action type="shell_command">make -C $INSTALL_DIR/src</action>
-                <action type="shell_command">sudo make install -C $INSTALL_DIR/src</action>
+                <action type="shell_command">make install -C $INSTALL_DIR/src</action>
             </actions>
         </install>
         <readme>
