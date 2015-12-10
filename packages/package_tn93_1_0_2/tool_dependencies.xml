@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="tn93" version="1.0.2">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">https://github.com/veg/tn93/archive/v1.0.2.tar.gz</action>
+		<action type="make_directory">$INSTALL_DIR/tn93</action>
+		<action type="move_directory_files">
+		  <source_directory>tn93-1.0.2</source_directory>
+		  <destination_directory>$INSTALL_DIR/tn93</destination_directory>
+		</action>
+                <action type="shell_command">(cd $INSTALL_DIR/tn93; sudo cmake -DCMAKE_INSTALL_PREFIX=/usr/local ./)</action>
+                <action type="shell_command">(cd $INSTALL_DIR/tn93; sudo make install)</action>
+            </actions>
+        </install>
+        <readme>
+This installs tn93 1.0.2.
+
+See usage instructions here: https://github.com/veg/tn93
+        </readme>
+    </package>
+</tool_dependency>
