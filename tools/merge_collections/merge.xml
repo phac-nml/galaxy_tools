@@ -1,17 +1,26 @@
 <tool id="merge_dataset" name="Merge Collection" version="1.0">
-  <description>Merge collection into single head to tail file</description>
+  <description>Collapse collection into single dataset in order of the collection</description>
   <command>
     cat 
     #for $f in $input_list# $f #end for#
     > $output
   </command>
   <inputs>
-     <param name="input_list" type="data_collection" label="Collection of files to merge" help="" optional="false" collection_type="list" />
+     <param name="input_list" type="data_collection" label="Collection of files to collapse into single dataset" help="" optional="false" collection_type="list" />
   </inputs>
   <outputs>
     <data name="output" format_source="input_list" ></data>
   </outputs>
   <tests>
+	<test>
+	        <param name="input_list">
+        	  <collection type="list">
+	            <element name="input1" value="input1" />
+        	    <element name="input2" value="input2" />
+	          </collection>
+		</param>
+		<output name="output" file="answer.txt"/>
+	</test>
   </tests>
   <help>
 	Single tool that combines a list collection into a single file
