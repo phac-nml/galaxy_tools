@@ -1,4 +1,4 @@
-<tool id="merge_dataset" name="Merge Collection" version="1.0">
+<tool id="collapse_dataset" name="Collapse Collection" version="1.0">
   <description>Collapse collection into single dataset in order of the collection</description>
   <command>
     cat 
