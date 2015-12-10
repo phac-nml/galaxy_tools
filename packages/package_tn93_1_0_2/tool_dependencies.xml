@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <tool_dependency>
+    <package name="cmake" version="3.2.3">
+      <repository  name="package_cmake_3_2_3" owner="iuc" prior_installation_required="True" />
+    </package>
     <package name="tn93" version="1.0.2">
         <install version="1.0">
             <actions>
