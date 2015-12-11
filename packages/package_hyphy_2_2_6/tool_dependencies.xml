@@ -10,14 +10,10 @@
         <install version="1.0">
           <actions>
               <action type="download_by_url">https://github.com/veg/hyphy/archive/2.2.6.tar.gz</action>
-              <action type="make_directory">$INSTALL_DIR/hyphy</action>
-              <action type="move_directory_files">
-                <source_directory>hyphy-2.2.6</source_directory>
-                <destination_directory>$INSTALL_DIR/hyphy</destination_directory>
-              </action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; cmake ./)</action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make MP2)</action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make install)</action>
+
+              <action type="shell_command">cmake ./ -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR</action>
+              <action type="shell_command">make MP2</action>
+              <action type="shell_command">make install</action>
           </actions>
         </install>
         <readme>
