@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="python" version="3.4">
+      <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+    </package>
+    <package name="cmake" version="3.2.3">
+      <repository  name="package_cmake_3_2_3" owner="iuc" prior_installation_required="True" />
+    </package>
+    <package name="hyphy" version="2.2.6">
+        <install version="1.0">
+          <actions>
+              <action type="download_by_url">https://github.com/veg/hyphy/archive/2.2.6.tar.gz</action>
+              <action type="make_directory">$INSTALL_DIR/hyphy</action>
+              <action type="move_directory_files">
+                <source_directory>hyphy-2.2.6</source_directory>
+                <destination_directory>$INSTALL_DIR/hyphy</destination_directory>
+              </action>
+              <action type="shell_command">(cd $INSTALL_DIR/hyphy; cmake ./)</action>
+              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make MP2)</action>
+              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make install)</action>
+          </actions>
+        </install>
+        <readme>
+This installs HyPhy 2.2.6.
+
+See usage instructions here: http://hyphy.org/w/index.php/Main_Page
+        </readme>
+    </package>
+</tool_dependency>

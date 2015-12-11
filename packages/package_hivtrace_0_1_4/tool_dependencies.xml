@@ -13,19 +13,10 @@
               <repository name="package_python_3_4" owner="iuc">
                 <package name="python" version="3.4" />
               </repository>
-            </action>
               <package>https://pypi.python.org/packages/source/n/numpy/numpy-1.10.1.tar.gz</package>
               <package>https://pypi.python.org/packages/source/b/biopython/biopython-1.66.tar.gz</package>
               <package>https://pypi.python.org/packages/source/b/bioext/bioext-0.9.5.tar.gz</package>
-              <action type="download_by_url">https://github.com/veg/hyphy/archive/2.2.6.tar.gz</action>
-              <action type="make_directory">$INSTALL_DIR/hyphy</action>
-              <action type="move_directory_files">
-                <source_directory>hyphy-2.2.6</source_directory>
-                <destination_directory>$INSTALL_DIR/hyphy</destination_directory>
-              </action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; cmake ./)</action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make MP2)</action>
-              <action type="shell_command">(cd $INSTALL_DIR/hyphy; make install)</action>
+            </action>
 
               <action type="download_by_url">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
               <action type="make_directory">$INSTALL_DIR/hppy</action>
