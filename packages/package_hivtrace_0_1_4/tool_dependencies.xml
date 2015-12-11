@@ -6,41 +6,19 @@
     <package name="cmake" version="3.2.3">
       <repository  name="package_cmake_3_2_3" owner="iuc" prior_installation_required="True" />
     </package>
+    <package name="hyphy" version="2.2.6">
+      <repository  name="package_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
+    </package>
     <package name="hivtrace" version="0.1.4">
         <install version="1.0">
           <actions>
-            <action type="setup_virtualenv">
-              <repository name="package_python_3_4" owner="iuc">
-                <package name="python" version="3.4" />
-              </repository>
-              <package>https://pypi.python.org/packages/source/n/numpy/numpy-1.10.1.tar.gz</package>
-              <package>https://pypi.python.org/packages/source/b/biopython/biopython-1.66.tar.gz</package>
-              <package>https://pypi.python.org/packages/source/b/bioext/bioext-0.9.5.tar.gz</package>
+            <action type="setup_virtualenv">https://pypi.python.org/packages/source/n/numpy/numpy-1.10.1.tar.gz
+              https://pypi.python.org/packages/source/b/biopython/biopython-1.66.tar.gz
+              https://pypi.python.org/packages/source/b/bioext/bioext-0.9.5.tar.gz
+              git+https://github.com/veg/hppy/archive/0.9.6.tar.gz
+              git+https://github.com/veg/hivclustering/archive/1.2.3.tar.gz
+              git+https://github.com/veg/hivtrace/archive/0.1.4.tar.gz
             </action>
-
-              <action type="download_by_url">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
-              <action type="make_directory">$INSTALL_DIR/hppy</action>
-              <action type="move_directory_files">
-                <source_directory>hppy-0.9.6</source_directory>
-                <destination_directory>$INSTALL_DIR/hppy</destination_directory>
-              </action>
-              <action type="shell_command">(cd $INSTALL_DIR/hppy; python3 setup.py install)</action>
-
-              <action type="download_by_url">https://github.com/veg/hivclustering/archive/1.2.3.tar.gz</action>
-              <action type="make_directory">$INSTALL_DIR/hivclustering</action>
-              <action type="move_directory_files">
-                <source_directory>hivclustering-1.2.3</source_directory>
-                <destination_directory>$INSTALL_DIR/hivclustering</destination_directory>
-              </action>
-              <action type="shell_command">(cd $INSTALL_DIR/hivclustering; python3 setup.py install)</action>
-
-              <action type="download_by_url">https://github.com/veg/hivtrace/archive/0.1.4.tar.gz</action>
-              <action type="make_directory">$INSTALL_DIR/hivtrace</action>
-              <action type="move_directory_files">
-                <source_directory>hivtrace-0.1.4</source_directory>
-                <destination_directory>$INSTALL_DIR/hivtrace</destination_directory>
-              </action>
-              <action type="shell_command">(cd $INSTALL_DIR/hivtrace; python3 setup.py install)</action>
             <action type="set_environment">
               <environment_variable action="prepend_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
             </action>
