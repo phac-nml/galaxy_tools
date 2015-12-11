@@ -5,8 +5,8 @@
             <actions>
                 <action type="download_by_url">http://downloads.sourceforge.net/project/mrbayes/mrbayes/3.2.6/mrbayes-3.2.6.tar.gz</action>
                 <action type="change_directory">src</action>
-                <action type="autoconf">--prefix=$INSTALL_DIR --with-beagle=no</action>
-                <action type="make_install"/>
+                <action type="shell_command">autoconf</action>
+                <action type="autoconf">--with-beagle=no</action>
                 <action type="set_environment">
                   <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
                 </action>
