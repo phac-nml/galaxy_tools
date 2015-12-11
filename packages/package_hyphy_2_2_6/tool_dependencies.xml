@@ -10,10 +10,9 @@
         <install version="1.0">
           <actions>
               <action type="download_by_url">https://github.com/veg/hyphy/archive/2.2.6.tar.gz</action>
-
-              <action type="shell_command">cmake ./ -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR</action>
+              <action type="shell_command">cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DINSTALL_PREFIX=$INSTALL_DIR ./</action>
               <action type="shell_command">make MP2</action>
-              <action type="shell_command">make install</action>
+              <action type="make_install"/>
           </actions>
         </install>
         <readme>
