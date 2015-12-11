@@ -4,29 +4,14 @@
         <install version="1.0">
             <actions>
                 <action type="download_by_url">http://downloads.sourceforge.net/project/mrbayes/mrbayes/3.2.6/mrbayes-3.2.6.tar.gz</action>
-		<action type="make_directory">$INSTALL_DIR/documentation</action>
-		<action type="make_directory">$INSTALL_DIR/examples</action>
-    <action type="make_directory">$INSTALL_DIR/src</action>
-		<action type="move_directory_files">
-		  <source_directory>documentation</source_directory>
-		  <destination_directory>$INSTALL_DIR/documentation</destination_directory>
-		</action>
-                <action type="move_directory_files">
-		  <source_directory>examples</source_directory>
-		  <destination_directory>$INSTALL_DIR/examples</destination_directory>
-		</action>
-                <action type="move_directory_files">
-      <source_directory>src</source_directory>
-      <destination_directory>$INSTALL_DIR/src</destination_directory>
-    </action>
+                <action type="change_directory">src</action>
                 <action type="set_environment">
-                <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/src</environment_variable>
+                  <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/src</environment_variable>
                 </action>
 
-                <action type="shell_command">(cd $INSTALL_DIR/src; autoconf)</action>
-                <action type="shell_command">(cd $INSTALL_DIR/src; ./configure --prefix=$INSTALL_DIR --with-beagle=no)</action>
-                <action type="shell_command">make -C $INSTALL_DIR/src</action>
-                <action type="shell_command">make install -C $INSTALL_DIR/src</action>
+                <action type="shell_command">autoconf</action>
+                <action type="shell_command">./configure --prefix=$INSTALL_DIR --with-beagle=no</action>
+                <action type="make_install"/>
             </actions>
         </install>
         <readme>
