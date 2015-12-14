@@ -15,9 +15,13 @@
     <package name="biopython" version="1.66">
       <repository  name="package_biopython_1_66" owner="nml" prior_installation_required="True" />
     </package>
+    <package name="bioext" version="0.17.3">
+      <repository  name="package_bioext_0_17_3" owner="nml" prior_installation_required="True" />
+    </package>
     <package name="hivtrace" version="0.1.4">
         <install version="1.0">
           <actions>
+            <action type="download_by_url">https://github.com/veg/hivtrace/archive/0.1.4.tar.gz</action>
             <action type="set_environment_for_install">
                 <repository name="package_hyphy_2_2_6" owner="nml">
                     <package name="hyphy" version="2.2.6" />
@@ -29,14 +33,20 @@
                     <package name="biopython" version="1.66" />
                 </repository>
             </action>
-            <action type="setup_virtualenv">https://pypi.python.org/packages/source/b/bioext/bioext-0.9.5.tar.gz
-              git+https://github.com/veg/hppy/archive/0.9.6.tar.gz
-              git+https://github.com/veg/hivclustering/archive/1.2.3.tar.gz
-              git+https://github.com/veg/hivtrace/archive/0.1.4.tar.gz
+            <action type="setup_virtualenv">
+              https://github.com/veg/hppy/archive/0.9.6.tar.gz
+              https://github.com/veg/hivclustering/archive/1.2.3.tar.gz
             </action>
-            <action type="set_environment">
-              <environment_variable action="prepend_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
+            <action type="make_directory">$INSTALL_DIR/lib/python</action>
+            <action type="shell_command">
+              export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
+              export PATH=$PATH:$PATH_NUMPY &amp;&amp;
+              export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_NUMPY &amp;&amp;
+              python setup.py install --install-lib $INSTALL_DIR/lib/python
             </action>
+            <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
+            <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
+            <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
           </actions>
         </install>
         <readme>

@@ -13,6 +13,11 @@
               <action type="shell_command">cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DINSTALL_PREFIX=$INSTALL_DIR ./</action>
               <action type="shell_command">make MP2</action>
               <action type="make_install"/>
+              <action type="shell_command">
+                export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
+                export PATH=$PATH:$PATH_HYPHY &amp;&amp;
+                export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_HYPHY &amp;&amp;
+              </action>
           </actions>
         </install>
         <readme>
