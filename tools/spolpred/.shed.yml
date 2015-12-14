@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: A program for predicting the spoligotype from raw sequence reads
+name: spolpred
+owner: nml

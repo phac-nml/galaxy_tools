@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="spolpred" version="1.0.0">
+    	<repository name="package_spolpred_1_0_0" owner="nml" />
+    </package>
+</tool_dependency>

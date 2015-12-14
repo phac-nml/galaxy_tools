@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="spolpred" version="1.0.0">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">http://pathogenseq.lshtm.ac.uk/downloads/spolpred.cpp</action>
+                <action type="shell_command">g++ spolpred.cpp</action>
+                <action type="shell_command">mv a.out spolpred</action>
+                <action type="set_environment">
+                  <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                </action>
+            </actions>
+        </install>
+        <readme>
+This installs SpolPred 1.0.0.
+
+See manual here http://pathogenseq.lshtm.ac.uk/downloads/spolpredmanual.pdf
+See also here http://pathogenseq.lshtm.ac.uk/spolpred
+        </readme>
+    </package>
+</tool_dependency>

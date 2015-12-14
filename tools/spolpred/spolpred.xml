@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<tool id="spolpred" name="SpolPred" version="1.0.0">
+  <description>with options and commands</description>
+  <requirements>
+    <requirement type="package" version="1.0.0">spolpred</requirement>
+  </requirements>
+  <command>
+
+spolpred
+
+$input_file
+
+-l $read_length
+-b $type_reads
+-d $more_details
+-s $stop_screening
+-a $screening_threshold
+-m $matching_threshold
+
+  </command>
+  <inputs>
+    <param name="input_file" type="data" format="fastq" label="FASTQ input file"/>
+
+    <param name="read_length" type="integer" label="Read length [35, 1000]" value="75">
+      <validator type="in_range" min="35" max="1000" message="Must be between 35 and 1000 (inclusive)"/>
+    </param>
+
+    <param name="type_reads" type="select" label="Type of input reads">
+        <sanitizer sanitize="False" />
+        <option value="d">Direct</option>
+        <option value="r">Reverse</option>
+    </param>
+
+    <param name="more_details" type="select" label="Level of processing output detail"
+      help="If set on, processing details are output to the job's STDOUT, including
+      number of processed reads and number of spacer sequences found">
+        <sanitizer sanitize="False" />
+        <option value="on">High</option>
+        <option value="off">Normal</option>
+    </param>
+
+    <param name="stop_screening" type="select" label="Read screening"
+      help="Used to end read processing when Screening Threshold is reached">
+        <sanitizer sanitize="False" />
+        <option value="on">Off</option>
+        <option value="off">On</option>
+    </param>
+
+    <param name="screening_threshold" type="integer" label="Screening threshold" value="50"
+      help="Average number of spacer occurrences used to stop screening.">
+      <validator type="in_range" min="0" max="inf" message="Must be at least 0"/>
+    </param>
+
+    <param name="matching_threshold" type="integer" label="Matching threshold" value="4"
+      help="Minimum number of spacer occurrences below which spacer absence is assigned.">
+      <validator type="in_range" min="0" max="inf" message="Must be at least 0"/>
+    </param>
+
+  </inputs>
+  <outputs>
+    <data name="outfile" format="txt" from_work_dir="output.txt"/>
+  </outputs>
+
+  <tests>
+    <test>
+      <param/>
+      <output/>
+    </test>
+  </tests>
+
+<help>
+  **Frequently Asked Questions**
+
+  **SpolPred only accepts one FASTQ file, what if I have got paired-end reads?**
+
+  Forward and reverse read files can be merged into one by making use of the Perl script
+  shuffleSequences_fastq.pl provided in Velvet software suite. SpolPred run will therefore take longer
+  than using only forward or reverse reads. In our dataset (read Methods for more details), the forward file
+  had enough reads to find all present spacers and infer the octal code for 49 out of 51 samples. That
+  decision will have to be made depending on the sample coverage depth.
+
+
+
+  **What if I have a FASTA file?**
+
+  SpolPred has been particularly designed to process raw reads and therefore only supports sequence
+  files in FASTQ format.
+
+
+
+  **What is the point of stopping the read screening?**
+
+  By default, all reads in the FASTQ file will be processed. Nevertheless, we have observed that a point is
+  reached when no more reads are needed to infer the octal code, in other words, the number of spacer
+  occurrences is high enough and steady to assume that all present spacers have already been found.
+  Therefore, stopping the program at this point would save time and computer resources. If low coverage
+  is the case, stopping the scanning is not advisable.
+
+
+
+  **How do I choose the Screening threshold?**
+
+  If you have decided to scan the whole input file there is no need to set such threshold. The Screening
+  threshold is used to let the program know when the screening should stop. Such value will depend on
+  read coverage. Running the software and looking at the number of times all spacers are detected will
+  provide insight into both the coverage and the most appropriate threshold value.
+
+
+
+  **Why is a Matching threshold required? Are spacers not supposed to occur uniquely?**
+
+  The number of times each spacer is found is tracked during the screening and absence assigned when
+  such number does not reach a user-defined threshold (4 times by default). This threshold, here called
+  Matching threshold, has had to be implemented because for some absent spacers, a few spurious
+  matches were found. Those false positives are likely to be related with bad-quality issues, like
+  sequencing errors. In our data set, no more than 3 false matches were detected for absent spacers, in
+  contrast to 50-150 found per present spacer.
+
+
+
+  **Should I be worried then about false positive matches?**
+
+  As long as proper pre-filtering steps are carried out to the raw reads, no important issues are expected
+  to come up.
+
+
+
+  **Can I change the number of allowed SNPs when querying the spacers?**
+
+  This option has not been implemented. Spacer sequences are conserved and only one SNP has been
+  reported to occur at the most.
+
+
+
+  **Why are exact matches output as well?**
+
+  The number of read-spacer exact matches, i.e. without allowing SNPs, will enable the easily
+  identification of SNPs on spacer sequences. When inferring the octal code, exact matches are not
+  employed.
+</help>
+<citations>
+  <citation type="doi">10.1093/bioinformatics/bts544</citation>
+</citations>
+</tool>
