@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <tool id="mrbayes" name="MrBayes" version="1.0.1">
   <description>with options and commands</description>
-  <stdio>
-    <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
-  </stdio>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
   </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+  </stdio>
   <command> mb $command_file > $outfile
 ## print list of avaialble variables
 #silent sys.stderr.write("\n \n \n ======== Cheetah template variables ========\n")
