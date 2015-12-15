@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
-<tool id="mrbayes" name="MrBayes" version="1.0.0">
+<tool id="mrbayes" name="MrBayes" version="1.0.1">
   <description>with options and commands</description>
+  <stdio>
+    <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+  </stdio>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
   </requirements>
@@ -15,7 +18,8 @@
   <configfiles>
     <configfile name="command_file">
         begin mrbayes;
-        set seed=$seed;
+        set Seed=$seed;
+        set Swapseed=$swapseed;
         set quitonerror=no;
         execute $data;
         outgroup $outgroup;
@@ -104,6 +108,10 @@
         help="Requires .ckp file (i.e. that number of generations > checkpoint frequency for previous analysis)." />
     <param name="seed" type="integer" label="&lt;hr&gt;Seed" optional="false" value="5"
       help="Specify a seed with which to run the job.">
+      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+    </param>
+    <param name="swapseed" type="integer" label="&lt;hr&gt;Swap Seed" optional="false" value="5"
+      help="Specify a swap seed with which to run the job.">
       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
     </param>
   </inputs>
