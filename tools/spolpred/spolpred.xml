@@ -7,12 +7,14 @@
   <command interpreter="bash">
 
 #set $output=$input_file.name
+
 spolpred.sh "$input_file.name" $input_file
-#if $screening_options.stop_screening == "off":
-  -a $screening_options.screening_threshold
-#end if
 
 -l $read_length -b $type_reads -d $more_details -s $screening_options.stop_screening
+
+#if $screening_options.stop_screening == "on":
+  -a $screening_options.screening_threshold
+#end if
 
 -m $matching_threshold
 
@@ -39,16 +41,16 @@ spolpred.sh "$input_file.name" $input_file
     <conditional name="screening_options">
       <param name="stop_screening" type="select" label="Read screening"
         help="Used to end read processing when Screening Threshold is reached">
-          <option value="off">Perform read screening</option>
-          <option value="on">Do not perform read screening</option>
+          <option value="on">Perform read screening</option>
+          <option value="off">Do not perform read screening</option>
       </param>
-      <when value="off">
+      <when value="on">
         <param name="screening_threshold" type="integer" label="Screening threshold" value="50"
           help="Average number of spacer occurrences used to stop screening">
           <validator type="in_range" min="0" max="inf" message="Must be at least 0"/>
         </param>
       </when>
-      <when value="on"/>
+      <when value="off"/>
     </conditional>
 
     <param name="matching_threshold" type="integer" label="Matching threshold" value="4"
