@@ -4,19 +4,16 @@
   <requirements>
     <requirement type="package" version="1.0.0">spolpred</requirement>
   </requirements>
-  <command>
+  <command interpreter="bash">
 
-spolpred
-
-$input_file
-
--l $read_length
--b $type_reads
--d $more_details
--s $screening_options.stop_screening
+#set $output=$input_file.name
+spolpred.sh "$input_file.name" $input_file
 #if $screening_options.stop_screening == "off":
   -a $screening_options.screening_threshold
 #end if
+
+-l $read_length -b $type_reads -d $more_details -s $screening_options.stop_screening
+
 -m $matching_threshold
 
   </command>
@@ -61,7 +58,7 @@ $input_file
 
   </inputs>
   <outputs>
-    <data name="outfile" format="txt" from_work_dir="output.txt"/>
+    <data name="outfile" format="tabular" from_work_dir="output.txt"/>
   </outputs>
 
   <tests>
