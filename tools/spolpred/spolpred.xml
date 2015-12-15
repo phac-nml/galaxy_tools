@@ -137,6 +137,8 @@ spolpred.sh "$input_file.name" $input_file
   The number of read-spacer exact matches, i.e. without allowing SNPs, will enable the easily
   identification of SNPs on spacer sequences. When inferring the octal code, exact matches are not
   employed.
+
+  Wrapper Author: Mark Iskander
 </help>
 <citations>
   <citation type="doi">10.1093/bioinformatics/bts544</citation>
