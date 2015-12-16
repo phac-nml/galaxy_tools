@@ -12,27 +12,24 @@
     --ambiguities $runtype.ambiguities
 
     #if $runtype.ambiguities == "RESOLVE":
-      --fraction $fraction
+      --fraction $runtype.fraction
     #end if
 
     #if $reftype.reference == "Custom":
-      --reference $customreference
+      --reference $reftype.customreference
     #else
-      --reference $reference
+      --reference $reftype.reference
     #end if
 
     --threshold $threshold
+
     --minoverlap $minoverlap
 
-    #if $curate:
-      --curate
-    #end if
+    --curate $curate
 
     --filter $filter
 
-    #if $strip_drams:
-      --strip_drams $strip_drams
-    #end if
+    --strip_drams $strip_drams
 
     #if $compare:
       --compare
@@ -45,6 +42,7 @@
   </command>
   <inputs>
     <param name="inputfasta" type="data" format="fasta" label="FASTA file"/>
+
     <conditional name="inputtype">
       <param name="typefasta" type="select" label="Type of FASTA">
         <option value="unaligned">Unaligned</option>
@@ -149,8 +147,9 @@
       <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
     </param>
 
-    <param name="compare" type="boolean" label="Compare to Los Alamos National Laboratory HIV database sequences" help="Compare uploaded sequences to the all of the public sequences,
-      retrieved periodically from (hiv.lanl.gov). Comparing to a public database is only available for some of the reference sequences"/>
+    <param name="compare" type="boolean" truevalue="--compare" falsevalue="" checked="False" label="Compare to Los Alamos National Laboratory HIV database sequences"
+      help="Compare uploaded sequences to the all of the public sequences, retrieved periodically from (hiv.lanl.gov). Comparing to a public database
+      is only available for some of the reference sequences"/>
   </inputs>
   <outputs>
     <data name="outfile" format="txt"/>
