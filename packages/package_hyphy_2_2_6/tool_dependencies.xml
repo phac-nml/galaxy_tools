@@ -13,10 +13,9 @@
               <action type="shell_command">cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DINSTALL_PREFIX=$INSTALL_DIR ./</action>
               <action type="shell_command">make MP2</action>
               <action type="make_install"/>
-              <action type="shell_command">
-                export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
-                export PATH=$PATH:$PATH_HYPHY &amp;&amp;
-                export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_HYPHY &amp;&amp;
+              <action type="set_environment">
+                <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib</environment_variable>
+                <environment_variable action="append_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
               </action>
           </actions>
         </install>
