@@ -11,12 +11,15 @@
                     <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                         <package name="numpy" version="1.10.1" />
                     </repository>
+                    <repository name="package_python_3_4" owner="nml">
+                        <package name="python" version="3.4" />
+                    </repository>
                 </action>
                 <action type="shell_command">
                     export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR &amp;&amp;
                     export PATH=$PATH:$PATH_NUMPY &amp;&amp;
                     export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_NUMPY:$PYTHONPATH_MATPLOTLIB &amp;&amp;
-                    python setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
+                    python3 setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
                 </action>
                 <action type="set_environment">
                     <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
