@@ -5,6 +5,6 @@ shift
 
 spolpred $@
 
-sed -i s/^.*\t/$name/ output.txt
+sed -i "s/^[^\t]*/$name/" output.txt
 
 exit 0
