@@ -29,9 +29,10 @@
                       export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
                       export PATH=$PATH:$PATH_NUMPY &amp;&amp;
                       export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_NUMPY &amp;&amp;
-                      python setup.py install --install-lib $INSTALL_DIR/lib/python
+                      python3 setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
                     </action>
                     <action type="set_environment">
+                      <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
