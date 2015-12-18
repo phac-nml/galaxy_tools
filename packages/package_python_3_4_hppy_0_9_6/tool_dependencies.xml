@@ -21,6 +21,7 @@
                     <action type="make_directory">$INSTALL_DIR/lib/python</action>
                     <action type="setup_virtualenv">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
                     <action type="set_environment">
+                      <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
                     </action>
                 </actions>
