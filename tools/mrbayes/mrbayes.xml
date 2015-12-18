@@ -20,7 +20,7 @@
         begin mrbayes;
         set Seed=$seed;
         set Swapseed=$swapseed;
-        set quitonerror=no;
+        set quitonerror=yes;
         execute $data;
         outgroup $outgroup;
         $model;
