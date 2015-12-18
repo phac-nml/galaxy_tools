@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tool_dependency>
         <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+          <repository name="package_python_3_4" owner="nml" prior_installation_required="True" />
         </package>
         <package name="hyphy" version="2.2.6">
           <repository  name="package_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
@@ -13,6 +13,9 @@
                     <action type="set_environment_for_install">
                         <repository name="package_hyphy_2_2_6" owner="nml">
                             <package name="hyphy" version="2.2.6" />
+                        </repository>
+                        <repository name="package_python_3_4" owner="nml">
+                            <package name="python" version="3.4" />
                         </repository>
                     </action>
                     <action type="make_directory">$INSTALL_DIR/lib/python</action>

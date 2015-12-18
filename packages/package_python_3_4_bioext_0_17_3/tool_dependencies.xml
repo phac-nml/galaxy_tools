@@ -1,24 +1,27 @@
 <?xml version="1.0"?>
 <tool_dependency>
         <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+          <repository name="package_python_3_4" owner="nml" prior_installation_required="True" />
         </package>
         <package name="numpy" version="1.10.1">
-          <repository  name="package_numpy_1_10_1" owner="nml" prior_installation_required="True" />
+          <repository  name="package_python_3_4_numpy_1_10_1" owner="nml" prior_installation_required="True" />
         </package>
         <package name="biopython" version="1.66">
-          <repository  name="package_biopython_1_66" owner="nml" prior_installation_required="True" />
+          <repository  name="package_python_3_4_biopython_1_66" owner="nml" prior_installation_required="True" />
         </package>
         <package name="bioext" version="0.17.3">
             <install version="1.0">
                 <actions>
                     <action type="download_by_url">https://github.com/veg/BioExt/archive/0.17.3.tar.gz</action>
                     <action type="set_environment_for_install">
-                        <repository name="package_numpy_1_10_1" owner="nml">
+                        <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                             <package name="numpy" version="1.10.1" />
                         </repository>
-                        <repository name="package_biopython_1_66" owner="nml">
+                        <repository name="package_python_3_4_biopython_1_66" owner="nml">
                             <package name="biopython" version="1.66" />
+                        </repository>
+                        <repository name="package_python_3_4" owner="nml">
+                            <package name="python" version="3.4" />
                         </repository>
                     </action>
                     <action type="make_directory">$INSTALL_DIR/lib/python</action>

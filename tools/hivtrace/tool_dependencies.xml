@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
     <package name="hivtrace" version="0.1.4">
-    	<repository name="package_hivtrace_0_1_4" owner="nml" />
+    	<repository name="package_python_3_4_hivtrace_0_1_4" owner="nml" />
     </package>
 </tool_dependency>
