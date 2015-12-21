@@ -52,7 +52,12 @@
             <action type="set_environment">
               <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
               <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOPYTHON]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOEXT]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
+              <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
+              <environment_variable action="prepend_to" name="PATH">$ENV[PATH_HIVCLUSTERING]</environment_variable>
             </action>
           </actions>
         </install>

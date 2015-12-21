@@ -46,6 +46,7 @@
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
+                      <environment_variable action="set_to" name="PATH_HIVCLUSTERING">$INSTALL_DIR/bin</environment_variable>
                     </action>
                 </actions>
             </install>

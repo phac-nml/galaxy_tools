@@ -35,7 +35,9 @@
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
+                      <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOPYTHON]</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
+                      <environment_variable action="set_to" name="PYTHONPATH_BIOEXT">$INSTALL_DIR/lib/python</environment_variable>
                     </action>
                 </actions>
             </install>
