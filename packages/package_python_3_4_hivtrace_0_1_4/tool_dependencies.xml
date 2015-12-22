@@ -38,6 +38,12 @@
                 <repository name="package_python_3_4_biopython_1_66" owner="nml">
                     <package name="biopython" version="1.66" />
                 </repository>
+                <repository name="package_python_3_4_bioext_0_17_3" owner="nml">
+                    <package name="bioext" version="0.17.3" />
+                </repository>
+                <repository name="package_python_3_4_hivclustering_1_2_3" owner="nml">
+                    <package name="hivclustering" version="1.2.3" />
+                </repository>
                 <repository name="package_python_3_4" owner="nml">
                     <package name="python" version="3.4" />
                 </repository>
@@ -58,6 +64,7 @@
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_HIVCLUSTERING]</environment_variable>
+              <environment_variable action="prepend_to" name="PATH">$ENV[PATH_BIOEXT]</environment_variable>
             </action>
           </actions>
         </install>
