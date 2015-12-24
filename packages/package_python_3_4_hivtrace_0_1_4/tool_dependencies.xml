@@ -49,11 +49,13 @@
                 </repository>
             </action>
             <action type="make_directory">$INSTALL_DIR/lib/python</action>
+            <action type="make_directory">$INSTALL_DIR/bin</action>
             <action type="shell_command">
+              ln -s $PATH_PYTHON3/python3 $INSTALL_DIR/bin/python3 &amp;&amp;
               export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
               export PATH=$PATH:$PATH_NUMPY &amp;&amp;
               export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_NUMPY &amp;&amp;
-              python3 setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
+              $INSTALL_DIR/bin/python3 setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
             </action>
             <action type="set_environment">
               <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
