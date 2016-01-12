@@ -1,7 +1,7 @@
 <tool id="spades" name="spades" version="1.1">
   <description>SPAdes genome assembler for regular and single-cell projects</description>
   <requirements>
-    <requirement type="package" version="3.6.1">spades</requirement>
+    <requirement type="package" version="3.6.2">spades</requirement>
   </requirements>
   <command interpreter="perl">spades.pl 
     $out_contigs 

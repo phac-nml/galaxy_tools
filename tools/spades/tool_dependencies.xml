@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="spades" version="3.6.1">
-        <repository name="package_spades_3_6_1" owner="nml"  />
+    <package name="spades" version="3.6.2">
+        <repository name="package_spades_3_6_2" owner="nml"  />
     </package>
 </tool_dependency>
