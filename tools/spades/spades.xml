@@ -1,4 +1,4 @@
-<tool id="spades" name="spades" version="1.1">
+<tool id="spades" name="spades" version="1.2">
   <description>SPAdes genome assembler for regular and single-cell projects</description>
   <requirements>
     <requirement type="package" version="3.6.2">spades</requirement>
