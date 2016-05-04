@@ -38,7 +38,7 @@
         #end if
 
         #if $single_or_paired.type == "single"
-            "$single_or_paired.input_se.name"
+            "$single_or_paired.input_se.element_identifier"
             --input_se "$input_se"
         #elif $single_or_paired.type == "paired"
             "$single_or_paired.forward_pe.name"
