@@ -1,20 +1,38 @@
-<tool id="bundle_collection" name="Bundle Collection" version="1.0.1">
+<tool id="bundle_collection" name="Bundle Collection" version="1.1">
 	<description>Download a collection of files</description>
 	<stdio>
   	<exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
   </stdio>
 	<command interpreter="perl">bundle_collection.pl -h $html_file -p $html_file.files_path
-		#for $f in $input.keys
-			-i "$f,$input[$f].ext=$input[$f]"
-			#if $input[$f].metadata.bam_index and $input[$f].metadata.bam_index != "None"
-				#set $bamind = $f+","+$input[$f].ext+".bai="+$input[$f].metadata.bam_index
-				-i "$bamind"
-			#end if
-		#end for
+
+                #if $input:
+               	    #for $f in $input.keys
+		    -i "$f,$input[$f].ext=$input[$f]"
+		    #if $input[$f].metadata.bam_index and $input[$f].metadata.bam_index != "None"
+		        #set $bamind = $f+","+$input[$f].ext+".bai="+$input[$f].metadata.bam_index
+		        -i "$bamind"
+	            #end if
+		    #end for
+                #end if
+                
+                #for $dataset in $single_files
+                    #if $dataset.single_file:
+                        -i "$dataset.single_file.name,$dataset.single_file.ext=$dataset.single_file"
+                    #end if
+
+		    #if $dataset.single_file.metadata.bam_index and $dataset.single_file.metadata.bam_index != "None"
+		        #set $bamind = $dataset.single_file.name+","+$dataset.single_file.ext+".bai="+$dataset.single_file.metadata.bam_index
+		        -i "$bamind"
+	            #end if
+                    
+                #end for
 	</command>
 
 	<inputs>
-		<param name="input" type="data_collection" label="Data Collection" collection_type="list"/>
+		<param name="input" type="data_collection" label="Data Collection" collection_type="list" optional='True'/>
+                <repeat name='single_files' title='Single dataset(s)'>
+                  <param name="single_file" label="Dataset to add the bundle" type="data" format='data' optional='True'/>
+                </repeat>
 	</inputs>
 
 	<outputs>
