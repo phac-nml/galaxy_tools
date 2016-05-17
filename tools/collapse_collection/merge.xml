@@ -2,14 +2,14 @@
   <description>Collapse collection into single dataset in order of the collection</description>
   <command>
     <![CDATA[
-
+    
      (
     #for $f in $input_list#
     #if $filename.add_name:
        #if str($filename.place_name) ==  "same":
-           printf "$f.name\t" ;
+           printf "$f.element_identifier\t" ;
        #else
-           printf "$f.name\n" ;
+           printf "$f.element_identifier\n" ;
        #end if
     #end if
     cat "$f" ;
@@ -21,7 +21,7 @@
     
   </command>
   <inputs>
-     <param name="input_list" type="data_collection" label="Collection of files to collapse into single dataset" help="" optional="false" collection_type="list" />
+     <param name="input_list" type="data" label="Collection of files to collapse into single dataset" help="" optional="false" multiple="true" />
      <conditional name="filename">
      <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
      <when value="true">
