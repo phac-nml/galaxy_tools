@@ -1,12 +1,38 @@
-<tool id="collapse_dataset" name="Collapse Collection" version="1.0">
+<tool id="collapse_dataset" name="Collapse Collection" version="2.0">
   <description>Collapse collection into single dataset in order of the collection</description>
   <command>
-    cat 
-    #for $f in $input_list# $f #end for#
+    <![CDATA[
+
+     (
+    #for $f in $input_list#
+    #if $filename.add_name:
+       #if str($filename.place_name) ==  "same":
+           printf "$f.name\t" ;
+       #else
+           printf "$f.name\n" ;
+       #end if
+    #end if
+    cat "$f" ;
+    #end for#
+    )
     > $output
+
+    ]]>
+    
   </command>
   <inputs>
      <param name="input_list" type="data_collection" label="Collection of files to collapse into single dataset" help="" optional="false" collection_type="list" />
+     <conditional name="filename">
+     <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
+     <when value="true">
+       <param name="place_name" type="select" label="Where to add dataset name">
+         <option value="same">Same line</option>
+         <option value="above">Line Above</option>
+       </param>
+     </when>
+     <when value='false'>
+     </when>
+     </conditional>
   </inputs>
   <outputs>
     <data name="output" format_source="input_list" ></data>
@@ -23,7 +49,9 @@
 	</test>
   </tests>
   <help>
-	Single tool that combines a list collection into a single file
+	Combines a list collection into a single file dataset with option to include dataset names.
+        
+        
   </help>
   <citations>
   </citations>
