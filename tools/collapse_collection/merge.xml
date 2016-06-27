@@ -21,7 +21,7 @@
     
   </command>
   <inputs>
-     <param name="input_list" type="data" label="Collection of files to collapse into single dataset" help="" optional="false" multiple="true" />
+     <param name="input_list" type="data" format="data" label="Collection of files to collapse into single dataset" help="" optional="false" multiple="true" />
      <conditional name="filename">
      <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
      <when value="true">
