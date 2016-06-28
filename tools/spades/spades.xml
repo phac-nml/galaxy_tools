@@ -216,8 +216,7 @@
     <test>
       <param name="sc" value="false" />
       <param name="careful" value="false" />
-      <param name="kmer_choice.auto_kmer_choice" value="false" />
-      <param name="kmer_choice.kmers" value="33,55" />
+      <param name="kmers" value="33,55" />
       <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
@@ -226,7 +225,7 @@
     <test>
       <param name="sc" value="false" />
       <param name="careful" value="false" />
-      <param name="kmer_choice.auto_kmer_choice" value="true" />
+      <param name="auto_kmer_choice" value="true" />
       <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
@@ -235,8 +234,7 @@
     <test>
       <param name="sc" value="false" />
       <param name="careful" value="false" />
-      <param name="kmer_choice.auto_kmer_choice" value="false" />
-      <param name="kmer_choice.kmers" value="77" />
+      <param name="kmers" value="77" />
       <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
