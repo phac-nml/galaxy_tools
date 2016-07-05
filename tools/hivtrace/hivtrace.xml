@@ -4,8 +4,10 @@
   <requirements>
     <requirement type="package" version="0.1.4">hivtrace</requirement>
   </requirements>
-  <command>
-
+  <stdio>
+    <exit_code range="1:" />
+  </stdio>
+  <command><![CDATA[
     hivtrace
 
     --input $inputfasta
@@ -46,7 +48,7 @@
     --log $logfile
 
     > $outfile
-  </command>
+  ]]></command>
   <inputs>
     <param name="inputfasta" type="data" format="fasta" label="Sequence file"/>
 
@@ -195,7 +197,7 @@
     </test>
   </tests>
 
-<help>
+  <help><![CDATA[
 Options Summary for HIV-Trace
 
 **Sequence file**
@@ -294,8 +296,8 @@ Affects only the Resolve option for handling ambiguities. Any sequence with no m
 **TIP:** This option is only available for specific reference types
 
 Compare uploaded sequences to all public sequences. Retrieved periodically from the Los Alamos HIV Sequence Database: http://hiv.lanl.gov/
-</help>
-<citations>
-  <citation/>
-</citations>
+  ]]></help>
+  <citations>
+    <citation/>
+  </citations>
 </tool>
