@@ -1,4 +1,4 @@
-<tool id="spades" name="spades" version="1.3.1">
+<tool id="spades" name="spades" version="1.3.2">
   <description>SPAdes genome assembler for regular and single-cell projects</description>
   <requirements>
     <requirement type="package" version="3.8.0">spades</requirement>
@@ -24,7 +24,9 @@
     $onlyassembler
     $careful
     -t \${GALAXY_SLOTS:-16}
-    -k "$kmers"
+    #if $kmer_choice.auto_kmer_choice == "false":
+    -k "$kmer_choice.kmers"
+    #end if
 
     #if $cov.state == "auto":
     --cov-cutoff 'auto'
@@ -88,9 +90,13 @@
     </param>
     <param name="onlyassembler" type="boolean" truevalue="--only-assembler" falsevalue="" checked="False" label="Run only assembly? (without read error correction)" />
     <param name="careful" type="boolean" truevalue="--careful" falsevalue="" checked="True" label="Careful correction?" help="Tries to reduce number of mismatches and short indels. Also runs MismatchCorrector – a post processing tool, which uses BWA tool (comes with SPAdes)." />
-    <param name="kmers" type="text" label="K-mers to use, separated by commas" value="21,33,55" help="Comma-separated list of k-mer sizes to be used (all values must be odd, less than 128, listed in ascending order, and smaller than the read length). The default value is 21,33,55." >
-
-    </param>
+    <conditional name="kmer_choice">
+      <param name="auto_kmer_choice" type="boolean" checked="False" truevalue="true" falsevalue="false" label="Automatically choose k-mer values" help="k-mer choices can be chosen by SPAdes instead of being entered manually" />
+      <when value="false">
+        <param name="kmers" type="text" label="K-mers to use, separated by commas" value="21,33,55" help="Comma-separated list of k-mer sizes to be used (all values must be odd, less than 128, listed in ascending order, and smaller than the read length). The default value is 21,33,55." />
+      </when>
+      <when value="true"> </when>
+    </conditional>
     <conditional name="cov">
       <param name="state" type="select" label="Coverage Cutoff">
         <option value="off">Off</option>
@@ -214,7 +220,25 @@
       <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
-      <output name="out_contigs" file="reference_1K.fa" ftype="fasta" compare="re_match" lines_diff="1" />
+      <output name="out_contigs" file="kmer_33_55_output.fa" ftype="fasta" compare="re_match" lines_diff="1" />
+    </test> 
+    <test>
+      <param name="sc" value="false" />
+      <param name="careful" value="false" />
+      <param name="auto_kmer_choice" value="true" />
+      <param name="lib_type" value="paired_end" />
+      <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
+      <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
+      <output name="out_contigs" file="auto_kmer_output.fa" ftype="fasta" compare="re_match" lines_diff="1" />
+    </test> 
+    <test>
+      <param name="sc" value="false" />
+      <param name="careful" value="false" />
+      <param name="kmers" value="77" />
+      <param name="lib_type" value="paired_end" />
+      <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
+      <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
+      <output name="out_contigs" file="kmer_77_output.fa" ftype="fasta" compare="re_match" lines_diff="1" />
     </test> 
  </tests>
   <help>
