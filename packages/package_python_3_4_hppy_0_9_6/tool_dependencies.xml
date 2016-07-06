@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <tool_dependency>
         <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="nml" prior_installation_required="True" />
+          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
         </package>
         <package name="hyphy" version="2.2.6">
-          <repository  name="package_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
+          <repository  name="package_python_3_4_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
         </package>
         <package name="hppy" version="0.9.6">
             <install version="1.0">
                 <actions>
                     <action type="setup_virtualenv">https://pypi.python.org/packages/source/f/fakemp/fakemp-0.9.1.tar.gz</action>
                     <action type="set_environment_for_install">
-                        <repository name="package_hyphy_2_2_6" owner="nml">
+                        <repository name="package_python_3_4_hyphy_2_2_6" owner="nml">
                             <package name="hyphy" version="2.2.6" />
                         </repository>
-                        <repository name="package_python_3_4" owner="nml">
+                        <repository name="package_python_3_4" owner="iuc">
                             <package name="python" version="3.4" />
                         </repository>
                     </action>

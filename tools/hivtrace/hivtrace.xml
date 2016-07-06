@@ -186,8 +186,8 @@
       is only available for some of the reference sequences"/>
   </inputs>
   <outputs>
-    <data name="outfile" format="txt"/>
-    <data name="logfile" format="txt"/>
+      <data name="outfile" format="txt" label="${tool.name} on ${on_string}: Results"/>
+      <data name="logfile" format="txt" label="${tool.name} on ${on_string}: Log"/>
   </outputs>
 
   <tests>

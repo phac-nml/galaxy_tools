@@ -4,17 +4,17 @@
           <repository name="package_atlas_3_10" owner="iuc" prior_installation_required="True" />
         </package>
         <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="nml" prior_installation_required="True" />
+          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
         </package>
         <package name="numpy" version="1.10.1">
             <install version="1.0">
                 <actions>
-                  <action type="download_by_url">http://sourceforge.net/projects/numpy/files/NumPy/1.10.1/numpy-1.10.1.tar.gz</action>
+                    <action type="download_by_url">http://sourceforge.net/projects/numpy/files/NumPy/1.10.1/numpy-1.10.1.tar.gz</action>
                     <action type="set_environment_for_install">
                         <repository name="package_atlas_3_10" owner="iuc">
                             <package name="atlas" version="3.10.2" />
                         </repository>
-                        <repository name="package_python_3_4" owner="nml">
+                        <repository name="package_python_3_4" owner="iuc">
                             <package name="python" version="3.4" />
                         </repository>
                     </action>

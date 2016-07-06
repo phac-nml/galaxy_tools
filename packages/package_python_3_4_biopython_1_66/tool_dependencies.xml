@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <tool_dependency>
+    <package name="python" version="3.4">
+        <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+    </package>
     <package name="numpy" version="1.10.1">
         <repository name="package_python_3_4_numpy_1_10_1" owner="nml" prior_installation_required="True" />
     </package>
@@ -11,7 +14,7 @@
                     <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                         <package name="numpy" version="1.10.1" />
                     </repository>
-                    <repository name="package_python_3_4" owner="nml">
+                    <repository name="package_python_3_4" owner="iuc">
                         <package name="python" version="3.4" />
                     </repository>
                 </action>

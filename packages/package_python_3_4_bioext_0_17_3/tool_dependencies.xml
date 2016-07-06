@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <tool_dependency>
         <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="nml" prior_installation_required="True" />
+          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+        </package>
+        <package name="pysam" version="0.8.3">
+            <repository name="package_python_3_4_pysam_0_8_3" owner="nml" prior_installation_required="True" />
         </package>
         <package name="numpy" version="1.10.1">
           <repository  name="package_python_3_4_numpy_1_10_1" owner="nml" prior_installation_required="True" />
@@ -14,13 +17,16 @@
                 <actions>
                     <action type="download_by_url">https://github.com/veg/BioExt/archive/0.17.3.tar.gz</action>
                     <action type="set_environment_for_install">
+                        <repository name="package_python_3_4_pysam_0_8_3" owner="nml">
+                            <package name="pysam" version="0.8.3" />
+                        </repository>
                         <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                             <package name="numpy" version="1.10.1" />
                         </repository>
                         <repository name="package_python_3_4_biopython_1_66" owner="nml">
                             <package name="biopython" version="1.66" />
                         </repository>
-                        <repository name="package_python_3_4" owner="nml">
+                        <repository name="package_python_3_4" owner="iuc">
                             <package name="python" version="3.4" />
                         </repository>
                     </action>
@@ -34,6 +40,7 @@
                     <action type="set_environment">
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
+                      <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_PYSAM]</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOPYTHON]</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
