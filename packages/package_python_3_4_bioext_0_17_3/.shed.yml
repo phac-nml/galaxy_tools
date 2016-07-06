@@ -1,4 +1,7 @@
-categories: [Tool Dependency Packages]
-description: PACKAGE_PYTHON_3_4_BIOEXT_0_17_3
 name: package_python_3_4_bioext_0_17_3
+categories:
+  - Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 0.17.3 of bioext
 owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/packages/package_python_3_4_bioext_0_17_3
+type: tool_dependency_definition

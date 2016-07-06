@@ -1,4 +1,7 @@
-categories: [Sequence Analysis]
-description: An application that identifies potential transmission clusters within a supplied FASTA file with an option to find potential links against the Los Alamos HIV Sequence Database.
 name: hivtrace
+categories:
+  - Sequence Analysis
+description: An application that identifies potential transmission clusters within a supplied FASTA file with an option to find potential links against the Los Alamos HIV Sequence Database.
 owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/tools/hivtrace
+type: unrestricted
