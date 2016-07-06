@@ -24,8 +24,11 @@
     $onlyassembler
     $careful
     -t \${GALAXY_SLOTS:-16}
-    #if $kmer_choice.auto_kmer_choice == "false":
-    -k "$kmer_choice.kmers"
+
+    #if str($kmer_choice.auto_kmer_choice) == 'False':
+    -k "$kmer_choice.kmers"    
+    #else
+
     #end if
 
     #if $cov.state == "auto":
@@ -216,11 +219,11 @@
     <test>
       <param name="sc" value="false" />
       <param name="careful" value="false" />
-      <param name="kmers" value="33,55" />
+      <param name="kmers" value="33" />
       <param name="lib_type" value="paired_end" />
       <param name="fwd_reads" value="ecoli_1K_1.fq" ftype="fastq" />
       <param name="rev_reads" value="ecoli_1K_2.fq" ftype="fastq" />
-      <output name="out_contigs" file="kmer_33_55_output.fa" ftype="fasta" compare="re_match" lines_diff="1" />
+      <output name="out_contigs" file="kmer_33_output.fa" ftype="fasta" compare="re_match" lines_diff="1" />
     </test> 
     <test>
       <param name="sc" value="false" />
