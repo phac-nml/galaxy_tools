@@ -1,0 +1,7 @@
+name: package_python_3_4_hppy_0_9_6
+categories:
+  - Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 0.9.6 of hppy
+owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/packages/package_python_3_4_hppy_0_9_6
+type: tool_dependency_definition

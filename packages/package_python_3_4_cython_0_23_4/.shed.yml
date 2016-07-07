@@ -1,0 +1,7 @@
+name: package_python_3_4_cython_0_23_4
+categories:
+  - Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 0.23.4 of cython
+owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/packages/package_python_3_4_cython_0_23_4
+type: tool_dependency_definition

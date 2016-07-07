@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<tool id="hivtrace" name="HIV-Trace" version="1.0.0">
+  <description>with options and commands</description>
+  <requirements>
+    <requirement type="package" version="0.1.4">hivtrace</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" />
+  </stdio>
+  <command><![CDATA[
+    hivtrace
+
+    --input $inputfasta
+    --ambiguities $runtype.ambiguities
+
+    #if $runtype.ambiguities == "RESOLVE":
+      --fraction $runtype.fraction
+    #else
+      --fraction 0.05
+    #end if
+
+    #if $reftype.reference == "Custom":
+      --reference $reftype.customreference
+    #else
+      --reference $reftype.reference
+    #end if
+
+    --threshold $threshold
+
+    --minoverlap $minoverlap
+
+    --curate $curate
+
+    --filter $filter
+
+    #if $reftype.strip_drams:
+      --strip_drams $reftype.strip_drams
+    #end if
+
+    #if $compare:
+      --compare
+    #end if
+
+    #if $inputtype.typefasta == "aligned":
+      --skip-alignment
+    #end if
+
+    --log $logfile
+
+    > $outfile
+  ]]></command>
+  <inputs>
+    <param name="inputfasta" type="data" format="fasta" label="Sequence file"/>
+
+    <conditional name="inputtype">
+      <param name="typefasta" type="select" label="Type of FASTA">
+        <option value="unaligned">Unaligned</option>
+        <option value="aligned">Aligned</option>
+      </param>
+      <when value="unaligned"/>
+      <when value="aligned"/>
+    </conditional>
+
+    <conditional name="reftype">
+      <param name="reference" type="select" label="Reference">
+        <sanitizer sanitize="False" />
+        <option value="HXB2_prrt">   HXB2_prrt</option>
+        <option value="HXB2_pol">    HXB2_pol</option>
+        <option value="NL4-3_prrt">  NL4-3_prrt</option>
+        <option value="HXB2_tat">    HXB2_tat</option>
+        <option value="HXB2_int">    HXB2_int</option>
+        <option value="HXB2_pr">     HXB2_pr</option>
+        <option value="HXB2_vif">    HXB2_vif</option>
+        <option value="HXB2_nef">    HXB2_nef</option>
+        <option value="HXB2_vpu">    HXB2_vpu</option>
+        <option value="HXB2_rev">    HXB2_rev</option>
+        <option value="HXB2_vpr">    HXB2_vpr</option>
+        <option value="HXB2_env">    HXB2_env</option>
+        <option value="HXB2_gag">    HXB2_gag</option>
+        <option value="HXB2_rt">     HXB2_rt</option>
+        <option value="Custom">      Custom</option>
+        <help>The sequence that will be used to align everything else to.</help>
+      </param>
+      <when value="HXB2_pol">
+        <param name="strip_drams" type="select" label="Remove DRAMS">
+          <sanitizer sanitize="False" />
+          <option value="no">       No</option>
+          <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
+          <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
+          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
+        </param>
+      </when>
+      <when value="NL4-3_prrt"/>
+      <when value="HXB2_tat"/>
+      <when value="HXB2_int"/>
+      <when value="HXB2_prrt">
+        <param name="strip_drams" type="select" label="Remove DRAMS">
+          <sanitizer sanitize="False" />
+          <option value="no">       No</option>
+          <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
+          <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
+          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
+        </param>
+      </when>
+      <when value="HXB2_pr">
+        <param name="strip_drams" type="select" label="Remove DRAMS">
+          <sanitizer sanitize="False" />
+          <option value="no">       No</option>
+          <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
+          <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
+          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
+        </param>
+      </when>
+      <when value="HXB2_vif"/>
+      <when value="HXB2_nef"/>
+      <when value="HXB2_vpu"/>
+      <when value="HXB2_rev"/>
+      <when value="HXB2_vpr"/>
+      <when value="HXB2_env"/>
+      <when value="HXB2_gag"/>
+      <when value="HXB2_rt">
+        <param name="strip_drams" type="select" label="Remove DRAMS">
+          <sanitizer sanitize="False" />
+          <option value="no">       No</option>
+          <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
+          <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
+          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
+        </param>
+      </when>
+      <when value="Custom">
+        <param name="customreference" type="data" format="fasta" label="Custom reference file"/>
+      </when>
+    </conditional>
+
+    <param name="curate" type="select" label="Contaminant screen">
+      <sanitizer sanitize="False" />
+      <option value="remove">   Remove all sequences sharing a cluster with the reference</option>
+      <option value="report">   Flag all sequences sharing a cluster with the reference</option>
+      <option value="no">       Do nothing</option>
+      <help>What should be done if query sequences belong to the same cluster as the reference. If the reference is a database/lab strain (e.g. HXB2),
+            such sequences are likely mislabeled/contaminated.</help>
+    </param>
+
+    <param name="threshold" type="float" label="Distance threshold" value="0.015"
+      help="Two sequences will be connected with a putative link (subject to filtering), if and only if their pairwise distance does not exceed this threshold.">
+      <validator type="in_range" min="0" max="0.02" message="Must be between 0 and 0.02"/>
+    </param>
+
+    <param name="minoverlap" type="float" label="Minimum overlap" value="500"
+      help="Only sequences who overlap by at least this many non-gap characters will be included in distance calculations. Be sure to adjust this based on the length of the input sequences.">
+      <validator type="in_range" min="50" max="5000" message="Must be between 50 and 5000"/>
+    </param>
+
+    <param name="filter" type="select" label="Filter edges">
+      <sanitizer sanitize="False" />
+      <option value="remove">   Remove spurious edges from the inferred network</option>
+      <option value="report">   Annotate spurious edges in the inferred network</option>
+      <option value="no">       Do not perform filtering</option>
+
+      <help>Use a phylogenetic test of conditional independence on each triangle in the network to remove spurious <i>transitive</i> connections which make A→B→C chains look like A-B-C triangles.</help>
+    </param>
+
+    <conditional name="runtype">
+      <param name="ambiguities" type="select" label="Handle Ambiguities">
+        <sanitizer sanitize="False" />
+        <option value="RESOLVE"> Resolve</option>
+        <option value="AVERAGE"> Average</option>
+        <option value="SKIP">    Skip</option>
+        <option value="GAPMM">   GAPMM</option>
+        <help>Procedure for handling IUPAC ambiguities</help>
+      </param>
+      <when value="AVERAGE"/>
+      <when value="SKIP"/>
+      <when value="GAPMM"/>
+      <when value="RESOLVE">
+        <param name="fraction" type="float" label="Ambiguity Fraction" value="0.05"
+          help="Any sequence with no more than the selected proportion [0 - 1] will have its ambiguities resolved (if possible), and ambiguities in
+                sequences with higher fractions of them will be averaged. This mitigates spurious linkages due to highly ambiguous sequences.">
+          <validator type="in_range" min="0" max="1" message="Must be between 0 and 1"/>
+        </param>
+      </when>
+    </conditional>
+
+    <param name="compare" type="boolean" truevalue="--compare" falsevalue="" checked="False" label="Compare to Los Alamos National Laboratory HIV database sequences"
+      help="Compare uploaded sequences to the all of the public sequences, retrieved periodically from (hiv.lanl.gov). Comparing to a public database
+      is only available for some of the reference sequences"/>
+  </inputs>
+  <outputs>
+      <data name="outfile" format="txt" label="${tool.name} on ${on_string}: Results"/>
+      <data name="logfile" format="txt" label="${tool.name} on ${on_string}: Log"/>
+  </outputs>
+
+  <tests>
+    <test>
+      <param/>
+      <output/>
+    </test>
+  </tests>
+
+  <help><![CDATA[
+Options Summary for HIV-Trace
+
+**Sequence file**
+
+A FASTA file, with nucleotide sequences to be analyzed. Each sequence will be aligned to the chosen reference sequence prior to network inference. Sequence names may include munged attributes, e.g. ISOLATE_XYZ|2005|SAN DIEGO|MSM
+
+-----
+
+**Type of FASTA**
+
+Select whether your FASTA file is aligned or unaligned
+
+-----
+
+**Reference**
+
+The sequence that will be used to align everything else to. It is assumed that the input sequences are in fact homologous to the reference and do not have too much indel variation
+
+Please reference the landmarks of the HIV-1 genome if the presets seem foreign to you.
+
+-----
+
+**Remove DRAMS**
+
+.. class:: infomark
+
+**TIP:** This option is only available for four reference types: HXB2_pol, HXB2_prrt, HXB2_pr, and HXB2_rt
+
+*Lewis* -	mask (with ---) the list of codon sites defined in Lewis et al: http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0050050
+
+*Wheeler* -	mask (with ---) the list of codon sites defined in Wheeler et al: http://www.ncbi.nlm.nih.gov/pubmed/20395786
+
+-----
+
+**Contaminant screen**
+
+Screen for contaminants by marking or removing sequences that cluster with any of the contaminant IDs
+
+*Remove* - remove spurious edges from the inferred network
+
+*Report* - flag all sequences sharing a cluster with the reference
+
+*None* - do nothing
+
+-----
+
+**Distance threshold**
+
+Two sequences will be connected with a putative link (subject to filtering, see below), if and only if their pairwise distance does not exceed this threshold
+
+-----
+
+**Minimum overlap**
+
+Only sequences who overlap by at least this many non-gap characters will be included in distance calculations. Be sure to adjust this based on the length of the input sequences. You should aim to have at least 2/(distance threshold) aligned characters
+
+-----
+
+**Filter edges**
+
+Use a phylogenetic test of conditional independence on each triangle in the network to remove spurious transitive connections which make A->B->C chains look like A-B-C triangles
+
+-----
+
+**Handle ambiguities**
+
+Handle ambiguious nucleotides using one of the following specified strategies.
+
+*Resolve* -	count any resolutions that match as a perfect match
+
+*Average* -	average all possible resolutions
+
+*Skip* - skip all positions with ambiguities
+
+*GAPMM* -	count character-gap positions as 4-way mismatches, otherwise same as average
+
+
+For more details, please see the the MBE paper: http://mbe.oxfordjournals.org/content/22/5/1208.short
+
+-----
+
+**Ambiguity fraction**
+
+.. class:: infomark
+
+**TIP:** This option is only available when *Handle ambiguities* is set to Resolve
+
+Affects only the Resolve option for handling ambiguities. Any sequence with no more than the selected proportion [0 - 1] will have its ambiguities resolved (if possible), and ambiguities in sequences with higher fractions of them will be averaged. This mitigates spurious linkages due to highly ambiguous sequences
+
+-----
+
+**Compare to Los Alamos National Laboratory HIV database sequences**
+
+.. class:: infomark
+
+**TIP:** This option is only available for specific reference types
+
+Compare uploaded sequences to all public sequences. Retrieved periodically from the Los Alamos HIV Sequence Database: http://hiv.lanl.gov/
+  ]]></help>
+  <citations>
+    <citation/>
+  </citations>
+</tool>
