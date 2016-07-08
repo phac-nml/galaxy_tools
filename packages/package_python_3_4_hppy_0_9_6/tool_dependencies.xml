@@ -1,31 +1,49 @@
 <?xml version="1.0"?>
 <tool_dependency>
-        <package name="python" version="3.4">
-          <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
-        </package>
-        <package name="hyphy" version="2.2.6">
-          <repository  name="package_python_3_4_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
-        </package>
-        <package name="hppy" version="0.9.6">
-            <install version="1.0">
-                <actions>
-                    <action type="setup_virtualenv">https://pypi.python.org/packages/source/f/fakemp/fakemp-0.9.1.tar.gz</action>
-                    <action type="set_environment_for_install">
-                        <repository name="package_python_3_4_hyphy_2_2_6" owner="nml">
-                            <package name="hyphy" version="2.2.6" />
-                        </repository>
-                        <repository name="package_python_3_4" owner="iuc">
-                            <package name="python" version="3.4" />
-                        </repository>
-                    </action>
-                    <action type="make_directory">$INSTALL_DIR/lib/python</action>
-                    <action type="setup_virtualenv">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
-                    <action type="set_environment">
-                      <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR</environment_variable>
-                      <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
-                    </action>
-                </actions>
-            </install>
-            <readme>hppy from https://github.com/veg/hppy</readme>
-        </package>
+    <package name="python" version="3.4">
+        <repository name="package_python_3_4" owner="iuc" prior_installation_required="True" />
+    </package>
+    <package name="cython" version="0.23.4">
+        <repository  name="package_python_3_4_cython_0_23_4" owner="nml" prior_installation_required="True" />
+    </package>
+    <package name="hyphy-python" version="0.1.3">
+        <repository  name="package_python_3_4_hyphy_python_0_1_3" owner="nml" prior_installation_required="True" />
+    </package>
+    <package name="fakemp" version="0.9.1">
+        <repository  name="package_python_3_4_fakemp_0_9_1" owner="nml" prior_installation_required="True" />
+    </package>
+    <package name="hppy" version="0.9.6">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
+                <action type="set_environment_for_install">
+                    <repository name="package_python_3_4_hyphy_python_0_1_3" owner="nml">
+                        <package name="hyphy-python" version="0.1.3" />
+                    </repository>
+                    <repository name="package_python_3_4" owner="iuc">
+                        <package name="python" version="3.4" />
+                    </repository>
+                    <repository name="package_python_3_4_cython_0_23_4" owner="nml">
+                        <package name="cython" version="0.23.4" />
+                    </repository>
+                    <repository name="package_python_3_4_fakemp_0_9_1" owner="nml">
+                        <package name="fakemp" version="0.9.1" />
+                    </repository>
+                </action>
+                <action type="make_directory">$INSTALL_DIR/lib/python</action>
+                <action type="shell_command">
+                    export PYTHONPATH=$PYTHONPATH:$INSTALL_DIR/lib/python &amp;&amp;
+                    python3 setup.py install --install-lib $INSTALL_DIR/lib/python --install-scripts $INSTALL_DIR/bin
+                </action>
+                <action type="set_environment">
+                    <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
+                    <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_HYPHY_PYTHON]</environment_variable>
+                    <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_CYTHON]</environment_variable>
+                    <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_FAKEMP]</environment_variable>
+                    <environment_variable action="append_to" name="PYTHONPATH_HPPY">$INSTALL_DIR/lib/python</environment_variable>
+                </action>
+            </actions>
+        </install>
+        <readme>hppy from https://github.com/veg/hppy</readme>
+    </package>
 </tool_dependency>

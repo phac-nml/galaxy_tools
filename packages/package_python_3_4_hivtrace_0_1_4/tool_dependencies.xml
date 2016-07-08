@@ -6,8 +6,11 @@
     <package name="cmake" version="3.2.3">
       <repository  name="package_cmake_3_2_3" owner="iuc" prior_installation_required="True" />
     </package>
-    <package name="hyphy" version="2.2.6">
-      <repository  name="package_python_3_4_hyphy_2_2_6" owner="nml" prior_installation_required="True" />
+    <package name="atlas" version="3.10.2">
+      <repository name="package_atlas_3_10" owner="iuc" prior_installation_required="True" />
+    </package>
+    <package name="hyphy-python" version="0.1.3">
+      <repository  name="package_python_3_4_hyphy_python_0_1_3" owner="nml" prior_installation_required="True" />
     </package>
     <package name="pysam" version="0.8.3">
         <repository name="package_python_3_4_pysam_0_8_3" owner="nml" prior_installation_required="True" />
@@ -15,11 +18,20 @@
     <package name="numpy" version="1.10.1">
       <repository  name="package_python_3_4_numpy_1_10_1" owner="nml" prior_installation_required="True" />
     </package>
+    <package name="scipy" version="0.16">
+      <repository  name="package_python_3_4_scipy_0_16" owner="nml" prior_installation_required="True" />
+    </package>
     <package name="biopython" version="1.66">
       <repository  name="package_python_3_4_biopython_1_66" owner="nml" prior_installation_required="True" />
     </package>
     <package name="bioext" version="0.17.3">
       <repository  name="package_python_3_4_bioext_0_17_3" owner="nml" prior_installation_required="True" />
+    </package>
+    <package name="cython" version="0.23.4">
+      <repository  name="package_python_3_4_cython_0_23_4" owner="nml" prior_installation_required="True" />
+    </package>
+    <package name="fakemp" version="0.9.1">
+      <repository  name="package_python_3_4_fakemp_0_9_1" owner="nml" prior_installation_required="True" />
     </package>
     <package name="hppy" version="0.9.6">
       <repository  name="package_python_3_4_hppy_0_9_6" owner="nml" prior_installation_required="True" />
@@ -35,14 +47,17 @@
           <actions>
             <action type="download_by_url">https://github.com/veg/hivtrace/archive/0.1.4.tar.gz</action>
             <action type="set_environment_for_install">
-                <repository name="package_python_3_4_hyphy_2_2_6" owner="nml">
-                    <package name="hyphy" version="2.2.6" />
+                <repository name="package_python_3_4_hyphy_python_0_1_3" owner="nml">
+                    <package name="hyphy-python" version="0.1.3" />
                 </repository>
                 <repository name="package_python_3_4_pysam_0_8_3" owner="nml">
                     <package name="pysam" version="0.8.3" />
                 </repository>
                 <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                     <package name="numpy" version="1.10.1" />
+                </repository>
+                <repository name="package_python_3_4_scipy_0_16" owner="nml">
+                    <package name="numpy" version="0.16" />
                 </repository>
                 <repository name="package_python_3_4_biopython_1_66" owner="nml">
                     <package name="biopython" version="1.66" />
@@ -52,6 +67,15 @@
                 </repository>
                 <repository name="package_python_3_4_hivclustering_1_2_3" owner="nml">
                     <package name="hivclustering" version="1.2.3" />
+                </repository>
+                <repository name="package_python_3_4_cython_0_23_4" owner="nml">
+                    <package name="cython" version="0.23.4" />
+                </repository>
+                <repository name="package_python_3_4_fakemp_0_9_1" owner="nml">
+                    <package name="fakemp" version="0.9.1" />
+                </repository>
+                <repository name="package_python_3_4_hppy_0_9_6" owner="nml">
+                    <package name="hppy" version="0.9.6" />
                 </repository>
                 <repository name="package_tn93_1_0_2" owner="nml">
                     <package name="tn93" version="1.0.2" />
@@ -75,13 +99,20 @@
               <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOPYTHON]</environment_variable>
               <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOEXT]</environment_variable>
               <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_SCIPY]</environment_variable>
               <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_PYSAM]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_HYPHY_PYTHON]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_CYTHON]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_HIVCLUSTERING]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_FAKEMP]</environment_variable>
+              <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_HPPY]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_PYSAM]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_HIVCLUSTERING]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_BIOEXT]</environment_variable>
               <environment_variable action="prepend_to" name="PATH">$ENV[PATH_TN93]</environment_variable>
+              <environment_variable action="prepend_to" name="LD_LIBRARY_PATH">$ENV[ATLAS_LIB_DIR]</environment_variable>
             </action>
           </actions>
         </install>
