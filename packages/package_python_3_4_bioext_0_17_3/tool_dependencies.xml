@@ -9,8 +9,14 @@
         <package name="numpy" version="1.10.1">
           <repository  name="package_python_3_4_numpy_1_10_1" owner="nml" prior_installation_required="True" />
         </package>
+        <package name="scipy" version="0.16">
+          <repository  name="package_python_3_4_scipy_0_16" owner="nml" prior_installation_required="True" />
+        </package>
         <package name="biopython" version="1.66">
           <repository  name="package_python_3_4_biopython_1_66" owner="nml" prior_installation_required="True" />
+        </package>
+        <package name="six" version="1.10.0">
+          <repository  name="package_python_3_4_six_1_10_0" owner="nml" prior_installation_required="True" />
         </package>
         <package name="bioext" version="0.17.3">
             <install version="1.0">
@@ -23,8 +29,14 @@
                         <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                             <package name="numpy" version="1.10.1" />
                         </repository>
+                        <repository name="package_python_3_4_scipy_0_16" owner="nml">
+                            <package name="scipy" version="0.16" />
+                        </repository>
                         <repository name="package_python_3_4_biopython_1_66" owner="nml">
                             <package name="biopython" version="1.66" />
+                        </repository>
+                        <repository name="package_python_3_4_six_1_10_0" owner="nml">
+                            <package name="six" version="1.10.0" />
                         </repository>
                         <repository name="package_python_3_4" owner="iuc">
                             <package name="python" version="3.4" />
@@ -42,8 +54,11 @@
                       <environment_variable action="append_to" name="PYTHONPATH">$INSTALL_DIR/lib/python</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_PYSAM]</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_NUMPY]</environment_variable>
+                      <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_SCIPY]</environment_variable>
                       <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_BIOPYTHON]</environment_variable>
+                      <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_SIX]</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$ENV[PATH_NUMPY]</environment_variable>
+                      <environment_variable action="prepend_to" name="PATH">$ENV[PATH_SCIPY]</environment_variable>
                       <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
                       <environment_variable action="set_to" name="PYTHONPATH_BIOEXT">$INSTALL_DIR/lib/python</environment_variable>
                       <environment_variable action="set_to" name="PATH_BIOEXT">$INSTALL_DIR/bin</environment_variable>
