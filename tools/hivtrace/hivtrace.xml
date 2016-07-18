@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<tool id="hivtrace" name="HIV-Trace" version="1.0.0">
+<tool id="hivtrace" name="HIV-Trace" version="0.1.6">
   <description>with options and commands</description>
   <requirements>
-    <requirement type="package" version="0.1.4">hivtrace</requirement>
+    <requirement type="package" version="0.1.6">hivtrace</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -192,8 +192,8 @@
 
   <tests>
     <test>
-      <param/>
-      <output/>
+      <param name="inputfasta" value="input.fasta" />
+      <output name="outfile" file="output.json" ftype="txt" />
     </test>
   </tests>
 
