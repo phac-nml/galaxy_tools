@@ -1,0 +1,112 @@
+<tool id="cge_resfinder" name="CGE ResFinder" version="0.1.0">
+    <requirements>
+        <requirement type="package" version="2.1">resfinder</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command>
+        \$RESFINDER/ResFinder-2.1.pl -i "$input1" -d \$RESFINDER/database -a "$database" -k "$percent_identity" -l "$min_length" -o output
+    </command>
+    <inputs>
+        <param type="data" name="input1" format="fasta" />
+	<param name="percent_identity" type="float" value="95.00" min="0" max="100" help="(-k)" label="Threshold for % identity." />
+	<param name="min_length" type="float" value="0.60" min="0" max="1" help="(-l)" label="Minimum length of overlap [0.0,1.0]." />
+	<param name="database" type="select" label="Resistance Database">
+		<option value="all_databases" selected="true">All Databases</option>
+		<option value="23Srna">23S RNA</option>
+		<option value="aminoglycoside">Aminoglycoside</option>
+		<option value="beta-lactamase">Beta-lactamase</option>
+		<option value="colistin">Colistin</option>
+		<option value="fosfomycin">Fosfomycin</option>
+		<option value="fusidicacid">Fusidic Acid</option>
+		<option value="macrolide">Macrolide-Lincosamide-StreptograminB</option>
+		<option value="nitroimidazole">Nitroimidazole</option>
+		<option value="oxazolidinone">Oxazolidinone</option>
+		<option value="phenicol">Phenicol</option>
+		<option value="quinolone">Fluoroquinolone</option>
+		<option value="rifampicin">Rifampicin</option>
+		<option value="sulphonamide">Sulphonamide</option>
+		<option value="tetracycline">Tetracycline</option>
+		<option value="trimethoprim">Trimethoprim</option>
+		<option value="vancomycin">Glycopeptide</option>
+	</param>
+    </inputs>
+    <outputs>
+        <data name="results" label="results.txt" format="txt" from_work_dir="output/results.txt" />
+	<data name="results_tab" label="results_tab.txt" format="txt" from_work_dir="output/results_tab.txt" />
+	<data name="Resistance_gene_seq" label="Resistance_gene_seq.fsa" format="fsa" from_work_dir="output/Resistance_gene_seq.fsa" />
+	<data name="Hit_in_genome_seq" label="Hit_in_genome_seq.fsa" format="fsa" from_work_dir="output/Hit_in_genome_seq.fsa" />
+    </outputs>
+    <help><![CDATA[
+        
+NAME
+  ResFinder_v2.pl - Findes antimicrobial resitance genes for a sequence or genome
+
+SYNOPSIS
+  ResFinder_v2.pl [Options]
+  
+DESCRIPTION
+  Calculates antibiotic resistance genes based on a BLAST alignment of the input
+  sequence file and the specified allele set. If possible the ST will be
+  given, or if unknown, that field will be left empty
+
+        Notice that although the options mimic that the input sequences are
+  aligned against the alleles, it is in fact the other way around. First,
+  the input is converted to a blast database, against which is aligned the
+  alleles from the species specified with '-d'.
+
+  Notice also that the default options for BLAST are changed to suit the
+  ResFinder alignment.
+
+Options:
+
+    -h HELP
+                    Prints a message with options and information to the screen
+    -d DATABASE
+                    The path to where you have located the database folder
+    -b BLAST
+                    The path to the location of blast-2.2.26 if it is not added
+                    to the user's path (see the install guide in 'README.md')
+    -i INFILE
+                    Your input file which needs to be preassembled partial
+                    or complete genomes in fasta format
+    -o OUTFOLDER
+                    The folder you want to have your output files places.
+                    If not specified the program will create a folder named
+                    'Output' in which the result files will be stored
+    -a ANTIMICROBIAL
+                    Antimicrobial configuration. The options can be found
+                    in the config file
+    -k THRESHOLD
+                    The threshold for % identity for example '95.00' for 95 %
+    -l MIN_LENGHT
+                    The minimum length of the overlap ex 0.60 for an overlap of minimum 60 %
+
+Example of use with the 'database' folder is loacted in the current directory and Blast added to the user's path
+    
+    perl ResFinder-2.1.pl -i INFILE.fasta -o OUTFOLDER -a aminoglycoside -k 95.00 -l 0.60
+
+Example of use with the 'database* and *blast-2.2.26' folders loacted in other directories
+
+    perl ResFinder-2.1.pl -d path/to/database -b path/to/blast-2.2.26 -i INFILE.fasta -o OUTFOLDER -a aminoglycoside -k 95.00 -l 0.60
+    
+
+VERSION
+    Current: 2.1
+
+AUTHORS
+    Carsten Friis, carsten@cbs.dtu.dk, Mette Voldby Larsen, metteb@cbs.dtu.dk, Ea Zankari
+
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{renameTODO,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {TODO},
+  url = {https://bitbucket.org/genomicepidemiology/resfinder},
+}</citation>
+    </citations>
+</tool>

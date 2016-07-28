@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="resfinder" version="2.1">
+		<repository name="package_resfinder_2_1" owner="franklin" />
+	</package>
+</tool_dependency>
