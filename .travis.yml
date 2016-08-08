@@ -10,6 +10,7 @@ addons:
     packages:
     - tabix
 install:
+  - pip install --upgrade setuptools
   - pip install git+git://github.com/galaxyproject/planemo.git@master
 #  - mkdir `pwd`/cache ; mkdir `pwd`/install ;export DOWNLOAD_CACHE=`pwd`/cache; export INSTALL_DIR=`pwd`/install;planemo  dependency_script -r
 script:
