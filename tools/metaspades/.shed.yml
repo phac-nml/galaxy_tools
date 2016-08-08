@@ -1,0 +1,4 @@
+categories: [Assembly]
+description: Genome assembler for metagenomic datasets
+name: metaspades
+owner: nml
