@@ -1,0 +1,6 @@
+1.0
+===
+ - Supports SPades 3.9
+ - NEW: rnaSPAdes pipeline for de novo transcriptome assembly from RNA-Seq data.
+ - CHANGE: Improved memory consumption in metagenomic pipeline.
+ - FIX: Several minor bugs.
