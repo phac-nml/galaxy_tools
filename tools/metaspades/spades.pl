@@ -118,7 +118,7 @@ sub extractCoverageLength{
 	chomp;
 	die "Not all elements found in $_\n" if (! m/^>(NODE|\S+)_(\d+)(?:_|\s)length_(\d+)_cov_(\d+\.*\d*)/);
 	my ($name,$n, $l, $cov) = ($1,$2, $3, $4);
-	print TAB "$name" . "_$n\t$l\t$cov\n";        
+	print TAB "$name" . "_$n\t$l\t$cov\n";
     }
     close TAB;
 }
