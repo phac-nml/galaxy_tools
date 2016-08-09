@@ -1,0 +1,4 @@
+categories: [Assembly]
+description: Pipeline for de novo transcriptome assembly from RNA-Seq data
+name: rnaspades
+owner: nml
