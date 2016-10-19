@@ -4,7 +4,10 @@
         <install version="1.0">
           <actions>
             <action type="download_by_url" sha256sum="164f1ea5f486036dbb77481d0cc560315f40ce7aecffbb0f28521431be188de0">https://github.com/anujg1991/stringMLST/archive/v0.2.1.tar.gz</action>
-            <action type="shell_command">cp ./stringMLST.py $INSTALL_DIR</action>
+            <action type="move_file">
+		<source>stringMLST.py</source>
+		<destination>$INSTALL_DIR</destination>
+	    </action>
             <action type="set_environment">
               <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/</environment_variable>
             </action>

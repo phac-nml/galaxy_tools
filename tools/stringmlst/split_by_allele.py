@@ -66,9 +66,9 @@ options, remainder = getopt.getopt(sys.argv[1:], '', [
 
 for opt, arg in options:
     if opt in ('--alleles'):
-		alleles = arg
+        alleles = arg
     elif opt in ('--profiles'):
-                profiles = arg
+        profiles = arg
 
 if alleles and profiles:
     split_allele_file(alleles,profiles)
