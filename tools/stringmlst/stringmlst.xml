@@ -1,4 +1,5 @@
-<tool id="stringmlst" name="StringMLST" version="1.0.4" description="k-mer tool for multilocus sequence typing">
+<tool id="stringmlst" name="StringMLST" version="1.0.4">
+  <description>k-mer tool for multilocus sequence typing</description>
   <requirements>
     <requirement type="package" version="1.0">stringmlst</requirement>
   </requirements>
