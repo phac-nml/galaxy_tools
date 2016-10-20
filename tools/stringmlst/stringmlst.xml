@@ -1,7 +1,7 @@
 <tool id="stringmlst" name="StringMLST" version="1.0.4">
   <description>k-mer tool for multilocus sequence typing</description>
   <requirements>
-    <requirement type="package" version="1.0">stringmlst</requirement>
+    <requirement type="package" version="2.1">stringmlst</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
