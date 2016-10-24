@@ -1,4 +1,4 @@
-<tool id="collapse_dataset" name="Collapse Collection" version="2.1">
+<tool id="collapse_dataset" name="Collapse Collection" version="3.0">
   <description>Collapse collection into single dataset in order of the collection</description>
   <command>
     <![CDATA[
@@ -6,13 +6,17 @@
      (
     #for $f in $input_list#
     #if $filename.add_name:
-       #if str($filename.place_name) ==  "same":
-           printf "$f.element_identifier\t" ;
-       #else
-           printf "$f.element_identifier\n" ;
+       #if str($filename.place_name) ==  "same_once":
+           printf "$f.element_identifier\t"; cat "$f";
+       #elif str($filename.place_name) ==  "same_multiple":
+           awk '{print "$f.element_identifier\t"$0}' "$f";
+       #elif str($filename.place_name) ==  "above":
+           printf "$f.element_identifier\n"; cat "$f";
        #end if
+    #else:
+       cat "$f" ;
     #end if
-    cat "$f" ;
+
     #end for#
     )
     > $output
@@ -26,7 +30,8 @@
      <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
      <when value="true">
        <param name="place_name" type="select" label="Where to add dataset name">
-         <option value="same">Same line</option>
+         <option value="same_once">Same line and only once per dataset</option>
+         <option value="same_multiple">Same line and each line in dataset</option>
          <option value="above">Line Above</option>
        </param>
      </when>
@@ -38,20 +43,18 @@
     <data name="output" format_source="input_list" ></data>
   </outputs>
   <tests>
-	<test>
-	        <param name="input_list">
-        	  <collection type="list">
-	            <element name="input1" value="input1" />
-        	    <element name="input2" value="input2" />
-	          </collection>
-		</param>
-		<output name="output" file="answer.txt"/>
-	</test>
+    <test>
+      <param name="input_list">
+        <collection type="list">
+	  <element name="input1" value="input1" />
+          <element name="input2" value="input2" />
+	</collection>
+      </param>
+      <output name="output" file="answer.txt"/>
+    </test>
   </tests>
   <help>
 	Combines a list collection into a single file dataset with option to include dataset names.
-        
-        
   </help>
   <citations>
   </citations>
