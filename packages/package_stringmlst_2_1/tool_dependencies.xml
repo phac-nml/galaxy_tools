@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="stringmlst" version="1.0">
+    <package name="stringmlst" version="2.1">
         <install version="1.0">
           <actions>
             <action type="download_by_url" sha256sum="164f1ea5f486036dbb77481d0cc560315f40ce7aecffbb0f28521431be188de0">https://github.com/anujg1991/stringMLST/archive/v0.2.1.tar.gz</action>

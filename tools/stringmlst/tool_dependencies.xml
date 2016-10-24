@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="stringmlst" version="1.0">
-    	<repository name="package_stringmlst_1_0" owner="nml" />
+    <package name="stringmlst" version="2.1">
+    	<repository name="package_stringmlst_2_1" owner="nml" />
     </package>
 </tool_dependency>
