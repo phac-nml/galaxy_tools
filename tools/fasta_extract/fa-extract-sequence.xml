@@ -1,0 +1,76 @@
+<tool id="fa-extract-sequence" name="Fasta Extract Sequence" version="1.0.0">
+    <description>Extract a single sequence from a fasta file.</description>
+     <requirements>
+        <requirement type="package" version="5.18.1">perl</requirement>
+        <requirement type="package" version="1.6.924">bioperl</requirement>
+    </requirements>
+    <command interpreter="perl">
+        fa-extract-few.pl
+        -f $dataset
+	$exact
+        $inverse
+        #if $file_or_type.select == "list"
+          --list $file_or_type.list_file
+        #else
+          $file_or_type.id
+        #end if
+
+        > 
+        $output
+    </command>
+    <inputs>
+        <param name="dataset" type="data" format="fasta" label="fasta or multifasta file" help="fasta dataset to get statistics for."/>
+        <param name="exact" type="boolean" truevalue="--exact" label="Exact matches only" help="Will only match exact matches for fasta id"/>
+        <param name="inverse" type="boolean" truevalue="--inverse" label="Entries NOT matching" help="Will return the sequences not matching the given ids"/>
+
+        <conditional name="file_or_type">
+          <param name="select" type="select" label="List file or single pattern">
+            <option value="list">List file</option>
+            <option value="single">Single Pattern</option>
+          </param>
+          <when value="list">
+            <param name="list_file" type="data" format="txt" help="List of pattern to find." label="List file"/>
+          </when>
+          <when value="single">
+            <param name="id" type="text" label="Sequence ID (or partial)" help="Name of the sequence to extract. Will also match partial names and return all matches." />
+          </when>
+        </conditional>
+                            
+        
+    </inputs>
+    <outputs>
+        <data name="output" format="fasta" label="${tool.name} on ${on_string}: Fasta"/>
+    </outputs>
+    <tests>
+      <test>
+        <output/>
+      </test>
+    </tests>
+    <help>
+**Fasta Extract Sequence**
+Extracts a fasta sequence from a multfasta by id (exact or partial)
+
+Latest author:
+Written by Philip Mabon   - Public Health Agency of Canada
+
+Original authors:
+Written by Torsten Seemann - Victorian Bioinformatics Consortium
+
+Wrapped by Simon Gladman - Victorian Bioinformatics Consortium
+
+
+------
+
+Outputs in fasta format.
+    
+------
+
+Inputs:
+
+Fasta dataset
+
+Sequence id
+    </help>
+    <citations>
+    </citations>
+</tool>
