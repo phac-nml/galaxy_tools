@@ -6,7 +6,7 @@
     <package name="tn93" version="1.0.2">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">https://github.com/veg/tn93/archive/v1.0.2.tar.gz</action>
+                <action type="download_by_url" sha256sum="23ecc822d0069296750727324f15f48503f0b089e7d2cfbaef877240ab69e9d8">https://github.com/veg/tn93/archive/v1.0.2.tar.gz</action>
                 <action type="set_environment_for_install">
                     <repository name="package_cmake_3_2_3" owner="iuc">
                         <package name="cmake" version="3.2.3" />

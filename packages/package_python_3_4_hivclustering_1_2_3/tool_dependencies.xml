@@ -21,7 +21,7 @@
         <package name="hivclustering" version="1.2.3">
             <install version="1.0">
                 <actions>
-                    <action type="download_by_url">https://github.com/veg/hivclustering/archive/1.2.3.tar.gz</action>
+                    <action type="download_by_url" sha256sum="9d1a6eb17797c2272c7427e934705240cc01548ffddd4104600cf3c606e7ef2d">https://github.com/veg/hivclustering/archive/1.2.3.tar.gz</action>
                     <action type="set_environment_for_install">
                         <repository name="package_python_3_4_cython_0_23_4" owner="nml">
                             <package name="cython" version="0.23.4" />

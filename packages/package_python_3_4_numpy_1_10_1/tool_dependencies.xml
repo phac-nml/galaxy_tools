@@ -9,7 +9,7 @@
         <package name="numpy" version="1.10.1">
             <install version="1.0">
                 <actions>
-                    <action type="download_by_url">http://sourceforge.net/projects/numpy/files/NumPy/1.10.1/numpy-1.10.1.tar.gz</action>
+                    <action type="download_by_url" sha256sum="8b9f453f29ce96a14e625100d3dcf8926301d36c5f622623bf8820e748510858">http://sourceforge.net/projects/numpy/files/NumPy/1.10.1/numpy-1.10.1.tar.gz</action>
                     <action type="set_environment_for_install">
                         <repository name="package_atlas_3_10" owner="iuc">
                             <package name="atlas" version="3.10.2" />
