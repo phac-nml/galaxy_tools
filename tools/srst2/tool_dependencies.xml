@@ -4,7 +4,7 @@
         <install version="1.0">
             <actions_group>
                 <actions>
-                    <action type="download_by_url">https://github.com/mariamiskander/VirulenceFactorsDB/archive/master.zip</action>
+                    <action type="download_by_url" sha256sum="eae59df6f7aad698da5e43322c58a28c25dfe91dd656cd2ee12ea330db6aa6bb">https://github.com/mariamiskander/VirulenceFactorsDB/archive/master.zip</action>
                     <action type="make_directory">$INSTALL_DIR/vfdb</action>
                     <action type="move_directory_files">
                         <source_directory>vfdb</source_directory>
