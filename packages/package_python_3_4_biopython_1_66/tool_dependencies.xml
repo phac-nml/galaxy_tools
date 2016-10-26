@@ -9,7 +9,7 @@
     <package name="biopython" version="1.66">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">http://biopython.org/DIST/biopython-1.66.tar.gz</action>
+                <action type="download_by_url" sha256sum="5178ea3b343b1d8710f39205386093e5369ed653aa020e1b0c4b7622a59346c1">http://biopython.org/DIST/biopython-1.66.tar.gz</action>
                 <action type="set_environment_for_install">
                     <repository name="package_python_3_4_numpy_1_10_1" owner="nml">
                         <package name="numpy" version="1.10.1" />

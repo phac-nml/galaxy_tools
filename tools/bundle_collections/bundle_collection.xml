@@ -1,4 +1,4 @@
-<tool id="bundle_collection" name="Bundle Collection" version="1.2">
+<tool id="bundle_collection" name="Bundle Collection" version="1.2.1">
 	<description>Download a collection of files</description>
 	<stdio>
   	<exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
@@ -53,8 +53,7 @@
 	</outputs>
 	<tests>
 		<test>
-			<param/>
-			<output/>
+		  <output/>
 		</test>
 	</tests>
 

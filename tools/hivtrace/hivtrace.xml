@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tool id="hivtrace" name="HIV-Trace" version="1.0.0">
+<tool id="hivtrace" name="HIV-Trace" version="1.0.1">
   <description>with options and commands</description>
   <requirements>
     <requirement type="package" version="0.1.4">hivtrace</requirement>
@@ -62,7 +62,7 @@
     </conditional>
 
     <conditional name="reftype">
-      <param name="reference" type="select" label="Reference">
+      <param name="reference" type="select" label="Reference" help="The sequence that will be used to align everything else to.">
         <sanitizer sanitize="False" />
         <option value="HXB2_prrt">   HXB2_prrt</option>
         <option value="HXB2_pol">    HXB2_pol</option>
@@ -79,36 +79,32 @@
         <option value="HXB2_gag">    HXB2_gag</option>
         <option value="HXB2_rt">     HXB2_rt</option>
         <option value="Custom">      Custom</option>
-        <help>The sequence that will be used to align everything else to.</help>
       </param>
       <when value="HXB2_pol">
-        <param name="strip_drams" type="select" label="Remove DRAMS">
+        <param name="strip_drams" type="select" label="Remove DRAMS" help="How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions">
           <sanitizer sanitize="False" />
           <option value="no">       No</option>
           <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
           <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
-          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
         </param>
       </when>
       <when value="NL4-3_prrt"/>
       <when value="HXB2_tat"/>
       <when value="HXB2_int"/>
       <when value="HXB2_prrt">
-        <param name="strip_drams" type="select" label="Remove DRAMS">
+        <param name="strip_drams" type="select" label="Remove DRAMS" help="How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions">
           <sanitizer sanitize="False" />
           <option value="no">       No</option>
           <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
           <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
-          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
         </param>
       </when>
       <when value="HXB2_pr">
-        <param name="strip_drams" type="select" label="Remove DRAMS">
+        <param name="strip_drams" type="select" label="Remove DRAMS" help="How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions">
           <sanitizer sanitize="False" />
           <option value="no">       No</option>
           <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
           <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
-          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
         </param>
       </when>
       <when value="HXB2_vif"/>
@@ -119,12 +115,11 @@
       <when value="HXB2_env"/>
       <when value="HXB2_gag"/>
       <when value="HXB2_rt">
-        <param name="strip_drams" type="select" label="Remove DRAMS">
+        <param name="strip_drams" type="select" label="Remove DRAMS" help="How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions">
           <sanitizer sanitize="False" />
           <option value="no">       No</option>
           <option value="lewis">    Mask (with ---) the list of codon sites defined in Lewis et al</option>
           <option value="wheeler">  Mask (with ---) the list of codon sites defined in Wheeler et al</option>
-          <help>How to handle analyses of proteins (HIV-1 pr and/or RT only) which include drug resistance associated positions</help>
         </param>
       </when>
       <when value="Custom">
@@ -132,13 +127,11 @@
       </when>
     </conditional>
 
-    <param name="curate" type="select" label="Contaminant screen">
+    <param name="curate" type="select" label="Contaminant screen" help="What should be done if query sequences belong to the same cluster as the reference. If the reference is a database/lab strain (e.g. HXB2),such sequences are likely mislabeled/contaminated.">
       <sanitizer sanitize="False" />
       <option value="remove">   Remove all sequences sharing a cluster with the reference</option>
       <option value="report">   Flag all sequences sharing a cluster with the reference</option>
       <option value="no">       Do nothing</option>
-      <help>What should be done if query sequences belong to the same cluster as the reference. If the reference is a database/lab strain (e.g. HXB2),
-            such sequences are likely mislabeled/contaminated.</help>
     </param>
 
     <param name="threshold" type="float" label="Distance threshold" value="0.015"
@@ -151,23 +144,20 @@
       <validator type="in_range" min="50" max="5000" message="Must be between 50 and 5000"/>
     </param>
 
-    <param name="filter" type="select" label="Filter edges">
+    <param name="filter" type="select" label="Filter edges" help="Use a phylogenetic test of conditional independence on each triangle in the network to remove spurious transitive connections which make A→B→C chains look like A-B-C triangles.">
       <sanitizer sanitize="False" />
       <option value="remove">   Remove spurious edges from the inferred network</option>
       <option value="report">   Annotate spurious edges in the inferred network</option>
       <option value="no">       Do not perform filtering</option>
-
-      <help>Use a phylogenetic test of conditional independence on each triangle in the network to remove spurious <i>transitive</i> connections which make A→B→C chains look like A-B-C triangles.</help>
     </param>
 
     <conditional name="runtype">
-      <param name="ambiguities" type="select" label="Handle Ambiguities">
+      <param name="ambiguities" type="select" label="Handle Ambiguities" help="Procedure for handling IUPAC ambiguities">
         <sanitizer sanitize="False" />
         <option value="RESOLVE"> Resolve</option>
         <option value="AVERAGE"> Average</option>
         <option value="SKIP">    Skip</option>
         <option value="GAPMM">   GAPMM</option>
-        <help>Procedure for handling IUPAC ambiguities</help>
       </param>
       <when value="AVERAGE"/>
       <when value="SKIP"/>
@@ -192,7 +182,6 @@
 
   <tests>
     <test>
-      <param/>
       <output/>
     </test>
   </tests>
@@ -298,6 +287,5 @@ Affects only the Resolve option for handling ambiguities. Any sequence with no m
 Compare uploaded sequences to all public sequences. Retrieved periodically from the Los Alamos HIV Sequence Database: http://hiv.lanl.gov/
   ]]></help>
   <citations>
-    <citation/>
   </citations>
 </tool>

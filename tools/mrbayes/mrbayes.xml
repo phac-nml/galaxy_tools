@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tool id="mrbayes" name="MrBayes" version="1.0.1">
+<tool id="mrbayes" name="MrBayes" version="1.0.2">
   <description>with options and commands</description>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
@@ -48,13 +48,13 @@
       help="Output files will be named this with .p, .t, .mcmc extensions. Use to avoid overwriting files when running repeated analyses on the same dataset." />
 
     <param name="ngen" type="integer" label="&lt;hr&gt;Number of generations" value="10000" >
-      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+      <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
     <param name="nchain" type="integer" label="Number of chains" value="2" >
-       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+       <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
     <param name="nrun" type="integer" label="Number of runs" value="2" >
-      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+      <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
 
     <param name="outgroup" type="text" label="&lt;hr&gt;Outgroup" size="10" value="1"
@@ -78,11 +78,11 @@
       <option value="adgamma"/>
     </param>
     <param name="samplefreq" type="integer" label="&lt;hr&gt;Sample frequency" value="500" >
-       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+       <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
        <help>Frequency with which output it written to files." </help>
     </param>
     <param name="printfreq" type="integer" label="Print frequency" value="500" >
-       <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+       <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
        <help>Frequency with which output is printed to the screen.</help>
     </param>
     <param name="burninfrac" type="float" label="Burn-in fraction" value="0.25">
@@ -101,18 +101,18 @@
         help="Creates an x-y graph of the parameter over the course of the chain."/>
 
     <param name="checkfreq" type="integer" label="&lt;hr&gt;Checkpoint frequency" value="100000" >
-       <validator type="in_range" min="100" max="inf" message="Must be greater than or equal to 100"/>
+       <validator type="in_range" min="100" max="2147483647" message="Must be greater than or equal to 100"/>
        <help>Frequency with which checkpoints are written. Used for continuing analysis with append.</help>
     </param>
     <param name="append" type="boolean" truevalue="mcmcp append=yes" falsevalue="mcmcp append=no" label="Append to last checkpoint?"
         help="Requires .ckp file (i.e. that number of generations > checkpoint frequency for previous analysis)." />
     <param name="seed" type="integer" label="&lt;hr&gt;Seed" optional="false" value="5"
       help="Specify a seed with which to run the job.">
-      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+      <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
     <param name="swapseed" type="integer" label="&lt;hr&gt;Swap Seed" optional="false" value="5"
       help="Specify a swap seed with which to run the job.">
-      <validator type="in_range" min="1" max="inf" message="Must be greater than or equal to 1"/>
+      <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
   </inputs>
   <outputs>

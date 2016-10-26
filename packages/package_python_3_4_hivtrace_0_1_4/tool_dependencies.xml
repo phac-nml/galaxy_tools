@@ -45,7 +45,7 @@
     <package name="hivtrace" version="0.1.4">
         <install version="1.0">
           <actions>
-            <action type="download_by_url">https://github.com/veg/hivtrace/archive/0.1.4.tar.gz</action>
+            <action type="download_by_url" sha256sum="25d3772197a4b16473275fedc45ddec221817fcf798ae86a7973ab620248a899">https://github.com/veg/hivtrace/archive/0.1.4.tar.gz</action>
             <action type="set_environment_for_install">
                 <repository name="package_python_3_4_hyphy_python_0_1_3" owner="nml">
                     <package name="hyphy-python" version="0.1.3" />

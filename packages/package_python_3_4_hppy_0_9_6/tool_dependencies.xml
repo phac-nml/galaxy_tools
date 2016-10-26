@@ -15,7 +15,7 @@
     <package name="hppy" version="0.9.6">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
+                <action type="download_by_url" sha256sum="d5cf04e7c1c621bff5aef37a4bc56340a39dba5acc39e82e06ff6cdedb8a01b1">https://github.com/veg/hppy/archive/0.9.6.tar.gz</action>
                 <action type="set_environment_for_install">
                     <repository name="package_python_3_4_hyphy_python_0_1_3" owner="nml">
                         <package name="hyphy-python" version="0.1.3" />

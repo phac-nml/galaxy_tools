@@ -21,7 +21,7 @@
         <package name="bioext" version="0.17.3">
             <install version="1.0">
                 <actions>
-                    <action type="download_by_url">https://github.com/veg/BioExt/archive/0.17.3.tar.gz</action>
+                    <action type="download_by_url" sha256sum="83f65b3ce6982376fa7a42f761637b69bad6d35cee82044c673235d8b9b9ce5a">https://github.com/veg/BioExt/archive/0.17.3.tar.gz</action>
                     <action type="set_environment_for_install">
                         <repository name="package_python_3_4_pysam_0_8_3" owner="nml">
                             <package name="pysam" version="0.8.3" />

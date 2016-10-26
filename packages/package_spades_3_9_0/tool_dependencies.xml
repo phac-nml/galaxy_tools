@@ -3,7 +3,7 @@
     <package name="spades" version="3.9.0">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz</action>
+                <action type="download_by_url" sha256sum="aee7e481c69d307fd6f40cbf6609ae185b83118ae02a3709136a75137888dc96">http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz</action>
                 <!-- Copying the whole bin folder -->
 		<action type="make_directory">$INSTALL_DIR/bin</action>
 		<action type="make_directory">$INSTALL_DIR/share</action>

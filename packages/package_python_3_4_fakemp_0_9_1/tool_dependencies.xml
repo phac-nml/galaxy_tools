@@ -9,7 +9,7 @@
     <package name="fakemp" version="0.9.1">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">https://pypi.python.org/packages/source/f/fakemp/fakemp-0.9.1.tar.gz</action>
+                <action type="download_by_url" sha256sum="320885d5851e0c568cd4247fa81e48f055e435822643e5bda9d82edc53c3b938">https://pypi.python.org/packages/source/f/fakemp/fakemp-0.9.1.tar.gz</action>
                 <action type="set_environment_for_install">
                     <repository name="package_python_3_4_cython_0_23_4" owner="nml">
                         <package name="cython" version="0.23.4" />
