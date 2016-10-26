@@ -133,6 +133,27 @@ if ($job_type eq 'g' | $job_type eq 'b')
   }
 }
 
+for (my $i  =0; $i< @ARGV; $i++){
+  if (index($ARGV[$i], "maxins") != -1){
+    my ($maxins, $minins);
+    my @b2args = split(' ', $ARGV[$i]);
+    for (my $j = 0; $j < @b2args; $j++){
+      if (index($b2args[$j], "maxins") != -1){
+        $maxins = $b2args[$j+1];
+      }
+      if (index($b2args[$j], "minins") != -1){
+        $minins = $b2args[$j+1];
+      }
+    }
+    if ($maxins - $minins < 0){
+      print STDERR  "--minins cannot be greater than --maxins";
+      exit(1);
+    }
+  }
+}
+
+
+
 my $command = "python $binary @ARGV";
 
 my $exit_code = system($command);
@@ -142,6 +163,7 @@ my $cur_dir = getcwd();
 my (@genefiles, @bamfiles, @pileupfiles, @fullgenefiles, @scoresfiles);
 
 # go through files in the output directory to move/concatenate them as required.
+
 foreach my $file (<$cur_dir/*>)
 {
     print $file, "\n";

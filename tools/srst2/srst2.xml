@@ -1,9 +1,9 @@
-<tool id="srst2" name="SRST2" version="0.3.4">
+<tool id="srst2" name="SRST2" version="0.3.5">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <requirements>
         <requirement type="package" version="0.1.18">samtools</requirement>
         <requirement type="package" version="2.1.0">bowtie2</requirement>
-        <requirement type="package" version="0.1.4.5">srst2</requirement>
+        <requirement type="package" version="0.1.4.6">srst2</requirement>
         <requirement type="package" version="08-07-2014">vfdb</requirement>
     </requirements>
     <stdio>
@@ -15,7 +15,7 @@
         #if $mlst_or_genedb.job_type == "mlst_only"
             m $txt_results $alleles
             #if ($mlst_or_genedb.allele_choice.allele_report=="all")
-                allstring
+                all
             #else if ($mlst_or_genedb.allele_choice.allele_report=="new")
                 new
             #end if
@@ -105,7 +105,14 @@
             #if $options.stop_after
                 --stop_after $options.stop_after
             #end if
-                --other "'-p \${GALAXY_SLOTS:-1}'"
+                --other "'-p \${GALAXY_SLOTS:-1}
+            #if $options.maxins
+                --maxins $options.maxins
+            #end if
+            #if $options.minins
+                --minins $options.minins
+            #end if
+                '"
             #if $options.mapq
                 --mapq $options.mapq
             #end if
@@ -215,6 +222,13 @@
                 <param name="stop_after" type="integer" label="Stop mapping after this number of reads have been mapped (otherwise map all)" optional="true"/>
                 <param name="mapq" type="integer" label="Samtools -q parameter" value="1"/>
                 <param name="baseq" type="integer" label="Samtools -Q parameter" value="20"/>
+                <param name="minins" type="integer" label="Bowtie 2 -I parameter. The minimum fragment length for valid paired-end alignments." value="0" >
+                     <validator type="in_range" message="Must be less than -X parameter." min="0"/>
+                </param>
+                <param name="maxins" type="integer" label="Bowtie 2 -X parameter. The maximum fragment length for valid paired-end alignments." value="1000" >
+                     <validator type="in_range" message="Must be greater than -I parameter." min="0"/>
+                </param>
+
             </when>
             <when value="basic"/>
         </conditional>
@@ -341,12 +355,24 @@ Advanced Options
 **Samtools -Q parameter:**
     - Default is 20 (--baseq)
 
-** Acknowledgments **
-Original Author: Mariam Iskander
+**Bowtie2 -I/--minins:**
+    - The minimum fragment length for valid paired-end alignments. E.g. if -I 60 is specified and a paired-end alignment consists of two 20-bp alignments in the appropriate orientation with a 20-bp gap between them, that alignment is considered valid (as long as -X is also satisfied). A 19-bp gap would not be valid in that case. If trimming options -3 or -5 are also used, the -I constraint is applied with respect to the untrimmed mates.
+    - The larger the difference between -I and -X, the slower Bowtie 2 will run. This is because larger differences bewteen -I and -X require that Bowtie 2 scan a larger window to determine if a concordant alignment exists. For typical fragment length ranges (200 to 400 nucleotides), Bowtie 2 is very efficient.
+    - Default: 0 (essentially imposing no minimum)
 
-Jen Cabral
-Philip Mabon
-Mark Iskander
+**Bowtie2 -X/--maxins:**
+    - The maximum fragment length for valid paired-end alignments. E.g. if -X 100 is specified and a paired-end alignment consists of two 20-bp alignments in the proper orientation with a 60-bp gap between them, that alignment is considered valid (as long as -I is also satisfied). A 61-bp gap would not be valid in that case. If trimming options -3 or -5 are also used, the -X constraint is applied with respect to the untrimmed mates, not the trimmed mates.
+    - The larger the difference between -I and -X, the slower Bowtie 2 will run. This is because larger differences bewteen -I and -X require that Bowtie 2 scan a larger window to determine if a concordant alignment exists. For typical fragment length ranges (200 to 400 nucleotides), Bowtie 2 is very efficient.
+    - Default: 500.
+
+**Acknowledgments**
+    Original Author: Mariam Iskander
+
+    Jen Cabral
+
+    Philip Mabon
+
+    Mark Iskander
 
     </help>
     <citations>
