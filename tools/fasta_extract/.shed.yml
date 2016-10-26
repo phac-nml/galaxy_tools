@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: extract single fasta from multiple fasta file
+name: fasta_extract
+owner: nml
