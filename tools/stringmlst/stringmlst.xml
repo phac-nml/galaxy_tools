@@ -1,0 +1,88 @@
+<tool id="stringmlst" name="StringMLST" version="1.0.4">
+  <description>k-mer tool for multilocus sequence typing</description>
+  <requirements>
+    <requirement type="package" version="2.1">stringmlst</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" />
+  </stdio>
+  <command><![CDATA[
+
+
+
+  python $__tool_directory__/split_by_allele.py --alleles=$alleles --profiles=$scheme
+  &&
+  stringMLST.py --buildDB -c config.txt -k $kmer -P DB
+
+  &&  
+        #if $single_or_paired.type == "single"
+        ln -s "$input_se" "$single_or_paired.input_se.element_identifier".fastq && 
+
+        stringMLST.py
+        --predict
+        -1 "$single_or_paired.input_se.element_identifier".fastq
+        -s 
+        #elif $single_or_paired.type == "paired"
+            ln -s  "$single_or_paired.forward_pe" "$single_or_paired.forward_pe.name"_1.fastq && ln -s  "$single_or_paired.reverse_pe" "$single_or_paired.forward_pe.name"_2.fastq &&
+            stringMLST.py
+            --predict
+            -1 "$single_or_paired.forward_pe.name"_1.fastq -2 "$single_or_paired.forward_pe.name"_2.fastq
+            -p
+        #else
+            ln -s "$single_or_paired.fastq_collection.forward" "$single_or_paired.fastq_collection.forward.name"_1.fastq && ln -s  "$single_or_paired.fastq_collection.reverse" "$single_or_paired.fastq_collection.forward.name"_2.fastq &&
+            stringMLST.py
+            --predict
+            -1 "$single_or_paired.fastq_collection.forward.name"_1.fastq -2 "$single_or_paired.fastq_collection.forward.name"_2.fastq
+            -p
+        #end if
+        -o $output
+        -r 
+        -P DB -k $kmer
+  
+  ]]></command>
+  <inputs>
+    <conditional name="single_or_paired">
+      <param name="type" type="select" label="Read type">
+        <option value="single">Single-end</option>
+        <option value="paired">Paired-end</option>
+        <option value="collection">Collection Paired-end</option>
+      </param>
+      <when value="single">
+        <param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
+      </when>
+      <when value="paired">
+        <param name="forward_pe" type="data" format="fastqsanger" label="Forward paired-end read file"/>
+        <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
+      </when>
+      <when value="collection">
+        <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="fastqsanger" collection_type="paired" />
+      </when>
+    </conditional>
+    <param name="kmer" type="integer" label="K-mer to use" value="35" help="  Kmer length for which the db was created(Default k = 35)." />      
+    <param name="scheme" type="data" format="tabular" label="ST definitions for MLST scheme"/>
+    <param name="alleles" type="data" format="fasta" label="Fasta file of MLST alleles"/>
+    
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" label="Results"/>
+    <data format="txt" name="log" label="Log" from_work_dir="DB.log"/>
+    <data format="fastqsanger" name="reads" label='Reads' from_work_dir="*.fq" >
+
+    </data>
+  </outputs>
+  <tests>
+    <test>
+      <param name="scheme" value="st.tabular" />
+      <param name="alleles" value="st.fasta" />
+      <param name="input_se" value="input.fastqsanger" />
+      <output file="results.tsv" ftype="tabular" name="output" />
+    </test>
+  </tests>
+  <help><![CDATA[
+Original manual for command line available at http://jordan.biology.gatech.edu/page/software/stringmlst/stringMLST-useageDocumentation.pdf
+]]>
+  
+  </help>
+  <citations>
+  </citations>
+</tool>
