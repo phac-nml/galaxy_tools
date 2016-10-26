@@ -13,7 +13,7 @@
 	    <install version="1.0">
 	         <actions_group>
 	            <actions>
-	                <action type="download_by_url">https://github.com/katholt/srst2/archive/v0.1.6.tar.gz</action>
+	                <action type="download_by_url" sha256sum="24cbd03933d4cc14bbfa7f8a073c9b0caafb13d55afb3bfa25f8b093fc5bc615">https://github.com/katholt/srst2/archive/v0.1.6.tar.gz</action>
 					<action type="shell_command">cp ./scripts/getmlst.py $INSTALL_DIR</action>
 					<action type="shell_command">cp ./scripts/srst2.py $INSTALL_DIR</action>
                     <action type="chmod"><file mode="777">$INSTALL_DIR/getmlst.py</file></action>
