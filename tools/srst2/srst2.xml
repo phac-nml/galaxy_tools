@@ -108,8 +108,6 @@
                 --other "'-p \${GALAXY_SLOTS:-1}
             #if $options.maxins
                 --maxins $options.maxins
-            #end if
-            #if $options.minins
                 --minins $options.minins
             #end if
                 '"
