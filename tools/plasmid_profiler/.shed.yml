@@ -1,0 +1,4 @@
+catagories: [Sequence Analysis]
+description: Explores plasmid content in WGS data
+name: plasmid_profiler
+owner: nml
