@@ -1,0 +1,93 @@
+<tool id="plasmid_profiler" name="Plasmid Profiler" version="0.1.1">
+	<description>Explores plasmid content in WGS data</description>
+	<requirements>
+		<requirement type="package" version="3.2.1">R</requirement>
+		<requirement type="package" version="7.35">libcurl</requirement>
+		<requirement type="package" version="0.4">plasmid_profiler</requirement>
+		<requirement type="package" version="0.0.1">pandoc</requirement>
+	</requirements>
+	<stdio>
+   		<exit_code range="1:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+	<command>
+		Rscript /\$SCRIPT_PATH/plasmidprofile.R --blastfile $blastfile --srst2file $srst2file 
+		#if $sureness != 0.0
+			--sureness $sureness
+		#end if
+		#if $length != 0
+			--length $length
+		#end if
+		$anonymize $combineincs 
+		#if $coverage != 0
+			--coverage $coverage
+		#end if
+		--title "$title" --outfile out
+	</command>
+
+	<inputs>
+		<param name="blastfile" type="data" format="tabular" label="BLAST TSV file" optional="false" />
+		<param name="srst2file" type="data" format="tabular" label="SRST2 TSV file" optional="false" />
+		<param name="sureness" type="float" label="Sureness cut off" value="0" />
+		<param name="length" type="integer" label="Plasmid length cut off" value="0" />
+		<param name="coverage" type="integer" label="Percent coverage cut off" value="0" />
+		<param name="title" type="text" label="Plot title" value="" />
+		<param name="anonymize" type="boolean" checked="false" label="Anonymize plasmid and sample names" truevalue="--anonymize" falsevalue="" />
+		<param name="combineincs" type="boolean" checked="false" label="Combine very closely related incompatibility groups" truevalue="--combineincs" falsevalue="" />
+	</inputs>
+
+	<outputs>
+		<data format="png" name="PNGOutput" label="png output" from_work_dir="*.png" />
+		<data format="html" name="HTMLOutput" label="html output" from_work_dir="*.html" />
+		<data format="csv" name="CSVOutput" label="csv output" from_work_dir="*.csv" />
+	</outputs>
+
+	<tests>
+		<test>
+			<output/>
+		</test>
+	</tests>
+	<help>
+What it does
+============
+
+Heatmap display of plasmid content in WGS data
+
+This program parses plasmids identified through SRST2 and BLAST, scores them based on a combined measure of maximized coverage and minimized sequence divergence, and produces visualizations along with tabular results. Best used on results from the workflow "P2 - Plasmid Profiler: SRST2 and BLAST"
+
+Usage
+=====
+
+**BLAST TSV file name:**
+ - Tab separated value table of BLAST results from querying plasmidfinder database with AMR sequences against SRST2 identified plasmids
+
+**SRST2 TSV file name:**
+ - Tab separated value table of SRST2 results from querying WGS reads against plasmid database
+
+**Sureness cut off:**
+	- Sureness is the difference between normalized sequence coverage and divergence. It is a unique measure per dataset that informs the user as to the likelihood the identified plasmid is present in their sample. A value of 0.75 is recommended for a first pass with plasmids scoring above 0.95 to be considered as present in the WGS data. 
+
+**Plasmid length cut off:**
+	- Remove all plasmid sequences below this length from results (eg. 10000)
+
+**Percent coverage cut off:**
+	- Plasmids with read coverage below this percentage will be excluded from the results (eg. 75)
+
+**Plot title:**
+	- Custom plot title for heatmap
+
+**Anonymize plasmids and sample names:**
+	- Hide identifiers in final image and replace with "Plasmid #" and "Sample #"
+
+**Combine very closely related incompatibility groups:**
+	- Collapse subtypes of incompatibility groups. (eg. FII(S) and FII(K) collapsed to FII)
+  
+
+**Acknowledgments**
+	Plasmid Profiler Author: Adrian Zetner
+
+	Galaxy tool author: Jen Cabral
+
+    </help>
+    <citations>
+    </citations>
+ </tool>

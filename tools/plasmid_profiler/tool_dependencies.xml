@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="R" version="3.2.1">
+		<repository name="package_r_3_2_1" owner="iuc" prior_installation_required="True" />
+	</package>
+	<package name="libcurl" version="7.35">
+		<repository name="package_libcurl_7_35" owner="iuc" prior_installation_required="True" />
+	</package>
+	<package name="pandoc" version="0.0.1">
+		<repository name="package_pandoc_0_0_1" owner="nml" prior_installation_required="True"/>
+	</package>
+
+	<package name="plasmid_profiler" version="0.4">
+		<install version="1.0">
+			<actions>
+				<action type="set_environment_for_install">
+					<repository name="package_libcurl_7_35" owner="iuc">
+						<package name="libcurl" version="7.35" />
+					</repository>
+					<repository name="package_pandoc_0_0_1" owner="nml">
+						<package name="pandoc" version="0.0.1"/>
+					</repository>
+				</action>
+				<action type="setup_r_environment">
+					<repository name="package_r_3_2_1" owner="iuc">
+						<package name="R" version="3.2.1"/>
+					</repository>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/highr_0.6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/formatR_1.4.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/BH_1.60.0-2.tar.gz?raw=true</package>
+					<package>https://github.com/JenCabral/galaxy_tool_source/blob/master/plasmid_profiler/ape_3.5.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/assertthat_0.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/base64enc_0.1-3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/colorspace_1.2-6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/DBI_0.5-1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/digest_0.6.10.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/R6_2.1.3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/Rcpp_0.12.7.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/lazyeval_0.2.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/tibble_1.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/magrittr_1.5.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/dplyr_0.5.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/gtools_3.5.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/gdata_2.17.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/gtable_0.2.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/plyr_1.8.4.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/stringi_1.1.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/stringr_1.1.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/reshape2_1.4.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/RColorBrewer_1.1-2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/dichromat_2.0-0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/munsell_0.4.3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/labeling_0.3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/scales_0.4.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/ggplot2_2.1.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/ggdendro_0.1-20.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/gridExtra_2.2.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/htmltools_0.3.5.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/jsonlite_1.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/yaml_2.1.13.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/htmlwidgets_0.7.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/mime_0.5.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/curl_1.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/openssl_0.9.4.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/httr_1.2.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/lattice_0.20-34.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/MASS_7.3-45.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/nlme_3.1-128.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/getopt_1.20.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/optparse_1.3.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/viridis_0.3.4.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/tidyr_0.6.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/hexbin_1.27.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/bitops_1.0-6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/evaluate_0.9.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/caTools_1.17.1.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/markdown_0.7.7.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/knitr_1.14.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/purrr_0.2.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/viridisLite_0.1.3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/plotly_4.5.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/rmarkdown_1.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/RGraphics_2.0-14.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/whisker_0.3-2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/trimcluster_0.1-2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/kernlab_0.9-24.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/DEoptimR_1.0-6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/robustbase_0.92-6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/mvtnorm_1.0-5.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/diptest_0.75-7.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/mclust_5.2.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/prabclus_2.2-6.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/modeltools_0.2-21.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/flexmix_2.3-13.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/fpc_2.1-10.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/dendextend_1.3.0.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/Plasmidprofiler_0.1.1.tar.gz?raw=true</package>
+				</action>
+				<action type="set_environment">
+					<environment_variable action="set_to" name="SCRIPT_PATH">$INSTALL_DIR/Plasmidprofiler/exec/</environment_variable>
+					<environment_variable action="append_to" name="PATH">$ENV[PANDOC_PATH]</environment_variable>
+				</action>
+			</actions>
+		</install>
+	</package>
+</tool_dependency>
+

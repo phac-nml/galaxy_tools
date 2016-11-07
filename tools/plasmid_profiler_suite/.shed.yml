@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Plasmid Profiler suite defining all dependencies for Plasmid Profiler
+name: suite_plasmid_profiler
+owner: nml
