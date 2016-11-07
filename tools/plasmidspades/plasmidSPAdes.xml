@@ -1,4 +1,4 @@
-<tool id="plasmidspades" name="plasmidspades" version="1.0">
+<tool id="plasmidspades" name="plasmidspades" version="1.1">
   <description>genome assembler for plasmids</description>
   <requirements>
     <requirement type="package" version="3.9.0">spades</requirement>
