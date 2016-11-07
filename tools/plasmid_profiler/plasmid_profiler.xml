@@ -42,12 +42,12 @@
 	</outputs>
 
 	<tests>
-      <test>
-        <param/>
-        <output/>
-      </test>
-    </tests>
-    <help>
+		<test>
+			<param/>
+			<output/>
+		</test>
+	</tests>
+	<help>
 What it does
 ============
 

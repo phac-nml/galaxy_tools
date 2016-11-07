@@ -3,23 +3,23 @@
 	<package name="R" version="3.2.1">
 		<repository name="package_r_3_2_1" owner="iuc" prior_installation_required="True" />
 	</package>
-    <package name="libcurl" version="7.35">
-        <repository name="package_libcurl_7_35" owner="iuc" prior_installation_required="True" />
-    </package>
-    <package name="pandoc" version="0.0.1">
-    	<repository name="package_pandoc_0_0_1" owner="nml" prior_installation_required="True"/>
-    </package>
+	<package name="libcurl" version="7.35">
+		<repository name="package_libcurl_7_35" owner="iuc" prior_installation_required="True" />
+	</package>
+	<package name="pandoc" version="0.0.1">
+		<repository name="package_pandoc_0_0_1" owner="nml" prior_installation_required="True"/>
+	</package>
 
 	<package name="plasmid_profiler" version="0.4">
 		<install version="1.0">
 			<actions>
 				<action type="set_environment_for_install">
-                    <repository name="package_libcurl_7_35" owner="iuc">
-                        <package name="libcurl" version="7.35" />
-                    </repository>
-                    <repository name="package_pandoc_0_0_1" owner="nml">
-                    	<package name="pandoc" version="0.0.1"/>
-                    </repository>
+					<repository name="package_libcurl_7_35" owner="iuc">
+						<package name="libcurl" version="7.35" />
+					</repository>
+					<repository name="package_pandoc_0_0_1" owner="nml">
+						<package name="pandoc" version="0.0.1"/>
+					</repository>
                 </action>
 				<action type="setup_r_environment">
 					<repository name="package_r_3_2_1" owner="iuc">
