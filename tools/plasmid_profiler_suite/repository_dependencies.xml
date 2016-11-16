@@ -2,7 +2,7 @@
 <repositories description="A suite of tools associated with SNVphyl pipeline">
 	<repository name="ncbi_blast_plus" owner="devteam"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="regex_find_replace" owner="jjohnson"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
-	<repository name="fasta_extract" owner="phil"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
+	<repository name="fasta_extract" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="bundle_collections" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="combine_tabular_collection" owner="phil"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="plasmid_profiler" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
