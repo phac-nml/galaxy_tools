@@ -94,7 +94,7 @@
 					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/flexmix_2.3-13.tar.gz?raw=true</package>
 					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/fpc_2.1-10.tar.gz?raw=true</package>
 					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/dendextend_1.3.0.tar.gz?raw=true</package>
-					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/Plasmidprofiler_0.1.3.tar.gz?raw=true</package>
+					<package>https://github.com/jencabral/galaxy_tool_source/blob/master/plasmid_profiler/Plasmidprofiler_0.1.4.tar.gz?raw=true</package>
 				</action>
 				<action type="set_environment">
 					<environment_variable action="set_to" name="SCRIPT_PATH">$INSTALL_DIR/Plasmidprofiler/exec/</environment_variable>

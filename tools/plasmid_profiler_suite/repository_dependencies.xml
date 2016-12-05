@@ -7,4 +7,5 @@
 	<repository name="combine_tabular_collection" owner="phil"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="plasmid_profiler" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 	<repository name="srst2" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
+	<repository name="kat_sect" owner="nml"  toolshed="http://galaxy-toolshed.corefacility.ca/" />
 </repositories>
