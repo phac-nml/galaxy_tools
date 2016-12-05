@@ -1,4 +1,4 @@
-<tool id="plasmid_profiler" name="Plasmid Profiler" version="0.1.1">
+<tool id="plasmid_profiler" name="Plasmid Profiler" version="0.1.3">
 	<description>Explores plasmid content in WGS data</description>
 	<requirements>
 		<requirement type="package" version="3.2.1">R</requirement>
