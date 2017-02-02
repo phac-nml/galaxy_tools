@@ -45,6 +45,7 @@
 		                <environment_variable action="append_to" name="PYTHONPATH">$ENV[PYTHONPATH_SCIPY]/lib/python</environment_variable>
 	                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
 	                    <environment_variable name="PATH" action="prepend_to">$ENV[PYTHONHOME]/bin</environment_variable>
+	                    <environment_variable name="LD_LIBRARY_PATH" action="prepend_to">$ENV[PYTHONHOME]/lib</environment_variable>
 	                    <environment_variable name="BASE" action="set_to">$INSTALL_DIR</environment_variable>
 	                    <environment_variable action="prepend_to" name="LD_LIBRARY_PATH">$ENV[ATLAS_LIB_DIR]</environment_variable>
                     </action>

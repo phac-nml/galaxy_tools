@@ -1,4 +1,4 @@
-<tool id="srst2" name="SRST2" version="0.3.5">
+<tool id="srst2" name="SRST2" version="0.3.6">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <requirements>
         <requirement type="package" version="0.1.18">samtools</requirement>
@@ -108,8 +108,6 @@
                 --other "'-p \${GALAXY_SLOTS:-1}
             #if $options.maxins
                 --maxins $options.maxins
-            #end if
-            #if $options.minins
                 --minins $options.minins
             #end if
                 '"

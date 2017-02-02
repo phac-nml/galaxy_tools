@@ -1,7 +1,7 @@
-<tool id="plasmidspades" name="plasmidspades" version="1.0">
+<tool id="plasmidspades" name="plasmidspades" version="1.1">
   <description>genome assembler for plasmids</description>
   <requirements>
-    <requirement type="package" version="3.8.0">spades</requirement>
+    <requirement type="package" version="3.9.0">spades</requirement>
   </requirements>
   <command interpreter="perl">spades.pl 
     $out_contigs 
@@ -217,7 +217,7 @@
 
 SPAdes – St. Petersburg genome assembler – is intended for both standard isolates and single-cell MDA bacteria assemblies. See http://bioinf.spbau.ru/en/spades for more details on SPAdes.
 
-This wrapper runs SPAdes 3.8, collects the output, and throws away all the temporary files. It also produces a tab file with contig names, length and coverage. 
+This wrapper runs SPAdes 3.9, collects the output, and throws away all the temporary files. It also produces a tab file with contig names, length and coverage. 
 
 **License**
 
