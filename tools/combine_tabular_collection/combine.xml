@@ -1,0 +1,23 @@
+<tool id="combine" name="Combine" version="0.1">
+  <description>Combine Tabular with same header</description>
+  <command interpreter="bash">
+
+    combine.sh $output
+    #for $f in $texts# $f #end for#
+  </command>
+  <inputs>
+     <param name="texts" type="data_collection" label="Collection of Tabular data" help="" optional="false" format="txt" collection_type="list" />
+  </inputs>
+  <stdio>
+    <exit_code range="5"  level="warning"   description="Your input sets were all empty. Either the tool that generated the input sets did not work correctly or no results were found."/>
+  </stdio>
+
+  <outputs>
+    <data name="output"  format="tabular" ></data>
+  </outputs>
+  <help>
+
+
+
+  </help>
+</tool>
