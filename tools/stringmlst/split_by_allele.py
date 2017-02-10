@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
-import sys
 import getopt
+import sys
 from Bio import SeqIO
 
 ERROR_MSG = "Error could not parse out allele name and number from '%s'"
