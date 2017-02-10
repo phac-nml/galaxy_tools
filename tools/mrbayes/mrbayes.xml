@@ -175,12 +175,12 @@ See the manual_ or the `command reference`_ for more information.
 
 Models are defined by the following MrBayes options::
 
-GRT: lset nst=6;
+GTR: lset nst=6;
 SYM: lset nst=6; prset statefreqpr=fixed(equal);
-HKY: lset nst=2;
+HKY85: lset nst=2;
 K2P: lset nst=2; prset statefreqpr=fixed(equal);
 F81: lset nst=1;
-JC: lset nst=1; prset statefreqpr=fixed(equal);
+JC69: lset nst=1; prset statefreqpr=fixed(equal);
 Mixed: lset nst=mixed;
 
 Each model makes different assumptions about nucelotide substitution rates and state frequencies.
