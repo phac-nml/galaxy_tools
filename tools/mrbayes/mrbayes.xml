@@ -88,9 +88,9 @@
                help="Frequency with which output it written to files.">
             <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
         </param>
-        <param name="printfreq" type="integer" label="Print frequency" value="500">
+        <param name="printfreq" type="integer" label="Print frequency" value="500"
+               help="Frequency with which output is printed to the screen.">
             <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
-            <help>Frequency with which output is printed to the screen.</help>
         </param>
         <param name="burninfrac" type="float" label="Burn-in fraction" value="0.25"
                help="Fraction of samples to discard when summarizing.">
@@ -147,7 +147,7 @@
     </tests>
 
     <help>
-
+<![CDATA[
 .. class:: warningmark
 
 This tool takes as input a Nexus file (.nex), described here_, that should only contain a data block, without
@@ -210,6 +210,7 @@ checkfreq > ngen will have no effect.
 -----
 
 Wrapper originally created by AAFC-MBB -> https://github.com/AAFC-MBB/
+]]>
     </help>
     <citations>
         <citation type="bibtex">@ARTICLE {huelsenbeckjpronquistf.2001,
