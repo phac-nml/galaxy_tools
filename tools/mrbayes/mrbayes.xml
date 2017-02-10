@@ -47,7 +47,7 @@
     <param name="filename" type="text" label="Output filename" size="10" value=""
       help="Output files will be named this with .p, .t, .mcmc extensions. Use to avoid overwriting files when running repeated analyses on the same dataset." />
 
-    <param name="ngen" type="integer" label="&lt;hr&gt;Number of generations" value="10000" >
+    <param name="ngen" type="integer" label="Number of generations" value="10000" >
       <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
     <param name="nchain" type="integer" label="Number of chains" value="2" >
@@ -57,52 +57,52 @@
       <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
     </param>
 
-    <param name="outgroup" type="text" label="&lt;hr&gt;Outgroup" size="10" value="1"
+    <param name="outgroup" type="text" label="Outgroup" size="10" value="1"
       help="The name or number identifying one taxon from the data." />
-    <param name="model" type="select" label="Choose model">
-      <sanitizer sanitize="False" />
-      <option value="lset nst=6"                                >GRT</option>
+    <param name="model" type="select" label="Choose model"
+           help="Models are defined below and are only valid for nucleotide data.">
+      <sanitizer sanitize="False"/>
+      <option value="lset nst=6">GTR</option>
       <option value="lset nst=6; prset statefreqpr=fixed(equal)">SYM</option>
-      <option value="lset nst=2"                                >HKY</option>
+      <option value="lset nst=2">HKY85</option>
       <option value="lset nst=2; prset statefreqpr=fixed(equal)">K2P</option>
-      <option value="lset nst=1"                                >F81</option>
-      <option value="lset nst=1; prset statefreqpr=fixed(equal)">JC </option>
-      <option value="lset nst=mixed"                            >Mixed </option>
-      <help>Models are defined below and are only valid for nucleotide data.</help>
+      <option value="lset nst=1">F81</option>
+      <option value="lset nst=1; prset statefreqpr=fixed(equal)">JC69</option>
+      <option value="lset nst=mixed">Mixed</option>
     </param>
     <param name="rates" type="select" label="Choose rates">
-      <option value="equal"/>
-      <option value="gamma"/>
-      <option value="propinv"/>
-      <option value="invgamma"/>
-      <option value="adgamma"/>
+      <option value="equal">(equal) No rate variation across sites</option>
+      <option value="gamma">(gamma) Gamma-distributed rates across sites</option>
+      <option value="propinv">(propinv) A proportion of the sites are invariable</option>
+      <option value="invgamma">(invgamma) A proportion of the sites are invariable and the remaining sites are Gamma-distributed</option>
+      <option value="adgamma">(adgamma) Autocorrelated rates across sites</option>
     </param>
-    <param name="samplefreq" type="integer" label="&lt;hr&gt;Sample frequency" value="500" >
+    <param name="samplefreq" type="integer" label="Sample frequency" value="500"
+           help="Frequency with which output it written to files.">
        <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
-       <help>Frequency with which output it written to files." </help>
     </param>
     <param name="printfreq" type="integer" label="Print frequency" value="500" >
        <validator type="in_range" min="1" max="2147483647" message="Must be greater than or equal to 1"/>
        <help>Frequency with which output is printed to the screen.</help>
     </param>
-    <param name="burninfrac" type="float" label="Burn-in fraction" value="0.25">
+    <param name="burninfrac" type="float" label="Burn-in fraction" value="0.25"
+           help="Fraction of samples to discard when summarizing.">
       <validator type="in_range" min="0.01" max=".50" message="Must be between 0.01 and .50"/>
-      <help>Fraction of samples to discard when summarizing. </help>
     </param>
     <param name="stoprule" type="select" label="Stop rule?" >
       <option value="no">No</option>
       <option value="yes">Yes</option>
     </param>
-    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="&lt;hr&gt;Include sump?"
+    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="Include sump?"
         help="Summarizes sampled parameter value."/>
     <param name="sumt" type="boolean" truevalue="sumt;" falsevalue="" label="Include sumt?"
         help="Summarizes the trees."/>
     <param name="plot" type="boolean" truevalue="plot" falsevalue="" label="Include plot?"
         help="Creates an x-y graph of the parameter over the course of the chain."/>
 
-    <param name="checkfreq" type="integer" label="&lt;hr&gt;Checkpoint frequency" value="100000" >
+    <param name="checkfreq" type="integer" label="Checkpoint frequency" value="100000"
+           help="Frequency with which checkpoints are written. Used for continuing analysis with append.">
        <validator type="in_range" min="100" max="2147483647" message="Must be greater than or equal to 100"/>
-       <help>Frequency with which checkpoints are written. Used for continuing analysis with append.</help>
     </param>
     <param name="append" type="boolean" truevalue="mcmcp append=yes" falsevalue="mcmcp append=no" label="Append to last checkpoint?"
         help="Requires .ckp file (i.e. that number of generations > checkpoint frequency for previous analysis)." />
