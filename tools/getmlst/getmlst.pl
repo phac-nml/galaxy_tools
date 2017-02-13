@@ -1,15 +1,15 @@
-#!usr/bin/env perl
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
 use Cwd;
 use File::Copy;
 
-my ($binary, $mlst_db, $mlst_defs, $species) = @ARGV;
+my ($mlst_db, $mlst_defs, $species) = @ARGV;
 
 $species =~ s/__pd__/#/ig;
 
-my $command = "python $binary --species '$species'";
+my $command = "getmlst.py --species '$species'";
 
 my $rv = system($command);
 
