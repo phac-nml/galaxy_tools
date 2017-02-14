@@ -6,11 +6,9 @@ use warnings;
 use Cwd;
 use File::Copy;
 
-#The first 4 arguments should be in this format:
-#  /path/to/srst2.py bam_output scores_output pileup_output ...
+#The first 3 arguments should be in this format:
+#  bam_output scores_output pileup_output ...
 
-my $binary = $ARGV[0];
-shift;
 
 my ($bam_results, $scores, $pileup, $job_type, $txt_results, $genes_results, $fullgenes_results, $name, $databases);
 my ($allele_results,$allele_type);
@@ -154,7 +152,7 @@ for (my $i  =0; $i< @ARGV; $i++){
 
 
 
-my $command = "python $binary @ARGV";
+my $command = "srst2 @ARGV";
 
 my $exit_code = system($command);
 

@@ -1,16 +1,15 @@
-<tool id="srst2" name="SRST2" version="0.3.6">
+<tool id="srst2" name="SRST2" version="0.3.7">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <requirements>
         <requirement type="package" version="0.1.18">samtools</requirement>
-        <requirement type="package" version="2.1.0">bowtie2</requirement>
+        <requirement type="package" version="2.2.4">bowtie2</requirement>
         <requirement type="package" version="0.1.4.6">srst2</requirement>
-        <requirement type="package" version="08-07-2014">vfdb</requirement>
     </requirements>
     <stdio>
       <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
     </stdio>
-    <command interpreter="perl">
-        srst2.pl \$BASE/srst2.py $bam_results $scores $pileup
+    <command>
+        $__tool_directory__/srst2.pl $bam_results $scores $pileup
 
         #if $mlst_or_genedb.job_type == "mlst_only"
             m $txt_results $alleles
@@ -252,9 +251,25 @@
     </outputs>
 
     <tests>
-      <test>
-        <output/>
-      </test>
+        <test>
+            <param name="type" value="collection" />
+            <param name="fastq">
+                <collection type="paired">
+                    <element name="forward" value="ERR024070_1.fastq" />
+                    <element name="reverse" value="ERR024070_2.fastq" />
+                </collection>
+            </param>
+            <param name="job_type" value="mlst_only" />
+            <param name="mlst_defs" value="ecoli.txt" />
+            <param name="mlst_db" value="Escherichia_coli#1.fasta" />
+            <param name="mlst_max_mismatch" value="10" />
+            <param name="mlst_delim" value="-" />
+            <output name="bam_results" file="" />
+            <output name="scores" file="" />
+            <output name="pileup" file="" />
+            <output name="alleles" file="" />
+            <output name="txt_results" file="" />
+        </test>
     </tests>
 
 
