@@ -72,10 +72,10 @@
   </outputs>
   <tests>
     <test>
-      <param name="scheme" value="st.tabular" />
+        <!-- <param name="scheme" value="st.tabular" />
       <param name="alleles" value="st.fasta" />
       <param name="input_se" value="input.fastqsanger" />
-      <output file="results.tsv" ftype="tabular" name="output" />
+      <output file="results.tsv" ftype="tabular" name="output" /> -->
     </test>
   </tests>
   <help><![CDATA[
