@@ -264,6 +264,8 @@
             <param name="mlst_delim" value="-" />
             <output name="bam_results" file="ERR028678_sampled.bam" ftype="bam" lines_diff="2" />
             <output name="scores" file="ERR028678_sampled_scores.tabular" />
+            <!-- Don't test pileup as it is too large of a file > 90 MB -->
+            <!-- <output name="pileup" file="ERR028678_sampled_pileup.tabular" />-->
             <output name="alleles" file="ERR028678_sampled_alleles.fasta" />
             <output name="txt_results" file="ERR028678_sampled_text_results.tabular" />
         </test>
