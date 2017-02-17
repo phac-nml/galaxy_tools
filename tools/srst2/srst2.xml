@@ -1,16 +1,13 @@
-<tool id="srst2" name="SRST2" version="0.3.6">
+<tool id="srst2" name="SRST2" version="0.3.7">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <requirements>
-        <requirement type="package" version="0.1.18">samtools</requirement>
-        <requirement type="package" version="2.1.0">bowtie2</requirement>
         <requirement type="package" version="0.1.4.6">srst2</requirement>
-        <requirement type="package" version="08-07-2014">vfdb</requirement>
     </requirements>
     <stdio>
-      <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+        <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
     </stdio>
-    <command interpreter="perl">
-        srst2.pl \$BASE/srst2.py $bam_results $scores $pileup
+    <command><![CDATA[
+        $__tool_directory__/srst2.pl $bam_results $scores $pileup
 
         #if $mlst_or_genedb.job_type == "mlst_only"
             m $txt_results $alleles
@@ -21,10 +18,10 @@
             #end if
         #else if $mlst_or_genedb.job_type == "custom_only"
             g $genes_results $fullgenes_results
-    #*
-    to allow multiple custom databases join all db names into comma separated variable then send that variable to the perl script to be parsed
-    make the database names an array and then join
-    *#
+            #*
+            to allow multiple custom databases join all db names into comma separated variable then send that variable to the perl script to be parsed
+            make the database names an array and then join
+            *#
             #set $dbs = ','.join([$database.gene_db.name for $database in ( $mlst_or_genedb.databases )])
             "$dbs"
         #else if $mlst_or_genedb.job_type == "vfdb_only"
@@ -121,15 +118,15 @@
             --other "'-p \${GALAXY_SLOTS:-1}'"
         #end if
 
-        --output out
-    </command>
+        --output \${PWD}/out
+    ]]></command>
     <inputs>
         <conditional name="single_or_paired">
             <param name="type" type="select" label="Read type">
                 <option value="single">Single-end</option>
                 <option value="paired">Paired-end</option>
                 <option value="collection">Collection Paired-end</option>
-                </param>
+            </param>
             <when value="single">
                 <param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
             </when>
@@ -138,7 +135,7 @@
                 <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
             </when>
             <when value="collection">
-                <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="txt" collection_type="paired" />
+                <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="fastqsanger" collection_type="paired" />
             </when>
         </conditional>
 
@@ -170,7 +167,7 @@
                 <param name="mlst_defs" type="data" format="tabular"  label="ST definitions for MLST scheme"/>
                 <param name="mlst_db" type="data" format="fasta" label="Fasta file of MLST alleles"/>
                 <param name="vfdb_in" type="select" label="Choose a VFDB strain">
-                <options from_data_table="vfdb_fasta_files" />
+                    <options from_data_table="vfdb_fasta_files" />
                 </param>
                 <param name="mlst_max_mismatch" type="integer" label="Maximum number of mismatches per read for MLST allele calling" value=""  help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
                 <param name="gene_max_mismatch" type="integer" label="Maximum number of mismatches per read for gene allele calling" value=""  help="SRST2.1 default value is 10 however our testing indicates that the value should be set to 250 to prevent erroneous allele calls."/>
@@ -252,9 +249,26 @@
     </outputs>
 
     <tests>
-      <test>
-        <output/>
-      </test>
+        <test>
+            <param name="type" value="collection" />
+            <param name="fastq_collection">
+                <collection type="paired">
+                    <element name="forward" value="ERR028678_sampled_1.fastq" />
+                    <element name="reverse" value="ERR028678_sampled_2.fastq" />
+                </collection>
+            </param>
+            <param name="job_type" value="mlst_only" />
+            <param name="mlst_defs" value="ecoli.txt" />
+            <param name="mlst_db" value="Escherichia_coli#1.fasta" />
+            <param name="mlst_max_mismatch" value="10" />
+            <param name="mlst_delim" value="-" />
+            <output name="bam_results" file="ERR028678_sampled.bam" ftype="bam" lines_diff="2" />
+            <output name="scores" file="ERR028678_sampled_scores.tabular" />
+            <!-- Don't test pileup as it is too large of a file > 90 MB -->
+            <!-- <output name="pileup" file="ERR028678_sampled_pileup.tabular" />-->
+            <output name="alleles" file="ERR028678_sampled_alleles.fasta" />
+            <output name="txt_results" file="ERR028678_sampled_text_results.tabular" />
+        </test>
     </tests>
 
 
@@ -370,6 +384,8 @@ Advanced Options
     Philip Mabon
 
     Mark Iskander
+
+    Eric Enns
 
     </help>
     <citations>
