@@ -1,17 +1,22 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="0.3.1">
+<tool id="sistr_cmd" name="sistr_cmd" version="0.3.3">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction
   </description>
   <requirements>
-    <requirement type="package" version="0.3.1">sistr_cmd</requirement>
+    <requirement type="package" version="0.3.3">sistr_cmd</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
   </stdio>
   <command><![CDATA[
   sistr 
+    #for $fasta in $input_fastas
+      -i '$fasta' '${$fasta.name.replace("." + $fasta.ext, "")}'
+    #end for
     -f $output_format
-    #if $output_format == "csv"
+    #if $output_format == "tab"
+      -o sistr-report.tab
+    #elif $output_format == "csv"
       -o sistr-report.csv
     #elif $output_format == "json"
       -o sistr-report.json
@@ -19,33 +24,13 @@
     -p $cgmlst_profiles
     -n $novel_alleles
     -a $alleles_output
-    -T $tmp_dir
-    #if $keep_tmp
-      -K
-    #end if
-    #if $use_full_cgmlst_db
-      --use-full-cgmlst-db
-    #end if
-    #if $no_cgmlst
-      --no-cgmlst
-    #end if
-    #if $run_mash
-      -m
-    #end if
-    #if $qc
-      --qc
-    #end if
-    #if $threads > 1
-      -t $threads
-    #end if
-    #if $verbosity == 1
-      -v
-    #elif $verbosity == 2
-      -vv
-    #elif $verbosity == 3
-      -vvv
-    #end if
-    ${" ".join(map(str, $input_fastas))}
+    $use_full_cgmlst_db
+    $no_cgmlst
+    $run_mash
+    $qc
+    --threads "\$GALAXY_SLOTS"
+    -T "\${TMPDIR:-/tmp}"
+    $keep_tmp
   ]]></command>
   <inputs>
     <param 
@@ -60,8 +45,11 @@
       name="output_format" 
       type="select" 
       label="Results output format"
-      multiple="false" >
-      <option value="csv" selected="true">
+      multiple="false">
+      <option value="tab" selected="true">
+        Tabular (tab-delimited values)
+      </option>
+      <option value="csv">
         CSV (Comma Separated Values)
       </option>
       <option value="json">
@@ -72,67 +60,66 @@
       name="use_full_cgmlst_db"
       type="boolean"
       checked="false"
+      truevalue="--use-full-cgmlst-db"
+      falsevalue=""
       label="Use full cgMLST database for serovar prediction. About 10X slower with equivalent results to reduced centroid allele database."
       />
     <param 
       name="run_mash"
       type="boolean"
       checked="true"
+      truevalue="--run-mash"
+      falsevalue=""
       label="Run Mash MinHash-based serovar prediction"
       />
     <param 
       name="no_cgmlst"
       type="boolean"
       checked="false"
+      truevalue="--no-cgmlst"
+      falsevalue=""
       label="Skip running cgMLST-based serovar prediction"
       />
     <param 
       name="qc"
       type="boolean"
       checked="true"
+      truevalue="--qc"
+      falsevalue=""
       label="Basic QC of results"
       />
-    <param
-      name="tmp_dir"
-      type="text"
-      value="/tmp"
-      label="Temporary analysis directory"
-     />
     <param 
       name="keep_tmp"
       type="boolean"
       checked="false"
+      falsevalue=""
+      truevalue="--keep-tmp"
       label="Keep temporary analysis directory"
       />
-    <param 
-      name="threads"
-      type="integer"
-      value="1"
-      label="Number of threads (1 genome will only use 1 thread)"
-      />
-    <param 
+      <!-- TODO: uncomment param below on sistr_cmd verbose opt fix release 
+      https://github.com/peterk87/sistr_cmd/commit/f096b5d2944dc19de8aa79696c137fe3f45927da  -->
+<!--     <param 
       name="verbosity"
       type="select" 
       label="Logging verbosity">
-      <option value="0">
+      <option value="">
         Error messages only
       </option>
-      <option value="1">
+      <option value="-v">
         Show warning messages
       </option>
-      <option value="2" selected="true">
+      <option value="-vv" selected="true">
         Show info messages
       </option>
-      <option value="3">
+      <option value="-vvv">
         Show debug messages
       </option>
-    </param>
+    </param> -->
   </inputs>
   <outputs>
-    <!-- TODO: Fix genome fasta name mangling by Galaxy; try to use original name if possible -->
     <data 
       name="output_prediction_csv" 
-      format="tabular" 
+      format="csv" 
       label="SISTR Results"
       from_work_dir="sistr-report.csv">
       <filter>output_format == "csv"</filter>
@@ -145,8 +132,15 @@
       <filter>output_format == "json"</filter>
     </data>
     <data 
-      name="cgmlst_profiles" 
+      name="output_prediction_tab" 
       format="tabular" 
+      label="SISTR Results"
+      from_work_dir="sistr-report.tab">
+      <filter>output_format == "tab"</filter>
+    </data>
+    <data 
+      name="cgmlst_profiles" 
+      format="csv" 
       label="cgMLST results" />
     <data
       name="novel_alleles"
@@ -161,62 +155,67 @@
   </tests>
   <help>
   <![CDATA[
-usage: sistr_cmd [-h] [-f OUTPUT_FORMAT] [-o OUTPUT_PREDICTION]
-                 [-p CGMLST_PROFILES] [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT]
-                 [-T TMP_DIR] [-K] [--use-full-cgmlst-db] [--no-cgmlst] [-m]
-                 [--qc] [-t THREADS] [-v] [-V]
-                 F [F ...]
 
-SISTR (Salmonella In Silico Typing Resource) Command-line Tool
-==============================================================
-Serovar predictions from whole-genome sequence assemblies by determination of antigen gene and cgMLST gene alleles using BLAST.
+Usage::
 
-Note about using the "--use-full-cgmlst-db" flag:
-    The "centroid" allele database is ~10% the size of the full set so analysis is much quicker with the "centroid" vs "full" set of alleles. Results between 2 cgMLST allele sets should not differ.
+    usage: sistr_cmd [-h] [-i INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME]
+                     [-f OUTPUT_FORMAT] [-o OUTPUT_PREDICTION]
+                     [-p CGMLST_PROFILES] [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT]
+                     [-T TMP_DIR] [-K] [--use-full-cgmlst-db] [--no-cgmlst] [-m]
+                     [--qc] [-t THREADS] [-v] [-V]
+                     [F [F ...]]
 
-If you find this program useful in your research, please cite as:
+    SISTR (Salmonella In Silico Typing Resource) Command-line Tool
+    ==============================================================
+    Serovar predictions from whole-genome sequence assemblies by determination of antigen gene and cgMLST gene alleles using BLAST.
 
-The Salmonella In Silico Typing Resource (SISTR): an open web-accessible tool for rapidly typing and subtyping draft Salmonella genome assemblies.
-Catherine Yoshida, Peter Kruczkiewicz, Chad R. Laing, Erika J. Lingohr, Victor P.J. Gannon, John H.E. Nash, Eduardo N. Taboada.
-PLoS ONE 11(1): e0147101. doi: 10.1371/journal.pone.0147101
+    Note about using the "--use-full-cgmlst-db" flag:
+        The "centroid" allele database is ~10% the size of the full set so analysis is much quicker with the "centroid" vs "full" set of alleles. Results between 2 cgMLST allele sets should not differ.
 
-positional arguments:
-  F                     Input genome FASTA file
+    If you find this program useful in your research, please cite as:
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -f OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
-                        Output format (json, csv, pickle)
-  -o OUTPUT_PREDICTION, --output-prediction OUTPUT_PREDICTION
-                        SISTR serovar prediction output path
-  -p CGMLST_PROFILES, --cgmlst-profiles CGMLST_PROFILES
-                        Output CSV file destination for cgMLST allelic
-                        profiles
-  -n NOVEL_ALLELES, --novel-alleles NOVEL_ALLELES
-                        Output FASTA file destination of novel cgMLST alleles
-                        from input genomes
-  -a ALLELES_OUTPUT, --alleles-output ALLELES_OUTPUT
-                        Output path of allele sequences and info to JSON
-  -T TMP_DIR, --tmp-dir TMP_DIR
-                        Base temporary working directory for intermediate
-                        analysis files.
-  -K, --keep-tmp        Keep temporary analysis files.
-  --use-full-cgmlst-db  Use the full set of cgMLST alleles which can include
-                        highly similar alleles. By default the smaller
-                        "centroid" alleles or representative alleles are used
-                        for each marker.
-  --no-cgmlst           Do not run cgMLST serovar prediction
-  -m, --run-mash        Determine Mash MinHash genomic distances to Salmonella
-                        genomes with trusted serovar designations. Mash binary
-                        must be in accessible via $PATH (e.g. /usr/bin).
-  --qc                  Perform basic QC to provide level of confidence in
-                        serovar prediction results.
-  -t THREADS, --threads THREADS
-                        Number of parallel threads to run sistr_cmd analysis.
-  -v, --verbose         Logging verbosity level (-v == show warnings; -vvv ==
-                        show debug info)
-  -V, --version         show program's version number and exit
+    The Salmonella In Silico Typing Resource (SISTR): an open web-accessible tool for rapidly typing and subtyping draft Salmonella genome assemblies.
+    Catherine Yoshida, Peter Kruczkiewicz, Chad R. Laing, Erika J. Lingohr, Victor P.J. Gannon, John H.E. Nash, Eduardo N. Taboada.
+    PLoS ONE 11(1): e0147101. doi: 10.1371/journal.pone.0147101
 
+    positional arguments:
+      F                     Input genome FASTA file
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -i INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME, --input-fasta-genome-name INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME
+                            fasta file path to genome name pair
+      -f OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                            Output format (json, csv, pickle)
+      -o OUTPUT_PREDICTION, --output-prediction OUTPUT_PREDICTION
+                            SISTR serovar prediction output path
+      -p CGMLST_PROFILES, --cgmlst-profiles CGMLST_PROFILES
+                            Output CSV file destination for cgMLST allelic
+                            profiles
+      -n NOVEL_ALLELES, --novel-alleles NOVEL_ALLELES
+                            Output FASTA file destination of novel cgMLST alleles
+                            from input genomes
+      -a ALLELES_OUTPUT, --alleles-output ALLELES_OUTPUT
+                            Output path of allele sequences and info to JSON
+      -T TMP_DIR, --tmp-dir TMP_DIR
+                            Base temporary working directory for intermediate
+                            analysis files.
+      -K, --keep-tmp        Keep temporary analysis files.
+      --use-full-cgmlst-db  Use the full set of cgMLST alleles which can include
+                            highly similar alleles. By default the smaller
+                            "centroid" alleles or representative alleles are used
+                            for each marker.
+      --no-cgmlst           Do not run cgMLST serovar prediction
+      -m, --run-mash        Determine Mash MinHash genomic distances to Salmonella
+                            genomes with trusted serovar designations. Mash binary
+                            must be in accessible via $PATH (e.g. /usr/bin).
+      --qc                  Perform basic QC to provide level of confidence in
+                            serovar prediction results.
+      -t THREADS, --threads THREADS
+                            Number of parallel threads to run sistr_cmd analysis.
+      -v, --verbose         Logging verbosity level (-v == show warnings; -vvv ==
+                            show debug info)
+      -V, --version         show program's version number and exit
 ]]>
   
   </help>
