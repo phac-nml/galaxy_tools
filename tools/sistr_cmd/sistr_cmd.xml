@@ -1,9 +1,9 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="0.3.3">
+<tool id="sistr_cmd" name="sistr_cmd" version="0.3.4">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction
   </description>
   <requirements>
-    <requirement type="package" version="0.3.3">sistr_cmd</requirement>
+    <requirement type="package" version="0.3.4">sistr_cmd</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -31,6 +31,7 @@
     --threads "\${GALAXY_SLOTS:-1}"
     -T "\${TMPDIR:-/tmp}"
     $keep_tmp
+    $verbosity
   ]]></command>
   <inputs>
     <param 
@@ -96,9 +97,7 @@
       truevalue="--keep-tmp"
       label="Keep temporary analysis directory"
       />
-      <!-- TODO: uncomment param below on sistr_cmd verbose opt fix release 
-      https://github.com/peterk87/sistr_cmd/commit/f096b5d2944dc19de8aa79696c137fe3f45927da  -->
-<!--     <param 
+    <param 
       name="verbosity"
       type="select" 
       label="Logging verbosity">
@@ -114,7 +113,7 @@
       <option value="-vvv">
         Show debug messages
       </option>
-    </param> -->
+    </param>
   </inputs>
   <outputs>
     <data 
@@ -223,17 +222,52 @@
         ftype="json"
         compare="sim_size"/>
     </test>
+    <test>
+      <param name="input_fastas" value="13-1101 Paratyphi_B.fasta"/>
+      <param name="output_format" value="tab"/>
+      <output 
+        name="novel_alleles" 
+        value="novel-alleles-13-1101.fasta"
+        ftype="fasta"
+        compare="sim_size"/>
+      <output 
+        name="cgmlst_profiles" 
+        value="cgmlst-profiles-13-1101.csv"
+        ftype="csv"
+        lines_diff="2">
+      </output>
+      <output 
+        name="output_prediction_tab" 
+        value="sistr-results-13-1101.tab"
+        ftype="tabular"
+        lines_diff="2">
+        <assert_contents>
+          <has_text text="13-1101 Paratyphi_B" />
+          <has_text text="Paratyphi B var. Java" />
+          <has_text text="enterica" />
+          <has_text text="1,4,[5],12" />
+          <has_text text="PASS" />
+          <has_text text="2375035975"/>
+          <has_n_columns n="21" />
+        </assert_contents>
+      </output>
+      <output 
+        name="alleles_output" 
+        value="alleles-output-13-1101.json"
+        ftype="json"
+        compare="sim_size"/>
+    </test>
   </tests>
   <help>
   <![CDATA[
 
 Usage::
 
-    usage: sistr_cmd [-h] [-i INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME]
-                     [-f OUTPUT_FORMAT] [-o OUTPUT_PREDICTION]
-                     [-p CGMLST_PROFILES] [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT]
-                     [-T TMP_DIR] [-K] [--use-full-cgmlst-db] [--no-cgmlst] [-m]
-                     [--qc] [-t THREADS] [-v] [-V]
+    usage: sistr_cmd [-h] [-i fasta_path genome_name] [-f OUTPUT_FORMAT]
+                     [-o OUTPUT_PREDICTION] [-p CGMLST_PROFILES]
+                     [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT] [-T TMP_DIR] [-K]
+                     [--use-full-cgmlst-db] [--no-cgmlst] [-m] [--qc] [-t THREADS]
+                     [-v] [-V]
                      [F [F ...]]
 
     SISTR (Salmonella In Silico Typing Resource) Command-line Tool
@@ -254,7 +288,7 @@ Usage::
 
     optional arguments:
       -h, --help            show this help message and exit
-      -i INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME, --input-fasta-genome-name INPUT_FASTA_GENOME_NAME INPUT_FASTA_GENOME_NAME
+      -i fasta_path genome_name, --input-fasta-genome-name fasta_path genome_name
                             fasta file path to genome name pair
       -f OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
                             Output format (json, csv, pickle)
