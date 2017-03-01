@@ -1,0 +1,331 @@
+<tool id="sistr_cmd" name="sistr_cmd" version="0.3.4">
+  <description>
+    Salmonella In Silico Typing Resource commandline tool for serovar prediction
+  </description>
+  <requirements>
+    <requirement type="package" version="0.3.4">sistr_cmd</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" />
+  </stdio>
+  <command><![CDATA[
+  sistr 
+    #for $fasta in $input_fastas
+      -i '$fasta' '${$fasta.name.replace("." + $fasta.ext, "")}'
+    #end for
+    -f $output_format
+    #if $output_format == "tab"
+      -o sistr-report.tab
+    #elif $output_format == "csv"
+      -o sistr-report.csv
+    #elif $output_format == "json"
+      -o sistr-report.json
+    #end if
+    -p $cgmlst_profiles
+    -n $novel_alleles
+    -a $alleles_output
+    $use_full_cgmlst_db
+    $no_cgmlst
+    $run_mash
+    $qc
+    --threads "\${GALAXY_SLOTS:-1}"
+    -T "\${TMPDIR:-/tmp}"
+    $keep_tmp
+    $verbosity
+  ]]></command>
+  <inputs>
+    <param 
+      name="input_fastas" 
+      type="data" 
+      label="Input Genome(s)" 
+      optional="false" 
+      multiple="true"
+      format="fasta"
+      />
+    <param 
+      name="output_format" 
+      type="select" 
+      label="Results output format"
+      multiple="false">
+      <option value="tab" selected="true">
+        Tabular (tab-delimited values)
+      </option>
+      <option value="csv">
+        CSV (Comma Separated Values)
+      </option>
+      <option value="json">
+        JSON (JavaScript Object Notation)
+      </option>
+    </param>
+    <param 
+      name="use_full_cgmlst_db"
+      type="boolean"
+      checked="false"
+      truevalue="--use-full-cgmlst-db"
+      falsevalue=""
+      label="Use full cgMLST database for serovar prediction. About 10X slower with equivalent results to reduced centroid allele database."
+      />
+    <param 
+      name="run_mash"
+      type="boolean"
+      checked="true"
+      truevalue="--run-mash"
+      falsevalue=""
+      label="Run Mash MinHash-based serovar prediction"
+      />
+    <param 
+      name="no_cgmlst"
+      type="boolean"
+      checked="false"
+      truevalue="--no-cgmlst"
+      falsevalue=""
+      label="Skip running cgMLST-based serovar prediction"
+      />
+    <param 
+      name="qc"
+      type="boolean"
+      checked="true"
+      truevalue="--qc"
+      falsevalue=""
+      label="Basic QC of results"
+      />
+    <param 
+      name="keep_tmp"
+      type="boolean"
+      checked="false"
+      falsevalue=""
+      truevalue="--keep-tmp"
+      label="Keep temporary analysis directory"
+      />
+    <param 
+      name="verbosity"
+      type="select" 
+      label="Logging verbosity">
+      <option value="">
+        Error messages only
+      </option>
+      <option value="-v">
+        Show warning messages
+      </option>
+      <option value="-vv" selected="true">
+        Show info messages
+      </option>
+      <option value="-vvv">
+        Show debug messages
+      </option>
+    </param>
+  </inputs>
+  <outputs>
+    <data 
+      name="output_prediction_csv" 
+      format="csv" 
+      label="SISTR Results"
+      from_work_dir="sistr-report.csv">
+      <filter>output_format == "csv"</filter>
+    </data>
+    <data 
+      name="output_prediction_json" 
+      format="json" 
+      label="SISTR Results"
+      from_work_dir="sistr-report.json">
+      <filter>output_format == "json"</filter>
+    </data>
+    <data 
+      name="output_prediction_tab" 
+      format="tabular" 
+      label="SISTR Results"
+      from_work_dir="sistr-report.tab">
+      <filter>output_format == "tab"</filter>
+    </data>
+    <data 
+      name="cgmlst_profiles" 
+      format="csv" 
+      label="cgMLST results" />
+    <data
+      name="novel_alleles"
+      format="fasta" 
+      label="Novel cgMLST alleles" />
+    <data 
+      name="alleles_output"
+      format="json"
+      label="cgMLST allele match results" />
+  </outputs>
+  <tests>
+    <test>
+      <param name="input_fastas" value="AE014613-699860.fasta"/>
+      <param name="output_format" value="tab"/>
+      <output 
+        name="novel_alleles" 
+        value="novel-alleles.fasta"
+        ftype="fasta"
+        compare="sim_size"/>
+      <output 
+        name="cgmlst_profiles" 
+        value="cgmlst-profiles.csv"
+        ftype="csv"
+        lines_diff="2">
+        <assert_contents>
+          <has_text text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3969539340,2545200385,225275747,2955003506,2353669245,2666669453,1672513023,3779563470,1301843222,2161147266,607954140,3680021500,2914087704,1062106200,3673111880,1314942441,1367997025,3293595301,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1528212814,2110459436,4160823845,1648892875,2084418558,1638162324,469721942,1317894045,1973458150,926214622,2197498164,398274060,,,,,,,,,,1123870984,278162969,490843778,3950769715,,,,,,4203409135,3569491948,,,,,,,1052128508,,,1510445340,,,4065472468,,,,,,1495737522,,,,,,,,3076491138,712233770,3105746335,625241463,3016847250,1928860657,2229984332,1341416065,2978539204,1175502179,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1328452594,2372254687,2640609716,3051501604,3258707132,,,,,,,,,,,,1007978530,,2019769394,1109678443,,,,,,,,,"/>
+        </assert_contents>
+      </output>
+      <output 
+        name="output_prediction_tab" 
+        value="sistr-results.tab"
+        ftype="tabular"
+        lines_diff="2">
+        <assert_contents>
+          <has_text text="AE014613-699860" />
+          <has_text text="Typhi" />
+          <has_text text="enterica" />
+          <has_text text="-:-:-" />
+          <has_n_columns n="19" />
+        </assert_contents>
+      </output>
+      <output 
+        name="alleles_output" 
+        value="alleles-output.json"
+        ftype="json"
+        compare="sim_size"/>
+    </test>
+    <test>
+      <param name="input_fastas" value="13-1101-Paratyphi_B.fasta"/>
+      <param name="output_format" value="tab"/>
+      <output 
+        name="novel_alleles" 
+        value="novel-alleles-13-1101.fasta"
+        ftype="fasta"
+        compare="sim_size"/>
+      <output 
+        name="cgmlst_profiles" 
+        value="cgmlst-profiles-13-1101.csv"
+        ftype="csv"
+        lines_diff="2">
+      </output>
+      <output 
+        name="output_prediction_tab" 
+        value="sistr-results-13-1101.tab"
+        ftype="tabular"
+        lines_diff="2">
+        <assert_contents>
+          <has_text text="13-1101-Paratyphi_B" />
+          <has_text text="Paratyphi B var. Java" />
+          <has_text text="enterica" />
+          <has_text text="1,4,[5],12" />
+          <has_text text="PASS" />
+          <has_text text="2375035975"/>
+          <has_n_columns n="21" />
+        </assert_contents>
+      </output>
+      <output 
+        name="alleles_output" 
+        value="alleles-output-13-1101.json"
+        ftype="json"
+        compare="sim_size"/>
+    </test>
+    <test>
+      <param name="input_fastas" value="13-1101 Paratyphi_B.fasta"/>
+      <param name="output_format" value="tab"/>
+      <output 
+        name="novel_alleles" 
+        value="novel-alleles-13-1101.fasta"
+        ftype="fasta"
+        compare="sim_size"/>
+      <output 
+        name="cgmlst_profiles" 
+        value="cgmlst-profiles-13-1101.csv"
+        ftype="csv"
+        lines_diff="2">
+      </output>
+      <output 
+        name="output_prediction_tab" 
+        value="sistr-results-13-1101.tab"
+        ftype="tabular"
+        lines_diff="2">
+        <assert_contents>
+          <has_text text="13-1101 Paratyphi_B" />
+          <has_text text="Paratyphi B var. Java" />
+          <has_text text="enterica" />
+          <has_text text="1,4,[5],12" />
+          <has_text text="PASS" />
+          <has_text text="2375035975"/>
+          <has_n_columns n="21" />
+        </assert_contents>
+      </output>
+      <output 
+        name="alleles_output" 
+        value="alleles-output-13-1101.json"
+        ftype="json"
+        compare="sim_size"/>
+    </test>
+  </tests>
+  <help>
+  <![CDATA[
+
+Usage::
+
+    usage: sistr_cmd [-h] [-i fasta_path genome_name] [-f OUTPUT_FORMAT]
+                     [-o OUTPUT_PREDICTION] [-p CGMLST_PROFILES]
+                     [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT] [-T TMP_DIR] [-K]
+                     [--use-full-cgmlst-db] [--no-cgmlst] [-m] [--qc] [-t THREADS]
+                     [-v] [-V]
+                     [F [F ...]]
+
+    SISTR (Salmonella In Silico Typing Resource) Command-line Tool
+    ==============================================================
+    Serovar predictions from whole-genome sequence assemblies by determination of antigen gene and cgMLST gene alleles using BLAST.
+
+    Note about using the "--use-full-cgmlst-db" flag:
+        The "centroid" allele database is ~10% the size of the full set so analysis is much quicker with the "centroid" vs "full" set of alleles. Results between 2 cgMLST allele sets should not differ.
+
+    If you find this program useful in your research, please cite as:
+
+    The Salmonella In Silico Typing Resource (SISTR): an open web-accessible tool for rapidly typing and subtyping draft Salmonella genome assemblies.
+    Catherine Yoshida, Peter Kruczkiewicz, Chad R. Laing, Erika J. Lingohr, Victor P.J. Gannon, John H.E. Nash, Eduardo N. Taboada.
+    PLoS ONE 11(1): e0147101. doi: 10.1371/journal.pone.0147101
+
+    positional arguments:
+      F                     Input genome FASTA file
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -i fasta_path genome_name, --input-fasta-genome-name fasta_path genome_name
+                            fasta file path to genome name pair
+      -f OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                            Output format (json, csv, pickle)
+      -o OUTPUT_PREDICTION, --output-prediction OUTPUT_PREDICTION
+                            SISTR serovar prediction output path
+      -p CGMLST_PROFILES, --cgmlst-profiles CGMLST_PROFILES
+                            Output CSV file destination for cgMLST allelic
+                            profiles
+      -n NOVEL_ALLELES, --novel-alleles NOVEL_ALLELES
+                            Output FASTA file destination of novel cgMLST alleles
+                            from input genomes
+      -a ALLELES_OUTPUT, --alleles-output ALLELES_OUTPUT
+                            Output path of allele sequences and info to JSON
+      -T TMP_DIR, --tmp-dir TMP_DIR
+                            Base temporary working directory for intermediate
+                            analysis files.
+      -K, --keep-tmp        Keep temporary analysis files.
+      --use-full-cgmlst-db  Use the full set of cgMLST alleles which can include
+                            highly similar alleles. By default the smaller
+                            "centroid" alleles or representative alleles are used
+                            for each marker.
+      --no-cgmlst           Do not run cgMLST serovar prediction
+      -m, --run-mash        Determine Mash MinHash genomic distances to Salmonella
+                            genomes with trusted serovar designations. Mash binary
+                            must be in accessible via $PATH (e.g. /usr/bin).
+      --qc                  Perform basic QC to provide level of confidence in
+                            serovar prediction results.
+      -t THREADS, --threads THREADS
+                            Number of parallel threads to run sistr_cmd analysis.
+      -v, --verbose         Logging verbosity level (-v == show warnings; -vvv ==
+                            show debug info)
+      -V, --version         show program's version number and exit
+]]>
+  
+  </help>
+  <citations>
+    <!-- Citation for SISTR PLOS ONE paper -->
+    <citation type="doi">10.1371/journal.pone.0147101</citation>
+  </citations>
+</tool>
