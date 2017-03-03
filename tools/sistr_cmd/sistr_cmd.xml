@@ -14,13 +14,7 @@
       -i '$fasta' '${$fasta.name.replace("." + $fasta.ext, "")}'
     #end for
     -f $output_format
-    #if $output_format == "tab"
-      -o sistr-report.tab
-    #elif $output_format == "csv"
-      -o sistr-report.csv
-    #elif $output_format == "json"
-      -o sistr-report.json
-    #end if
+    -o sistr-report.$output_format
     -p $cgmlst_profiles
     -n $novel_alleles
     -a $alleles_output
