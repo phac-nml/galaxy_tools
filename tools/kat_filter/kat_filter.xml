@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tool id="kat_@EXECUTABLE@" name="KAT @EXECUTABLE@" version="@VERSION@.1">
+  <description>Filtering reads or k-mer from fasta file</description>
+  <macros>
+    <token name="@EXECUTABLE@">filter_seq</token>
+    <import>macros.xml</import>
+  </macros>
+  <expand macro="requirements" />
+  <expand macro="stdio" />
+  <expand macro="version_command" />
+  <command><![CDATA[
+
+
+  cp "$db" db.fasta &&
+
+  #if $single_or_paired.type == "single"
+  ln  "$input_se" "$single_or_paired.input_se.element_identifier".fastq && 
+
+  kat filter seq
+
+  --seq "$single_or_paired.input_se.element_identifier".fastq
+   
+  #elif $single_or_paired.type == "paired"
+  ln  "$single_or_paired.forward_pe" "$single_or_paired.forward_pe.name"_1.fastq && ln  "$single_or_paired.reverse_pe" "$single_or_paired.forward_pe.name"_2.fastq &&
+  
+  kat filter seq
+
+  --seq "$single_or_paired.forward_pe.name"_1.fastq --seq2 "$single_or_paired.forward_pe.name"_2.fastq
+  
+  #else
+  ln "$single_or_paired.fastq_collection.forward" "$single_or_paired.fastq_collection.forward.name"_1.fastq && ln  "$single_or_paired.fastq_collection.reverse" "$single_or_paired.fastq_collection.forward.name"_2.fastq &&
+  
+  kat filter seq
+
+  --seq "$single_or_paired.fastq_collection.forward.name"_1.fastq --seq2 "$single_or_paired.fastq_collection.forward.name"_2.fastq
+  
+  #end if
+
+  
+  @THREADS@
+  
+  --mer_len $kmer
+  
+  $stats
+
+  #if $invert_or_both.which == "invert":
+     $invert_or_both.invert
+  #elif $invert_or_both.which == "split":
+     $invert_or_both.separate
+  #end if
+     
+  -o reads
+  'db.fasta'
+  
+  ]]></command>
+  <inputs>
+    <expand macro="macro_input" />
+
+    <param name="db" type="data" format="fasta" label="Fasta file of targeted regions"/>
+    <expand macro="macro_kmers" />
+    
+    <param name="threshold" type="float" value='0.10000000000000001' label="Target Threshold" help="What percentage of the sequence needs to be covered with target k-mers to keep the sequence"/>
+
+    <param name="stats" type="boolean" truevalue='--stats' falsevalue='' checked='False' label="Stats" help="Whether to emit statistics about quantity of found k-mers in each sequence."/>
+    <conditional name="invert_or_both">
+      <param name="which" type="select" label="Advance Options">
+        <option value="none">No Advance</option>
+        <option value="invert">Option 1</option>
+        <option value="split">Option 2</option>
+      </param>
+      <when value="invert">
+        <param name="invert" type="boolean" truevalue='--invert' falsevalue='' checked='True' label="Take k-mer not matching target" help="Whether to take k-mers outside region as selected content, rather than those inside."/>
+      </when>
+      <when value="split">
+        <param name="separate" type="boolean" truevalue='--separate' falsevalue='' checked='True' label="Keep inside and outside of target(s) region" help="Whether to partition the k-mers into two sets, those inside region and those outside."/>
+      </when>
+      <when value="none">
+      </when>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data format="fastqsanger" name="reads" label="Reads.fastq" from_work_dir="reads.in.fastq" >
+      <filter> single_or_paired['type'] == "single" </filter>
+    </data>
+    <data format="fastqsanger" name="forward" label="forward_R1.fastq" from_work_dir="reads.in.R1.fastq" >
+      <filter> single_or_paired['type'] == "paired"</filter>
+    </data>
+    <data format="fastqsanger" name="reverse" label="reverse_R2.fastq" from_work_dir="reads.in.R2.fastq" >
+      <filter> single_or_paired['type'] == "paired"</filter>
+    </data>
+
+
+    <collection name="paired_reads" type="paired" label="Reads">
+      <data name="forward" format="fastqsanger" from_work_dir="reads.in.R1.fastq" >
+        <filter> single_or_paired['type'] == "collection"</filter>
+      </data>
+      <data name="reverse" format="fastqsanger" from_work_dir="reads.in.R2.fastq" >
+        <filter> single_or_paired['type'] == "collection"</filter>
+      </data>
+    </collection>
+    
+    
+    <data format="fastqsanger" name="outside_reads" label='Outside reads' from_work_dir="reads.out.fastq">
+      <filter>invert_or_both['which'] == 'split' and invert_or_both['separate'] and single_or_paired['type'] == "single"</filter>
+    </data>
+    <data format="tabular" name="file_stats" label='Stats' from_work_dir="reads.stats">
+      <filter>stats</filter>
+    </data>
+
+  </outputs>
+  <tests>
+    <test>
+      <param name="input_se" value="input.fastq" />
+      <param name="db" value="db.fasta" />
+      <output file="matched.fastq" ftype="fastqsanger" name="reads" />
+    </test>
+  </tests>
+  <help><![CDATA[
+http://kat.readthedocs.io/en/latest/using.html#filtering-tools
+]]>
+  
+  </help>
+  <citations>
+  </citations>
+</tool>
