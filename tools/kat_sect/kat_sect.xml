@@ -26,6 +26,9 @@
   #end if  
 
   @THREADS@
+
+  --mer_len $kmer
+  
   
   $keep_counts
   
