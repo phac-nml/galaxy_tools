@@ -37,7 +37,8 @@
   #end if
 
   
-  --threads \${GALAXY_SLOTS:-4}
+  @THREADS@
+  
   --mer_len $kmer
   
   $stats
