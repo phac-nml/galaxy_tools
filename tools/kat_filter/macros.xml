@@ -1,0 +1,50 @@
+<macros>
+  <token name="@VERSION@">2.3</token>
+  <xml name="requirements">
+    <requirements>
+      <requirement type="package" version="2.3.1">kat</requirement>
+    </requirements>
+  </xml>
+  <xml name="stdio">
+    <stdio>
+      <exit_code range="1:" />
+      <exit_code range=":-1" />
+      <regex match="Error:" />
+      <regex match="Exception:" />
+    </stdio>
+  </xml>
+  <xml name="version_command">
+    <version_command>kat --version</version_command>
+  </xml>
+  <xml name="citations">
+    <citations>
+      <citation type="doi">10.1101/064733</citation>
+      <yield />
+    </citations>
+  </xml>
+  <token name="@THREADS@">
+    --threads \${GALAXY_SLOTS:-4}
+  </token>
+  <xml name="macro_input">
+    <conditional name="single_or_paired">
+      <param name="type" type="select" label="Read type">
+        <option value="single">Single-end</option>
+        <option value="paired">Paired-end</option>
+        <option value="collection">Collection Paired-end</option>
+      </param>
+      <when value="single">
+        <param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
+      </when>
+      <when value="paired">
+        <param name="forward_pe" type="data" format="fastqsanger" label="Forward paired-end read file"/>
+        <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
+      </when>
+      <when value="collection">
+        <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="fastqsanger" collection_type="paired" />
+      </when>
+    </conditional>
+  </xml>
+  <xml name="macro_kmers"> 
+    <param name="kmer" type="integer" value='27' label="Kmer size" help="The kmer length to use in the kmer hashes.  Larger values will provide more discriminating power between kmers but at the expense of additional memory and lower coverage."/>
+  </xml>
+</macros>

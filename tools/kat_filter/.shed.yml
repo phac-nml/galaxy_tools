@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Filtering kmers or reads from a database of kmers hashes
+name: kat_filter
+owner: nml
