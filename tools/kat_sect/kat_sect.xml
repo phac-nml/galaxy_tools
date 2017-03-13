@@ -23,7 +23,7 @@
     "$single_or_paired.fastq_collection.forward.name"_1.fastq "$single_or_paired.fastq_collection.forward.name"_2.fastq
   #end if  
   --threads \${GALAXY_SLOTS:-4}
-  -o reads
+  -o results
   
   ]]></command>
   <inputs>
@@ -47,13 +47,13 @@
     <param name="db" type="data" format="fasta" label="Fasta file of targeted regions"/>
   </inputs>
   <outputs>
-    <data format="tabular" name="reads" label='Reads' from_work_dir="reads-stats.tsv" />
+    <data format="tabular" name="stats" label='Stats' from_work_dir="results-stats.tsv" />
   </outputs>
   <tests>
     <test>
-      <param name="input" value="input.fastq" />
+      <param name="input_se" value="input.fastq" />
       <param name="db" value="db.fasta" />
-      <output file="matched.fastq" ftype="fastqsanger" name="reads" />
+      <output file="kat-sect-stats.tsv" name="stats" />
     </test>
   </tests>
   <help><![CDATA[
