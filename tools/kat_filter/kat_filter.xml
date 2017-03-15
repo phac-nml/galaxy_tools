@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<tool id="kat_@EXECUTABLE@" name="KAT @EXECUTABLE@" version="@VERSION@.1">
+<tool id="kat_@EXECUTABLE@" name="KAT @EXECUTABLE@" version="@VERSION@.2">
   <description>Filtering reads or k-mer from fasta file</description>
   <macros>
     <token name="@EXECUTABLE@">filter_seq</token>
@@ -14,25 +14,25 @@
   cp "$db" db.fasta &&
 
   #if $single_or_paired.type == "single"
-  ln  "$input_se" "$single_or_paired.input_se.element_identifier".fastq && 
+  ln  "$input_se" read.fastq && 
 
   kat filter seq
 
-  --seq "$single_or_paired.input_se.element_identifier".fastq
+  --seq read.fastq
    
   #elif $single_or_paired.type == "paired"
-  ln  "$single_or_paired.forward_pe" "$single_or_paired.forward_pe.name"_1.fastq && ln  "$single_or_paired.reverse_pe" "$single_or_paired.forward_pe.name"_2.fastq &&
+  ln  "$single_or_paired.forward_pe" read_1.fastq && ln  "$single_or_paired.reverse_pe" read_2.fastq &&
   
   kat filter seq
 
-  --seq "$single_or_paired.forward_pe.name"_1.fastq --seq2 "$single_or_paired.forward_pe.name"_2.fastq
+  --seq read_1.fastq --seq2 read_2.fastq
   
   #else
-  ln "$single_or_paired.fastq_collection.forward" "$single_or_paired.fastq_collection.forward.name"_1.fastq && ln  "$single_or_paired.fastq_collection.reverse" "$single_or_paired.fastq_collection.forward.name"_2.fastq &&
+  ln "$single_or_paired.fastq_collection.forward" read_1.fastq && ln  "$single_or_paired.fastq_collection.reverse" read_2.fastq &&
   
   kat filter seq
 
-  --seq "$single_or_paired.fastq_collection.forward.name"_1.fastq --seq2 "$single_or_paired.fastq_collection.forward.name"_2.fastq
+  --seq read_1.fastq --seq2 read_2.fastq
   
   #end if
 
