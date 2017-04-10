@@ -1,0 +1,96 @@
+<tool id="kaptive" name="Kaptive" version="0.3.0">
+  <description>reports information about capsular (K) loci found in genome assemblies.</description>
+    <requirements>
+        <requirement type="package" version="0.3">kaptive</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+    </stdio>
+    <command><![CDATA[
+    
+    ln -s "$assembly" "$assembly.name" &&
+    
+    kaptive.py --assembly "$assembly.name"
+
+    
+    --k_refs "$references"
+    -o 'result'
+
+    -t "\${GALAXY_SLOTS:-4}"
+
+    #if $allelic_typing:
+    --allelic_typing "$allelic_typing"
+    #end if
+
+
+    #if $start_end_margin:
+    --start_end_margin "$start_end_margin"
+    #end if
+
+    #if $min_gene_cov:
+    --min_gene_cov "$min_gene_cov"
+    #end if
+
+    #if $min_gene_id: 
+    --min_gene_id "$min_gene_id"
+    #end if
+
+    #if $low_gene_id: 
+    --low_gene_id "$low_gene_id"
+    #end if
+
+    #if $gap_fill_size: 
+    --gap_fill_size "$gap_fill_size"
+    #end if    
+    
+    ]]></command>
+    <inputs>
+
+      <param name="assembly" type="data" format="fasta" label="Assembly fasta file"/>
+
+      <param name="references" type="data" format="genbank" label="Genbank referece K loci"/>
+
+      <param name="allelic_typing" type="data" format="fasta" label="Allelic Typing genes" help="SRST2-formatted  file of allelic typing genes to include in results" optional="True"/>
+
+      <param name="start_end_margin" type="integer" label="Start end margin" help="Missing bases at the ends of K locus allowed in a perfect match. (default: 10)" value="10"/>
+
+      <param name="min_gene_cov" type="float" label="Minimum % coverage for genes" help="minimum required % coverage for genes (default: 90.0)" value="90.0"/>
+
+      <param name="min_gene_id" type="float" label="Minimum % identity for genes" help="minimum required % identity for genes (default: 80.0)" value="80.0"/>
+
+      <param name="low_gene_id" type="float" label="Flag gene with % identity below" help="genes with a % identity below this value will be flagged as low identity (default: 95.0) " value="95.0"/>
+      
+      <param name="gap_fill_size" type="integer" label="Distance to merge assemblies" help="when separate parts of the assembly are found within this distance, they will be merged (default: 100) " value="100"/>
+
+      
+
+    </inputs>
+
+    <outputs>
+      <data format="tabular" name="results" label="Report Results" from_work_dir="result_table.txt"/>
+      <data format="txt" name="json" label="JSON Results" from_work_dir="result.json"/>
+      <data format="fasta" name="fasta" label="Fasta Hit Results" from_work_dir="result_*.fasta" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="assembly" value="input.fasta" />
+            <param name="references" value="Klebsiella_k_locus_primary_reference_db.gbk" />
+            <output name="results" file="result_table.txt" />
+            <output name="json" file="result.json" />
+            <output name="fasta" file="result_input.fasta" />
+        </test>
+    </tests>
+    <help>
+      <![CDATA[
+
+Documentation available @ https://github.com/katholt/Kaptive/blob/master/README.md
+
+
+**Acknowledgments**
+    Tool Wrapper Author: Philip Mabon
+]]>
+    </help>
+    <citations>
+      <citation type="doi">10.5281/zenodo.55773</citation>
+    </citations>
+</tool>
