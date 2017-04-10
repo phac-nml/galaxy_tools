@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Kaptive reports information about capsular (K) loci found in genome assemblies.
+name: kaptive
+owner: nml
