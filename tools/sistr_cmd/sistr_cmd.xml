@@ -1,9 +1,9 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="0.3.4">
+<tool id="sistr_cmd" name="sistr_cmd" version="0.3.6">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction
   </description>
   <requirements>
-    <requirement type="package" version="0.3.4">sistr_cmd</requirement>
+    <requirement type="package" version="0.3.6">sistr_cmd</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -25,6 +25,8 @@
     --threads "\${GALAXY_SLOTS:-1}"
     -T "\${TMPDIR:-/tmp}"
     $keep_tmp
+    $full_output
+    $report_blast_results
     $verbosity
   ]]></command>
   <inputs>
@@ -82,6 +84,22 @@
       truevalue="--qc"
       falsevalue=""
       label="Basic QC of results"
+      />
+    <param 
+      name="report_blast_results"
+      type="boolean"
+      checked="false"
+      truevalue="--report-blast-results"
+      falsevalue=""
+      label="Report all blastn results from antigen search"
+      />
+    <param 
+      name="full_output"
+      type="boolean"
+      checked="false"
+      truevalue="--full-output"
+      falsevalue=""
+      label="Report detailed results"
       />
     <param 
       name="keep_tmp"
@@ -172,7 +190,7 @@
           <has_text text="Typhi" />
           <has_text text="enterica" />
           <has_text text="-:-:-" />
-          <has_n_columns n="19" />
+          <has_n_columns n="21" />
         </assert_contents>
       </output>
       <output 
@@ -206,7 +224,6 @@
           <has_text text="enterica" />
           <has_text text="1,4,[5],12" />
           <has_text text="PASS" />
-          <has_text text="2375035975"/>
           <has_n_columns n="21" />
         </assert_contents>
       </output>
@@ -241,7 +258,6 @@
           <has_text text="enterica" />
           <has_text text="1,4,[5],12" />
           <has_text text="PASS" />
-          <has_text text="2375035975"/>
           <has_n_columns n="21" />
         </assert_contents>
       </output>
@@ -258,7 +274,8 @@
 Usage::
 
     usage: sistr_cmd [-h] [-i fasta_path genome_name] [-f OUTPUT_FORMAT]
-                     [-o OUTPUT_PREDICTION] [-p CGMLST_PROFILES]
+                     [-o OUTPUT_PREDICTION] [--full-output]
+                     [--report-blast-results] [-p CGMLST_PROFILES]
                      [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT] [-T TMP_DIR] [-K]
                      [--use-full-cgmlst-db] [--no-cgmlst] [-m] [--qc] [-t THREADS]
                      [-v] [-V]
@@ -288,6 +305,9 @@ Usage::
                             Output format (json, csv, pickle)
       -o OUTPUT_PREDICTION, --output-prediction OUTPUT_PREDICTION
                             SISTR serovar prediction output path
+      --full-output         Produce full detailed output
+      --report-blast-results
+                            Report blastn results for each antigen gene
       -p CGMLST_PROFILES, --cgmlst-profiles CGMLST_PROFILES
                             Output CSV file destination for cgMLST allelic
                             profiles
