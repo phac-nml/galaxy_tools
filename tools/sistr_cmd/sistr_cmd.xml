@@ -1,9 +1,9 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="0.3.6">
+<tool id="sistr_cmd" name="sistr_cmd" version="1.0.2">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction
   </description>
   <requirements>
-    <requirement type="package" version="0.3.6">sistr_cmd</requirement>
+    <requirement type="package" version="1.0.2">sistr_cmd</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -25,8 +25,7 @@
     --threads "\${GALAXY_SLOTS:-1}"
     -T "\${TMPDIR:-/tmp}"
     $keep_tmp
-    $full_output
-    $report_blast_results
+    $more_output
     $verbosity
   ]]></command>
   <inputs>
@@ -86,21 +85,19 @@
       label="Basic QC of results"
       />
     <param 
-      name="report_blast_results"
-      type="boolean"
-      checked="false"
-      truevalue="--report-blast-results"
-      falsevalue=""
-      label="Report all blastn results from antigen search"
-      />
-    <param 
-      name="full_output"
-      type="boolean"
-      checked="false"
-      truevalue="--full-output"
-      falsevalue=""
-      label="Report detailed results"
-      />
+      name="more_output"
+      type="select" 
+      label="Results verbosity">
+      <option value="" selected="true">
+        Basic results only
+      </option>
+      <option value="-M">
+        Report top antigen BLAST results
+      </option>
+      <option value="-MM" >
+        Report all antigen BLAST results
+      </option>
+    </param>
     <param 
       name="keep_tmp"
       type="boolean"
@@ -167,17 +164,12 @@
       <param name="input_fastas" value="AE014613-699860.fasta"/>
       <param name="output_format" value="tab"/>
       <output 
-        name="novel_alleles" 
-        value="novel-alleles.fasta"
-        ftype="fasta"
-        compare="sim_size"/>
-      <output 
         name="cgmlst_profiles" 
         value="cgmlst-profiles.csv"
         ftype="csv"
         lines_diff="2">
         <assert_contents>
-          <has_text text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3969539340,2545200385,225275747,2955003506,2353669245,2666669453,1672513023,3779563470,1301843222,2161147266,607954140,3680021500,2914087704,1062106200,3673111880,1314942441,1367997025,3293595301,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1528212814,2110459436,4160823845,1648892875,2084418558,1638162324,469721942,1317894045,1973458150,926214622,2197498164,398274060,,,,,,,,,,1123870984,278162969,490843778,3950769715,,,,,,4203409135,3569491948,,,,,,,1052128508,,,1510445340,,,4065472468,,,,,,1495737522,,,,,,,,3076491138,712233770,3105746335,625241463,3016847250,1928860657,2229984332,1341416065,2978539204,1175502179,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1328452594,2372254687,2640609716,3051501604,3258707132,,,,,,,,,,,,1007978530,,2019769394,1109678443,,,,,,,,,"/>
+          <has_text text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3969539340,2545200385,225275747,2955003506,2353669245,2666669453,1672513023,3779563470,1301843222,2161147266,607954140,3680021500,2914087704,1062106200,3673111880,1314942441,1367997025,3293595301,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1528212814,2110459436,4160823845,1648892875,2084418558,1638162324,469721942,1317894045,1973458150,926214622,2197498164,398274060,,,,,,,,,,1154766063,278162969,490843778,3950769715,,,,,,4203409135,2061008354,,,,,,,1052128508,,,1510445340,,,4065472468,,,,,,1495737522,,,,,,,,3076491138,712233770,3105746335,625241463,3016847250,1928860657,2229984332,1341416065,2978539204,1175502179,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1328452594,2372254687,2640609716,3051501604,3258707132,,,,,,,,,,,,1007978530,,3646345463,1109678443,,,,,,,,,"/>
         </assert_contents>
       </output>
       <output 
@@ -267,6 +259,24 @@
         ftype="json"
         compare="sim_size"/>
     </test>
+    <test>
+      <param name="input_fastas" value="13-1101-Paratyphi_B.fasta"/>
+      <param name="output_format" value="json"/>
+      <param name="more_output" value="-MM"/>
+      <output 
+        name="output_prediction_json" 
+        value="sistr-results-13-1101.json"
+        ftype="json"
+        compare="sim_size">
+        <assert_contents>
+          <has_text text="13-1101-Paratyphi_B" />
+          <has_text text="Paratyphi B var. Java" />
+          <has_text text="enterica" />
+          <has_text text="1,4,[5],12" />
+          <has_text text="PASS" />
+        </assert_contents>
+      </output>
+    </test>
   </tests>
   <help>
   <![CDATA[
@@ -274,8 +284,7 @@
 Usage::
 
     usage: sistr_cmd [-h] [-i fasta_path genome_name] [-f OUTPUT_FORMAT]
-                     [-o OUTPUT_PREDICTION] [--full-output]
-                     [--report-blast-results] [-p CGMLST_PROFILES]
+                     [-o OUTPUT_PREDICTION] [-M] [-p CGMLST_PROFILES]
                      [-n NOVEL_ALLELES] [-a ALLELES_OUTPUT] [-T TMP_DIR] [-K]
                      [--use-full-cgmlst-db] [--no-cgmlst] [-m] [--qc] [-t THREADS]
                      [-v] [-V]
@@ -305,9 +314,8 @@ Usage::
                             Output format (json, csv, pickle)
       -o OUTPUT_PREDICTION, --output-prediction OUTPUT_PREDICTION
                             SISTR serovar prediction output path
-      --full-output         Produce full detailed output
-      --report-blast-results
-                            Report blastn results for each antigen gene
+      -M, --more-results    Output more detailed results (-M) and all antigen
+                            search blastn results (-MM)
       -p CGMLST_PROFILES, --cgmlst-profiles CGMLST_PROFILES
                             Output CSV file destination for cgMLST allelic
                             profiles
