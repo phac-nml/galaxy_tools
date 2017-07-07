@@ -1,0 +1,29 @@
+[
+    {
+        "class": "sourmash_signature",
+        "email": "",
+        "filename": "input",
+        "hash_function": "0.murmur64",
+        "signatures": [
+            {
+                "ksize": 31,
+                "max_hash": 18446744073709552,
+                "md5sum": "2ab97d7d7a40b257fff2e449fe0b7b80",
+                "mins": [
+                    5505416902735804,
+                    11014467956786427,
+                    12417686909471773,
+                    12561261551408282,
+                    14753474682458855,
+                    17841675429409812,
+                    18098657946038058
+                ],
+                "molecule": "dna",
+                "num": 4294967295,
+                "seed": 42
+            }
+        ],
+        "type": "mrnaseq",
+        "version": 0.4
+    }
+]

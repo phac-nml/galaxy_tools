@@ -1,0 +1,57 @@
+<tool id="sourmash_compare" name="sourmash compare" version="0.1.0">
+    <description>Compare multiple signatures</description>
+    <requirements>
+        <requirement type="package" version="2.0.0a1">sourmash</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+
+
+    #for $sigs in  $signatures 
+      ln -s "$sigs" "$sigs.name " && 
+    #end for
+    
+
+    sourmash compare 
+    
+    #for $sigs in  $signatures
+     "$sigs.name " 
+    #end for
+
+    
+
+    --ksize "$ksizes"
+
+
+    $ignore_abundance
+    
+    
+    -o output
+    > $redirect
+    ]]></command>
+    <inputs>
+      <param type="data" multiple="true" name="signatures" format="json" label="Signatures"/>
+      <param name="ignore_abundance" type="boolean" falsevalue='' truevalue='--ignore-abundance' checked='False' label="Do NOT use k-mer abundances if present" help=""/>
+      <param help="A single k-mer size to be used. The default value is 31." label="K-mer size" name="ksizes" type="integer" value="31" />
+      
+    </inputs>
+    <outputs>
+      <data name="output" format="binary" from_work_dir="output" labels="Binary results"/>
+      <data name="output_labels" format="txt" from_work_dir="output.labels.txt" label="Binary text labels"/>
+      <data name="redirect" format="txt" label="Text based results"/>
+    </outputs>
+    <tests>
+      <test>
+        <param name="signatures" value="genome1.fna.sig,genome2.fna.sig"/>
+        <output name="output_labels" file="output.txt.labels.txt"/>
+        <output name="redirect" file="redirect"/>
+      </test>
+    </tests>
+    <help><![CDATA[
+Need help?
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

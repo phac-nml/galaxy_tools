@@ -1,0 +1,86 @@
+<tool id="sourmash_compute" name="sourmash compute" version="0.1.0">
+    <description>generate minHash signatures</description>
+    <requirements>
+        <requirement type="package" version="2.0.0a1">sourmash</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+
+
+    ln -s "$input1" input && 
+    sourmash compute "input"
+
+    $dna
+    $protein
+    --ksizes "$ksizes"
+
+    #if $hashes_or_scaled.type == "hashes"
+    --num-hashes "$hashes_or_scaled.num_hashes"
+    #elif $hashes_or_scaled.type == "scaled"
+    --scaled "$hashes_or_scaled.scaled"
+    #end if
+
+    $track_abundance
+    
+    --seed "$seed"
+
+    $singleton
+    $checkseq
+    
+    -o "$json"
+    ]]></command>
+    <inputs>
+      <param type="data" name="input1" format="fastq,fastqsanger,fasta" label="Input sequence(s)"/>
+      <param name="dna" type="boolean" falsevalue='--no-dna' truevalue='--dna' checked='True' label="build DNA signatures" help="build DNA signatures (default: True)"/>
+      <param name="protein" type="boolean" falsevalue='--no-protein' truevalue='--protein' checked='False' label="build protein signatures" help="build protein signatures (default: False)"/>
+      <param name="is_protein" type="boolean" falsevalue='' truevalue='--input-is-protein' checked='False' label="Input is protein" help="Consume protein sequences - no translation needed."/>
+      <param help="Comma-separated list of k-mer sizes to be used (all values must be odd and listed in ascending order). Example of multiple kmer value '21,31,51' The default value is 31." label="K-mers to use, separated by commas" name="ksizes" type="text" value="31" />
+      <param name="singleton" type="boolean" falsevalue='' truevalue='--singleton' checked='False' label="Compute a signature per record" help="compute a signature for each sequence record individually. Not recommended for fastq data (default: False)"/>
+      <conditional name="hashes_or_scaled">
+        <param name="type" type="select" label="Number of Hashes or scaled">
+          <option value="hashes">Number of hashes per sketch</option>
+          <option value="scaled">Scaled</option>
+        </param>
+        <when value="hashes">
+          <param help="Number of hashes to use in each sketch (default: 500)" label="Number of hashes" name="num_hashes" type="integer" value="500" />
+        </when>
+        <when value="scaled">
+          <param help="choose number of hashes as 1 in FRACTION of input k-mers (recommended 1000)" label="Scaled" name="scaled" type="integer" value="1000" />
+        </when>
+      </conditional>
+      <param name="track_abundance" type="boolean" falsevalue='' truevalue='--track-abundance' checked='False' label="track k-mer abundances" help="track k-mer abundances in the generated signature (default: False)"/>
+      
+      <param help="Random seed hash for MurmurHash. (Default: 42)" label="Seed value" name="seed" type="integer" value="42" />
+      <param help="complain if input sequence is invalid (default: False)" label="Check Sequence" name="checkseq" type="boolean" truevalue="--check-sequence" falsevalue="" />
+      
+    </inputs>
+    <outputs>
+        <data name="json" format="json" />
+    </outputs>
+    <tests>
+      <test>
+        <param name="input1" value="input.fastq"/>
+        <param name="type" value="hashes"/>
+        <param name="num_hashes" value="500"/>
+        <output name="json" file="signatures.json"/>
+      </test>
+      <test>
+        <param name="input1" value="input.fastq"/>
+        <param name="type" value="scaled"/>
+        <param name="scaled" value="1000"/>
+        <output name="json" file="signatures_scaled.json"/>
+      </test>
+      <test>
+        <param name="input1" value="genome.fasta"/>
+        <param name="singleton" value="True"/> 
+        <output name="json" file="input.sig"/>
+      </test>      
+    </tests>
+    <help><![CDATA[
+Need help?
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
