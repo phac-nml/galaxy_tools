@@ -14,7 +14,7 @@
                level="fatal"
                description="You cannot do that!! What were you thinking!" />
     </stdio>
-    <command interpreter="bash">
+    <command>
         smalt_map.sh $smi $sma $oformat.outformat
 
         #if $singlePaired.sPaired == "single":
