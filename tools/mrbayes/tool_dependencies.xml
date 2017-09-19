@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-    <package name="mrbayes" version="3.2.6">
-    	<repository name="package_mrbayes_3_2_6" owner="nml" />
-    </package>
-</tool_dependency>
