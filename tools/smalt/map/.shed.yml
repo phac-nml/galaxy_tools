@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: SMALT aligns DNA sequencing reads with a reference genome.
+name:  smalt_map
+owner: nml

@@ -1,0 +1,343 @@
+<tool id="smalt_map" name="smalt map" version="1.2.0" >
+    <description>Map query reads (FASTA/FASTQ) format onto the reference sequences</description>
+    <requirements>
+        <requirement type="package" version="0.7.6">smalt</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:"   level="fatal"   description="Unknown error" />
+        <regex match="Command line error"
+               source="stdout"
+               level="fatal"
+               description="You cannot do that!! What were you thinking!" />
+        <regex match="ERROR"
+               source="stderr"
+               level="fatal"
+               description="You cannot do that!! What were you thinking!" />
+    </stdio>
+    <command interpreter="bash">
+        smalt_map.sh $smi $sma $oformat.outformat
+
+        #if $singlePaired.sPaired == "single":
+              1 $singlePaired.sInput1
+        #elif $singlePaired.sPaired == "paired":
+              2 $singlePaired.pInput1 $singlePaired.pInput2
+        #elif $singlePaired.sPaired == "collections":
+              2 $singlePaired.fastq_collection.forward $singlePaired.fastq_collection.reverse
+        #end if
+
+          -o $output
+
+        #if $oformat.outformat == "sam":
+          #if $oformat.samOptions:
+             -f "$oformat.outformat:$oformat.samOptions"
+          #else
+             -f "$oformat.outformat"
+          #end if
+        #elif $oformat.outformat == "bam":
+          #if $oformat.bamOptions:
+             -f "$oformat.outformat:$oformat.bamOptions"
+          #else
+             -f "$oformat.outformat"
+          #end if
+        #else
+          -f "$oformat.outformat"
+        #end if
+
+
+
+          -n \${GALAXY_SLOTS:-2}
+
+        #if $singlePaired.sPaired != "single":
+          -l $singlePaired.pairtype
+        #end if
+
+
+        #if $mincover:
+          -c "$mincover"
+        #end if
+
+        #if $scordiff:
+          -d "$scordiff"
+        #end if
+
+        #if $insfil:
+          -g "$insfil"
+        #end if
+
+        #if $insertmax:
+         -i "$insertmax"
+        #end if
+
+        #if $insertmin:
+          -j "$insertmin"
+        #end if
+
+        #if $minscor:
+          -m "$minscor"
+        #end if
+
+        #if $minbasq:
+          -q "$minbasq"
+        #end if
+
+        #if $seed:
+          -r "$seed"
+        #end if
+
+        #if $sw_weighted:
+          -w
+        #end if
+
+        #if $search_harder:
+          -x
+        #end if
+
+        #if $minid:
+          -y "$minid"
+        #end if
+
+    </command>
+
+
+    <inputs>
+        <conditional name="singlePaired">
+            <param name="sPaired" type="select" label="What is the library type?">
+                <option value="single">Single-end</option>
+                <option value="paired">Paired-end</option>
+                <option value="collections">Paired-end Collections</option>
+            </param>
+            <when value="single">
+                <param name="sInput1" type="data" format="fastq" label="Single end illumina fastq file" optional="false"/>
+            </when>
+            <when value="paired">
+                <param name="pInput1" type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa" label="Forward FASTQ file" help="Must have ASCII encoded quality scores"/>
+                <param name="pInput2" type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa" label="Reverse FASTQ file" help="File format must match the Forward FASTQ file"/>
+                <param name="pairtype" type="select" label="Pair Type" help="Type of read pair library">
+                  <option value="pe">Illumina paired-end (short inserts)</option>
+                  <option value="mp">Illumina mate-pair library (long inserts)</option>
+                  <option value="pp">Mate-pair sequenced on the same strand</option>
+                </param>
+            </when>
+            <when value="collections">
+                <param name="fastq_collection" type="data_collection" label="Paired-end Fastq collection" help="" optional="false" format="txt" collection_type="paired" />
+                <param name="pairtype" type="select" label="Pair Type" help="Type of read pair library">
+                  <option value="pe">Illumina paired-end (short inserts)</option>
+                  <option value="mp">Illumina mate-pair library (long inserts)</option>
+                  <option value="pp">Mate-pair sequenced on the same strand</option>
+                </param>
+            </when>
+
+        </conditional>
+       
+        <param name="smi" type="data" format="binary"  label="SMI index" help=""/>
+        <param name="sma" type="data" format="binary"  label="SMA index" help=""/>
+
+        <param name="mincover" type="text"  label="Mincover" help="Only consider mappings where the k-mer word seeds cover the query read to a minimum extent"/>
+        <param name="scordiff" type="text"  label="Scordiff" help="Set a threshold of the Smith-Waterman alignment score relative to the maximum score"/>
+        <conditional name="oformat">
+            <param name="outformat" type="select"  label="Format" help="">
+                <option value="cigar">cigar</option>
+                <option value="sam" selected="true">sam</option>
+                <option value="ssaha">ssaha</option>
+                <option value="bam">bam</option>
+            </param>
+            <when value="sam">
+                <param name="samOptions" type="select" display="checkboxes" label="Sam Options" multiple="true">
+                    <option value="nohead">No Header</option>
+                    <option value="clip">Hard Clip</option>
+                </param>
+            </when>
+            <when value="bam">
+                <param name="bamOptions" type="select" display="checkboxes" label="Bam Options" multiple="true">
+                    <option value="clip">Hard Clip</option>
+                </param>
+            </when>
+            <when value="cigar">
+            </when>
+             <when value="ssaha">
+            </when>
+       </conditional>
+        <param name="insfil" type="data" optional="true" label="Distribution insert sizes " help="Use the distribution of insert sizes stored in the file [insfil. Thisfile is in ASCII format and can be generated using the 'sample'" format="sam"/>
+        <param name="insertmax" type="text" label="Maximum insert size (only in paired-end mode). " help="Maximum insert size (only in paired-end mode). The default is 500."/>
+        <param name="insertmin" type="text" label="Minimum insert size (only in paired-end mode). " help="Minimum insert size (only in paired-end mode). The default is 0."/>
+        
+
+        <param name="minscor" type="text" label="Sets an absolute threshold of the Smith-Waterman scores." help="Mappings with scores below that threshold will not be reported. The default is &#060; minscor &#062; = &#060; wordlen &#062; + &#060; stepsiz &#062; - 1"/>
+
+        <param name="minbasq" type="text" label="Sets a base quality threshold (0 &#060;= minbasq &#060;= 10, default 0)" help="K-mer words of the read with nucleotides that have a base quality below this threshold are not looked up in the hash index."/>
+
+        <param name="seed" type="text" label="If the there are multiple mappings with the same best alignment score report one picked at random." help="is an integer >= 0 used to seed the pseudo-random genarator."/>
+
+        <param name="sw_weighted" type="boolean" label="Smith-Waterman scores are complexity weighted."/>
+
+        <param name="search_harder" type="boolean" label="This flag triggers a more exhaustive search for alignments at the cost of decreased speed" help="In paired-end mode each mate is mapped independently. (By default the mate with fewer hits in the hash index is mapped first and the vicinity is searched for mappings of its mate.)"/>
+
+        <param name="minid" type="text" label="Sets an identity threshold for a mapping to be reported (default: 0)." help="specifies the number of exactly matching nucleotides either as a positive integer or as a fraction of the read length (&#062;= 1.0)."/>
+    </inputs>
+
+    <outputs>
+        <data name="output" format="cigar" >
+            <change_format>
+                <when input="oformat.outformat" value="cigar" format="cigar"/>
+                <when input="oformat.outformat" value="sam" format="sam"/>
+                <when input="oformat.outformat" value="ssaha" format="ssaha"/>
+                <when input="oformat.outformat" value="bam" format="bam"/>
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+      <test>
+        <param name="sPaired" value="paired"/>
+        <param name="pInput1" value="ecoli_1K_1.fq"/>
+        <param name="pInput2" value="ecoli_1K_2.fq"/>
+        <param name="pairtype" value="pe"/>
+        <param name="smi" value="output.smi"/>
+        <param name="sma" value="output.sma"/>
+        <param name="outformat" value="sam"/>
+        <output name="output">
+          <assert_contents>
+            <has_text text="@HD	VN:1.3	SO:unknown" />
+          </assert_contents>
+        </output>        
+      </test>
+    </tests>
+    <help>
+
+**What it does**
+
+SMALT is a pairwise sequence alignment program for the experimentingcient mapping of DNA sequencing reads onto genomic reference sequences. It uses a combination of short-word hashing and dynamic programming. Most types of sequencing platforms are supported including paired-end sequencing reads.
+
+
+------
+
+
+**Know what you are doing**
+
+.. class:: warningmark
+
+There is no such thing (yet) as an automated gearshift in short read mapping. It is all like stick-shift driving in San Francisco. In other words = running this tool with default parameters will probably not give you meaningful results. A way to deal with this is to **understand** the parameters by carefully reading the `documentation`__ and experimenting. Fortunately, Galaxy makes experimenting easy.
+
+ .. __: http://www.sanger.ac.uk/resources/software/smalt/
+
+------
+
+**Input formats**
+
+SMALT accepts files in Sanger FASTQ format (galaxy type *fastqsanger*). Use the FASTQ Groomer to prepare your files.
+
+------
+
+
+Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
+
+------
+
+
+  -a     Output explicit alignments along with the mapping coordinates.
+
+  -c &#060;mincover INT&#062;
+     Only consider mappings where the k-mer word seeds cover the query read to
+     a minimum extent. If &#060;mincover&#062; is an integer or floating point &#062; 1.0, at
+     least this many bases of the read must be covered by k-mer word seeds. If
+     &#060;mincover&#062; is a floating point &#060;= 1.0, it specifies the fraction of the
+     query read length that must be covered by k-mer word seeds. This option
+     is only valid in conjunction with the '-x' flag.
+
+  -d &#060;scordiff INT&#062;
+     Set a threshold of the Smith-Waterman alignment score relative to the
+     maximum score. When mapping single reads, all alignments are reported
+     that have Smith-Waterman scores within &#060;scorediff&#062; of the maximum.
+     Mappings with lower scores are skipped. If &#060;scorediff&#062; is set to to a
+     value &#060; 0, all alignments are printed that have scores above the
+     threshold specified with the '-m &#060;minscor&#062;' option.
+     For paired reads, only a value of 0 is supported. With the option '-d 0'
+     all aligments (pairings) with the best score are output. By default
+     (without the option '-d 0') single reads/mates with multiple best mappings
+     are reported as 'not mapped'.
+
+  -f &#060;ouform STR&#062;
+     Specifies the output format. &#060;ouform&#062; can be either 'sam'(default),
+     'cigar', 'gff' or 'ssaha'. Optional extension 'sam:nohead,x,clip'
+     (see manual). Support for BAM format is dependent on additional
+     libraries (not installed).
+
+  -F &#060;inform STR&#062;
+     Specifies the input format. The only available format is fastq (default).
+     Support for BAM and SAM formats (see: samtools.sourceforge.net) depends
+     on additional libraries (not installed).
+
+  -g &#060;insfil STR&#062;
+     Use the distribution of insert sizes stored in the file &#060;insfil&#062;. This
+     file is in ASCII format and can be generated using the 'sample' task see
+     'smalt sample -H' for help).
+
+  -H     Print these instructions.
+
+  -i &#060;insert_max INT&#062;
+     Maximum insert size (only in paired-end mode). The default is 500.
+
+  -j &#060;insert_min INT&#062;
+     Minimum insert size (only in paired-end mode). The default is 0.
+
+  -l &#060;pairtyp STR&#062;
+     Type of read pair library. &#060;pairtyp&#062; can be either 'pe', i.e. for
+     the Illumina paired-end library for short inserts ( \|&#8212;&#062; &#060;&#8212;\| ). 'mp'
+     for the Illumina mate-pair library for long inserts ( &#060;&#8212;\| \|&#8212;&#062; ) or
+     'pp' for mates sequenced on the same strand ( \|&#8212;&#062; \|&#8212;&#062; ). 'pe' is the
+     default.
+
+  -m &#060;minscor INT&#062;
+     Sets an absolute threshold of the Smith-Waterman scores. Mappings with
+     scores below that threshold will not be reported. The default is
+     &#060;minscor&#062; = &#060;wordlen&#062; + &#060;stepsiz&#062; - 1.
+
+  -n &#060;nthreads INT&#062;
+     Run smalt using mutiple threads. &#060;nthread&#062; is the number of additional
+     threads forked. The order of the reads in the input files is not preserved
+     for the output unless '-O' is also specified.
+
+  -o &#060;oufilnam STR&#062;
+     Write mapping output (e.g. SAM lines) to a separate file. If this option
+     is not specified, mappings are written to standard output.
+
+  -O     Output mappings in the order of the reads in the input files when using
+     multiple threads (option '-n &#060;nthreads&#062;').
+
+
+  -p     Report partial alignments if they are complementary on the read (split
+     reads).
+
+  -q &#060;minbasq INT&#062;
+     Sets a base quality threshold (0 &#060;= minbasq &#060;= 10, default 0).
+     K-mer words of the read with nucleotides that have a base quality below
+     this threshold are not looked up in the hash index.
+
+  -r &#060;seed INT&#062;
+     If &#060;seed&#062; &#062;= 0 report an alignment selected at random where there are
+     multiple mappings with the same best alignment score. With &#060;seed&#062; = 0
+     (default) a seed is derived from the current calendar time. If &#060;seed&#062;
+     &#060; 0 reads with multiple best mappings are reported as 'not mapped'.
+
+  -S &#060;scorspec STR&#062;
+     Specify alignment penalty scores for a match or mismatch (substitution),
+     or for opening or extending a gap. &#060;scorspec&#062; is a comma speparated
+     list of integer assigments to one or more of the following variables:
+     match, subst, gapopen, gapext, i.e. 'gapopen=-5,gapext=-4' (no spaces
+     allowed in &#060;scorespec&#062;). Default:'match=1,subst=-2,gapopen=-4,gapext=-3'
+
+  -w     Smith-Waterman scores are complexity weighted.
+
+  -x     This flag triggers a more exhaustive search for alignments at the cost
+     of speed. In paired-end mode each mate is mapped independently.(By
+     default the mate with fewer hits in the hash index is mapped first and
+     the vicinity is searched for mappings of its mate.)
+
+  -y &#060;minid FLT&#062;
+     Sets an identity threshold for a mapping to be reported (default: 0).
+     &#060;minid&#062; specifies the number of exactly matching nucleotides either as
+     a positive integer or as a fraction of the read length (&#060;= 1.0).
+    </help>
+<citations>
+<citation></citation>
+</citations>
+</tool>
