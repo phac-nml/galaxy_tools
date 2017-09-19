@@ -15,7 +15,7 @@
                description="You cannot do that!! What were you thinking!" />
     </stdio>
     <command>
-        smalt_map.sh $smi $sma $oformat.outformat
+        bash $__tool_directory__/smalt_map.sh $smi $sma $oformat.outformat
 
         #if $singlePaired.sPaired == "single":
               1 $singlePaired.sInput1
