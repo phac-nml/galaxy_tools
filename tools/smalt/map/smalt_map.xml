@@ -337,7 +337,4 @@ Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
      &#060;minid&#062; specifies the number of exactly matching nucleotides either as
      a positive integer or as a fraction of the read length (&#060;= 1.0).
     </help>
-<citations>
-<citation></citation>
-</citations>
 </tool>
