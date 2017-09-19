@@ -1,7 +1,7 @@
 <tool id="seqtk_nml_sample" name="seqTK Sample NML" version="1.0.0">
   <description>Runs seqTK sample if raw coverage is above user defined threshold </description>
   <requirements>
-    <requirement type="package" version="r75">seqtk</requirement>
+    <requirement type="package" version="1.2">seqtk</requirement>
     <requirement type="package" version="1.6.924">perl-bioperl</requirement>
   </requirements>
   <stdio>
