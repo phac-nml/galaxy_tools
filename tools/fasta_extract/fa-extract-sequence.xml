@@ -1,11 +1,10 @@
-<tool id="fa-extract-sequence" name="Fasta Extract Sequence" version="1.0.0">
+<tool id="fa-extract-sequence" name="Fasta Extract Sequence" version="1.1.0">
     <description>Extract a single sequence from a fasta file.</description>
      <requirements>
-        <requirement type="package" version="5.18.1">perl</requirement>
-        <requirement type="package" version="1.6.924">bioperl</requirement>
+        <requirement type="package" version="1.6.924">perl-bioperl</requirement>
     </requirements>
-    <command interpreter="perl">
-        fa-extract-few.pl
+    <command >
+        perl $__tool_directory__/fa-extract-few.pl
         -f $dataset
 	$exact
         $inverse
@@ -35,15 +34,16 @@
             <param name="id" type="text" label="Sequence ID (or partial)" help="Name of the sequence to extract. Will also match partial names and return all matches." />
           </when>
         </conditional>
-                            
-        
     </inputs>
     <outputs>
         <data name="output" format="fasta" label="${tool.name} on ${on_string}: Fasta"/>
     </outputs>
     <tests>
       <test>
-        <output/>
+        <param name="dataset" value="input.fasta"/>
+        <param name="select" value="single"/>
+        <param name="id" value="B0R37_29930"/>
+        <output name="output" value="output.fasta"/>
       </test>
     </tests>
     <help>
