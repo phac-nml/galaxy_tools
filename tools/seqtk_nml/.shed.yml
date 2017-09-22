@@ -1,7 +1,0 @@
-categories: [Sequence Analysis]
-description: Tool to downsample fastq reads
-long_description: Tool to downsample fastq reads to a certain times coverage based on a given reference fasta file. Tool uses Seqtk sample for actually downsampling.
-homepage_url: https://github.com/lh3/seqtk
-name: seqtk_nml
-owner: nml
-remote_repository_url: https://github.com/phac-nml/snvphyl-galaxy

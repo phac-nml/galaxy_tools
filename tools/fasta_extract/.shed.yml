@@ -1,7 +1,4 @@
 categories: [Sequence Analysis]
 description: extract single fasta from multiple fasta file
-long_description: Uses partial matching on fasta sequence id to extract sequences into a new fasta file.
-remote_repository_url: https://toolshed.g2.bx.psu.edu/view/nml/fasta_extract
-homepage_url: https://toolshed.g2.bx.psu.edu/view/nml/fasta_extract
 name: fasta_extract
 owner: nml
