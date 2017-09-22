@@ -27,7 +27,7 @@ def split_allele_file(alleles, profiles):
                 newid = '_'.join(result)
                 record.id = newid
             else:
-                print ERROR_MSG % seqid
+                print(ERROR_MSG % seqid)
                 exit(0)
 
         name, num = result
@@ -47,7 +47,7 @@ def split_allele_file(alleles, profiles):
     # create config file based on the alleles found
     with open('config.txt', 'w') as cfile:
         cfile.write("[loci]\n")
-        for name, writer in writers.iteritems():
+        for name, writer in writers.items():
             path = os.path.realpath(writer.name)
             cfile.write("%s\t%s\n" % (name, path))
         cfile.write("[profile]\n")
