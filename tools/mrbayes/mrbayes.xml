@@ -132,11 +132,6 @@
             <param name="data" value="avian_ovomucoids.nex"/>
             <output name="outfile">
                 <assert_contents>
-                    <has_text text="        500 -- [-6144.805] (-6235.323) * [-5853.458] (-5936.317)"/>
-                    <has_text text="       3000 -- (-4258.327) [-3872.656] * [-3961.044] (-3988.174)"/>
-                    <has_text text="       5000 -- (-3805.933) [-3708.438] * [-3704.553] (-3727.547)"/>
-                    <has_text text="       8000 -- [-3676.746] (-3665.247) * [-3621.851] (-3665.758)"/>
-                    <has_text text="      10000 -- [-3639.639] (-3639.407) * [-3613.090] (-3667.495)"/>
                     <has_text text="            13.4 %     ( 11 %)     TLMultiplier(V)"/>
                     <has_text text="            12.4 %     ( 10 %)     TLMultiplier(V)"/>
                     <has_text text="         1 |          0.14 "/>
