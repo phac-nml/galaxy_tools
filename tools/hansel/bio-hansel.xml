@@ -1,12 +1,13 @@
 <tool id="bio-hansel" name="Hansel - Salmonella Subtyping" version="0.1.0">
     <requirements>
         <requirement type="package" version="0.1.0">bio-hansel</requirement>
+        <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ## Variables to be set.
         #set outputResultsName = 'results.tab'
         #set outputMatchResultsName = 'match_results.tab'
-        #set verboseDebuggingLevel = '-vv'
+        #set verboseDebuggingLevel = '-vvv'
 
         ## Preparing file input.
         #if $single_or_paired.type == "paired":
@@ -54,6 +55,7 @@
         #elif $type_of_scheme.scheme_type == "custom":
             custom_scheme.fasta
         #end if
+
 
         #if $kmer_min
             --min-kmer-freq $kmer_min
