@@ -1,7 +1,6 @@
 <tool id="bio_hansel" name="Hansel - Salmonella Subtyping" version="0.1.0">
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
-        <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ## Variables to be set.
@@ -152,6 +151,10 @@
 
 Subtype *Salmonella enterica* subsp. enterica serovar Heidelberg and Enteritidis genomes using *in-silico* 33 bp k-mer SNP subtyping schemes developed by Genevieve Labbe et al.
 Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequencing reads (FASTQ files)!
+
+Github
+========
+https://github.com/phac-nml/bio_hansel
 
 Citation
 ========
