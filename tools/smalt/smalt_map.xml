@@ -1,4 +1,4 @@
-<tool id="smalt_map" name="smalt map" version="1.2.1" >
+<tool id="smalt" name="smalt" version="1.0.0" >
     <description>Map query reads (FASTA/FASTQ) format onto the reference sequences</description>
     <requirements>
       <requirement type="package" version="0.7.6">smalt</requirement>
