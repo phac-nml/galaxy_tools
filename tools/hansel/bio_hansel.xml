@@ -1,6 +1,7 @@
 <tool id="bio_hansel" name="Hansel - Salmonella Subtyping" version="0.1.0">
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
+        <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ## Variables to be set.
