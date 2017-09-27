@@ -1,7 +1,8 @@
-<tool id="smalt_map" name="smalt map" version="1.2.0" >
+<tool id="smalt" name="smalt" version="1.0.0" >
     <description>Map query reads (FASTA/FASTQ) format onto the reference sequences</description>
     <requirements>
-        <requirement type="package" version="0.7.6">smalt</requirement>
+      <requirement type="package" version="0.7.6">smalt</requirement>
+      <requirement type="package" version="1.5">samtools</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:"   level="fatal"   description="Unknown error" />
@@ -15,17 +16,23 @@
                description="You cannot do that!! What were you thinking!" />
     </stdio>
     <command>
-        bash $__tool_directory__/smalt_map.sh $smi $sma $oformat.outformat
+      <![CDATA[
+        ## prepare smalt index
+        smalt index
 
-        #if $singlePaired.sPaired == "single":
-              1 $singlePaired.sInput1
-        #elif $singlePaired.sPaired == "paired":
-              2 $singlePaired.pInput1 $singlePaired.pInput2
-        #elif $singlePaired.sPaired == "collections":
-              2 $singlePaired.fastq_collection.forward $singlePaired.fastq_collection.reverse
+        #if $k:
+            -k "$k"
         #end if
 
-          -o $output
+        #if $s:
+            -s "$s"
+        #end if
+            
+        'temp' "$reference" &&
+      
+        smalt map
+       
+        -o $output
 
         #if $oformat.outformat == "sam":
           #if $oformat.samOptions:
@@ -96,10 +103,28 @@
           -y "$minid"
         #end if
 
+
+       'temp'
+
+        #if $singlePaired.sPaired == "single":
+              $singlePaired.sInput1
+        #elif $singlePaired.sPaired == "paired":
+              $singlePaired.pInput1 $singlePaired.pInput2
+        #elif $singlePaired.sPaired == "collections":
+              $singlePaired.fastq_collection.forward $singlePaired.fastq_collection.reverse
+        #end if
+
+
+        #if $oformat.outformat == "bam":
+             &&  samtools sort -@ \${GALAXY_SLOTS:-1} $output -o sorted && mv sorted $output
+        #end if 
+
+
+      ]]>
     </command>
 
 
-    <inputs>
+    <inputs>     
         <conditional name="singlePaired">
             <param name="sPaired" type="select" label="What is the library type?">
                 <option value="single">Single-end</option>
@@ -128,10 +153,15 @@
             </when>
 
         </conditional>
-       
-        <param name="smi" type="data" format="binary"  label="SMI index" help=""/>
-        <param name="sma" type="data" format="binary"  label="SMA index" help=""/>
 
+
+
+        <!-- reference genome -->
+        <param name="reference" type="data" format="fasta" label="Select fasta reference"/>
+        <param name="k" type="integer" value="13" label="K-mer size" help="Specifies the word length. [wordlen] is an integer within the limits. between 3 and 20. The default word length is 13" max="20" min="3"/>
+        <param name="s" type="integer" optional="true" label="Step size" help="Specifies how many bases are skipped between indexed words."/>
+
+        
         <param name="mincover" type="text"  label="Mincover" help="Only consider mappings where the k-mer word seeds cover the query read to a minimum extent"/>
         <param name="scordiff" type="text"  label="Scordiff" help="Set a threshold of the Smith-Waterman alignment score relative to the maximum score"/>
         <conditional name="oformat">
@@ -191,12 +221,12 @@
         <param name="pInput1" value="ecoli_1K_1.fq"/>
         <param name="pInput2" value="ecoli_1K_2.fq"/>
         <param name="pairtype" value="pe"/>
-        <param name="smi" value="output.smi"/>
-        <param name="sma" value="output.sma"/>
+        <param name="source" value="history"/>
+        <param name="reference" value="contigs.fasta"/>
         <param name="outformat" value="sam"/>
         <output name="output">
           <assert_contents>
-            <has_text text="@HD	VN:1.3	SO:unknown" />
+            <has_text text="SN:NODE_1_length_1000_cov_140.620106" />
           </assert_contents>
         </output>        
       </test>
