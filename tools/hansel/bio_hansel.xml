@@ -1,4 +1,4 @@
-<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.0">
+<tool id="bio_hansel" name="Hansel - Salmonella Subtyping" version="0.1.0">
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
         <requirement type="package" version="17.2.0">attrs</requirement>
@@ -117,8 +117,8 @@
                 <param name="scheme_input" type="data" format="fasta" label="Scheme Input"/>
             </when>
         </conditional>
-        <param name="kmer_min" argument="--min-kmer-freq" optional="True" type="integer" min="0" label="Min k-mer freq/coverage" help="default = 10"/>
-        <param name="kmer_max" argument="--max-kmer-freq" optional="True" type="integer" min="1" label="Max k-mer freq/coverage" help="default = 200"/>
+        <param name="kmer_min" argument="--min-kmer-freq" optional="True" type="integer" min="0" label="Min k-mer freq/coverage" value="10" help="default = 10"/>
+        <param name="kmer_max" argument="--max-kmer-freq" optional="True" type="integer" min="1" label="Max k-mer freq/coverage" value="200" help="default = 200"/>
     </inputs>
     <outputs>
         <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
@@ -152,8 +152,22 @@
 
 Subtype *Salmonella enterica* subsp. enterica serovar Heidelberg and Enteritidis genomes using *in-silico* 33 bp k-mer SNP subtyping schemes developed by Genevieve Labbe et al.
 Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequencing reads (FASTQ files)!
-    
 
+Github
+========
+https://github.com/phac-nml/bio_hansel
+
+Citation
+========
+
+If you find this tool useful, please cite as:
+
+    .. epigraph::
+
+        A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.
+        Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Chad R. Laing, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Philip Mabon, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Marisa Rankin, Joanne MacKinnon, Roger Johnson, John H.E. Nash.
+        [Manuscript in preparation]
+ 
 Usage
 =====
 Enter your FASTQ/FASTA read files, select which scheme you would like to use (e.g. heidelberg, enteritidis, etc...) or specify your own. Finally, click execute.
@@ -164,6 +178,7 @@ Example Usage
 
 Analysis of a single FASTA file
 -------------------------------
+
 
 Contents of ``results.tab``:
 
@@ -229,17 +244,6 @@ Contents of ``match_results.tab``:
 
     [Next 200 lines omitted.]
     
-Citation
-========
-
-If you find this tool useful, please cite as:
-
-    .. bibtex::
-
-        A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.
-        Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Chad R. Laing, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Philip Mabon, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Marisa Rankin, Joanne MacKinnon, Roger Johnson, John H.E. Nash.
-        [Manuscript in preparation]
- 
 
 Wrapper written by Matthew Gopez at the Public Health Agency of Canada, National Microbiology Laboratory.
     ]]></help>
