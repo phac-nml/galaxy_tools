@@ -4,11 +4,6 @@
         <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        ## Variables to be set.
-        #set outputResultsName = 'results.tab'
-        #set outputMatchResultsName = 'match_results.tab'
-        #set verboseDebuggingLevel = '-vvv'
-
         ## Preparing file input.
         #if $single_or_paired.type == "paired":
 
@@ -40,7 +35,6 @@
             #end if
         #end if
 
-
         ## Start the actual command here
         hansel 
 
@@ -66,7 +60,7 @@
         #end if
 
         ## Adding more parameters to the command.
-        $verboseDebuggingLevel -t "\${GALAXY_SLOTS:-1}" -o $outputResultsName -O $outputMatchResultsName 
+        -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab 
 
 
         ## Entering the file inputs.
@@ -156,7 +150,8 @@ Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequenc
 
 Usage
 =====
-Enter your FASTQ/FASTA read files, select which scheme you would like to use (e.g. heidelberg, enteritidis, etc...) or specify your own. Finally, click execute.
+Enter your FASTA/FASTQ file(s), select which scheme you would like to use (e.g. heidelberg, enteritidis, or specify your own). Finally, click execute.
+For more information visit `https://github.com/phac-nml/bio_hansel`
 
 
 Example Usage
@@ -228,13 +223,14 @@ Contents of ``match_results.tab``:
     CAGGAGAAAGGATGCCAGGGTCAACACGTAAAC   33  SRR5646583 SRR5646583_forward.fastqsanger; SRR5646583_reverse.fastqsanger    944885-2.2.1.1.1    True    2.2.1.1.1   944885  True    heidelberg
 
     [Next 200 lines omitted.]
+
     
 Citation
 ========
 
 If you find this tool useful, please cite as:
 
-    .. bibtex::
+    .. epigraph::
 
         A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.
         Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Chad R. Laing, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Philip Mabon, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Marisa Rankin, Joanne MacKinnon, Roger Johnson, John H.E. Nash.
