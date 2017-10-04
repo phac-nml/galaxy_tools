@@ -1,5 +1,5 @@
 <tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.1">
-    <description>Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequencing reads (FASTQ files)!</description>
+    <description>Genome assemblies and/or whole-genome sequencing readset</description>
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
         <requirement type="package" version="17.2.0">attrs</requirement>
