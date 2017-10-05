@@ -8,22 +8,22 @@
         ## Preparing file input.
         #if $data_type.type == "paired":
 
-            ln -s '$data_type.fastq_input1' $data_type.fastq_input1.name &&
-            ln -s '$data_type.fastq_input2' $data_type.fastq_input2.name &&
+            ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
+            ln -s '$data_type.fastq_input2' '$data_type.fastq_input2.name' &&
 
         #elif $data_type.type == "collection":
 
-            ln -s '$data_type.fastq_input1.forward' $data_type.fastq_input1.forward.name &&
-            ln -s '$data_type.fastq_input1.reverse' $data_type.fastq_input1.reverse.name &&
+            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.forward.name' &&
+            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.reverse.name' &&
 
         #elif $data_type.type == "single":
 
             #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                ln -s '$data_type.fastq_input1' $data_type.fastq_input1.name &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
             #end if
 
             #if $data_type.fastq_input1.is_of_type('fasta'):
-                ln -s '$data_type.fastq_input1' $data_type.fastq_input1.name &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
             #end if
 
         #end if
@@ -32,7 +32,7 @@
         ## Checking for custom scheme.
         #if $type_of_scheme.scheme_type == "custom":
             #if $type_of_scheme.scheme_input.is_of_type('fasta'):
-                ln -s '$type_of_scheme.scheme_input' $type_of_scheme.scheme_input.name &&
+                ln -s '$type_of_scheme.scheme_input' '$type_of_scheme.scheme_input.name' &&
             #end if
         #end if
 
@@ -48,7 +48,7 @@
         #elif $type_of_scheme.scheme_type == "enteritidis":
             enteritidis
         #elif $type_of_scheme.scheme_type == "custom":
-            $type_of_scheme.scheme_input.name
+            '$type_of_scheme.scheme_input.name'
         #end if
 
 
@@ -67,13 +67,13 @@
         ## Entering the file inputs
 
         #if $data_type.type == "single":
-            $data_type.fastq_input1.name
+            '$data_type.fastq_input1.name'
 
         #elif $data_type.type =="collection":
-            -p $data_type.fastq_input1.forward.name  $data_type.fastq_input1.reverse.name
+            -p '$data_type.fastq_input1.forward.name'  '$data_type.fastq_input1.reverse.name'
         
         #elif $data_type.type =="paired":
-            -p $data_type.fastq_input1.name  $data_type.fastq_input2.name
+            -p '$data_type.fastq_input1.name'  '$data_type.fastq_input2.name'
 
         #end if
 
