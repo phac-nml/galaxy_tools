@@ -1,0 +1,39 @@
+<tool id="callntvar" name="Nucleotide Variants" version="0.1.0">
+    <description>Identifies nucleotide variants</description>
+    <requirements>
+          <requirement type="package" version="0.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    
+        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+        quasitools callntvar '$input_bam' '$ref_file' 
+
+        #if $error_rate:
+            -e "$error_rate"
+        #end if
+
+        > output.vcf
+
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="error_rate" type="float" optional="true" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
+    </inputs>
+    <outputs>
+        <data format="vcf" name="output" from_work_dir="output.vcf" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="test.bam" />
+            <param name="ref_file" value="SIVmac239M5SpXplasmid_reference_1269-10407.fasta" />
+
+            <output name="output" file="output.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
