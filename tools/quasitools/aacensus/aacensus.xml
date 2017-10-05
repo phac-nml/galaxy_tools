@@ -5,8 +5,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
-        cut -f-4 '${input_genes}' > trimmed_genes.bed &&
-        quasitools aacensus '$input_bam' '$ref_file' trimmed_genes.bed > output.csv
+        quasitools aacensus '$input_bam' '$ref_file' '$input_genes' > output.csv
     ]]></command>
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
