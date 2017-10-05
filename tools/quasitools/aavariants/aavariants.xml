@@ -1,0 +1,42 @@
+<tool id="aavariants" name="Amino Acid Variants" version="0.1.0">
+    <description>Identifies amino acid mutations</description>
+    <requirements>
+          <requirement type="package" version="0.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+        quasitools aavariants '$input_bam' '$ref_file' '$var_file' '$input_genes' 
+        
+        #if $mutation_db:
+          '$mutation_db' 
+        #end if
+
+        > output.vcf
+
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="var_file" type="data" format="vcf" optional="false" label="Variants file" />
+        <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
+        <param name="mutation_db" type="data" format="" optional="true" label="Mutation DB" />
+    </inputs>
+    <outputs>
+        <data format="vcf" name="output" from_work_dir="output.vcf" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="test.bam" />
+            <param name="ref_file" value="SIVmac239M5SpXplasmid_reference_1269-10407.fasta" />
+            <param name="var_file" value="test.vcf" />
+            <param name="input_genes" value="SIVmac239M5SpXplasmid_reference_1269-10407.bed" />
+            <output name="output" file="output.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
