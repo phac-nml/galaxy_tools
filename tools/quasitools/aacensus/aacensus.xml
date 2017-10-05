@@ -1,0 +1,32 @@
+<tool id="aacensus" name="Amino Acid Census" version="0.1.0">
+    <description>Builds an aa census and returns its coverage</description>
+    <requirements>
+          <requirement type="package" version="0.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+        cut -f-4 '${input_genes}' > trimmed_genes.bed &&
+        quasitools aacensus '$input_bam' '$ref_file' trimmed_genes.bed > output.csv
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="test.bam" />
+            <param name="ref_file" value="SIVmac239M5SpXplasmid_reference_1269-10407.fasta" />
+            <param name="input_genes" value="SIVmac239M5SpXplasmid_reference_1269-10407.bed" />
+            <output name="output" file="output.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
