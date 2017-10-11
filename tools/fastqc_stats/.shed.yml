@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: Summary multiple FastQC into a single tabular line report
+name: fastqc_stats
+owner: nml
+long_description: Tool will attempt to generate an one line tabular report per sample based on forward and reverse FastQC reports and raw fastqs
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools
