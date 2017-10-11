@@ -25,15 +25,18 @@
        
     </tests>
     <help><![CDATA[
-        # **_feht_** -- pronounced "fate", as the "eh" is Canadian
 
+
+********************************************************************
+  feht -- automatic identification of markers predictive of groups
+********************************************************************
+        
         A commandline program to automatically identify markers predictive of groups. Can be used with binary data, genomic (single nucleotide variant) data, or arbitrary character data.
 
 
-        If you are on Windows and prefer a GUI, check out [GenomeFisher](https://bitbucket.org/peterk87/genomefisher/wiki/Home)
-
         ## Quick Start
 
+        There should honestly be a quickstart section but alas, there's nothing here.
 
         ## Descriptiion
 
@@ -69,13 +72,15 @@
          
         The same applies to specifying arguments to `--two`, and if specified in addition to `--one`, only those two groups will be compared. For example:
 
-            ./feht --info=data/metadata.txt --datafile=data/data.tab --mode="snp" --one="Province AB NB" --two="Province NS QC OE" > output.txt]]></help>
+            ./feht --info=data/metadata.txt --datafile=data/data.tab --mode="snp" --one="Province AB NB" --two="Province NS QC OE" > output.txt
 
+
+            ]]></help>
     <citations>
         <citation type="bibtex">@ARTICLE{a1,
-            title = {A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.},
-            author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Chad R. Laing, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Philip Mabon, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Marisa Rankin, Joanne MacKinnon, Roger Johnson, John H.E. Nash.},
-            url = {https://github.com/phac-nml/bio_hansel}
+            title = {A commandline program to automatically identify markers predictive of groups. Can be used with binary data, genomic (single nucleotide variant) data, or arbitrary character data.},
+            author = {Chad R. Laing},
+            url = {https://github.com/chadlaing/feht}
             }
         }</citation>
     </citations>
