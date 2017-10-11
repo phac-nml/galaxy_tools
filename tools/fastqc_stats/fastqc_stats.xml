@@ -1,0 +1,106 @@
+<tool id="FastQC_Summary" name="FastQC Summary" version="1.2">
+  <description>Provide a one line summary of a FastQC report(s)</description>
+  <requirements>
+    <requirement type="package" version="1.6.924">perl-bioperl</requirement>
+    <requirement type="package" version="2.49">perl-getopt-long</requirement>    
+  </requirements>  
+  <command detect_errors="exit_code"><![CDATA[        
+
+    perl $__tool_directory__/fastqc_stats.pl
+
+
+    #if $single_or_mate.library_type == "single"
+      --fastq_se $single_or_mate.fastq_file --g_rawdata_se $rawdata_file
+      --sample "$single_or_mate.fastq_file.name"
+    #elif $single_or_mate.library_type == "paired"
+      --fastq_pe_1 $single_or_mate.forward_fastq --fastq_pe_2 $single_or_mate.reverse_fastq --g_rawdata_pe_1 $single_or_mate.forward_rawdata --g_rawdata_pe_2 $single_or_mate.reverse_rawdata
+      --sample "$single_or_mate.forward_fastq.name"
+   #else
+      --fastq_pe_1 $single_or_mate.fastq_collection.forward --fastq_pe_2 $single_or_mate.fastq_collection.reverse --g_rawdata_pe_1 $single_or_mate.fastqc_collection.forward --g_rawdata_pe_2 $single_or_mate.fastqc_collection.reverse
+      --sample "$single_or_mate.fastq_collection.name"
+    #end if
+    
+ 
+
+    #if $ref_or_num.select == "reference"
+      --ref $ref_or_num.ref_file
+    #else
+      --num_bps $ref_or_num.bp_num
+    #end if
+    -o $out_file
+    
+    ]]></command>            
+  <inputs>
+    <conditional name="single_or_mate">
+      <param name="library_type" type="select" label="Is this library single or paired-end?">
+        <option value="single">Single-end</option>
+        <option value="paired">Paired-end</option>
+        <option value="collection">Collection Paired-end Fastqs</option>
+      </param>
+      <when value="single">
+	<param name="fastq_file" type="data" format="fastqsanger,fastq" label="Single end FASTQ"/>
+	<param name="rawdata_file" type="data" format="txt" label="FastQC RawData"/>
+      </when>
+      <when value="paired">  
+        <param name="forward_fastq" type="data" format="fastqsanger,fastq" label="Forward FASTQ"/>
+        <param name="reverse_fastq" type="data" format="fastqsanger,fastq" label="Reverse FASTQ"/>
+        <param name="forward_rawdata" type="data" format="txt" label="FASTQC forward RawData"/>
+        <param name="reverse_rawdata" type="data" format="txt" label="FASTQC reverse RawData"/>
+      </when>
+      <when value="collection">
+        <param name="fastq_collection" type="data_collection" label="Paired-end Fastq collection" help="" optional="false" format="txt" collection_type="paired" />
+        <param name="fastqc_collection" type="data_collection" label="Paired-end FastQC collection" help="" optional="false" format="txt" collection_type="paired" />
+      </when>
+    </conditional>
+    <conditional name="ref_or_num">
+      <param name="select" type="select" label="Reference file or number of base pairs?">
+	<option value="reference">Reference file</option>
+	<option value="num_pairs">Number of base pairs</option>
+      </param>
+      <when value="reference">
+	<param name="ref_file" type="data" format='fasta' help="To determine raw genome coverage." label="Reference file"/>
+      </when>
+      <when value="num_pairs">
+	<param name="bp_num" type="integer" value="" label="Number of base pairs"/>
+      </when>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data format="tabular" name="out_file" label="Output csv file"/>
+  </outputs>
+  <tests>
+    <test>
+      <param name="fastq_file" value="forward.fastq"/>
+      <param name="rawdata_file" value="forward.txt"/>
+      <param name="ref_file" value="reference_1K.fa"/>
+      <output name="out_file" value="output_single.tsv"/>
+    </test>
+    <test>
+      <param name="library_type" value="paired"/>
+      <param name="forward_fastq" value="forward.fastq"/>
+      <param name="reverse_fastq" value="reverse.fastq"/>
+      <param name="forward_rawdata" value="forward.txt"/>
+      <param name="reverse_rawdata" value="reverse.txt"/>
+      <param name="ref_file" value="reference_1K.fa"/>
+      <output name="out_file" value="output_pe.tsv"/>
+    </test>
+  </tests>
+  <help>
+    
+What it does
+============
+This script provides a one line summary of the FastQC report.
+
+Inputs
+======
+- **Is this library single or paired end?**: Choose Single-end or Paired-end. This option will display the correct number of input fields depending on the option selected
+- **Fastq input**: - Fastqc file
+- **FastQC rawData input**: - This is the txt file produced by the FastQC tool
+- **Sample Name**: Sample name that will appear in the output file
+- **Reference file or number of base pairs?**: Choose between providing a reference file or providing a number of basepairs to determine the raw genome coverage.
+
+Outputs
+=======
+- **Output csv file**: Summarizes the FastQC report in a csv format
+  </help>
+</tool>
