@@ -39,13 +39,13 @@
       </param>
       <when value="single">
 	<param name="fastq_file" type="data" format="fastqsanger,fastq" label="Single end FASTQ"/>
-	<param name="rawdata_file" type="data" label="FastQC RawData"/>
+	<param name="rawdata_file" type="data" format="txt" label="FastQC RawData"/>
       </when>
       <when value="paired">  
         <param name="forward_fastq" type="data" format="fastqsanger,fastq" label="Forward FASTQ"/>
         <param name="reverse_fastq" type="data" format="fastqsanger,fastq" label="Reverse FASTQ"/>
-        <param name="forward_rawdata" type="data" label="FASTQC forward RawData"/>
-        <param name="reverse_rawdata" type="data" label="FASTQC reverse RawData"/>
+        <param name="forward_rawdata" type="data" format="txt" label="FASTQC forward RawData"/>
+        <param name="reverse_rawdata" type="data" format="txt" label="FASTQC reverse RawData"/>
       </when>
       <when value="collection">
         <param name="fastq_collection" type="data_collection" label="Paired-end Fastq collection" help="" optional="false" format="txt" collection_type="paired" />
