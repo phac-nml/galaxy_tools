@@ -1,0 +1,179 @@
+<tool id="filter_spades_repeat" name="Filter SPAdes repeats" version="1.0.0">
+	<description>Remove short and repeat contigs/scaffolds</description>
+	<requirements>
+		<requirement type="package" version="1.6.924">perl-bioperl</requirement>
+	</requirements>
+	<command detect_errors="exit_code"><![CDATA[
+
+		perl $__tool_directory__/filter_spades_repeats.pl 
+
+		-i '$fasta_input' 
+		-t '$tab_input' 
+		-c '$cov_cutoff' 
+		-r '$rep_cutoff' 
+		-l '$len_cutoff' 
+		-o '$output_with_repeats' 
+		-u '$output_without_repeats' 
+		-n '$repeat_sequences_only'
+		-e '$cov_len_cutoff' 
+		-f '$discarded_sequences' 
+		-s '$summary'
+
+	]]></command>
+
+	<inputs>
+		<param name="fasta_input" type="data" format="fasta" label="Contigs or scaffolds file" help="Contigs/Scaffolds output file from Spades" />
+		<param name="tab_input" type="data" format="tabular" label="Stats file" help="Enter the corresponding stats file of the fasta file input above" />
+		<param name="cov_cutoff" type="float" value="0.33" min="0" label="Coverage cut-off ratio" help="This is the average coverage ratio cutoff. For example: if the average coverage is 100 and a coverage cut-off ratio of 0.5 is used, then any contigs with coverage lower than 50 will be eliminated." />
+		<param name="rep_cutoff" type="float" value="1.75" min="0" label="Repeat cut-off ratio" help="This is the coverage ratio cutoff to determine repeats in contigs. For exmaple: if the average coverage is 100 and a repeat cut-off ratio of 1.75 is used, then any contigs with coverage more than or equal to 175 will be marked as repeats." />
+		<param name="len_cutoff" type="integer" value="1000" min="0" label="Length cut-off" help="Contigs with length under the chosen cut-off will be eliminated." />
+		<param name="cov_len_cutoff" type="integer" value="5000" min="0" label="Length for average coverage calculation" help="Only contigs above this length will be used to calculate the average coverage." />
+		<param name="keep_leftover" type="select" label="Print out a fasta file containing the discarded sequences?">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+		<param name="print_summary" type="select" label="Print out a summary of all the results?">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+	</inputs>
+	<outputs>
+		<data format="fasta" name="output_with_repeats" label="Filtered sequences (with repeats)" />
+		<data format="fasta" name="output_without_repeats" label="Filtered sequences (no repeats)" />
+		<data format="fasta" name="repeat_sequences_only" label="Repeat sequences" />
+		<data format="fasta" name="discarded_sequences" label="Discarded sequences">
+			<filter>keep_leftover == "yes"</filter>
+		</data>
+		<data format="txt" name="summary" label="Results summary">
+			<filter>print_summary == "yes"</filter>
+		</data>
+	</outputs>
+	 <tests>
+        <test>
+            <param name="fasta_input" value="SPAdes_scaffolds_(fasta).fasta"/>
+            <param name="tab_input" value="SPAdes_scaffold_stats.tabular"/>
+            <output name="output_with_repeats" value="Filtered_sequences_(with_repeats).fasta"/>
+            <output name="output_without_repeats" value="Filtered_sequences_(no_repeats).fasta"/>
+            <output name="repeat_sequences_only" value="Repeat_sequences.fasta"/>
+            <output name="discarded_sequences" value="Discarded_sequences.fasta"/>
+            <output name="summary" value="Results_summary.txt"/>
+        </test>
+    </tests>
+	<help><![CDATA[
+********************
+  What does it do?
+********************
+Using the output of SPAdes (a fasta and a stats file, either from contigs or scaffolds), it filters the fasta files, discarding all sequences that are under a given length or under a calculated coverage. Repeated contigs are detected based on coverage.
+
+**********
+  Output
+**********
+
+ - **Filtered sequences (with repeats)** 
+ - Will contain the filtered contigs/scaffolds including the repeats. These are the sequences that passed the length and minumum coverage cutoffs.
+ - For workflows, this output is named **output_with_repeats**
+ - **Filtered sequences (no repeats)**   
+ -  Will contain the filtered contigs/scaffolds excluding the repeats. These are the sequences that passed the length, minimum coverage and repeat cutoffs.
+ - For workflows, this output is named **output_without_repeats**
+ - **Repeat sequences**                  
+ - Will contain the repeated contigs/scaffolds only. These are the sequences that were exluded for having high coverage (determined by the repeat cutoff).
+ - For workflows, this output is named **repeat_sequences_only**
+ - **Discarded sequences**               
+ - If selected, will contain the discarded sequences. These are the sequences that fell below the length and minumum coverage cutoffs, and got discarded.
+ - For workflows, this output is named **discarded_sequences**
+ - **Results summary**  : If selected, will contain a summary of all the results.
+
+************
+  Example
+************
+
+Stats file input:
+------------------
+
++------------+------------+------------+
+|#name       |length      |coverage    |
++============+============+============+
+|NODE_1      |2500        |15.5        |
++------------+------------+------------+
+|NODE_2      |102         |3.0         |
++------------+------------+------------+
+|NODE_3      |1300        |50.0        |
++------------+------------+------------+
+|NODE_4      |1000        |2.3         |
++------------+------------+------------+
+|NODE_5      |5000        |14.3        |
++------------+------------+------------+
+|NODE_6      |450         |25.2        |
++------------+------------+------------+
+
+User Inputs:
+------------
+
+- Coverage cut-off ratio = 0.33 
+- Repeat cut-off ratio = 1.75  
+- Length cut-off = 500
+- Length for average coverage calculation = 1000
+
+Calculations:
+-------------
+
+**Average coverage will be calculatd based on contigs with length >= 1000bp**
+
+
+- Average coverage = 15.5 + 50.0 + 2.3 + 14.3 / 4 = 20.5
+
+**Contigs that have coverage in the lower 1/3 of the average coverage will be eliminated.**
+
+- Coverage cut-off = 20.5 * 0.33 = 6.8
+
+**Contigs with high coverage (larger than 1.75 times the average coverage) are considered to be repeated contigs.**
+
+- Repeat cut-off = 20.5 * 1.75 = 35.9
+
+**Number of copies are calculated by dividing the sequence coverage by the average coverage.**
+
+- Number of repeats for NODE_3  = 50 / 20.5 = 2 copies
+
+
+Output (in fasta format):
+--------------------------
+
+**Filtered sequences (with repeats)**
+
+::
+
+>NODE_1
+>NODE_3 (2 copies)
+>NODE_5
+
+**Filtered sequences (no repeats)**
+
+::
+
+>NODE_1
+>NODE_5
+
+**Repeat sequences**
+
+::
+
+>NODE_3 (2 copies)
+
+**Discarded sequences**
+
+::
+
+>NODE_2
+>NODE_4
+>NODE_6
+
+	]]></help>
+    <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {Filter SPAdes repeats Remove short and repeat contigs/scaffolds},
+            author = {Mariam Iskander},
+            url = {https://github.com/phac-nml/galaxy_tools/}
+            }
+        }</citation>
+    </citations>
+</tool>
