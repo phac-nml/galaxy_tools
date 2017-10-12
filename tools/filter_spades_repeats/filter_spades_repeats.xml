@@ -7,7 +7,17 @@
 
 		perl $__tool_directory__/filter_spades_repeats.pl 
 
-		-i $fasta_input -t $tab_input -c $cov_cutoff -r $rep_cutoff -l $len_cutoff -o $output_with_repeats -u $output_without_repeats -n $repeat_sequences_only -e $cov_len_cutoff -f $discarded_sequences -s $summary
+		-i '$fasta_input' 
+		-t '$tab_input' 
+		-c '$cov_cutoff' 
+		-r '$rep_cutoff' 
+		-l '$len_cutoff' 
+		-o '$output_with_repeats' 
+		-u '$output_without_repeats' 
+		-n '$repeat_sequences_only'
+		-e '$cov_len_cutoff' 
+		-f '$discarded_sequences' 
+		-s '$summary'
 
 	]]></command>
 
@@ -162,7 +172,7 @@ Output (in fasta format):
         <citation type="bibtex">@ARTICLE{a1,
             title = {Filter SPAdes repeats Remove short and repeat contigs/scaffolds},
             author = {Mariam Iskander},
-            url = {http://gitlab.corefacility.ca/nml/nmltoolkit/}
+            url = {https://github.com/phac-nml/galaxy_tools/}
             }
         }</citation>
     </citations>
