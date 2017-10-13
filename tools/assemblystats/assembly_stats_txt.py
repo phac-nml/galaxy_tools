@@ -58,7 +58,7 @@ def __main__():
         except OverflowError:
             pass
         if returncode != 0:
-            raise Exception, stderr
+            raise Exception
     except Exception, e:
         stop_err('Error running assembly_stats.py ' + str(e))
 
