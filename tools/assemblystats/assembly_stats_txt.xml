@@ -4,8 +4,8 @@
 		<requirement type="package" version="1.6.924">perl-bioperl</requirement>
 		<requirement type="package" version="5.0.4">gnuplot</requirement>
 	</requirements>
-	<command interpreter="python"><![CDATA[
-		assembly_stats_txt.py 
+	<command detect_errors="exit_code"><![CDATA[
+		python $__tool_directory__/assembly_stats_txt.py 
 
 		'$type' 
 		'$stats.extra_files_path'

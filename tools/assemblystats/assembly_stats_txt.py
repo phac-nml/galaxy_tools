@@ -1,7 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Version 1.01 - bugs kindly corrected by Jan van Haarst
+# Modified by Matthew Gopez October 13th, 2017
 
 import logging
 import os
