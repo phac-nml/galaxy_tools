@@ -3,20 +3,11 @@
 
 # Version 1.01 - bugs kindly corrected by Jan van Haarst
 
-import pkg_resources
 import logging
 import os
-import string
 import sys
-import tempfile
-import glob
-import shutil
-import types
-import urllib
-import shlex
+
 import subprocess
-from optparse import OptionParser, OptionGroup
-from stat import *
 
 log = logging.getLogger(__name__)
 
@@ -32,9 +23,6 @@ def __main__():
 
     # Parse Command Line
 
-    s = 'assembly_stats_txt.py:  argv = %s\n' % sys.argv
-    argcnt = len(sys.argv)
-    html_file = sys.argv[1]
     working_dir = sys.argv[2]
     type = sys.argv[3]
     bucket = sys.argv[4]
