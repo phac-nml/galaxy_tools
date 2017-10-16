@@ -1,4 +1,4 @@
-categories: [Assemblies]
+categories: [Assembly]
 description: Summarise an assembly (e.g. N50 metrics)
 name: assemblystats
 owner: nml
