@@ -1,4 +1,4 @@
-categories: [Assemblies]
+categories: [Assembly]
 description: Remove short and repeat contigs/scaffolds
 name: filter_spades_repeats
 owner: nml
