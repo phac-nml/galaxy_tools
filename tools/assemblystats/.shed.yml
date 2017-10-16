@@ -1,0 +1,7 @@
+categories: [Assembly]
+description: Summarise an assembly (e.g. N50 metrics)
+name: assemblystats
+owner: nml
+long_description: This version of assemblystats shows the input file name in the output. Also gives the user the option to choose how many files to output.
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools
