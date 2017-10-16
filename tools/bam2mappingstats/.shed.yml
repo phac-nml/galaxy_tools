@@ -5,4 +5,4 @@ owner: nml
 long_description: Generates mapping stats from a bam file.
 remote_repository_url: https://github.com/phac-nml/galaxy_tools
 homepage_url: https://github.com/phac-nml/galaxy_tools
-install: travis_wait mvn install
+install: travis_wait 30 mvn install

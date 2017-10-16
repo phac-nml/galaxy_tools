@@ -31,6 +31,8 @@
         <test>
             <param name="alignment" value="align.bam"/>
             <param name="reference" value="reference.fasta"/>
+            <param name="overlap_cutoff" value="65"/>
+            <param name="identity_cutoff" value="75"/>
             <output name="output" value="BAM_2_Mapping_Stats.csv"/>
         </test>
     </tests>
