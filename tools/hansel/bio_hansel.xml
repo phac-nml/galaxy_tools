@@ -13,8 +13,8 @@
 
         #elif $data_type.type == "collection":
 
-            ln -s '$data_type.fastq_input1.forward' 'forward_$data_type.fastq_input1.name' &&
-            ln -s '$data_type.fastq_input1.reverse' 'reverse_$data_type.fastq_input1.name' &&
+            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1 &&
+            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2 &&
 
         #elif $data_type.type == "single":
 
@@ -70,7 +70,7 @@
             '$data_type.fastq_input1.name'
 
         #elif $data_type.type =="collection":
-            -p 'forward_$data_type.fastq_input1.name'  'reverse_$data_type.fastq_input1.name'
+            -p '$data_type.fastq_input1.name'_1  '$data_type.fastq_input1.name'_2
         
         #elif $data_type.type =="paired":
             -p '$data_type.fastq_input1.name'  '$data_type.fastq_input2.name'
