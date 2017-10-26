@@ -27,7 +27,11 @@
             <param name="data_file" value="test_snps.txt"/>
             <param name="binary_or_snp" value="snp"/>
             <param name="delimiter_type" value="\t"/>
-            <output name="output.txt" value="output.txt"/>
+            <output name="output.txt" value="output.txt">
+                <assert_contents>
+                    <has_text text="Done"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
