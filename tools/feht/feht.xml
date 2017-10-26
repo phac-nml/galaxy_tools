@@ -22,7 +22,13 @@
         <data format="data" name="output.txt" from_work_dir="output.txt" label="output.txt"/>
     </outputs>
     <tests>
-       
+        <test>
+            <param name="metadata" value="test_metadata.txt"/>
+            <param name="data_file" value="test_snps.txt"/>
+            <param name="binary_or_snp" value="snp"/>
+            <param name="delimiter_type" value="\t"/>
+            <output name="output.txt" value="output.txt"/>
+        </test>
     </tests>
     <help><![CDATA[
 
@@ -46,7 +52,7 @@
          
         Files can be either tab-delimited, or comma-delimited. The default is tab, but it can be changed by including
          
-            --delimter=","
+            --delimiter=","
                      
         in the command line options. Both the metadata file and the datafile must use the same delimiter.
          
