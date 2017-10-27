@@ -1,5 +1,5 @@
 <tool id="feht" name="feht" version="0.1.0">
-    <description>A commandline program to automatically identify makers predictive of groups.</description>
+    <description>Automatically identify makers predictive of groups.</description>
     <requirements>
         <requirement type="package" version="1.1.0">feht</requirement>
     </requirements>
