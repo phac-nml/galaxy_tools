@@ -10,16 +10,16 @@
         <param name="metadata" type="data" format="txt, csv" label="Delimited Metadata Input"/>
         <param name="data_file" type="data" format="txt, csv" label="Datafile Input"/>
         <param name="binary_or_snp" type="select" label="Pick Binary or SNP">
-          <option value="binary">Binary</option>
-          <option value="snp">SNP</option>
+            <option value="snp">SNP</option>
+            <option value="binary">Binary</option>
         </param>
         <param name="delimiter_type" type="select" label="Metadata's delimiter type">
-          <option value=",">Comma (,)</option>
-          <option value="\t">Tab (\t)</option>
+            <option value="\t">Tab (\t)</option>
+            <option value=",">Comma (,)</option>
         </param>
     </inputs>
     <outputs>
-        <data format="data" name="output.txt" from_work_dir="output.txt" label="output.txt"/>
+        <data format="tabular" name="output.txt" from_work_dir="output.txt" label="output.txt"/>
     </outputs>
     <tests>
         <test>
@@ -37,55 +37,77 @@
     <help><![CDATA[
 
 
-********************************************************************
-  feht -- automatic identification of markers predictive of groups
-********************************************************************
-        
-        A commandline program to automatically identify markers predictive of groups. Can be used with binary data, genomic (single nucleotide variant) data, or arbitrary character data.
+****
+feht
+****
+-------------------------------------------------
+feht - pronounced "fate", as the "eh" is Canadian
+-------------------------------------------------
 
+A command line program to automatically identify markers predictive of groups. Can be used with binary data, genomic (single nucleotide variant) data, or arbitrary character data.
 
-        ## Quick Start
+===========
+File format 
+===========
+The program takes command line arguments, of which 2 are required: `-i`, which specifies the information (eg. metadata) file, and `-d`, which specifies the data file. Both of these files need to be delimited with the same delimiter, eg. tab (`\t`, which is the default).
 
-        There should honestly be a quickstart section but alas, there's nothing here.
+The information file should be formatted with sample names in the first column, which does not require a header; sample names need to be identical in both the information and data files. All other columns require a header, and this header will be used as a metadata category; all subsequent rows will be interpreted as values within that category. For example, the `data/test_metadata.txt` file included in this repository is as follows:
 
-        ## Descriptiion
++-------------+-------+----------+
+| Genomes     | Group | Position |
++-------------+-------+----------+
+|     GenomeA | B     | up       |
++-------------+-------+----------+
+|     GenomeB | A     | up       |
++-------------+-------+----------+
+|     GenomeC | A     | down     |
++-------------+-------+----------+
+|     GenomeD | C     | sideways |
++-------------+-------+----------+
+|     GenomeE | B     | down     |
++-------------+-------+----------+
+|     GenomeF | A     | down     |
++-------------+-------+----------+
+|     GenomeG | A     | floating |
++-------------+-------+----------+
+|     GenomeH | A     | up       |
++-------------+-------+----------+
+|     GenomeI | B     | sideways |
++-------------+-------+----------+
+|     GenomeJ | C     | down     |
++-------------+-------+----------+
 
-        The program takes command line arguments, 3 of which are required. For example:
+The first column contains the sample names, `GenomeA, GenomeB ...` and though not required also contains a column header. Both `group` and `position` will be interpreted as metadata categories, and `A, B, C` as values within metadata category `group`, and `up, down, sideways, floating` as values with metadata category `position`.
 
-            ./feht --info=data/metadata.txt --datafile=data/data.tab --mode="snp" > output.txt
-         
-        Files can be either tab-delimited, or comma-delimited. The default is tab, but it can be changed by including
-         
-            --delimiter=","
-                     
-        in the command line options. Both the metadata file and the datafile must use the same delimiter.
-         
-        The info file is the delimited metadata, where the column headers denote the metadata categories, the row labels denote the subject names (which must exactly match the names in the datafile), and the cells are values for the metadata category for a given subject.
-         
-        The datafile is the actual data, where the column headers denote the subject names (which must exactly match the row labels in the info file), the row labels denote the factor name (which must be unique), and the cells are the factors for a particular subject. If the factors represent binary data, this can be specified as:
+The corresponding data file `data/test_binary.txt` looks as follows:
+    
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|             | GenomeA | GenomeB | GenomeC | GenomeD | GenomeE | GenomeF | GenomeG | GenomeH | GenomeI | GenomeJ | GenomeK | GenomeL |
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     binary1 | 0       | -       | 0       | 0       | 1       | 0       | 0       | 1       | 0       | 0       | 1       | 1       |
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     binary2 | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       |
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     binary3 | 1       | 1       | 0       | 0       | 0       | 0       | 1       | 1       | 1       | 1       | 0       | 0       |
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     binary4 | 1       | 0       | 0       | 1       | 1       | 0       | 0       | -       | 0       | 0       | 1       | 0       |
++-------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
 
-            --mode="binary"
-         
-        If the mode is set as “snp”, using:
-         
-            --mode="snp"
-         
-         then the factors are assumed to be genetic data of A, C, T, or G, and each of A vs not-A, C vs not-C, T vs not T, G vs not-G are computed, and (_c, _t, _g, _a) is appended to the factor name in the results, to denote the comparison that was significant.
-         
-        There are two additional, optional arguments: `--one`, and `--two`, which are used to specify the Metadata Category and values for groups of interest. If neither `--one` nor `--two` are specified, then all possible combinations for all metadata categories will be computed eg. if there is a Province column, then AB vs. not-AB, AB vs. BC, AB vs. SK, AB vs. MB ... will be computed, and this is done for every column in the `--info` file.
-         
-        If only `--one` is specified, then that group is compared against all others of the same category. Using our previous Province example, to compare AB and NB to a group consisting of all other provinces, the following would be run:
+In the data file, the sample names are the column headers, and must exactly match those provided in the information (metadata) file. The first column in the data file lacks a column header, but contains labels for the data being examined, in this case, `snp1, snp2, snp3, snp4 ...`. Each row represents values of the data being examined for each sample.
 
-            ./feht --info=data/metadata.txt --datafile=data/data.tab --mode="snp" --one="Province AB NB" > output.txt
-         
-        The options given to --one must be quoted, and the first word must contain no spaces and be an exact match to a Column Name in the `--info` sheet, followed by space-separated values that should be included as part of the comparison group.
-         
-        The same applies to specifying arguments to `--two`, and if specified in addition to `--one`, only those two groups will be compared. For example:
+======================
+Performing comparisons
+======================
 
-            ./feht --info=data/metadata.txt --datafile=data/data.tab --mode="snp" --one="Province AB NB" --two="Province NS QC OE" > output.txt
+`feht` by default will perform all possible pairwise comparisons given the categories in the information file. In our example using the `data/test_metadata.txt` file, a separate comparison within the `group` category of (`A vs. B`, `A vs. C`, `A vs (B and C)`,`B vs. C`, `B vs. (A and C)`, `C vs. (A and B)`) will be performed, and likewise within the `position` category.
 
+======================
+Specifying a delimiter
+======================
 
-            ]]></help>
+By default the tab character ('\t') is used as a delimiter, but any single character can be used. To use the comma character select the comma option within the delimiter selection.
+
+        ]]></help>
     <citations>
         <citation type="bibtex">@ARTICLE{a1,
             title = {A commandline program to automatically identify markers predictive of groups. Can be used with binary data, genomic (single nucleotide variant) data, or arbitrary character data.},
