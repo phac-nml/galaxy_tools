@@ -4,7 +4,7 @@
         <requirement type="package" version="1.1.0">feht</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        feht -i $metadata -d $data_file -m $binary_or_snp > output.txt
+        feht -i '$metadata' -d '$data_file' -m '$binary_or_snp' > output.txt
     ]]></command>
     <inputs>
         <param name="metadata" type="data" format="txt, csv" label="Delimited Metadata Input"/>
