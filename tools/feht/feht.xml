@@ -1,10 +1,10 @@
 <tool id="feht" name="feht" version="0.1.0">
     <description>A commandline program to automatically identify makers predictive of groups.</description>
     <requirements>
-        <requirement type="package" version="1.0.1">feht</requirement>
+        <requirement type="package" version="1.1.0">feht</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        feht --info=$metadata --datafile=$data_file --mode=$binary_or_snp > output.txt
+        feht -i $metadata -d $data_file -m $binary_or_snp > output.txt
     ]]></command>
     <inputs>
         <param name="metadata" type="data" format="txt, csv" label="Delimited Metadata Input"/>
