@@ -29,6 +29,7 @@
             <param name="delimiter_type" value="\t"/>
             <output name="output.txt" value="output.txt">
                 <assert_contents>
+                    <has_text_matching expression="(Name)\s+(GroupOne)\s+\(\+\)\s+(GroupOne)\s+\(-\)\s+(GroupTwo)\s+\(\+\)\s+(GroupTwo)\s+\(\-\)\s+(pValue)\s+(Ratio)"/>
                     <has_text text="Done"/>
                 </assert_contents>
             </output>
