@@ -1,0 +1,79 @@
+<tool id="assemblystats" name="assemblystats" version="1.0.1">
+	<description>Summarise an assembly (e.g. N50 metrics)</description>
+	<requirements>
+		<requirement type="package" version="1.6.924">perl-bioperl</requirement>
+		<requirement type="package" version="5.0.4">gnuplot</requirement>
+	</requirements>
+	<command detect_errors="exit_code"><![CDATA[
+		python $__tool_directory__/assembly_stats_txt.py 
+
+		'$type' 
+		'$stats.extra_files_path'
+		'$type'
+		'$bucket'
+		'$input'
+		'$stats'
+		'$sortedcontigs'
+		'$histogrampng' 
+		'$summedcontigspng'
+		'$histogramdata' 
+		'$summedcontigdata' 
+		]]></command>
+		<inputs>
+			<param label="Type of read" name="type" type="select" help="Is this from an genomic (contig) or transcriptomic assembly (isotig) or are these raw reads (read)">
+				<option value="contig" selected="yes">Contig (if from genomic assembly)</option>
+				<option value="isotig">Isotig (if from transcriptomic assembly)</option>
+				<option value="read">Raw reads from sequencer in FASTA format (useful for 454 data)</option>
+			</param>
+			<param name="bucket" type="boolean" label="Output histogram with bin sizes=1" truevalue="-b" falsevalue="" help="Use this to specify whether or not bin sizes of 1 should be used when plotting histograms"/>
+			<param format="fasta" name="input" type="data" label="Source file in FASTA format"/>
+			<param name = "all_outputs" type ="boolean" checked="false" label="Return all output files" help="If checked, all output files will be displayed. If not checked, only the file 'Assembly Statistics' will be provided." />
+		</inputs>
+		<outputs>
+			<data format="tabular" name="stats" label="Assembly statistics - $input.display_name"/>
+			<data format="fasta" name="sortedcontigs" label="Sorted contigs - $input.display_name" >
+				<filter>all_outputs is True</filter>
+			</data>
+			<data format="png" name="histogrampng" label="Histogram of contig sizes - $input.display_name">
+				<filter>all_outputs is True</filter>
+			</data>
+			<data format="png" name="summedcontigspng" label="Cumulative sum of contig sizes - $input.display_name">
+				<filter>all_outputs is True</filter>
+			</data>
+			<data format="tabular" name="histogramdata" label="Histogram data - $input.display_name">
+				<filter>all_outputs is True</filter>
+			</data>
+			<data format="tabular" name="summedcontigdata" label="Cumulative sum of contig size data - $input.display_name">
+				<filter>all_outputs is True</filter>
+			</data>
+		</outputs>
+		<tests>
+			<test>
+				<param name="input" value="SRR1002850_SMALL.fasta"/>
+				<output name="stats" value="Assembly_statistics_-_SRR1002850_SMALL.fasta.tabular"/>
+			</test>
+		</tests>
+		<help><![CDATA[
+			**Summarise assembly overview** 
+
+			This script is used to give summary statistics of an assembly or set of reads. Typically this is run after an assembly to evaluate gross features.
+
+
+			# Gives back
+			# - N50
+			# - num of contigs > 1 kb
+			# - num of contigs
+			# - Read or Contig Histogram and graphs.
+			# - Summed contig length (by number of contigs, in sorted order)
+			]]>
+			
+		</help>
+		<citations>
+			<citation type="bibtex">@ARTICLE{a1,
+				title = {Summarise an assembly (e.g. N50 metrics)},
+				author = {Konrad Paszkiewicz, Sujai Kumar, Mariam Iskander},
+				url = {https://github.com/phac-nml/galaxy_tools/}
+				}
+			}</citation>
+		</citations>
+</tool>

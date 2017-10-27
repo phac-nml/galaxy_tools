@@ -1,0 +1,7 @@
+categories: [Assembly]
+description: Remove short and repeat contigs/scaffolds
+name: filter_spades_repeats
+owner: nml
+long_description: Using the output of SPAdes (a fasta and a stats file, either from contigs or scaffolds), it filters the fasta files, discarding all sequences that are under a given length or under a calculated coverage. Repeated contigs are detected based on coverage.
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/
+homepage_url: https://github.com/phac-nml/galaxy_tools/

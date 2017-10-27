@@ -1,4 +1,4 @@
-<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.2">
+<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.3">
     <description>Genome assemblies and/or whole-genome sequencing readset</description>
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
@@ -13,8 +13,8 @@
 
         #elif $data_type.type == "collection":
 
-            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.forward.name' &&
-            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.reverse.name' &&
+            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1 &&
+            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2 &&
 
         #elif $data_type.type == "single":
 
@@ -70,7 +70,7 @@
             '$data_type.fastq_input1.name'
 
         #elif $data_type.type =="collection":
-            -p '$data_type.fastq_input1.forward.name'  '$data_type.fastq_input1.reverse.name'
+            -p '$data_type.fastq_input1.name'_1  '$data_type.fastq_input1.name'_2
         
         #elif $data_type.type =="paired":
             -p '$data_type.fastq_input1.name'  '$data_type.fastq_input2.name'
