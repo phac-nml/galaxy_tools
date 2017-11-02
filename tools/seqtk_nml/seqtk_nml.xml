@@ -1,113 +1,114 @@
-<tool id="seqtk_nml_sample" name="seqTK Sample NML" version="1.0.0">
+<tool id="seqtk_nml_sample" name="seqTK Sample NML" version="1.0.1">
   <description>Runs seqTK sample if raw coverage is above user defined threshold </description>
   <requirements>
     <requirement type="package" version="1.2">seqtk</requirement>
     <requirement type="package" version="1.6.924">perl-bioperl</requirement>
   </requirements>
-  <stdio>
-    <exit_code range="1:" level="fatal" description="Unknown error has occured"/>
-  </stdio>
-  <command>
-		perl  $__tool_directory__/seqtk_nml.pl --ref $fastar 
+  <command detect_errors="exit_code"><![CDATA[
+    perl  $__tool_directory__/seqtk_nml.pl 
 
-		#if $single_or_paired.type == "single"
-			--type single
- 			--forward $input_se
- 			--cov $coverage 
-			--out_forward $output
-			--log $log
-		#elif $single_or_paired.type == "paired"
-	        --type paired
-          	--forward $single_or_paired.forward_pe 
-		--reverse $single_or_paired.reverse_pe
-          	--cov $coverage 
-		--out_forward $output 
-		--out_reverse $output_rev
-		--log $log
-        #else
-            collection
-            $single_or_paired.fastq_collection.forward $single_or_paired.fastq_collection.reverse
-            $coverage $output_collection.forward $output_collection.reverse
-        #end if
+    --ref '$fastar' 
 
-  </command>
+    #if $single_or_paired.type == "single"
+    --type single
+    --forward '$input_se'
+    --out_forward '$output'
+
+    #elif $single_or_paired.type == "paired"
+    --type paired
+    --forward '$single_or_paired.forward_pe'
+    --reverse '$single_or_paired.reverse_pe'
+    --out_forward '$output' 
+    --out_reverse '$output_rev'
+    
+    #else
+    --type paired
+    --forward '$single_or_paired.fastq_collection.forward' 
+    --reverse '$single_or_paired.fastq_collection.reverse'
+    --out_forward '$output_collection.forward' 
+    --out_reverse '$output_collection.reverse'
+    #end if
+
+    --cov '$coverage'
+    --log '$log'
+
+    ]]></command>
   <inputs>
     <conditional name="single_or_paired">
       <param name="type" type="select" label="Read type">
-	<option value="single">Single-end</option>
-        <option value="paired">Paired-end</option>
-        <option value="collection">Collection Paired-end</option>
-      </param>
-      <when value="single">
-	<param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
-      </when>
-      <when value="paired">
-	<param name="forward_pe" type="data" format="fastqsanger" label="Forward paired-end read file"/>
-        <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
-      </when>
-      <when value="collection">
-        <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="txt" collection_type="paired" />
-      </when>
-    </conditional>
-    <param name="fastar" type="data" label="Fasta Reference File" format="fasta" />
-    <param name="coverage" type="integer" label="Desired Coverage" value="50" />
-  </inputs>
-  <outputs>
-    <data format="fastqsanger" name="output" label="SubSampled Fastq" >
-      <filter>single_or_paired['type']!="collection"</filter>
-    </data>
-    <data format="fastqsanger" name="output_rev" label="SubSampled Fastq Reverse">
-      <filter>single_or_paired['type']=="paired"</filter>
-    </data>
-    <collection name="output_collection" type="paired" label="SubSampled Fastqs">
-      <data name="forward" format="fastqsanger"/>
-      <data name="reverse" format="fastqsanger"/>
-      <filter>single_or_paired['type']=="collection"</filter>
-    </collection>
-    <data format="txt" name="log" label="Log file"/>
-  </outputs>
-  
-  <tests>
-    <test>
-      <param name="type" value="paired" />
-      <param name="forward_pe" value="inputforward.fastq" />
-      <param name="reverse_pe" value="inputreverse.fastq" />
-      <param name="fastar" value="testref.fasta"/>
-      <param name="coverage" value="50" />
-      <output name="output" file="outputforward.fastq" />
-      <output name="output_rev" file="outputreverse.fastq" />
-      <output name="log" file="lognosample.log" />
-    </test>
-    <test>
-      <param name="type" value="paired" />
-      <param name="forward_pe" value="inputforward.fastq" />
-      <param name="reverse_pe" value="inputreverse.fastq" />
-      <param name="fastar" value="testref.fasta"/>
-      <param name="coverage" value="25" />
-      <output name="output" file="outputdownsamepleforward.fastq" />
-      <output name="output_rev" file="outputdownsameplereverse.fastq" />
-      <output name="log" file="logdownsample.log" />
-    </test>
-  </tests>
-  <help>
+       <option value="single">Single-end</option>
+       <option value="paired">Paired-end</option>
+       <option value="collection">Collection Paired-end</option>
+     </param>
+     <when value="single">
+       <param name="input_se" type="data" format="fastqsanger" label="Single end read file(s)"/>
+     </when>
+     <when value="paired">
+       <param name="forward_pe" type="data" format="fastqsanger" label="Forward paired-end read file"/>
+       <param name="reverse_pe" type="data" format="fastqsanger" label="Reverse paired-end read file"/>
+     </when>
+     <when value="collection">
+      <param name="fastq_collection" type="data_collection" label="Paired-end reads collection" optional="false" format="txt" collection_type="paired" />
+    </when>
+  </conditional>
+  <param name="fastar" type="data" label="Fasta Reference File" format="fasta" />
+  <param name="coverage" type="integer" label="Desired Coverage" value="50" />
+</inputs>
+<outputs>
+  <data format="fastqsanger" name="output" label="SubSampled Fastq" >
+    <filter>single_or_paired['type']!="collection"</filter>
+  </data>
+  <data format="fastqsanger" name="output_rev" label="SubSampled Fastq Reverse">
+    <filter>single_or_paired['type']=="paired"</filter>
+  </data>
+  <collection name="output_collection" type="paired" label="SubSampled Fastqs">
+    <data name="forward" format="fastqsanger"/>
+    <data name="reverse" format="fastqsanger"/>
+    <filter>single_or_paired['type']=="collection"</filter>
+  </collection>
+  <data format="txt" name="log" label="Log file"/>
+</outputs>
+
+<tests>
+  <test>
+    <param name="type" value="paired" />
+    <param name="forward_pe" value="inputforward.fastq" />
+    <param name="reverse_pe" value="inputreverse.fastq" />
+    <param name="fastar" value="testref.fasta"/>
+    <param name="coverage" value="50" />
+    <output name="output" file="outputforward.fastq" />
+    <output name="output_rev" file="outputreverse.fastq" />
+    <output name="log" file="lognosample.log" />
+  </test>
+  <test>
+    <param name="type" value="paired" />
+    <param name="forward_pe" value="inputforward.fastq" />
+    <param name="reverse_pe" value="inputreverse.fastq" />
+    <param name="fastar" value="testref.fasta"/>
+    <param name="coverage" value="25" />
+    <output name="output" file="outputdownsamepleforward.fastq" />
+    <output name="output_rev" file="outputdownsameplereverse.fastq" />
+    <output name="log" file="logdownsample.log" />
+  </test>
+</tests>
+<help><![CDATA[
+============
 What it does
 ============
-
 Calculates raw coverage. If the raw coverage is greater than desired coverage, runs seqTK sample to generate downsampled reads. 
 
-
+=====
 Usage
 =====
 
 **Parameters**
-	- Fastq reads (single end, paired end, or paired end collection)
-	- Fasta reference file
+- Fastq reads (single end, paired end, or paired end collection)
+- Fasta reference file
 
 **Options**
-	- Desired coverage (50)
-  </help>
-  <citations>
-    <citation type="doi">doi.org/10.1371/journal.pone.0163962</citation>
-  </citations>
+- Desired coverage (50)
+]]></help>
+<citations>
+  <citation type="doi">10.1371/journal.pone.0163962</citation>
+</citations>
 </tool>
-
