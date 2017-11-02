@@ -5,7 +5,7 @@
     <requirement type="package" version="1.6.924">perl-bioperl</requirement>
   </requirements>
   <command detect_errors="exit_code"><![CDATA[
-    perl  $__tool_directory__/seqtk_nml.pl 
+    perl  '$__tool_directory__/seqtk_nml.pl'
 
     --ref '$fastar' 
 
