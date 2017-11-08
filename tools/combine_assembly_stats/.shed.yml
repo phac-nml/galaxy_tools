@@ -1,0 +1,7 @@
+categories: [Assembly]
+description: Combine multiple Assemblystats datasets into a single tabular report
+name: combine_assemblystats
+owner: nml
+long_description: Will combine multiple reports from Assemblystats and convert into a single tabular result where each row represents a strain
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools
