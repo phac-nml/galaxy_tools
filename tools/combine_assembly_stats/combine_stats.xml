@@ -1,0 +1,45 @@
+<tool id="combine_stats" name="Combine AssemblyStats" version="1.0">
+  <description>Combines List Collection Assembly Statistics </description>
+  <requirements>
+    <requirement type="package" version="2.49">perl-getopt-long</requirement>
+  </requirements>  
+  <command detect_errors="exit_code"><![CDATA[
+  perl '$__tool_directory__/combine_stats.pl'
+
+  --output '$result'
+    #for $f in $texts.keys# --stats '$f=$texts[$f]' #end for#
+  ]]></command>    
+  <inputs>
+    <param name="texts" type="data_collection" label="List Collection of Assembly Statistics" help="" optional="false" collection_type="list" />
+  </inputs>
+  <outputs>
+    <data name="result"  format="tabular" ></data>
+  </outputs>
+  <tests>
+    <test>
+      <param name="texts">
+        <collection type="list">
+          <element name="first" value="first.txt" />
+          <element name="second" value="second.txt" />
+        </collection>
+      </param>
+      <output name="result" file="results.tabular"/>
+    </test>
+  </tests>
+  <help><![CDATA[
+
+  **What it does**
+  
+  Tool will take one or more https://toolshed.g2.bx.psu.edu/view/nml/assemblystats/ results and combine into a single tabular line file where each result is represented by a single line.
+
+  ]]>
+  </help>
+    <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {Combine AssemblyStats},
+            author = {Mariam Iskander, Philip Mabon},
+            url = {https://github.com/phac-nml/galaxy_tools/}
+            }
+        }</citation>
+    </citations>
+</tool>
