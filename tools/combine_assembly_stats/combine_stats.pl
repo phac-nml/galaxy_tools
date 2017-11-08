@@ -10,7 +10,7 @@ use Getopt::Long;
 my ($files,$output) = prepare_inputs();
 
 
-my @strains = sort { $a <=> $b } keys %{$files};
+my @strains = sort { $a cmp $b } keys %{$files};
 
 
 #get first file so we can determine the header
