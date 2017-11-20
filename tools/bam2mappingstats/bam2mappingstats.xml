@@ -1,0 +1,61 @@
+<tool id="bam2mappingstats" name="BAM 2 Mapping Stats" version="1.1.0">
+    <description>Generates a csv file containing stats at each position in the reference, for the selected alignment.</description>
+    <requirements>
+        <requirement type="package" version="5.22.0.1">perl</requirement>
+        <requirement type="package" version="1.6.924">perl-bioperl</requirement>
+        <requirement type="package" version="1.43">perl-bio-samtools</requirement>
+        <requirement type="package" version="1.41">perl-bio-db-sam</requirement>
+    </requirements>
+    <stdio>
+        <regex match="\[fai_load\] build FASTA index" source="stderr" level="log" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        perl $__tool_directory__/bam2mappingstats.pl 
+
+        --bam $alignment 
+        --ref $reference 
+        --overlap_cutoff $overlap_cutoff 
+        --identity_cutoff $identity_cutoff 
+        --output $output
+    ]]></command>
+    <inputs>
+        <param name="alignment" type="data" format="bam" label="BAM Alignment" optional="false"/>
+        <param name="reference" type="data" format="fasta" label="Reference" optional="false"/>
+        <param name="overlap_cutoff" type="integer" value="65" min="0" max="100" label="Overlap Cutoff" optional="false"/>
+        <param name="identity_cutoff" type="integer" value="75" min="0" max="100" label="Identity Cutoff" optional="false"/>
+    </inputs>
+    <outputs>
+        <data format="csv" name="output"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="alignment" value="align.bam"/>
+            <param name="reference" value="reference.fasta"/>
+            <param name="overlap_cutoff" value="65"/>
+            <param name="identity_cutoff" value="75"/>
+            <output name="output" value="BAM_2_Mapping_Stats.csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+================
+**What it does**
+================
+
+Generates a csv file containing stats at each position in the reference, for the selected alignment.
+
+============
+**Inputs**
+============
+
+- **BAM Alignment**: Select the BAM alignment that you would like to generate mapping stats on
+- **Reference**: Select the Reference sequence that you aligned against
+    ]]></help>
+    <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {Generates a csv file containing stats at each position in the reference, for the selected alignment.},
+            author = {Eric Enns},
+            url = {https://github.com/phac-nml/galaxy_tools/}
+            }
+        }</citation>
+    </citations>
+</tool>

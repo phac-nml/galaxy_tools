@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: Convert multiple fasta file into tabular bed file format
+name: fasta2bed
+owner: nml
+long_description: Simple script to convert a multiple fasta file into a bed file format where the coordinators for each record is from base pair 1 till end of contig
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools

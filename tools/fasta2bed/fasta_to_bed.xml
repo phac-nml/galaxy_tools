@@ -1,0 +1,28 @@
+<tool id="fasta2bed" name="Fasta to Bed File" version="1.0.0">
+  <description>Create Bed file from Multiple fasta file</description>
+    <requirements>
+      <requirement type="package" version="1.6.924">perl-bioperl</requirement>
+      <requirement type="package" version="2.49">perl-getopt-long</requirement>
+    </requirements>  
+    <command detect_errors="exit_code"><![CDATA[      
+        perl $__tool_directory__/fasta_to_bed.pl 
+        -i '$dataset'
+        -o '$output'
+    ]]></command>        
+    <inputs>
+        <param name="dataset" type="data" format="fasta" label="fasta or multifasta file" help="fasta to convert to bed file."/> 
+    </inputs>
+    <outputs>
+        <data name="output" format="bed"/>
+    </outputs>
+    <tests>
+      <test>
+            <param name="dataset" value="contigs.fasta"/>
+            <output name="output" value="results.bed"/>
+      </test>
+    </tests>
+    <help>
+    Create a bed file format using the start and end position of one or more fata record in a fasta file.
+
+    </help>
+</tool>

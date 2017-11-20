@@ -1,0 +1,13 @@
+genomes	group	oryx
+GenomeA	B	up
+GenomeB	A	up
+GenomeC	A	down
+GenomeD	C	sideways
+GenomeE	B	down
+GenomeF	A	down
+GenomeG	A	floating
+GenomeH	A	up
+GenomeI	B	sideways
+GenomeJ	C	down
+GenomeK	B	up
+GenomeL	A	up

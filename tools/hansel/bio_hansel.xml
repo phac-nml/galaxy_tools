@@ -1,4 +1,4 @@
-<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.1">
+<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.3">
     <description>Genome assemblies and/or whole-genome sequencing readset</description>
     <requirements>
         <requirement type="package" version="0.1.0">bio_hansel</requirement>
@@ -8,22 +8,22 @@
         ## Preparing file input.
         #if $data_type.type == "paired":
 
-            ln -s '$data_type.fastq_input1' fast_q_paired_1.fastq &&
-            ln -s '$data_type.fastq_input2' fast_q_paired_2.fastq &&
+            ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
+            ln -s '$data_type.fastq_input2' '$data_type.fastq_input2.name' &&
 
         #elif $data_type.type == "collection":
 
-            ln -s '$data_type.fastq_input1.forward' fast_q_paired_1.fastq &&
-            ln -s '$data_type.fastq_input1.reverse' fast_q_paired_2.fastq &&
+            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1 &&
+            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2 &&
 
         #elif $data_type.type == "single":
 
             #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                ln -s '$data_type.fastq_input1' fast_q_single.fastq &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
             #end if
 
             #if $data_type.fastq_input1.is_of_type('fasta'):
-                ln -s '$data_type.fastq_input1' fast_a_single.fasta &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
             #end if
 
         #end if
@@ -32,7 +32,7 @@
         ## Checking for custom scheme.
         #if $type_of_scheme.scheme_type == "custom":
             #if $type_of_scheme.scheme_input.is_of_type('fasta'):
-                ln -s '$type_of_scheme.scheme_input' custom_scheme.fasta &&
+                ln -s '$type_of_scheme.scheme_input' '$type_of_scheme.scheme_input.name' &&
             #end if
         #end if
 
@@ -48,7 +48,7 @@
         #elif $type_of_scheme.scheme_type == "enteritidis":
             enteritidis
         #elif $type_of_scheme.scheme_type == "custom":
-            custom_scheme.fasta
+            '$type_of_scheme.scheme_input.name'
         #end if
 
 
@@ -64,23 +64,20 @@
         -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab 
 
 
-        ## Entering the file inputs.
+        ## Entering the file inputs
+
         #if $data_type.type == "single":
+            '$data_type.fastq_input1.name'
 
-            #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                fast_q_single.fastq
-            #end if
-
-            #if $data_type.fastq_input1.is_of_type('fasta'):
-                fast_a_single.fasta
-            #end if
-
-        #else
-
-            ##use -p to declare using two files.
-            -p fast_q_paired_1.fastq  fast_q_paired_2.fastq
+        #elif $data_type.type =="collection":
+            -p '$data_type.fastq_input1.name'_1  '$data_type.fastq_input1.name'_2
+        
+        #elif $data_type.type =="paired":
+            -p '$data_type.fastq_input1.name'  '$data_type.fastq_input2.name'
 
         #end if
+
+
     ]]></command>
     <inputs>
         <conditional name="data_type">
@@ -161,21 +158,6 @@
 
 Subtype *Salmonella enterica* subsp. enterica serovar Heidelberg and Enteritidis genomes using *in-silico* 33 bp k-mer SNP subtyping schemes developed by Genevieve Labbe et al.
 Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequencing reads (FASTQ files)!
-
-Github
-========
-https://github.com/phac-nml/bio_hansel
-
-Citation
-========
-
-If you find this tool useful, please cite as:
-
-    .. epigraph::
-
-        A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.
-        Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Chad R. Laing, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Philip Mabon, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Marisa Rankin, Joanne MacKinnon, Roger Johnson, John H.E. Nash.
-        [Manuscript in preparation]
  
 Usage
 =====

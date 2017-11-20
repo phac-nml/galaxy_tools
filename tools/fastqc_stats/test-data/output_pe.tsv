@@ -1,0 +1,2 @@
+Name	SE/PE	Encoding	# of Reads	Total # Base Pairs	Sequence length range	Most abundant read length	# of reads for abundant	Estimated Coverage	Reference length	Duplicate % R1	Duplicate % R2	# of Overrepresented sequences
+forward	PE	Sanger / Illumina 1.9	4108	353950	30-100	100	1860	353.95	1000	-35.98	-33.40	59.5
