@@ -9,19 +9,22 @@
         quasitools consensus '$input_bam' '$ref_file' 
 
         #if $percentage:
-            -p "$percentage"
+            -p '$percentage'
         #end if
 
-        > output.fasta
+        #if $output_name:
+            -o '$output_name'
+        #end if
 
     ]]></command>
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="percentage" type="float" optional="true" label="Percentage" help="Percentage to include base in mixture."/>
+        <param name="percentage" type="integer" optional="true" label="Percentage" help="Percentage to include base in mixture."/>
+        <param name="output_name" type="text" optional="true" label="Output name" default="output.vcf" help="Name of the output vcf file. Defaults to output.vcf."/>
     </inputs>
     <outputs>
-        <data format="fasta" name="output" from_work_dir="output.fasta" />
+        <data format="fasta" name="output" from_work_dir="$output_name" />
     </outputs>
     <tests>
         <test>

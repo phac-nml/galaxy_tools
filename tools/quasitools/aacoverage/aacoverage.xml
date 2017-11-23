@@ -1,11 +1,14 @@
-<tool id="aacensus" name="Amino Acid Census" version="0.1.0">
+<tool id="aacoverage" name="Amino Acid Coverage" version="0.1.0">
     <description>Builds an aa census and returns its coverage</description>
     <requirements>
-          <requirement type="package" version="0.1">quasitools</requirement>
+          <requirement type="package" version="0.2.0">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
-        quasitools aacensus '$input_bam' '$ref_file' '$input_genes' > output.csv
+
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+
+        quasitools aacoverage $input_bam $ref_file $input_genes -o $output
+
     ]]></command>
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
@@ -13,7 +16,7 @@
         <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
     </inputs>
     <outputs>
-        <data format="csv" name="output" from_work_dir="output.csv" />
+        <data format="csv" name="output" />
     </outputs>
     <tests>
         <test>
@@ -24,7 +27,7 @@
         </test>
     </tests>
     <help><![CDATA[
-        TODO: Fill in help.
+
     ]]></help>
     <citations>
     </citations>

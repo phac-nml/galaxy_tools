@@ -1,0 +1,168 @@
+<tool id="hydra" name="Hydra pipeline" version="0.1.0">
+    <description>Identifies drug resistance within an NGS dataset</description>
+    <requirements>
+          <requirement type="package" version="0.2.0">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        quasitools hydra '$forward' 
+
+        #if $reverse:
+            '$reverse' 
+        #end if
+
+        #if $mutation_db:
+            -m '$mutation_db' 
+        #end if
+
+        #if $reporting_threshold:
+            -rt '$reporting_threshold' 
+        #end if
+
+        #if $consensus_pct:
+            -cp '$consensus_pct' 
+        #end if
+
+        #if $length_cutoff:
+            -lc '$length_cutoff' 
+        #end if
+
+        #if $score_cutoff:
+            -sc '$score_cutoff' 
+        #end if
+
+        #if $error_rate:
+            -e '$error_rate' 
+        #end if
+
+        #if $min_qual:
+            -mq '$min_qual' 
+        #end if
+
+        #if $min_depth:
+            -md '$min_depth' 
+        #end if
+
+        #if $min_ac:
+            -ma '$min_ac' 
+        #end if
+
+        #if $min_freq:
+            -mf '$min_freq' 
+        #end if
+
+        #if $generate_consensus:
+            --generate_consensus 
+        #end if
+
+        #if $filter_ns:
+            --ns 
+        #end if
+
+        #if $output_name:
+            -o '$output_name'
+
+    ]]></command>
+    <inputs>
+        <param name="forward" type="data" format="fasta" optional="false" label="Forward read" />
+        <param name="reverse" type="data" format="fasta" optional="true" label="Reverse read" help="Not required."/>
+        <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
+        <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" default="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
+        <param name="consensus_pct" type="integer" optional="true" min="1" max="100" value="20" default="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
+        <param name="length_cutoff" type="integer" optional="true" label="Length cutoff" value="100" default="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="score_cutoff" type="integer" optional="true" label="Score cutoff" value="30" default="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
+        <param name="error_rate" type="float" optional="true" label="Error rate" value="0.0021" default="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
+        <param name="min_qual" type="integer" optional="true" label="Minimum quality" value="30" default="30" help="Minimum required quality for variant to be considered later on in the pipeline. Defaults to 30." />
+        <param name="min_depth" type="integer" optional="true" label="Minimum depth" value="100" default="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
+        <param name="min_ac" type="integer" optional="true" label="Minimum allele count" value="5" default="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
+        <param name="min_freq" type="float" optional="true" label="Minimum frequency" value="0.01" default="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
+        <param name="generate_consensus" type="boolean" truevalue="--generate_consensus" falsevalue="" checked="False" label="Generate consensus" />
+        <param name="filter_ns" type="boolean" truevalue="--ns" falsevalue="" checked="False" label="Filter out n's" />
+        <param name="output_name" type="text" optional="true" default="output.vcf" label="Output directory name" />
+    </inputs>
+    <outputs>
+
+    </outputs>
+    <help><![CDATA[
+
+HyDRA - HIV Drug Resistance Analyzer
+====================================
+
+The HyDRA pipeline provides a pipeline for identifying drug resistance within a Next Generation Sequencing dataset. The pipeline takes as input the raw reads produced by a Next Generation Sequencer and produces a report detailing found drug resistance per sample.
+
+Authors
+-------
+
+The HyDRA pipeline was developed by Eric Enns and David Peddle.
+
+Stages
+------
+
+The HyDRA pipleine proceeds through the following stages:
+
+1. Quality Control/Filtering
+2. Reference mapping using SMALT.
+3. Variant Calling and filtering using a Poisson distribution.
+4. AA Mutation Calling and filtering.
+5. Drug Resistance report generation.
+
+Details
+-------
+
+The following is an example for running the pipeline, using our included test dataset:
+    * Output directory name: "/tmp/hydra_out"
+    * Forward reads: "reads_w_K103N.fastq"
+
+### Output ###
+
+The detailed output directory tree looks as follows:
+
+    /tmp/hydra_out/
+        * align.bam
+        * align.bam.bai
+        * coverage_file.csv
+        * dr_report.csv
+        * filtered.fastq
+        * hydra.vcf
+        * mutation_report.hmcf
+        * stats.txt
+
+The description of each of these directories/files are as follows:
+
+* __run.conf__: The configuration used when this output was produced.
+* __reads_w_K103N/__: The results directory for the input file reads_w_K103N.fastq
+    * __align.bam__: The alignment file in bam format.
+    * __align.bam.bai__: The index to the alignment file.
+    * __coverage_file.csv__: A file with one entry per line with the AA position and the coverage at the position.
+    * __dr_report.csv__: A report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
+    * __filtered.fastq__: The reads remaining after the filtering stage.
+    * __hydra.vcf__: The variants found by the pipeline.
+    * __mutation_report.hmcf__: The AA mutations found by the pipeline.
+    * __stats.txt__: A log file detailing size after filtering and major stages.
+
+The __dr_report.csv__ file lists all found drug resistant mutations (mutations included in the mutation database) which have frequency greater than the reporting threshold. An example of this file is given below.
+
+Example: __dr_report.csv__
+
+    Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage
+    RT,NNRTI,Yes,K,103,N,9.03,155
+
+The __mutation_report.hmcf__ files is our custom VCF like file which details all of the AA mutations found by the pipeline. An example if this file is given below.
+
+Example: __mutation_report.hmcf__
+
+    ##fileformat=HMCFv1
+    ##fileDate=20150008
+    ##source=HyDRA
+    ##reference=/home/ericenns/hydra/var/hxb2_pol.fas
+    ##INFO=<ID=MC,Number=.,Description="String">
+    ##INFO=<ID=MCF,Number=.,Description="String">
+    ##INFO=<ID=WC,Number=.,Description="String">
+    ##FILTER=<ID=mf0.01,Description="Mutant freq below 0.01">
+    #GENE   CATEGORY        SURVEILLANCE    TYPE    WILDTYPE        POS     MUTANT  FILTER  MUTANT_FREQ     COVERAGE INFO
+    RT      NNRTI   Yes     mutation        K       103     N       PASS    0.0903  155     WC=aaa;MC=aaC;MCF=0.0903
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

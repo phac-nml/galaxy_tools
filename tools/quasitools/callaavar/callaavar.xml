@@ -1,18 +1,20 @@
 <tool id="aavariants" name="Amino Acid Variants" version="0.1.0">
     <description>Identifies amino acid mutations</description>
     <requirements>
-          <requirement type="package" version="0.1">quasitools</requirement>
+          <requirement type="package" version="0.2.0">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
         ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
-        quasitools aavariants '$input_bam' '$ref_file' '$var_file' '$input_genes' 
-        
+        quasitools call aavar '$input_bam' '$ref_file' '$var_file' '$input_genes' 
+
         #if $mutation_db:
           '$mutation_db' 
         #end if
 
-        > output.vcf
+        #if $output_name:
+            -o '$output_name'
+        #end if
 
     ]]></command>
     <inputs>
@@ -20,10 +22,12 @@
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
         <param name="var_file" type="data" format="vcf" optional="false" label="Variants file" />
         <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
-        <param name="mutation_db" type="data" format="" optional="true" label="Mutation DB" />
+        <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" />
+        <param name="min_freq" type="float" optional="true" label="Minimum frequency" help="The minimum required frequency. Defaults to 0.01." />
+        <param name="output_name" type="text" optional="true" label="Output name" default="output.vcf" help="Name of the output vcf file. Defaults to output.vcf." />
     </inputs>
     <outputs>
-        <data format="vcf" name="output" from_work_dir="output.vcf" />
+        <data format="vcf" name="output" from_work_dir="$output_name" />
     </outputs>
     <tests>
         <test>

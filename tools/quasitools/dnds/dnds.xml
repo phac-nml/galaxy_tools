@@ -1,0 +1,22 @@
+<tool id="dnds" name="dNdS Report" version="0.1.0">
+    <description>Calculate the dN/dS value for each region in a bed file</description>
+    <requirements>
+          <requirement type="package" version="0.2.0">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        TODO: Fill in command template.
+    ]]></command>
+    <inputs>
+        <param name="csv_file" type="data" format="csv" optional="false" label="CSV file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="offset" type="float" optional="false" label="Offset" min="0" value="0"/>
+        <param name="output_name" type="text" optional="true" label="Output name" help="Name of the output csv file. Defaults to output.vcf."/>
+    </inputs>
+    <outputs>
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

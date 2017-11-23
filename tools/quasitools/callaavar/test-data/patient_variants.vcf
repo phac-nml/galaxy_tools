@@ -1,0 +1,15 @@
+##fileformat=VCFv4.2
+##fileDate=20171006
+##source=quasitools
+##contig=<ID=hxb2_pol,length=2844>
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele Count">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency">
+##FILTER=<ID=q30,Description="Set if True; QUAL<30">
+##FILTER=<ID=ac5,Description="Set if True; AC<5">
+##FILTER=<ID=dp100,Description="Set if True; DP<100">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+hxb2_pol	606	.	a	c	89	PASS	DP=127;AC=13;AF=0.1024
+hxb2_pol	606	.	a	t	4	q30;ac5	DP=127;AC=2;AF=0.0157
+hxb2_pol	2542	.	g	a	5	q30;ac5	DP=175;AC=3;AF=0.0171
+hxb2_pol	2792	.	g	a	2	q30;ac5;dp100	DP=92;AC=1;AF=0.0109
