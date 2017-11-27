@@ -1,21 +1,35 @@
 <tool id="dnds" name="dNdS Report" version="0.1.0">
     <description>Calculate the dN/dS value for each region in a bed file</description>
     <requirements>
-          <requirement type="package" version="0.2.0">quasitools</requirement>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        TODO: Fill in command template.
+
+        quasitools dnds $csv_file $ref_file $offset
+
     ]]></command>
     <inputs>
         <param name="csv_file" type="data" format="csv" optional="false" label="CSV file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
         <param name="offset" type="float" optional="false" label="Offset" min="0" value="0"/>
-        <param name="output_name" type="text" optional="true" label="Output name" help="Name of the output csv file. Defaults to output.vcf."/>
     </inputs>
     <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
     </outputs>
+    <tests>
+        <test>
+            <param name="csv_file" value="mutant_types.csv" />
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <output name="output" file="output.csv" />
+        </test>
+    </tests>
     <help><![CDATA[
-        TODO: Fill in help.
+
+dNdS Report
+===================
+
+Determines the dNdS ratio for each codon variant in a supplied csv file (codon variants).
+
     ]]></help>
     <citations>
     </citations>

@@ -1,7 +1,7 @@
 <tool id="aacoverage" name="Amino Acid Coverage" version="0.1.0">
     <description>Builds an aa census and returns its coverage</description>
     <requirements>
-          <requirement type="package" version="0.2.0">quasitools</requirement>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -20,13 +20,22 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_bam" value="test.bam" />
-            <param name="ref_file" value="SIVmac239M5SpXplasmid_reference_1269-10407.fasta" />
-            <param name="input_genes" value="SIVmac239M5SpXplasmid_reference_1269-10407.bed" />
+            <param name="input_bam" value="align.bam" />
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <param name="input_genes" value="hxb2_pol.bed" />
             <output name="output" file="output.csv" />
         </test>
     </tests>
     <help><![CDATA[
+
+Amino Acid Coverage
+===================
+
+Builds an amino acid census and returns its coverage.
+
+**Output**
+
+A file with one entry per line with the AA position and the coverage at the position.
 
     ]]></help>
     <citations>

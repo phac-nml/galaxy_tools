@@ -1,7 +1,7 @@
 <tool id="hydra" name="Hydra pipeline" version="0.1.0">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.2.0">quasitools</requirement>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -59,13 +59,12 @@
             --ns 
         #end if
 
-        #if $output_name:
-            -o '$output_name'
+        -o output
 
     ]]></command>
     <inputs>
-        <param name="forward" type="data" format="fasta" optional="false" label="Forward read" />
-        <param name="reverse" type="data" format="fasta" optional="true" label="Reverse read" help="Not required."/>
+        <param name="forward" type="data" format="fastq" optional="false" label="Forward read" />
+        <param name="reverse" type="data" format="fastq" optional="true" label="Reverse read" help="Not required."/>
         <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
         <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" default="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
         <param name="consensus_pct" type="integer" optional="true" min="1" max="100" value="20" default="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
@@ -78,11 +77,23 @@
         <param name="min_freq" type="float" optional="true" label="Minimum frequency" value="0.01" default="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
         <param name="generate_consensus" type="boolean" truevalue="--generate_consensus" falsevalue="" checked="False" label="Generate consensus" />
         <param name="filter_ns" type="boolean" truevalue="--ns" falsevalue="" checked="False" label="Filter out n's" />
-        <param name="output_name" type="text" optional="true" default="output.vcf" label="Output directory name" />
     </inputs>
     <outputs>
-
+        <data format="bam" label="HyDRA: alignment bam output" name="output_bam" from_work_dir="output/align.bam" />
+        <data format="bai" label="HyDRA: bam.bai output" name="Hydra bam bai" from_work_dir="output/align.bam.bai" />
+        <data format="csv" label="HyDRA: coverage output" name="output_coverage" from_work_dir="output/coverage_file.csv" />
+        <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
+        <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
+        <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
+        <data format="hmcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
+        <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
     </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="align.bam" />
+            <output name="output" file="output.csv" />
+        </test>
+    </tests>
     <help><![CDATA[
 
 HyDRA - HIV Drug Resistance Analyzer

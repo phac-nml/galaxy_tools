@@ -1,28 +1,26 @@
 <tool id="drmutations" name="Drug Resistance Mutations" version="0.1.0">
     <description>Identifies drug resistance amino acid mutations</description>
     <requirements>
-          <requirement type="package" version="0.2.0">quasitools</requirement>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
-        quasitools drmutations '$input_bam' '$ref_file' '$var_file' '$input_genes' 
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        quasitools drmutations $input_bam $ref_file $var_file $input_genes 
         
         #if $mutation_db:
-          '$mutation_db' 
+          $mutation_db 
         #end if
 
         #if $min_freq:
-            -f "$min_freq"
+            -f $min_freq
         #end if
 
         #if $reporting_thres:
-            -t "$reporting_thres" 
+            -t $reporting_thres 
         #end if
 
-        #if $output_name:
-            -o '$output_name'
-        #end if
+        -o $output
         
     ]]></command>
     <inputs>
@@ -30,18 +28,17 @@
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
         <param name="var_file" type="data" format="vcf" optional="false" label="Variants file" />
         <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
-        <param name="mutation_db" type="data" format="tsv" optional="false" label="Mutation DB" />
-        <param name="min_freq" type="float" optional="true" label="Minimum frequency" help="The minimum required frequency. Defaults to 0.01." />
-        <param name="reporting_thres" type="integer" optional="true" label="Reporting threshold" 
+        <param name="mutation_db" type="data" format="tsv" optional="false" label="Mutation DB" help="Not required. Defaults to HIV mutation db." />
+        <param name="min_freq" type="float" optional="true" label="Minimum frequency" default="0.01" value="0.01" help="The minimum required frequency. Defaults to 0.01." />
+        <param name="reporting_thres" type="integer" optional="true" label="Reporting threshold" default="1" value="1"
             help="The minimum percentage required for an entry in the drug resistant report. Defaults to 1."/>
-        <param name="output_name" type="text" optional="true" label="Output name" default="output.csv" help="Name of the output vcf file. Defaults to output.csv."/>
     </inputs>
     <outputs>
-        <data format="csv" name="output" from_work_dir="$output_name" />
+        <data format="csv" name="output" from_work_dir="output.csv" />
     </outputs>
     <tests>
         <test>
-            <param name="input_bam" value="test.bam" />
+            <param name="input_bam" value="align.bam" />
             <param name="ref_file" value="SIVmac239M5SpXplasmid_reference_1269-10407.fasta" />
              <param name="var_file" value="test.vcf" />
             <param name="input_genes" value="SIVmac239M5SpXplasmid_reference_1269-10407.bed" />
@@ -49,7 +46,14 @@
         </test>
     </tests>
     <help><![CDATA[
-        TODO: Fill in help.
+
+Drug Resistance Mutations
+=========================
+
+Call codon variants for a given BAM. A report is generated that details nt mutations within a 
+codon and the resulting AA mutation. The report indicates whether the nt mutation resulted in 
+a synonymous or non-synonymous mutation.
+
     ]]></help>
     <citations>
     </citations>
