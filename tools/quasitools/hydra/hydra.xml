@@ -90,8 +90,15 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_bam" value="align.bam" />
-            <output name="output" file="output.csv" />
+            <param name="test_forward" value="forward.fastq" />
+            <output name="output_bam" from_work_dir="output/align.bam" />
+            <output name="Hydra bam bai" from_work_dir="output/align.bam.bai" />
+            <output name="output_coverage" from_work_dir="output/coverage_file.csv" />
+            <output name="output_dr" from_work_dir="output/dr_report.csv" />
+            <output name="output_filtered" from_work_dir="output/filtered.fastq" />
+            <output name="output_hydra" from_work_dir="output/hydra.vcf" />
+            <output name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
+            <output name="output_stats" from_work_dir="output/stats.txt" />
         </test>
     </tests>
     <help><![CDATA[

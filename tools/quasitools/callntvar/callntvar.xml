@@ -12,22 +12,22 @@
             -e $error_rate 
         #end if
 
-        -o $output
+        -o output.vcf 
 
     ]]></command>
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="error_rate" type="float" optional="true" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
+        <param name="error_rate" type="float" optional="true" default="0.01" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
     </inputs>
     <outputs>
-        <data format="vcf" name="output" from_work_dir="output.vcf" />
+        <data format="vcf" name="output.vcf" />
     </outputs>
     <tests>
         <test>
-            <param name="input_bam" value="align.bam" />
-            <param name="ref_file" value="hxb2_pol.fas" />
-            <output name="output" file="output.vcf" />
+            <param name="input_bam" value="align.bam" ftype="bam" />
+            <param name="ref_file" value="hxb2_pol.fas" ftype="fasta" />
+            <output name="output" file="output.vcf" ftype="vcf" />
         </test>
     </tests>
     <help><![CDATA[

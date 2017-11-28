@@ -39,8 +39,8 @@
 Codon Variants
 ==============
 
-Call codon variants for a given BAM. A report is generated that details nt mutations within a 
-codon and the resulting AA mutation. The report indicates whether the nt mutation resulted in 
+Call codon variants for a given BAM. A report is generated that details nucleotide variants within a 
+codon and the resulting AA variants. The report indicates whether the nucleotide variants correspond to
 a synonymous or non-synonymous mutation.
 
     ]]></help>

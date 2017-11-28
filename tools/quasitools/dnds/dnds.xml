@@ -11,7 +11,7 @@
     <inputs>
         <param name="csv_file" type="data" format="csv" optional="false" label="CSV file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="offset" type="float" optional="false" label="Offset" min="0" value="0"/>
+        <param name="offset" type="integer" optional="false" label="Offset" min="0" value="0"/>
     </inputs>
     <outputs>
         <data format="csv" name="output" from_work_dir="output.csv" />
