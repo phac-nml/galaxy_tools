@@ -5,6 +5,8 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
+        cat $input_genes && 
+
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
         quasitools call codonvar $input_bam $ref_file $offset $input_genes 
 
@@ -12,13 +14,13 @@
             -e $error_rate 
         #end if
 
-        -o $output
+        -o output.csv
 
     ]]></command>
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="offset" type="float" optional="false" label="Offset" min="0" value="0"/>
+        <param name="offset" type="integer" optional="false" label="Offset" min="0" value="0"/>
         <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
         <param name="error_rate" type="float" optional="true" label="Error rate" default="0.01" value="0.01" help="Estimated sequencing error rate. Defaults to 0.01." />
     </inputs>
@@ -29,9 +31,14 @@
         <test>
             <param name="input_bam" value="align.bam" />
             <param name="ref_file" value="hxb2_pol.fas" />
-            <param name="input_genes" value="hxb2_pol.bed" />
             <param name="offset" value="1269"/>
-            <output name="output" file="output.csv" />
+            <param name="input_genes" ftype="bed" value="hxb2_pol.bed" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="#gene,nt position (gene),nt start position,nt end position,ref codon,mutant codon,ref AA,mutant AA,coverage,mutant frequency,mutant type,NS count,S count" />
+                    <has_text text="RT,1566-2885,1872,1874,aaa,aaC,K,N,154,7.79,NS,1.0000,0.0000" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

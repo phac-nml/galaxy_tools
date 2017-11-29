@@ -119,7 +119,7 @@ Stages
 The HyDRA pipleine proceeds through the following stages:
 
 1. Quality Control/Filtering
-2. Reference mapping using SMALT.
+2. Reference mapping using bowtie2.
 3. Variant Calling and filtering using a Poisson distribution.
 4. AA Mutation Calling and filtering.
 5. Drug Resistance report generation.

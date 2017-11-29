@@ -5,7 +5,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        quasitools dnds $csv_file $ref_file $offset
+        quasitools dnds $csv_file $ref_file $offset -o output.csv
 
     ]]></command>
     <inputs>
@@ -20,7 +20,12 @@
         <test>
             <param name="csv_file" value="mutant_types.csv" />
             <param name="ref_file" value="hxb2_pol.fas" />
-            <output name="output" file="output.csv" />
+            <output name="output" format="csv" >
+                <assert_contents>
+                    <has_text_matching expression="#gene,pn,ps,pn_sites,ps_sites,dn/ds"/>
+                    <has_text text="RT,0.0334,0.0111,1,1,3.0539" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

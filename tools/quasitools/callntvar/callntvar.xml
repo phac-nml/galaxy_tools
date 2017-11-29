@@ -12,7 +12,7 @@
             -e $error_rate 
         #end if
 
-        -o output.vcf 
+        -o output.vcf
 
     ]]></command>
     <inputs>
@@ -21,13 +21,18 @@
         <param name="error_rate" type="float" optional="true" default="0.01" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
     </inputs>
     <outputs>
-        <data format="vcf" name="output.vcf" />
+        <data format="vcf" name="output" from_work_dir="output.vcf" />
     </outputs>
     <tests>
         <test>
             <param name="input_bam" value="align.bam" ftype="bam" />
             <param name="ref_file" value="hxb2_pol.fas" ftype="fasta" />
-            <output name="output" file="output.vcf" ftype="vcf" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s69\sPASS\sDP=157;AC=12;AF=0.0764" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

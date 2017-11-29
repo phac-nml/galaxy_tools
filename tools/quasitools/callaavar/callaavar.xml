@@ -1,7 +1,7 @@
 <tool id="aavariants" name="Amino Acid Variants" version="0.1.0">
     <description>Identifies amino acid mutations</description>
     <requirements>
-          <requirement type="package" version="0.2.2">quasitools</requirement>
+        <requirement type="package" version="0.2.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -12,7 +12,7 @@
           $mutation_db 
         #end if
 
-        -o $output
+        -o output.vcf
 
     ]]></command>
     <inputs>
@@ -31,8 +31,13 @@
             <param name="input_bam" value="align.bam" />
             <param name="ref_file" value="hxb2_pol.fas" />
             <param name="var_file" value="nt_variants.vcf" />
-            <param name="input_genes" value="hxb2_pol.bed" />
-            <output name="output" file="output.vcf" />
+            <param name="input_genes" ftype="bed" value="hxb2_pol.bed" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
+                    <has_text text="hxb2_pol\sRT\smutation\sk\s108\sN\sPASS\s0.0779\s154\sWC=aaa;MC=aaC;MCF=0.0779;CAT=.;SRVL=." />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
