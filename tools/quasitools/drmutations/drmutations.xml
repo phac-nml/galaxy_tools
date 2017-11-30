@@ -29,8 +29,8 @@
         <param name="var_file" type="data" format="vcf" optional="false" label="Variants file" />
         <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
         <param name="mutation_db" type="data" format="tsv" optional="false" label="Mutation DB" />
-        <param name="min_freq" type="float" optional="true" label="Minimum frequency" default="0.01" value="0.01" help="The minimum required frequency. Defaults to 0.01." />
-        <param name="reporting_thres" type="integer" optional="true" label="Reporting threshold" default="1" value="1"
+        <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" default="0.01" value="0.01" help="The minimum required frequency. Defaults to 0.01." />
+        <param name="reporting_thres" type="integer" min="1" max="20" optional="true" label="Reporting threshold" default="1" value="1"
             help="The minimum percentage required for an entry in the drug resistant report. Defaults to 1."/>
     </inputs>
     <outputs>
