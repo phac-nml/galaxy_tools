@@ -66,21 +66,21 @@
         <param name="forward" type="data" format="fastq" optional="false" label="Forward read" />
         <param name="reverse" type="data" format="fastq" optional="true" label="Reverse read" help="Not required."/>
         <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
-        <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" default="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
-        <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" default="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
-        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" default="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
-        <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" default="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
-        <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.0021" default="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
-        <param name="min_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" default="30" help="Minimum required quality for variant to be considered later on in the pipeline. Defaults to 30." />
-        <param name="min_depth" type="integer" optional="true" min="0" max="5000" label="Minimum depth" value="100" default="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
-        <param name="min_ac" type="integer" optional="true" min="0" max="5000" label="Minimum allele count" value="5" default="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
-        <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" default="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
+        <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
+        <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
+        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
+        <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
+        <param name="min_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" help="Minimum required quality for variant to be considered later on in the pipeline. Defaults to 30." />
+        <param name="min_depth" type="integer" optional="true" min="0" max="5000" label="Minimum depth" value="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
+        <param name="min_ac" type="integer" optional="true" min="0" max="5000" label="Minimum allele count" value="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
+        <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
         <param name="generate_consensus" type="boolean" truevalue="--generate_consensus" falsevalue="" checked="False" label="Generate consensus" />
         <param name="filter_ns" type="boolean" truevalue="--ns" falsevalue="" checked="False" label="Filter out n's" />
     </inputs>
     <outputs>
         <data format="bam" label="HyDRA: alignment bam output" name="output_bam" from_work_dir="output/align.bam" />
-        <data format="bai" label="HyDRA: bam.bai output" name="Hydra bam bai" from_work_dir="output/align.bam.bai" />
+        <data format="bai" label="HyDRA: bam.bai output" name="output_bam_bai" from_work_dir="output/align.bam.bai" />
         <data format="csv" label="HyDRA: coverage output" name="output_coverage" from_work_dir="output/coverage_file.csv" />
         <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
         <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
@@ -91,14 +91,50 @@
     <tests>
         <test>
             <param name="test_forward" value="forward.fastq" />
-            <output name="output_bam" from_work_dir="output/align.bam" />
-            <output name="Hydra bam bai" from_work_dir="output/align.bam.bai" />
-            <output name="output_coverage" from_work_dir="output/coverage_file.csv" />
-            <output name="output_dr" from_work_dir="output/dr_report.csv" />
-            <output name="output_filtered" from_work_dir="output/filtered.fastq" />
-            <output name="output_hydra" from_work_dir="output/hydra.vcf" />
-            <output name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
-            <output name="output_stats" from_work_dir="output/stats.txt" />
+            <output name="output_bam" file="align.bam"/>
+            <output name="output_bam_bai" />
+            <output name="output_coverage">
+                <assert_contents>
+                    <has_text text="frame: 0" />
+                    <has_text text="1,0" />
+                    <has_text text="948,1" />
+                </assert_contents>
+            </output>
+            <output name="output_dr">
+                <assert_contents>
+                    <has_text text="Chromosome,Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,103,N,7.79,154" />
+                </assert_contents>
+            </output>
+            <output name="output_filtered" />
+            <output name="output_hydra">
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s69\sPASS\sDP=157;AC=12;AF=0.0764" />
+                </assert_contents>
+            </output>
+            <output name="output_aa_mt">
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s103\sN\sPASS\s0.0779\s154\sWC=aaa;MC=aaC;MCF=0.0779;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s70\sE\sPASS\s0.0103\s2422\sWC=gga;MC=gAa;MCF=0.0103;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sIN\smutation\sE\s96\sG\sPASS\s0.0163\s1959\sWC=gaa;MC=gGa;MCF=0.0163;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sIN\smutation\sE\s96\sK\sPASS\s0.0148\s1959\sWC=gaa;MC=Aaa;MCF=0.0148;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s189\sR\sPASS\s0.0234\s214\sWC=ggg;MC=Agg;MCF=0.0234;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s192\sW\sPASS\s0.0159\s314\sWC=ggg;MC=Tgg;MCF=0.0159;CAT=.;SRVL=." />
+                </assert_contents>
+            </output>
+            <output name="output_stats">
+                <assert_contents>
+                    <has_text text="Input Size: 25000"/>
+                    <has_text text="Number of reads filtered due to length: 15074"/>
+                    <has_text text="Number of reads filtered due to average quality score: 501"/>
+                    <has_text text="Number of reads filtered due to presence of Ns: 0"/>
+                    <has_text text="Number of reads filtered due to excess coverage: 0"/>
+                    <has_text text="Number of reads filtered due to poor mapping: 12"/>
+                    <has_text text="Percentage of reads filtered: 62.35"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

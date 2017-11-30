@@ -2,5 +2,6 @@ categories: [Sequence Analysis]
 description: A collection of tools for analysing Viral Quasispecies
 name: quasitools
 owner: nml
+long_description: Includes aacoverage, callaavar, callcodonvar, callntvar, consensus, dnds, drmutations, and the hydra pipeline.
 remote_repository_url: https://github.com/phac-nml/quasitools
 homepage_url: https://github.com/phac-nml/quasitools

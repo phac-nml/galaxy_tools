@@ -18,7 +18,7 @@
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="error_rate" type="float" optional="true" min="0" max="1" default="0.01" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
+        <param name="error_rate" type="float" optional="true" min="0" max="1" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
     </inputs>
     <outputs>
         <data format="vcf" name="output" from_work_dir="output.vcf" />
