@@ -1,0 +1,223 @@
+<tool id="hydra" name="Hydra pipeline" version="0.1.0">
+    <description>Identifies drug resistance within an NGS dataset</description>
+    <requirements>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        quasitools hydra '$forward' 
+
+        #if $reverse:
+            '$reverse' 
+        #end if
+
+        #if $mutation_db:
+            -m '$mutation_db' 
+        #end if
+
+        #if $reporting_threshold:
+            -rt '$reporting_threshold' 
+        #end if
+
+        #if $consensus_pct:
+            -cp '$consensus_pct' 
+        #end if
+
+        #if $length_cutoff:
+            -lc '$length_cutoff' 
+        #end if
+
+        #if $score_cutoff:
+            -sc '$score_cutoff' 
+        #end if
+
+        #if $error_rate:
+            -e '$error_rate' 
+        #end if
+
+        #if $min_qual:
+            -mq '$min_qual' 
+        #end if
+
+        #if $min_depth:
+            -md '$min_depth' 
+        #end if
+
+        #if $min_ac:
+            -ma '$min_ac' 
+        #end if
+
+        #if $min_freq:
+            -mf '$min_freq' 
+        #end if
+
+        #if $generate_consensus:
+            --generate_consensus 
+        #end if
+
+        #if $filter_ns:
+            --ns 
+        #end if
+
+        -o output
+
+    ]]></command>
+    <inputs>
+        <param name="forward" type="data" format="fastq" optional="false" label="Forward read" />
+        <param name="reverse" type="data" format="fastq" optional="true" label="Reverse read" help="Not required."/>
+        <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
+        <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
+        <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
+        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
+        <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
+        <param name="min_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" help="Minimum required quality for variant to be considered later on in the pipeline. Defaults to 30." />
+        <param name="min_depth" type="integer" optional="true" min="0" max="5000" label="Minimum depth" value="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
+        <param name="min_ac" type="integer" optional="true" min="0" max="5000" label="Minimum allele count" value="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
+        <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
+        <param name="generate_consensus" type="boolean" truevalue="--generate_consensus" falsevalue="" checked="False" label="Generate consensus" />
+        <param name="filter_ns" type="boolean" truevalue="--ns" falsevalue="" checked="False" label="Filter out n's" />
+    </inputs>
+    <outputs>
+        <data format="bam" label="HyDRA: alignment bam output" name="output_bam" from_work_dir="output/align.bam" />
+        <data format="bam" label="HyDRA: bam.bai output" name="output_bam_bai" from_work_dir="output/align.bam.bai" />
+        <data format="csv" label="HyDRA: coverage output" name="output_coverage" from_work_dir="output/coverage_file.csv" />
+        <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
+        <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
+        <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
+        <data format="vcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
+        <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="forward" value="forward.fastq" />
+            <output name="output_coverage">
+                <assert_contents>
+                    <has_text text="frame: 0" />
+                    <has_text text="1,0" />
+                    <has_text text="948,0" />
+                </assert_contents>
+            </output>
+            <output name="output_dr">
+                <assert_contents>
+                    <has_text text="Chromosome,Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,101,P,14.23,1574" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,103,N,5.49,1912" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,C,24.07,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,I,18.04,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,V,20.08,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,188,C,2.81,3454" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,G,190,A,5.20,3233" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,G,190,S,6.68,3233" />
+                </assert_contents>
+            </output>
+            <output name="output_hydra">
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\s576\s.\sa\sg\s100\sPASS\sDP=805;AC=245;AF=0.3043" />
+                    <has_text_matching expression="hxb2_pol\s958\s.\sc\sa\s100\sPASS\sDP=2503;AC=28;AF=0.0112" />
+                </assert_contents>
+            </output>
+            <output name="output_aa_mt">
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s101\sP\sPASS\s0.1423\s1574\sWC=aaa;MC=CCa;MCF=0.1423;CAT=NNRTI;SRVL=Yes" />
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
+                </assert_contents>
+            </output>
+            <output name="output_stats">
+                <assert_contents>
+                    <has_text text="Input Size: 25000"/>
+                    <has_text text="Number of reads filtered due to length: 15074"/>
+                    <has_text text="Number of reads filtered due to average quality score: 501"/>
+                    <has_text text="Number of reads filtered due to presence of Ns: 0"/>
+                    <has_text text="Number of reads filtered due to excess coverage: 0"/>
+                    <has_text text="Number of reads filtered due to poor mapping: 12"/>
+                    <has_text text="Percentage of reads filtered: 62.35"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+HyDRA - HIV Drug Resistance Analyzer
+====================================
+
+The HyDRA pipeline provides a pipeline for identifying drug resistance within a Next Generation Sequencing dataset. The pipeline takes as input the raw reads produced by a Next Generation Sequencer and produces a report detailing found drug resistance per sample.
+
+Authors
+-------
+
+The HyDRA pipeline was developed by Eric Enns and David Peddle.
+
+Stages
+------
+
+The HyDRA pipleine proceeds through the following stages:
+
+1. Quality Control/Filtering
+2. Reference mapping using bowtie2.
+3. Variant Calling and filtering using a Poisson distribution.
+4. AA Mutation Calling and filtering.
+5. Drug Resistance report generation.
+
+Details
+-------
+
+The following is an example for running the pipeline, using our included test dataset:
+    * Output directory name: "/tmp/hydra_out"
+    * Forward reads: "reads_w_K103N.fastq"
+
+### Output ###
+
+The detailed output directory tree looks as follows:
+
+    /tmp/hydra_out/
+        * align.bam
+        * align.bam.bai
+        * coverage_file.csv
+        * dr_report.csv
+        * filtered.fastq
+        * hydra.vcf
+        * mutation_report.hmcf
+        * stats.txt
+
+The description of each of these directories/files are as follows:
+
+* __run.conf__: The configuration used when this output was produced.
+* __reads_w_K103N/__: The results directory for the input file reads_w_K103N.fastq
+    * __align.bam__: The alignment file in bam format.
+    * __align.bam.bai__: The index to the alignment file.
+    * __coverage_file.csv__: A file with one entry per line with the AA position and the coverage at the position.
+    * __dr_report.csv__: A report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
+    * __filtered.fastq__: The reads remaining after the filtering stage.
+    * __hydra.vcf__: The variants found by the pipeline.
+    * __mutation_report.hmcf__: The AA mutations found by the pipeline.
+    * __stats.txt__: A log file detailing size after filtering and major stages.
+
+The __dr_report.csv__ file lists all found drug resistant mutations (mutations included in the mutation database) which have frequency greater than the reporting threshold. An example of this file is given below.
+
+Example: __dr_report.csv__
+
+    Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage
+    RT,NNRTI,Yes,K,103,N,9.03,155
+
+The __mutation_report.hmcf__ files is our custom VCF like file which details all of the AA mutations found by the pipeline. An example if this file is given below.
+
+Example: __mutation_report.hmcf__
+
+    ##fileformat=HMCFv1
+    ##fileDate=20150008
+    ##source=HyDRA
+    ##reference=/home/ericenns/hydra/var/hxb2_pol.fas
+    ##INFO=<ID=MC,Number=.,Description="String">
+    ##INFO=<ID=MCF,Number=.,Description="String">
+    ##INFO=<ID=WC,Number=.,Description="String">
+    ##FILTER=<ID=mf0.01,Description="Mutant freq below 0.01">
+    #GENE   CATEGORY        SURVEILLANCE    TYPE    WILDTYPE        POS     MUTANT  FILTER  MUTANT_FREQ     COVERAGE INFO
+    RT      NNRTI   Yes     mutation        K       103     N       PASS    0.0903  155     WC=aaa;MC=aaC;MCF=0.0903
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

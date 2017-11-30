@@ -1,0 +1,49 @@
+<tool id="aacoverage" name="Amino Acid Coverage" version="0.1.0">
+    <description>Builds an aa census and returns its coverage</description>
+    <requirements>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+
+        quasitools aacoverage $input_bam $ref_file $input_genes -o output.csv
+
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="align.bam" />
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <param name="input_genes" ftype="bed" value="hxb2_pol.bed" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="frame: 0" />
+                    <has_text text="1,0" />
+                    <has_text text="948,1" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Amino Acid Coverage
+===================
+
+Builds an amino acid census and returns its coverage.
+
+**Output**
+
+A file with one entry per line with the AA position and the coverage at the position.
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

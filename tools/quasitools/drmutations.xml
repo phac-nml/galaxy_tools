@@ -1,0 +1,64 @@
+<tool id="drmutations" name="Drug Resistance Mutations" version="0.1.0">
+    <description></description>
+    <requirements>
+        <requirement type="package" version="0.2.2">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        quasitools drmutations $input_bam $ref_file $var_file $input_genes 
+        
+        #if $mutation_db:
+          $mutation_db 
+        #end if
+
+        #if $min_freq:
+            -f $min_freq
+        #end if
+
+        #if $reporting_thres:
+            -t $reporting_thres 
+        #end if
+
+        -o output.csv
+        
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="var_file" type="data" format="vcf" optional="false" label="Variants file" />
+        <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
+        <param name="mutation_db" type="data" format="tsv" optional="false" label="Mutation DB" />
+        <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" help="The minimum required frequency. Defaults to 0.01." />
+        <param name="reporting_thres" type="integer" min="1" max="20" optional="true" label="Reporting threshold" value="1"
+            help="The minimum percentage required for an entry in the drug resistant report. Defaults to 1."/>
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="align.bam" />
+            <param name="ref_file" value="hxb2_pol.fas" />
+             <param name="var_file" value="nt_variants.vcf" />
+            <param name="input_genes" ftype="bed" value="hxb2_pol.bed" />
+            <param name="mutation_db" value="mutation_db.tsv" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="Chromosome,Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,103,N,7.79,154" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Drug Resistance Mutations
+=========================
+
+Generates a report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
