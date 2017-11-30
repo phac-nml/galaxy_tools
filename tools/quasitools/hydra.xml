@@ -80,48 +80,49 @@
     </inputs>
     <outputs>
         <data format="bam" label="HyDRA: alignment bam output" name="output_bam" from_work_dir="output/align.bam" />
-        <data format="bai" label="HyDRA: bam.bai output" name="output_bam_bai" from_work_dir="output/align.bam.bai" />
+        <data format="bam" label="HyDRA: bam.bai output" name="output_bam_bai" from_work_dir="output/align.bam.bai" />
         <data format="csv" label="HyDRA: coverage output" name="output_coverage" from_work_dir="output/coverage_file.csv" />
         <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
         <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
         <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
-        <data format="hmcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
+        <data format="vcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
         <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
     </outputs>
     <tests>
         <test>
-            <param name="test_forward" value="forward.fastq" />
-            <output name="output_bam" file="align.bam"/>
-            <output name="output_bam_bai" />
+            <param name="forward" value="forward.fastq" />
             <output name="output_coverage">
                 <assert_contents>
                     <has_text text="frame: 0" />
                     <has_text text="1,0" />
-                    <has_text text="948,1" />
+                    <has_text text="948,0" />
                 </assert_contents>
             </output>
             <output name="output_dr">
                 <assert_contents>
                     <has_text text="Chromosome,Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage" />
-                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,103,N,7.79,154" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,101,P,14.23,1574" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,K,103,N,5.49,1912" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,C,24.07,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,I,18.04,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,181,V,20.08,4557" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,Y,188,C,2.81,3454" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,G,190,A,5.20,3233" />
+                    <has_text text="hxb2_pol,RT,NNRTI,Yes,G,190,S,6.68,3233" />
                 </assert_contents>
             </output>
-            <output name="output_filtered" />
             <output name="output_hydra">
                 <assert_contents>
                     <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
-                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s69\sPASS\sDP=157;AC=12;AF=0.0764" />
+                    <has_text_matching expression="hxb2_pol\s576\s.\sa\sg\s100\sPASS\sDP=805;AC=245;AF=0.3043" />
+                    <has_text_matching expression="hxb2_pol\s958\s.\sc\sa\s100\sPASS\sDP=2503;AC=28;AF=0.0112" />
                 </assert_contents>
             </output>
             <output name="output_aa_mt">
                 <assert_contents>
                     <has_text_matching expression="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
-                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s103\sN\sPASS\s0.0779\s154\sWC=aaa;MC=aaC;MCF=0.0779;CAT=.;SRVL=." />
-                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s70\sE\sPASS\s0.0103\s2422\sWC=gga;MC=gAa;MCF=0.0103;CAT=.;SRVL=." />
-                    <has_text_matching expression="hxb2_pol\sIN\smutation\sE\s96\sG\sPASS\s0.0163\s1959\sWC=gaa;MC=gGa;MCF=0.0163;CAT=.;SRVL=." />
-                    <has_text_matching expression="hxb2_pol\sIN\smutation\sE\s96\sK\sPASS\s0.0148\s1959\sWC=gaa;MC=Aaa;MCF=0.0148;CAT=.;SRVL=." />
-                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s189\sR\sPASS\s0.0234\s214\sWC=ggg;MC=Agg;MCF=0.0234;CAT=.;SRVL=." />
-                    <has_text_matching expression="hxb2_pol\sIN\smutation\sG\s192\sW\sPASS\s0.0159\s314\sWC=ggg;MC=Tgg;MCF=0.0159;CAT=.;SRVL=." />
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s101\sP\sPASS\s0.1423\s1574\sWC=aaa;MC=CCa;MCF=0.1423;CAT=NNRTI;SRVL=Yes" />
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
                 </assert_contents>
             </output>
             <output name="output_stats">
