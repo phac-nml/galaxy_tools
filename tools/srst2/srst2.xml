@@ -2,6 +2,7 @@
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
     <requirements>
         <requirement type="package" version="0.1.4.6">srst2</requirement>
+        <requirement type="package" version="08-07-2014">vfdb</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>

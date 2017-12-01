@@ -1,0 +1,7 @@
+categories: [Assembly]
+description: Generates mapping stats from a bam file.
+name: bam2mappingstats
+owner: nml
+long_description: Generates mapping stats from a bam file.
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools

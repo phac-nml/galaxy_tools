@@ -1,0 +1,34 @@
+Statistics for contig lengths:
+	Min contig length:	1,134
+	Max contig length:	101,601
+	Mean contig length:	24967.61
+	Standard deviation of contig length:	23081.09
+	Median contig length:	16,588
+	N50 contig length:	44,563
+
+Statistics for numbers of contigs:
+	Number of contigs:	185
+	Number of contigs >=1kb:	185
+	Number of contigs in N50:	37
+
+Statistics for bases in the contigs:
+	Number of bases in all contigs:	4,619,008
+	Number of bases in contigs >=1kb:	4,619,008
+	GC Content of contigs:	47.50 %
+
+Simple Dinucleotide repeats:
+	Number of contigs with over 70% dinucleotode repeats:	0.00 % (0 contigs)
+	AT:	0.00 % (0 contigs)
+	CG:	0.00 % (0 contigs)
+	AC:	0.00 % (0 contigs)
+	TG:	0.00 % (0 contigs)
+	AG:	0.00 % (0 contigs)
+	TC:	0.00 % (0 contigs)
+
+Simple mononucleotide repeats:
+	Number of contigs with over 50% mononucleotode repeats:	0.00 % (0 contigs)
+	AA:	0.00 % (0 contigs)
+	TT:	0.00 % (0 contigs)
+	CC:	0.00 % (0 contigs)
+	GG:	0.00 % (0 contigs)
+
