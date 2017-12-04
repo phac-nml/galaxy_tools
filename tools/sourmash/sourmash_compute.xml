@@ -1,7 +1,7 @@
 <tool id="sourmash_compute" name="sourmash compute" version="0.1.0">
     <description>generate minHash signatures</description>
     <requirements>
-        <requirement type="package" version="2.0.0a1">sourmash</requirement>
+        <requirement type="package" version="2.0.0a2">sourmash</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" />
@@ -9,8 +9,8 @@
     <command><![CDATA[
 
 
-    ln -s "$input1" input && 
-    sourmash compute "input"
+    ln -s "$input1" '$input1.name' && 
+    sourmash compute "$input1.name"
 
     $dna
     $protein
