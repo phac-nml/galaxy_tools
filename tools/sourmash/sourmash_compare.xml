@@ -20,33 +20,31 @@
      "$sigs.name " 
     #end for
 
-    
+    $dna
+    $protein
 
     --ksize "$ksizes"
 
 
     $ignore_abundance
     
-    
-    -o output
-    > $redirect
+    --csv '$csv'
     ]]></command>
     <inputs>
       <param type="data" multiple="true" name="signatures" format="json" label="Signatures"/>
+      <param name="dna" type="boolean" falsevalue='--no-dna' truevalue='--dna' checked='True' label="build DNA signatures" help="build DNA signatures (default: True)"/>
+      <param name="protein" type="boolean" falsevalue='--no-protein' truevalue='--protein' checked='False' label="build protein signatures" help="build protein signatures (default: False)"/>
       <param name="ignore_abundance" type="boolean" falsevalue='' truevalue='--ignore-abundance' checked='False' label="Do NOT use k-mer abundances if present" help=""/>
       <param help="A single k-mer size to be used. The default value is 31." label="K-mer size" name="ksizes" type="integer" value="31" />
       
     </inputs>
     <outputs>
-      <data name="output" format="binary" from_work_dir="output" label="Binary results"/>
-      <data name="output_labels" format="txt" from_work_dir="output.labels.txt" label="Binary text labels"/>
-      <data name="redirect" format="txt" label="Text based results"/>
+      <data name="csv" format="csv" />
     </outputs>
     <tests>
       <test>
-        <param name="signatures" value="genome1.fna.sig,genome2.fna.sig"/>
-        <output name="output_labels" file="output.txt.labels.txt"/>
-        <output name="redirect" file="redirect"/>
+        <param name="signatures" value="genome2.fna.sig,genome1.fna.sig"/>
+        <output name="csv" file="compare.csv"/>
       </test>
     </tests>
     <help><![CDATA[
