@@ -1,0 +1,73 @@
+<tool id="sourmash_search" name="sourmash search" version="0.1.0">
+    <description>search a database of signatures</description>
+    <requirements>
+        <requirement type="package" version="2.0.0a2">sourmash</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+
+
+    ## prepare sourmash index
+    #set index_path = ''
+    #if str($reference_database.source) == "history":
+    
+    #else:
+       #set index_path = $reference_database.index.fields.path
+    #end if
+
+    
+    ln -s /home/CSCScience.ca/pmabon/Desktop/db/.sbt.genbank-k31 && ln -s /home/CSCScience.ca/pmabon/Desktop/db/genbank-k31.sbt.json && 
+    ln -s "$input1" '$input1.name' && 
+    sourmash search
+
+    --ksize "$ksize"
+    
+    $dna
+    $protein
+    
+    "$input1.name"
+
+    'genbank-k31.sbt.json'
+
+    -o "$csv"
+    
+    ]]></command>
+    <inputs>
+      <param type="data" name="input1" format="json" label="Input sequence(s)"/>
+      <param name="dna" type="boolean" falsevalue='--no-dna' truevalue='--dna' checked='True' label="build DNA signatures" help="build DNA signatures (default: True)"/>
+      <param name="protein" type="boolean" falsevalue='--no-protein' truevalue='--protein' checked='False' label="build protein signatures" help="build protein signatures (default: False)"/>
+      <param help="A single k-mer size to be used (value must be odd). The default value is 31." label="K-mer to use" name="ksize" type="integer" value="31" />
+
+
+        <conditional name="reference_database">
+          <param name="source" type="select" label="Will you select a reference database from your history or use a built-in index?" help="Built-ins were indexed using default options. See `Indexes` section of help below">
+            <option value="indexed">Use a built-in genome index</option>
+            <option value="history">Use a genome from the history and build index</option>
+          </param>
+          <when value="indexed">
+            <param name="index" type="select" label="Select reference database" help="If your database of interest is not listed, contact the Galaxy team">
+              <options from_data_table="sourmash_indexes">
+                <filter type="sort_by" column="2"/>
+                <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+              </options>
+            </param>
+          </when>
+          <when value="history">
+            <param name="own_file" type="data" format="fasta" label="Select reference database" />
+          </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="csv" format="csv" />
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+    Need help?
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
