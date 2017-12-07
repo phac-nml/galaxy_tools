@@ -1,0 +1,48 @@
+<tool id="callntvar" name="Nucleotide Variants" version="0.1.0">
+    <description>Identifies nucleotide variants</description>
+    <requirements>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        quasitools call ntvar $input_bam $ref_file 
+
+        #if $error_rate:
+            -e $error_rate 
+        #end if
+
+        -o output.vcf
+
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="error_rate" type="float" optional="true" min="0" max="1" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
+    </inputs>
+    <outputs>
+        <data format="vcf" name="output" from_work_dir="output.vcf" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="align.bam" ftype="bam" />
+            <param name="ref_file" value="hxb2_pol.fas" ftype="fasta" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s69\sPASS\sDP=157;AC=12;AF=0.0764" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+        
+Nucleotide Variants
+===================
+
+Call nucleotide variants for a given BAM file and a supplied reference file.
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

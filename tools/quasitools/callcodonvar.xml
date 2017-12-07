@@ -1,0 +1,56 @@
+<tool id="callcodonvar" name="Codon Variants" version="0.1.0">
+    <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
+    <requirements>
+          <requirement type="package" version="0.2.2">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        cat $input_genes && 
+
+        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        quasitools call codonvar $input_bam $ref_file $offset $input_genes 
+
+        #if $error_rate:
+            -e $error_rate 
+        #end if
+
+        -o output.csv
+
+    ]]></command>
+    <inputs>
+        <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="offset" type="integer" optional="false" label="Offset" min="0" value="0"/>
+        <param name="input_genes" type="data" format="bed" optional="false" label="Gene file" />
+        <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.01" help="Estimated sequencing error rate. Defaults to 0.01." />
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="align.bam" />
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <param name="offset" value="1269"/>
+            <param name="input_genes" ftype="bed" value="hxb2_pol.bed" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="#gene,nt position (gene),nt start position,nt end position,ref codon,mutant codon,ref AA,mutant AA,coverage,mutant frequency,mutant type,NS count,S count" />
+                    <has_text text="RT,1566-2885,1872,1874,aaa,aaC,K,N,154,7.79,NS,1.0000,0.0000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Codon Variants
+==============
+
+Call codon variants for a given BAM. A report is generated that details nucleotide variants within a 
+codon and the resulting AA variants. The report indicates whether the nucleotide variants correspond to
+a synonymous or non-synonymous mutation.
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
