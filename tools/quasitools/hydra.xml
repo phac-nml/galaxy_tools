@@ -118,7 +118,8 @@
     </outputs>
     <tests>
         <test>
-            <param name="forward" value="forward.fastq" />
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
             <output name="output_coverage">
                 <assert_contents>
                     <has_text text="frame: 0" />
