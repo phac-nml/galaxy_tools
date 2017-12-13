@@ -5,10 +5,23 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        quasitools hydra '$forward' 
+        quasitools hydra 
 
-        #if $reverse:
-            '$reverse' 
+        ## Preparing file input.
+        #if $data_type.type == "paired":
+
+            '$data_type.fastq_input1' 
+            '$data_type.fastq_input2' 
+
+        #elif $data_type.type == "collection":
+
+            '$data_type.fastq_input1.forward' 
+            '$data_type.fastq_input1.reverse' 
+
+        #elif $data_type.type == "single":
+
+            '$data_type.fastq_input1' 
+
         #end if
 
         #if $mutation_db:
@@ -63,8 +76,23 @@
 
     ]]></command>
     <inputs>
-        <param name="forward" type="data" format="fastq" optional="false" label="Forward read" />
-        <param name="reverse" type="data" format="fastq" optional="true" label="Reverse read" help="Not required."/>
+        <conditional name="data_type">
+            <param name="type" type="select" label="Specify the read type.">
+                <option value="single">Single-end Data</option>
+                <option value="paired">Paired-end Data</option>
+                <option value="collection">Collection Paired-end Data</option>
+            </param>
+            <when value="single">
+                <param name="fastq_input1" type="data" format="fastq" label="Single end read file(s)"/>
+            </when>
+            <when value="paired">
+                <param name="fastq_input1" type="data" format="fastq" label="Forward paired-end read file"/>
+                <param name="fastq_input2" type="data" format="fastq" label="Reverse paired-end read file"/>
+            </when>
+            <when value="collection">
+                <param name="fastq_input1" type="data_collection" label="Paired-end reads collection" optional="false" format="fastq" collection_type="paired" />
+            </when>
+        </conditional>
         <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
         <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
         <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
@@ -90,7 +118,8 @@
     </outputs>
     <tests>
         <test>
-            <param name="forward" value="forward.fastq" />
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
             <output name="output_coverage">
                 <assert_contents>
                     <has_text text="frame: 0" />
