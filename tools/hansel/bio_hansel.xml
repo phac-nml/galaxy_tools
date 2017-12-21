@@ -1,7 +1,7 @@
-<tool id="bio_hansel" name="Salmonella Subtyping" version="0.1.3">
+<tool id="bio_hansel" name="Bio_Hansel - SNV Subtyping" version="1.0.0">
     <description>Genome assemblies and/or whole-genome sequencing readset</description>
     <requirements>
-        <requirement type="package" version="0.1.0">bio_hansel</requirement>
+        <requirement type="package" version="1.1.0">bio_hansel</requirement>
         <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
@@ -52,16 +52,32 @@
         #end if
 
 
-        #if $kmer_min
-            --min-kmer-freq $kmer_min
+        #if $kmer_vals.kmer_min
+            --min-kmer-freq $kmer_vals.kmer_min
         #end if
 
-        #if $kmer_max
-            --max-kmer-freq $kmer_max
+        #if $kmer_vals.kmer_max
+            --max-kmer-freq $kmer_vals.kmer_max
+        #end if
+
+        #if $qc_vals.low_cov_depth_freq
+            --low-cov-depth-freq $qc_vals.low_cov_depth_freq
+        #end if
+
+        #if $qc_vals.max_missing_tiles
+            --max-missing-tiles $qc_vals.max_missing_tiles
+        #end if
+
+        #if $qc_vals.min_ambiguous_tiles
+            --min-ambiguous-tiles $qc_vals.min_ambiguous_tiles
+        #end if
+
+        #if $qc_vals.max_intermediate_tiles
+            --max-intermediate-tiles $qc_vals.max_intermediate_tiles
         #end if
 
         ## Adding more parameters to the command.
-        -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab 
+        -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab -S tech_results.tab
 
 
         ## Entering the file inputs
@@ -109,12 +125,23 @@
                 <param name="scheme_input" type="data" format="fasta" label="Scheme Input"/>
             </when>
         </conditional>
-        <param name="kmer_min" argument="--min-kmer-freq" optional="True" type="integer" min="0" label="Min k-mer freq/coverage" value="10" help="default = 10"/>
-        <param name="kmer_max" argument="--max-kmer-freq" optional="True" type="integer" min="1" label="Max k-mer freq/coverage" value="200" help="default = 200"/>
+        <!-- K-mer frequencies. -->
+        <section name="kmer_vals" title="K-mer Frequency Thresholds" expanded="False">
+            <param name="kmer_min" argument="--min-kmer-freq" optional="True" type="integer" min="0" label="Min k-mer freq/coverage" value="8" help="default = 8"/>
+            <param name="kmer_max" argument="--max-kmer-freq" optional="True" type="integer" min="1" label="Max k-mer freq/coverage" value="1000" help="default = 1000"/>
+        </section>
+        <!-- Quality Checking Parameters -->
+        <section name="qc_vals" title="Quality Checking Thresholds" expanded="False">
+            <param name="low_cov_depth_freq" argument="--low-cov-depth-freq" optional="True" type="integer" min="0" label="QC: Frequency below this coverage are considered low coverage" value="20" help="default = 20"/>
+            <param name="min_ambiguous_tiles" argument="--min-ambiguous-tiles" optional="True" type="integer" min="0" label="QC: Min number of tiles missing for Ambiguous Result" value="3" help="default = 3"/>
+            <param name="max_missing_tiles" argument="--max-missing-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/>
+            <param name="max_intermediate_tiles" argument="--max-intermediate-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/> 
+        </section>
     </inputs>
     <outputs>
         <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
         <data format="tabular" name="match_results.tab" from_work_dir="match_results.tab" label="match_results.tab"/>
+        <data format="tabular" name="tech_results.tab" from_work_dir="tech_results.tab" label="tech_results.tab"/>
     </outputs>
     <tests>
         <test>
@@ -123,16 +150,17 @@
             <param name="fastq_input1" value="SRR1002850_SMALL.fasta"/>
             <output name="results.tab">
                 <assert_contents>
-                    <!-- Verifying that the columns are as expected. -->
-                    <has_text_matching expression="sample\s+scheme\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_total\s+n_tiles_matching_positive\s+n_tiles_matching_positive_total\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_total\s+file_path"/>
-                    <!-- Verifying that the output of running the test file is expected. This is done via REGEX because the name and path of the file outputted to results.tab changes each test. -->
-                    <has_text_matching expression="(heidelberg)\s+(2.2.2.2.1.4)\s+(2;)\s+(2.2;)\s+(2.2.2;)\s+(2.2.2.2;)\s+(2.2.2.2.1;)\s+(2.2.2.2.1.4)\s+(1037658-2.2.2.2.1.4;)\s+(2154958-2.2.2.2.1.4;)\s+(3785187-2.2.2.2.1.4)\s+(True)\s+(202)\s+(202)\s+(17)\s+(17)\s+(3)\s+(3)"/>
+                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
                 </assert_contents>
             </output>
             <output name="match_results.tab">
                 <assert_contents>
-                    <!-- This is the last line in the file, this assertion is to make sure that we have the correct number of items. -->
-                    <has_text_matching expression="negative4738855-1.1"/>
+                    <has_text_matching expression="tilename\s+seq\s+is_revcomp\s+contig_id\s+match_index\s+refposition\s+subtype\s+is_pos_tile\s+sample\s+file_path\s+scheme\s+scheme_version\s+qc_status\s+qc_message"/>
+                </assert_contents>
+            </output>
+            <output name="tech_results.tab">
+                <assert_contents>
+                    <has_text_matching expression="sample\s+subtype\s+qc_status\s+qc_message"/>
                 </assert_contents>
             </output>
         </test>
@@ -143,10 +171,17 @@
             <param name="fastq_input2" value="SRR5646583_SMALL_2.fastq"/>
             <output name="results.tab">
                 <assert_contents>
-                    <!-- Verifying that the columns are as expected. -->
-                    <has_text_matching expression="sample\s+scheme\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_total\s+n_tiles_matching_positive\s+n_tiles_matching_positive_total\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_total\s+file_path"/>
-                    <!-- Verifying that the output of running the test file is expected. This is done via REGEX because the name and path of the file outputted to results.tab changes each test. -->
-                    <has_text_matching expression="(heidelberg)\s+(2.2.1.1.1.1)\s+(2;)\s+(2.2;)\s+(2.2.1;)\s+(2.2.1.1;)\s+(2.2.1.1.1;)\s+(2.2.1.1.1.1)\s+(1983064-2.2.1.1.1.1;)\s+(4211912-2.2.1.1.1.1)\s+(True)\s+(202)\s+(202)\s+(20)\s+(20)\s+(2)\s+(2)"/>
+                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
+                </assert_contents>
+            </output>
+            <output name="match_results.tab">
+                <assert_contents>
+                    <has_text_matching expression="tilename\s+seq\s+freq\s+refposition\s+subtype\s+is_pos_tile\s+is_kmer_freq_okay\s+sample\s+scheme\s+scheme_version\s+qc_status\s+qc_message"/>
+                </assert_contents>
+            </output>
+            <output name="tech_results.tab">
+                <assert_contents>
+                    <has_text_matching expression="sample\s+subtype\s+qc_status\s+qc_message"/>
                 </assert_contents>
             </output>
         </test>
