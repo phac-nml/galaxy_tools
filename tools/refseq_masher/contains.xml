@@ -9,62 +9,134 @@
   <command detect_errors="exit_code">
 <![CDATA[
 
-#for $input in $inputs
-  ln -s '$input' '$input.name' &&
-#end for
+#import re
 
-refseq_masher 
-  $verbosity 
-  contains 
-  --output refseq_masher-contains.$output_type
-  --output-type $output_type
-  --top-n-results $top_n_results
-  -p "\${GALAXY_SLOTS:-1}"
-
-#for $input in $inputs
-  $input.name
+#if $input.type == 'fasta'
+#set $input_files = '"{}"'.format($input.fasta.name)
+  ln -s "$input.fasta" $input_files &&
+#elif $input.type == 'paired'
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
+#set $_forward = '"{}_1{}"'.format($re.sub(r'_[12]\..+$', '', $input.forward.name), $_forward_ext)
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.reverse.name) else '.fastq'
+#set $_reverse = '"{}_2{}"'.format($re.sub(r'_[12]\..+$', '', $input.reverse.name), $_reverse_ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.forward" $_forward &&
+  ln -s "$input.reverse" $_reverse &&
+#elif $input.type == 'single'
+#set $input_files = '"{}"'.format($input.single.name)
+  ln -s "$input.single" $input_files &&
+#elif $input.type == 'paired_collection'
+#set $_forward = '"{}_1.{}"'.format($input.paired_collection.name, $input.paired_collection.forward.ext)
+#set $_reverse = '"{}_2.{}"'.format($input.paired_collection.name, $input.paired_collection.reverse.ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.paired_collection.forward" $_forward &&
+  ln -s "$input.paired_collection.reverse" $_reverse &&
+#elif $input.type == 'fasta_collection'
+#set $input_files = ' '.join(['"{}"'.format($_x.name) for $_x in $input.fasta_collection])
+#for $_fasta in $input.fasta_collection
+  ln -s "$_fasta" "$_fasta.name" &&
 #end for
+#end if
+
+
+refseq_masher
+  $adv.verbosity
+  contains
+  --output refseq_masher-contains.${adv.output_type}
+  --output-type $adv.output_type
+  --top-n-results $adv.top_n_results
+  --parallelism "\${GALAXY_SLOTS:-1}"
+  --min-identity $adv.min_identity
+  --max-pvalue $adv.max_pvalue
+  $input_files
+
 ]]>
   </command>
   <inputs>
-    <param name="inputs"
-      type="data" format="fasta, fastq, fastqsanger"
-      label="Input FASTQs/FASTAs"
-      optional="true"
-      multiple="true"
-      />
-    <param name="output_type"
-      type="select"
-      label="Output type"
-      multiple="false">
-      <option value="tab" selected="true">Tabular (tab-delimited values)</option>
-      <option value="csv">CSV (Comma Separated Values)</option>
-    </param>
-    <param name="top_n_results"
-      type="integer"
-      label="Top N matches to report (0 to report all)"
-      min="0"
-      value="0"
-      optional="true"
-      />
-    <param name="min_identity" 
-      type="float" value="0.9" min="0.0" max="1.0"
-      label="Mash screen min. identity to report"
-      optional="true"
-      />
-    <param name="max_pvalue"
-      type="float" value="0.01" min="0.0" max="1.0"
-      label="Mash screen max. p-value to report"
-      optional="true"
-      />
-    <param name="verbosity"
-      type="select"
-      label="Logging verbosity">
-      <option value="">Error messages only</option>
-      <option value="-v">Show warning messages</option>
-      <option value="-vv" selected="true">Show info messages</option>
-      <option value="-vvv">Show debug messages</option>
-    </param>
+    <conditional name="input">
+      <param name="type" type="select" label="Sequence input type">
+        <option value="fasta">FASTA</option>
+        <option value="paired">Paired-end</option>
+        <option value="single">Single-end</option>
+        <option value="paired_collection">Paired-end collection</option>
+        <option value="fasta_collection">FASTA collection</option>
+      </param>
+      <when value="fasta">
+        <param name="fasta"
+          type="data" format="fasta"
+          optional="false"
+          />
+      </when>
+      <when value="paired">
+        <param name="forward"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Forward FASTQ file"
+          help="Must have ASCII encoded quality scores"
+          />
+        <param name="reverse"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Reverse FASTQ file"
+          help="File format must match the Forward FASTQ file"
+          />
+      </when>
+      <when value="single">
+        <param name="single"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Single-end FASTQ file"
+          />
+      </when>
+      <when value="paired_collection">
+        <param name="paired_collection"
+          type="data_collection" format="txt,fastq,fastqsanger,fastqillumina,fastqsolexa"
+          collection_type="paired"
+          optional="false"
+          label="Paired-end FASTQ collection"
+          help=""
+          />
+      </when>
+      <when value="fasta_collection">
+        <param name="fasta_collection"
+        type="data_collection" format="fasta"
+        />
+      </when>
+    </conditional>
+    <section name="adv" title="Advanced Options" expanded="false">
+      <param name="top_n_results"
+        type="integer"
+        label="Top N matches to report (0 to report all)"
+        min="0"
+        value="0"
+        optional="true"
+        />
+      <param name="min_identity" 
+        type="float" value="0.9" min="0.0" max="1.0"
+        label="Mash dist min. identity to report"
+        optional="true"
+        />
+      <param name="max_pvalue"
+        type="float" value="0.01" min="0.0" max="1.0"
+        label="Mash screen max. p-value to report"
+        optional="true"
+        />
+      <param name="output_type"
+        type="select"
+        label="Output type"
+        multiple="false">
+        <option value="tab" selected="true">Tabular (tab-delimited values)</option>
+        <option value="csv">CSV (Comma Separated Values)</option>
+      </param>
+      <param name="verbosity"
+        type="select"
+        label="Logging verbosity">
+        <option value="">Error messages only</option>
+        <option value="-v">Show warning messages</option>
+        <option value="-vv" selected="true">Show info messages</option>
+        <option value="-vvv">Show debug messages</option>
+      </param>
+    </section>
   </inputs>
   <outputs>
     <data 
@@ -72,23 +144,28 @@ refseq_masher
       format="csv" 
       label="RefSeq Masher contains table"
       from_work_dir="refseq_masher-contains.csv">
-      <filter>output_type == "csv"</filter>
+      <filter>adv['output_type'] == 'csv'</filter>
     </data>
     <data 
       name="output_path_tab" 
       format="tabular" 
       label="RefSeq Masher contains table"
       from_work_dir="refseq_masher-contains.tab">
-      <filter>output_type == "tab"</filter>
+      <filter>adv['output_type'] == 'tab'</filter>
     </data>
   </outputs>
   <tests>
     <test>
-      <param name="inputs" value="SRR1203042_1-head4000.fastq"/>
-      <param name="top_n_results" value="5"/>
-      <param name="output_type" value="tab"/>
-      <param name="min_identity" value="0.9"/>
-      <param name="max_pvalue" value="0.01"/>
+      <conditional name="input">
+        <param name="type" value="single"/>
+        <param name="single" value="SRR1203042_1-head4000.fastq"/>
+      </conditional>
+      <section name="adv">
+        <param name="top_n_results" value="5"/>
+        <param name="output_type" value="tab"/>
+        <param name="min_identity" value="0.9"/>
+        <param name="max_pvalue" value="0.01"/>
+      </section>
       <output name="output_path_tab"
         value="SRR1203042_1-head4000-contains.tab"
         ftype="tabular"

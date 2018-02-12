@@ -9,86 +9,158 @@
   <command detect_errors="exit_code">
 <![CDATA[
 
-#for $input in $inputs
-  ln -s '$input' '$input.name' &&
-#end for
+#import re
 
-refseq_masher 
-  $verbosity 
-  matches 
-  --output refseq_masher-matches.$output_type
-  --output-type $output_type
-  --top-n-results $top_n_results
-#if $min_kmer_threshold
-  --min-kmer-threshold $min_kmer_threshold
+#if $input.type == 'fasta'
+#set $input_files = '"{}"'.format($input.fasta.name)
+  ln -s "$input.fasta" $input_files &&
+#elif $input.type == 'paired'
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
+#set $_forward = '"{}_1{}"'.format($re.sub(r'_[12]\..+$', '', $input.forward.name), $_forward_ext)
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.reverse.name) else '.fastq'
+#set $_reverse = '"{}_2{}"'.format($re.sub(r'_[12]\..+$', '', $input.reverse.name), $_reverse_ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.forward" $_forward &&
+  ln -s "$input.reverse" $_reverse &&
+#elif $input.type == 'single'
+#set $input_files = '"{}"'.format($input.single.name)
+  ln -s "$input.single" $input_files &&
+#elif $input.type == 'paired_collection'
+#set $_forward = '"{}_1.{}"'.format($input.paired_collection.name, $input.paired_collection.forward.ext)
+#set $_reverse = '"{}_2.{}"'.format($input.paired_collection.name, $input.paired_collection.reverse.ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.paired_collection.forward" $_forward &&
+  ln -s "$input.paired_collection.reverse" $_reverse &&
+#elif $input.type == 'fasta_collection'
+#set $input_files = ' '.join(['"{}"'.format($_x.name) for $_x in $input.fasta_collection])
+#for $_fasta in $input.fasta_collection
+  ln -s "$_fasta" "$_fasta.name" &&
+#end for
 #end if
 
-#for $input in $inputs
-  $input.name
-#end for
+refseq_masher 
+  $adv.verbosity 
+  matches 
+  --output refseq_masher-matches.${adv.output_type}
+  --output-type $adv.output_type
+  --top-n-results $top_n_results
+#if $adv.min_kmer_threshold
+  --min-kmer-threshold $adv.min_kmer_threshold
+#end if
+  $input_files
 ]]>
   </command>
   <inputs>
-    <param name="inputs"
-      type="data"
-      label="Input FASTQs/FASTAs"
-      optional="true"
-      multiple="true"
-      format="fasta, fastq, fastqsanger"
-      />
-    <param name="output_type"
-      type="select"
-      label="Output type"
-      multiple="false">
-      <option value="tab" selected="true">
-        Tabular (tab-delimited values)
-      </option>
-      <option value="csv">
-        CSV (Comma Separated Values)
-      </option>
-    </param>
+    <conditional name="input">
+      <param name="type" type="select" label="Sequence input type">
+        <option value="fasta">Genome FASTA</option>
+        <option value="paired">Paired-end FASTQs</option>
+        <option value="single">Single-end FASTQ</option>
+        <option value="paired_collection">Paired-end FASTQ collection</option>
+        <option value="fasta_collection">Genome FASTA collection</option>
+      </param>
+      <when value="fasta">
+        <param name="fasta"
+          type="data" format="fasta"
+          optional="false"
+          label="Genome FASTA file"
+          />
+      </when>
+      <when value="paired">
+        <param name="forward"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Forward FASTQ file"
+          />
+        <param name="reverse"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Reverse FASTQ file"
+          help="File format must match the Forward FASTQ file"
+          />
+      </when>
+      <when value="single">
+        <param name="single"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Single-end FASTQ file"
+          />
+      </when>
+      <when value="paired_collection">
+        <param name="paired_collection"
+          type="data_collection" format="txt,fastq,fastqsanger,fastqillumina,fastqsolexa"
+          collection_type="paired"
+          optional="false"
+          label="Paired-end FASTQ collection"
+          />
+      </when>
+      <when value="fasta_collection">
+        <param name="fasta_collection"
+        type="data_collection" format="fasta"
+        label="Genome FASTA file collection"
+        />
+      </when>
+    </conditional>
     <param name="top_n_results"
       type="integer"
-      label="Top N matches to report"
       min="0"
       value="5"
       optional="true"
+      label="Top N matches to report"
       />
-    <param name="min_kmer_threshold"
-      type="integer"
-      min="1"
-      value="8"
-      label="Mash sketch of reads: Minimum copies of each k-mer required to pass noise filter for reads (default=8)"
-      optional="true"
-      />
-    <param name="verbosity"
-      type="select"
-      label="Logging verbosity">
-      <option value="">Error messages only</option>
-      <option value="-v">Show warning messages</option>
-      <option value="-vv" selected="true">Show info messages</option>
-      <option value="-vvv">Show debug messages</option>
-    </param>
+    <section name="adv" title="Advanced Options" expanded="false">
+      <param name="min_kmer_threshold"
+        type="integer"
+        min="1"
+        value="8"
+        optional="true"
+        label="Mash sketch of reads: Minimum copies of each k-mer required to pass noise filter for reads (default=8)"
+        />
+      <param name="output_type"
+        type="select"
+        label="Output type"
+        multiple="false">
+        <option value="tab" selected="true">
+          Tabular (tab-delimited values)
+        </option>
+        <option value="csv">
+          CSV (Comma Separated Values)
+        </option>
+      </param>
+      <param name="verbosity"
+        type="select"
+        label="Logging verbosity">
+        <option value="">Error messages only</option>
+        <option value="-v">Show warning messages</option>
+        <option value="-vv" selected="true">Show info messages</option>
+        <option value="-vvv">Show debug messages</option>
+      </param>
+    </section>
   </inputs>
   <outputs>
     <data name="output_path_csv" 
       format="csv" 
       label="RefSeq Masher matches table"
       from_work_dir="refseq_masher-matches.csv">
-      <filter>output_type == "csv"</filter>
+      <filter>adv['output_type'] == 'csv'</filter>
     </data>
     <data name="output_path_tab" 
       format="tabular" 
       label="RefSeq Masher matches table"
       from_work_dir="refseq_masher-matches.tab">
-      <filter>output_type == "tab"</filter>
+      <filter>adv['output_type'] == 'tab'</filter>
     </data>
   </outputs>
   <tests>
     <test>
-      <param name="inputs" value="Se-Enteritidis.fasta"/>
+      <conditional name="input">
+        <param name="type" value="fasta"/>
+        <param name="fasta" value="Se-Enteritidis.fasta"/>
+      </conditional>
       <param name="top_n_results" value="1"/>
-      <param name="output_type" value="tab"/>
+      <section name="adv">
+        <param name="output_type" value="tab"/>
+      </section>
       <output name="output_path_tab"
         value="Se-Enteritidis-refseq_masher-matches.tab"
         ftype="tabular"
@@ -96,10 +168,15 @@ refseq_masher
       </output>
     </test>
     <test>
-      <param name="inputs" value="SRR1203042_1-head4000.fastq"/>
+      <conditional name="input">
+        <param name="type" value="single"/>
+        <param name="single" value="SRR1203042_1-head4000.fastq"/>
+      </conditional>
       <param name="top_n_results" value="1"/>
-      <param name="min_kmer_threshold" value="2"/>
-      <param name="output_type" value="tab"/>
+      <section name="adv">
+        <param name="output_type" value="tab"/>
+        <param name="min_kmer_threshold" value="2"/>
+      </section>
       <output name="output_path_tab"
         value="SRR1203042_1-head4000-refseq_masher-matches-m2.tab"
         ftype="tabular"
