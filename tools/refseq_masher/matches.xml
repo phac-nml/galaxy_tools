@@ -4,7 +4,7 @@
   </description>
   <requirements>
     <requirement type="package" version="2.0">mash</requirement>
-    <requirement type="package" version="0.1.0">refseq_masher</requirement>
+    <requirement type="package" version="0.1.1">refseq_masher</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -47,6 +47,7 @@ refseq_masher
 #if $adv.min_kmer_threshold
   --min-kmer-threshold $adv.min_kmer_threshold
 #end if
+  -T "\${TMPDIR:-/tmp}"
   $input_files
 ]]>
   </command>
@@ -189,7 +190,7 @@ refseq_masher
 RefSeq Masher - Genomic Distance
 ================================
 
-Find what NCBI RefSeq genomes match most closely match your sequence data using Mash_ with a Mash sketch database of 54,925 NCBI RefSeq Genomes.
+Find what NCBI RefSeq genomes most closely match your sequence data using Mash_ with a Mash sketch database of 54,925 NCBI RefSeq Genomes.
 
 
 Source code available on Github at https://github.com/phac-nml/refseq_masher

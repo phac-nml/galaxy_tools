@@ -4,7 +4,7 @@
   </description>
   <requirements>
     <requirement type="package" version="2.0">mash</requirement>
-    <requirement type="package" version="0.1.0">refseq_masher</requirement>
+    <requirement type="package" version="0.1.1">refseq_masher</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
