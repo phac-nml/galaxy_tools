@@ -31,11 +31,6 @@
 #set $input_files = '{} {}'.format($_forward, $_reverse)
   ln -s "$input.paired_collection.forward" $_forward &&
   ln -s "$input.paired_collection.reverse" $_reverse &&
-#elif $input.type == 'fasta_collection'
-#set $input_files = ' '.join(['"{}"'.format($_x.name) for $_x in $input.fasta_collection])
-#for $_fasta in $input.fasta_collection
-  ln -s "$_fasta" "$_fasta.name" &&
-#end for
 #end if
 
 
@@ -59,7 +54,6 @@ refseq_masher
         <option value="paired">Paired-end</option>
         <option value="single">Single-end</option>
         <option value="paired_collection">Paired-end collection</option>
-        <option value="fasta_collection">FASTA collection</option>
       </param>
       <when value="fasta">
         <param name="fasta"
@@ -96,11 +90,6 @@ refseq_masher
           label="Paired-end FASTQ collection"
           help=""
           />
-      </when>
-      <when value="fasta_collection">
-        <param name="fasta_collection"
-        type="data_collection" format="fasta"
-        />
       </when>
     </conditional>
     <section name="adv" title="Advanced Options" expanded="false">
