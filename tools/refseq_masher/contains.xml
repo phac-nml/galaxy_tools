@@ -1,4 +1,4 @@
-<tool id="refseq_masher_contains" name="RefSeq Masher Contains" version="0.1.0">
+<tool id="refseq_masher_contains" name="RefSeq Masher Contains" version="0.1.1">
   <description>
     Find NCBI RefSeq Genomes contained in your sequences
   </description>
