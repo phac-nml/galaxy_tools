@@ -85,7 +85,7 @@ refseq_masher
       </when>
       <when value="paired_collection">
         <param name="paired_collection"
-          type="data_collection" format="txt,fastq,fastqsanger,fastqillumina,fastqsolexa"
+          type="data_collection" format="fastq,fastqsanger,fastqillumina,fastqsolexa,fastq.gz,txt"
           collection_type="paired"
           optional="false"
           label="Paired-end FASTQ collection"
