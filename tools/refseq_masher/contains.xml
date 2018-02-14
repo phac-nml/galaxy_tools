@@ -25,15 +25,14 @@
 #set $input_files = '"{}"'.format($input.single.name)
   ln -s "$input.single" $input_files &&
 #elif $input.type == 'paired_collection'
-#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.paired_collection.forward) else '.fastq'
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.forward)) else '.fastq'
 #set $_forward = '"{}_1{}"'.format($input.paired_collection.name, $_forward_ext)
-#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.paired_collection.reverse) else '.fastq'
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.reverse)) else '.fastq'
 #set $_reverse = '"{}_2{}"'.format($input.paired_collection.name, $_reverse_ext)
 #set $input_files = '{} {}'.format($_forward, $_reverse)
   ln -s "$input.paired_collection.forward" $_forward &&
   ln -s "$input.paired_collection.reverse" $_reverse &&
 #end if
-
 
 refseq_masher
   $adv.verbosity
