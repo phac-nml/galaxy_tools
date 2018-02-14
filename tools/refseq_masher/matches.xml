@@ -3,7 +3,6 @@
     Find closest matching NCBI RefSeq Genomes to your sequences
   </description>
   <requirements>
-    <requirement type="package" version="2.0">mash</requirement>
     <requirement type="package" version="0.1.1">refseq_masher</requirement>
   </requirements>
   <command detect_errors="exit_code">
@@ -26,8 +25,10 @@
 #set $input_files = '"{}"'.format($input.single.name)
   ln -s "$input.single" $input_files &&
 #elif $input.type == 'paired_collection'
-#set $_forward = '"{}_1.{}"'.format($input.paired_collection.name, $input.paired_collection.forward.ext)
-#set $_reverse = '"{}_2.{}"'.format($input.paired_collection.name, $input.paired_collection.reverse.ext)
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.paired_collection.forward) else '.fastq'
+#set $_forward = '"{}_1{}"'.format($input.paired_collection.name, $_forward_ext)
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.paired_collection.reverse) else '.fastq'
+#set $_reverse = '"{}_2.{}"'.format($input.paired_collection.name, $_reverse_ext)
 #set $input_files = '{} {}'.format($_forward, $_reverse)
   ln -s "$input.paired_collection.forward" $_forward &&
   ln -s "$input.paired_collection.reverse" $_reverse &&
@@ -93,9 +94,9 @@ refseq_masher
     <param name="top_n_results"
       type="integer"
       min="0"
-      value="5"
+      value="20"
       optional="true"
-      label="Top N matches to report"
+      label="Top N matches to report (set to 0 to report all)"
       />
     <section name="adv" title="Advanced Options" expanded="false">
       <param name="min_kmer_threshold"
