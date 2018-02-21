@@ -1,4 +1,4 @@
-<tool id="bio_hansel" name="Bio Hansel" version="1.2.0">
+<tool id="bio_hansel" name="Bio Hansel" version="1.2.1">
     <description>SNV Subtyping with genome assemblies or reads</description>
     <requirements>
         <requirement type="package" version="1.2.0">bio_hansel</requirement>
