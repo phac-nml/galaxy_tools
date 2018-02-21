@@ -168,7 +168,6 @@
         <data format="json" name="tech_results.json" from_work_dir="tech_results.tab.json" label="tech_results.json">
         	<filter>dev_args['use_json'] == "yes"</filter>
         </data>
-
     </outputs>
     <tests>
         <test>
