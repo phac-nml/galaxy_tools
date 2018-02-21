@@ -80,6 +80,10 @@
             --max-intermediate-tiles $qc_vals.max_intermediate_tiles
         #end if
 
+		#if $qc_vals.low_coverage_warning
+            --low-cov-warning $qc_vals.low_coverage_warning
+        #end if
+
         ## Adding more parameters to the command.
         -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab -S tech_results.tab
 
@@ -147,6 +151,7 @@
             <param name="min_ambiguous_tiles" argument="--min-ambiguous-tiles" optional="True" type="integer" min="0" label="QC: Min number of tiles missing for Ambiguous Result" value="3" help="default = 3"/>
             <param name="max_missing_tiles" argument="--max-missing-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/>
             <param name="max_intermediate_tiles" argument="--max-intermediate-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/> 
+            <param name="low_coverage_warning" argument="--low-cov-warning" optional="True" type="integer" min="0" label="QC: Overall tile coverage below this value will trigger a low coverage warning" value="20" help="default = 20"/> 
         </section>
         <section name="dev_args" title="Developer Options" expanded="False">
         	<param name="use_json" type="select" label="Enable JSON output" help="Use this option of you need json representations of analysis' details">
