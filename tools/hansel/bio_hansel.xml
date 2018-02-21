@@ -1,29 +1,29 @@
-<tool id="bio_hansel" name="Bio Hansel" version="1.0.1">
+<tool id="bio_hansel" name="Bio Hansel" version="1.2.0">
     <description>SNV Subtyping with genome assemblies or reads</description>
     <requirements>
-        <requirement type="package" version="1.1.3">bio_hansel</requirement>
+        <requirement type="package" version="1.2.0">bio_hansel</requirement>
         <requirement type="package" version="17.2.0">attrs</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ## Preparing file input.
         #if $data_type.type == "paired":
 
-            ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
-            ln -s '$data_type.fastq_input2' '$data_type.fastq_input2.name' &&
+            ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fastq &&
+            ln -s '$data_type.fastq_input2' '$data_type.fastq_input2.name'.fastq &&
 
         #elif $data_type.type == "collection":
 
-            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1 &&
-            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2 &&
+            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1.fastq &&
+            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2.fastq &&
 
         #elif $data_type.type == "single":
 
             #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fastq &&
             #end if
 
             #if $data_type.fastq_input1.is_of_type('fasta'):
-                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name' &&
+                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fasta &&
             #end if
 
         #end if
@@ -51,6 +51,10 @@
             '$type_of_scheme.scheme_input.name'
         #end if
 
+        ## Use Json output
+        #if $dev_args.use_json == "yes":
+        	--json
+        #end if
 
         #if $kmer_vals.kmer_min
             --min-kmer-freq $kmer_vals.kmer_min
@@ -83,13 +87,20 @@
         ## Entering the file inputs
 
         #if $data_type.type == "single":
-            '$data_type.fastq_input1.name'
+
+            #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
+                '$data_type.fastq_input1.name'.fastq
+            #end if
+
+            #if $data_type.fastq_input1.is_of_type('fasta'):
+                '$data_type.fastq_input1.name'.fasta
+            #end if
 
         #elif $data_type.type =="collection":
-            -p '$data_type.fastq_input1.name'_1  '$data_type.fastq_input1.name'_2
+            -p '$data_type.fastq_input1.name'_1.fastq  '$data_type.fastq_input1.name'_2.fastq
         
         #elif $data_type.type =="paired":
-            -p '$data_type.fastq_input1.name'  '$data_type.fastq_input2.name'
+            -p '$data_type.fastq_input1.name'.fastq  '$data_type.fastq_input2.name'.fastq
 
         #end if
 
@@ -137,11 +148,26 @@
             <param name="max_missing_tiles" argument="--max-missing-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/>
             <param name="max_intermediate_tiles" argument="--max-intermediate-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/> 
         </section>
+        <section name="dev_args" title="Developer Options" expanded="False">
+        	<param name="use_json" type="select" label="Enable JSON output" help="Use this option of you need json representations of analysis' details">
+            	<option value="no">no</option>
+            	<option value="yes">yes</option>
+        	</param>
+    	</section>
     </inputs>
     <outputs>
         <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
         <data format="tabular" name="match_results.tab" from_work_dir="match_results.tab" label="match_results.tab"/>
         <data format="tabular" name="tech_results.tab" from_work_dir="tech_results.tab" label="tech_results.tab"/>
+        <data format="json" name="results.json" from_work_dir="results.tab.json" label="results.json">
+        	<filter>dev_args['use_json'] == "yes"</filter>
+       	</data>
+        <data format="json" name="match_results.json" from_work_dir="match_results.tab.json" label="match_results.json">
+        	<filter>dev_args['use_json'] == "yes"</filter>
+        </data>
+        <data format="json" name="tech_results.json" from_work_dir="tech_results.tab.json" label="tech_results.json">
+        	<filter>dev_args['use_json'] == "yes"</filter>
+        </data>
     </outputs>
     <tests>
         <test>
@@ -150,7 +176,7 @@
             <param name="fastq_input1" value="SRR1002850_SMALL.fasta"/>
             <output name="results.tab">
                 <assert_contents>
-                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
+                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
                 </assert_contents>
             </output>
             <output name="match_results.tab">
@@ -171,7 +197,7 @@
             <param name="fastq_input2" value="SRR5646583_SMALL_2.fastq"/>
             <output name="results.tab">
                 <assert_contents>
-                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
+                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path"/>
                 </assert_contents>
             </output>
             <output name="match_results.tab">
@@ -181,7 +207,7 @@
             </output>
             <output name="tech_results.tab">
                 <assert_contents>
-                    <has_text_matching expression="sample\s+subtype\s+qc_status\s+qc_message"/>
+                    <has_text_matching expression="sample\s+subtype\s+avg_tile_coverage\s+qc_status\s+qc_message"/>
                 </assert_contents>
             </output>
         </test>
