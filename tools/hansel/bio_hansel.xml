@@ -80,7 +80,7 @@
             --max-intermediate-tiles $qc_vals.max_intermediate_tiles
         #end if
 
-		#if $qc_vals.low_coverage_warning
+	#if $qc_vals.low_coverage_warning
             --low-cov-warning $qc_vals.low_coverage_warning
         #end if
 
