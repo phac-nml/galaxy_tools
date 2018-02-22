@@ -53,7 +53,7 @@
 
         ## Use Json output
         #if $dev_args.use_json == "yes":
-        	--json
+            --json
         #end if
 
         #if $kmer_vals.kmer_min
@@ -80,7 +80,7 @@
             --max-intermediate-tiles $qc_vals.max_intermediate_tiles
         #end if
 
-	#if $qc_vals.low_coverage_warning
+        #if $qc_vals.low_coverage_warning
             --low-cov-warning $qc_vals.low_coverage_warning
         #end if
 
@@ -105,9 +105,7 @@
         
         #elif $data_type.type =="paired":
             -p '$data_type.fastq_input1.name'.fastq  '$data_type.fastq_input2.name'.fastq
-
         #end if
-
 
     ]]></command>
     <inputs>
@@ -154,24 +152,24 @@
             <param name="low_coverage_warning" argument="--low-cov-warning" optional="True" type="integer" min="0" label="QC: Overall tile coverage below this value will trigger a low coverage warning" value="20" help="default = 20"/> 
         </section>
         <section name="dev_args" title="Developer Options" expanded="False">
-        	<param name="use_json" type="select" label="Enable JSON output" help="Use this option of you need json representations of analysis' details">
-            	<option value="no">no</option>
-            	<option value="yes">yes</option>
-        	</param>
-    	</section>
+            <param name="use_json" type="select" label="Enable JSON output" help="Use this option of you need json representations of analysis' details">
+                <option value="no">no</option>
+                <option value="yes">yes</option>
+            </param>
+        </section>
     </inputs>
     <outputs>
         <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
         <data format="tabular" name="match_results.tab" from_work_dir="match_results.tab" label="match_results.tab"/>
         <data format="tabular" name="tech_results.tab" from_work_dir="tech_results.tab" label="tech_results.tab"/>
         <data format="json" name="results.json" from_work_dir="results.tab.json" label="results.json">
-        	<filter>dev_args['use_json'] == "yes"</filter>
-       	</data>
+            <filter>dev_args['use_json'] == "yes"</filter>
+        </data>
         <data format="json" name="match_results.json" from_work_dir="match_results.tab.json" label="match_results.json">
-        	<filter>dev_args['use_json'] == "yes"</filter>
+            <filter>dev_args['use_json'] == "yes"</filter>
         </data>
         <data format="json" name="tech_results.json" from_work_dir="tech_results.tab.json" label="tech_results.json">
-        	<filter>dev_args['use_json'] == "yes"</filter>
+            <filter>dev_args['use_json'] == "yes"</filter>
         </data>
     </outputs>
     <tests>
