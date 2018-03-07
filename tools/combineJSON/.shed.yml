@@ -1,4 +1,4 @@
 categories: [Sequence Analysis]
 description: JSON collection tool that takes multiple JSON data arrays and combines them into a single JSON array.
-name: combineJSON
+name: combine_json
 owner: nml
