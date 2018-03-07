@@ -1,0 +1,77 @@
+<tool id="combineJSON" name="Combine Json" version="0.1">
+  <description>Combine multiple JSON Arrays</description>
+  <command detect_errors="exit_code"><![CDATA[
+    python $__tool_directory__/combineJSON.py
+
+    -i
+
+    #for $f in $json_files.keys
+      $json_files[$f]
+    #end for
+
+    -o 'jsoncombined.json'
+    ]]></command>
+  <inputs>
+    <param name="json_files" type="data_collection" label="Collection of JSON arrays" help="" optional="false" collection_type="list"/>
+  </inputs>
+  <outputs>
+      <data format="json" name="jsoncombined.json" from_work_dir="jsoncombined.json" label="Combined JSON Array"/>
+  </outputs>
+  <tests>
+      <test>
+          <param name="json_files">
+              <collection type="list">
+                  <element name="json1" value="json1.json" />
+                  <element name="json2" value="json2.json" />
+              </collection>
+          </param>
+          <output name="jsoncombined.json" file="jsoncombined.json" />
+      </test>
+  </tests>
+  <help><![CDATA[    
+***************
+  combineJSON
+***************
+
+This tool takes two or more JSON arrays and combines them into one JSON array.
+
+Usage
+=====
+1) Input JSON files in a dataset collection
+2) Click Execute
+
+Example
+=======
+
+.. code:: javascript
+
+    JsonArray1
+    [
+      {hello: test}
+    ]
+
+    JsonArray2
+    [
+      {world: testerson}
+    ]
+
+
+`combineJson -JsonArray1.json -JsonArray2.json`
+
+.. code:: javascript
+
+    JsonCombined
+    [
+      {hello: test},
+      {world: testerson}
+    ]
+
+  ]]></help>
+    <citations>
+      <citation type="bibtex">@ARTICLE{a1,
+          title = {JSON Combine}
+          author = {Matthew Gopez}
+          }
+      }</citation>
+    </citations>
+</tool>
