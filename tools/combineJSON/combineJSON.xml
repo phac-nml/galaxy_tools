@@ -1,4 +1,4 @@
-<tool id="combineJSON" name="Combine Json" version="0.1">
+<tool id="combine_json" name="Combine Json" version="0.1">
   <description>Combine multiple JSON Arrays</description>
   <command detect_errors="exit_code"><![CDATA[
     python $__tool_directory__/combineJSON.py
@@ -30,7 +30,7 @@
   </tests>
   <help><![CDATA[    
 ***************
-  combineJSON
+  combine_json
 ***************
 
 This tool takes two or more JSON arrays and combines them into one JSON array.
