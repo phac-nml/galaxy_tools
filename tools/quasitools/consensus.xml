@@ -1,7 +1,7 @@
 <tool id="consensus" name="Consensus Sequence" version="0.1.0">
     <description>Generate a consensus sequence from a BAM file</description>
     <requirements>
-          <requirement type="package" version="0.2.2">quasitools</requirement>
+          <requirement type="package" version="0.2.3">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
