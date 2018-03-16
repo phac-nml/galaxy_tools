@@ -95,7 +95,7 @@
         </conditional>
         <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
         <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
-        <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Reporting threshold" help="Minimum mutation frequency to report. Defaults to 20." />
+        <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Consensus percentage" help="Minimum mutation frequency to report. Defaults to 20." />
         <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
         <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
         <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
@@ -115,6 +115,9 @@
         <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
         <data format="vcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
         <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
+        <data format="fasta" label="HyDRA: consensus output" name="output_consensus" from_work_dir="output/consensus.fasta">
+            <filter>generate_consensus</filter>
+        </data>
     </outputs>
     <tests>
         <test>
