@@ -9,9 +9,9 @@
         quasitools consensus $input_bam $ref_file 
 
         #if $fasta_id.type == 'default':
-            -i $input_bam.name 
+            -i '${input_bam.element_identifier}' 
         #elif $fasta_id.type == 'custom':
-            -i $fasta_id.custom_id 
+            -i '${fasta_id.custom_id}'
         #end if
 
         #if $base_type.type == 'mixed':
