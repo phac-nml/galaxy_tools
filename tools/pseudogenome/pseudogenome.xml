@@ -1,0 +1,73 @@
+<tool id="pseudogenome" name="Create pseudo genome" version="1.0.0">
+  <description>from a fasta file in order of appearance</description>
+  <requirements>
+    <requirement type="package" version="1.6.924">perl-bioperl</requirement>
+    <requirement type="package" version="1.04">perl-readonly</requirement>
+    <requirement type="package" version="2.49">perl-getopt-long</requirement>
+    <requirement type="package" version="1.25">perl-ipc-system-simple</requirement>
+  </requirements>
+  <command detect_errors="exit_code"><![CDATA[
+    perl '$__tool_directory__/pseudogenome.pl' -i '$input'
+    
+    #if $stitch.howto == "jcvi":
+        -s
+    #else
+        -n '$stitch.number' -c '$stitch.glue'
+    #end if
+
+    -o '$output'
+  ]]></command>
+  <inputs>
+    <param name="input" type="data" format="fasta" label="Multi contig fasta file" optional="false"/>
+
+    <conditional name="stitch">
+      <param name="howto" type="select" label="How do you want to merge contigs?">
+        <option selected="true" value="jcvi">JCVI Linker</option>
+        <option value="custom">Custom options</option>
+      </param>
+      <when value="jcvi">
+      </when>
+      <when value="custom">
+	<param name="number" type="integer" value="10" label="Number of filler base pairs" optional="false"/>
+	<param name="glue" type="text" value="N" label="Character inserted between contigs" optional="false"/>
+      </when>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data format="fasta" name="output"/>
+  </outputs>
+  <tests>
+    <test>
+      <param name="input" value="input.fasta"/>
+      <output name="output" value="output.fasta"/>
+    </test>
+    <test>
+      <param name="input" value="input.fasta"/>
+      <param name="howto" value="custom"/>
+      <param name="number" value="50"/>
+      <param name="glue" value="X"/>
+      <output name="output" value="custom.fasta"/>
+    </test>    
+  </tests>
+  <help>
+
+What it does
+============
+This tool takes in a mult-contig fasta file and converts it into a pseudo genome.
+
+
+
+JCVI Linker
+============
+
+Linker is a 36 base pair sequence which places start and
+stop codons in all 6 reading frames to prevent gene for being predicted across contigs.
+
+Sequence below:
+
+"NNNNNCACACACTTAATTAATTAAGTGTGTGNNNNN"
+
+  </help>
+  <citations>
+  </citations>
+</tool>
