@@ -1,0 +1,5 @@
+categories: ["Sequence Analysis"]
+description: Create a pseudogenome from a multiple fasta file either with a JCVI linke or custom length and characters.
+name: pseudogenome
+owner: nml
+homepage_url: https://github.com/phac-nml/galaxy_tools
