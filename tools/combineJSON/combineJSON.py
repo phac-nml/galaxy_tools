@@ -22,7 +22,7 @@ args = parser.parse_args()
 input_files = args.i
 json_file = []
 
-if input_files is None or len(input_files) < 2:
+if input_files is None or len(input_files) < 1:
     print('Not enough input files. '
           'Please use -i filename.txt filename1.txt '
           'to combine JSON data files')
