@@ -1,7 +1,7 @@
 <tool id="aacoverage" name="Amino Acid Coverage" version="0.1.0">
     <description>Builds an aa census and returns its coverage</description>
     <requirements>
-          <requirement type="package" version="0.2.3">quasitools</requirement>
+          <requirement type="package" version="0.3.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 

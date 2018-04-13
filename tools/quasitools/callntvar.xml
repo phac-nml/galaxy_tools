@@ -1,7 +1,7 @@
 <tool id="callntvar" name="Nucleotide Variants" version="0.1.0">
     <description>Identifies nucleotide variants</description>
     <requirements>
-          <requirement type="package" version="0.2.3">quasitools</requirement>
+          <requirement type="package" version="0.3.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
     
