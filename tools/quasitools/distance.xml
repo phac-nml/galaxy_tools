@@ -1,0 +1,51 @@
+<tool id="distance" name="Quasispecies Distance" version="0.1.0">
+    <description>Calculate the evolutionary distance between viral quasispecies.</description>
+    <requirements>
+          <requirement type="package" version="0.3.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        #for $bam_file in $bam_files
+        ln -s $bam_file '${bam_file}.bam' &&
+        ln -s $bam_file.metadata.bam_index '${bam_file}.bai' &&
+        #end for
+
+        quasitools distance $ref_file
+
+        #for $bam_file in $bam_files
+        '${bam_file}.bam'
+        #end for
+
+        -o matrix.csv
+
+    ]]></command>
+    <inputs>
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="matrix" from_work_dir="matrix.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <param name="bam_files" value="quasi1.bam,quasi2.bam" />
+            <output name="matrix" ftype="csv" >
+                <assert_contents>
+                    <has_text_matching expression="Quasispecies"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Quasispecies Distance
+=====================
+
+Determines the evolutionary distance between viral quasispecies.
+Uses the angular cosine distance function by default.
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
