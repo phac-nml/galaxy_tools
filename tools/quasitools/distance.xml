@@ -18,10 +18,34 @@
 
         -o matrix.csv
 
+        $normalize
+
+        #if $low_coverage.coverage_selector == 'keep':
+            -k
+        #else if $low_coverage.coverage_selector == 'remove':
+            -r
+        #else if $low_coverage.coverage_selector == 'truncate':
+            -t
+        #end if
+
     ]]></command>
     <inputs>
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
         <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" />
+        <param name="normalize" type="boolean" truevalue="-n" falsevalue="-dn" checked="True" label="Normalize pileups" />
+        <conditional name="low_coverage">
+            <param name="coverage_selector" type="select" label="Choose how to deal with regions without coverage in the pileup">
+                <option value="remove" selected = "true">remove all zero coverage positions</option>
+                <option value="keep">keep all zero coverage positions</option>
+                <option value="truncate">truncate zero coverage positions at start and end of pileup</option>
+            </param>
+            <when value="remove">
+            </when>
+            <when value="keep">
+            </when>
+            <when value="truncate">
+            </when>
+        </conditional>
     </inputs>
     <outputs>
         <data format="csv" name="matrix" from_work_dir="matrix.csv" />
@@ -30,6 +54,8 @@
         <test>
             <param name="ref_file" value="hxb2_pol.fas" />
             <param name="bam_files" value="quasi1.bam,quasi2.bam" />
+            <param name="normalize" value="-n" />
+            <param name="coverage_selector" value="truncate" />
             <output name="matrix" ftype="csv" >
                 <assert_contents>
                     <has_text_matching expression="Quasispecies"/>
@@ -44,6 +70,17 @@ Quasispecies Distance
 
 Determines the evolutionary distance between viral quasispecies.
 Uses the angular cosine distance function by default.
+
+Inputs
+------
+
+1. FASTA Consensus file
+2. Two or more BAM files (otherwise tool will throw an error)
+
+Outputs
+-------
+
+CSV containing distance matrix.
 
     ]]></help>
     <citations>
