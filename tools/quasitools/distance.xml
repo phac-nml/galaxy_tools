@@ -38,14 +38,14 @@
     ]]></command>
     <inputs>
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" min="2" />
-        <param name="normalize" type="boolean" truevalue="-n" falsevalue="-dn" checked="True" label="Normalize pileups" />
-        <param name="output_similarity" type="boolean" truevalue="-os" falsevalue="-od" checked="False" label="Output cosine similarity instead of angular cosine distance." help="Cosine similarity is not a metric." />
+        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" min="2" help="At least two BAM files are required to perform quasispecies distance comparison."/>
+        <param name="normalize" type="boolean" truevalue="-n" falsevalue="-dn" checked="True" label="Normalize pileups" help="Normalize read count data so that the read counts per 4-tuple (A, C, T, G) sum to one."/>
+        <param name="output_similarity" type="boolean" truevalue="-os" falsevalue="-od" checked="False" label="Output cosine similarity instead of angular cosine distance." help="Cosine similarity is not a distance metric." />
         <conditional name="low_coverage">
-            <param name="coverage_selector" type="select" label="Choose how to treat zero coverage positions">
-                <option value="remove" selected = "true">remove all zero coverage positions</option>
-                <option value="keep">keep all zero coverage positions</option>
-                <option value="truncate">truncate zero coverage positions at start and end of pileup</option>
+            <param name="coverage_selector" type="select" label="Choose how to treat zero coverage positions.">
+                <option value="remove" selected = "true">Remove all zero coverage positions.</option>
+                <option value="keep">Keep all zero coverage positions.</option>
+                <option value="truncate">Truncate zero coverage positions at start and end of pileup.</option>
             </param>
             <when value="remove">
             </when>
@@ -55,7 +55,7 @@
             </when>
         </conditional>
         <conditional name="select_range">
-            <param name="manual_input" type="select" label="Select pileup range">
+            <param name="manual_input" type="select" label="Select pileup range.">
                 <option value="keep_range" selected = "true">Use original pileup for distance calculation.</option>
                 <option value="select_range">Manually select pileup's start and end position for distance calculation.</option>
             </param>
@@ -93,12 +93,21 @@ Quasispecies Distance
 Determines the evolutionary distance between viral quasispecies.
 Uses the angular cosine distance function by default.
 
+------
 Inputs
 ------
 
 1. FASTA Consensus file
 2. Two or more BAM files (otherwise tool will throw an error)
 
+----------
+Parameters
+----------
+1. Normalize pileup (True or False)
+2. Select custom start and end position.
+3. Choose how to treat zero coverage regions (keep, remove all, or truncate)
+
+-------
 Outputs
 -------
 
@@ -106,5 +115,13 @@ CSV containing distance matrix.
 
     ]]></help>
     <citations>
+        <citation type="bibtex">
+            @misc{GitHubquasitoolsdistance,
+            title = {quasitools distance},
+            publisher = {phac-nml},
+            journal = {GitHub repository},
+            url = {https://github.com/phac-nml/quasitools},
+            }
+        </citation>
     </citations>
 </tool>
