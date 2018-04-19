@@ -6,14 +6,14 @@
     <command detect_errors="exit_code"><![CDATA[
 
         #for $bam_file in $bam_files
-        ln -s $bam_file '${bam_file}.bam' &&
-        ln -s $bam_file.metadata.bam_index '${bam_file}.bai' &&
+        ln -s $bam_file '${bam_file.name}' &&
+        ln -s $bam_file.metadata.bam_index '${bam_file.name}.bai' &&
         #end for
 
         quasitools distance $ref_file
 
         #for $bam_file in $bam_files
-        '${bam_file}.bam'
+        '${bam_file.name}'
         #end for
 
         -o matrix.csv
@@ -28,13 +28,21 @@
             -t
         #end if
 
+        #if $select_range.manual_input == 'select_range':
+            -s $select_range.start
+            -e $select_range.end
+        #end if
+
+        $output_similarity
+
     ]]></command>
     <inputs>
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" />
+        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" min="2" />
         <param name="normalize" type="boolean" truevalue="-n" falsevalue="-dn" checked="True" label="Normalize pileups" />
+        <param name="output_similarity" type="boolean" truevalue="-os" falsevalue="-od" checked="False" label="Output cosine similarity instead of angular cosine distance." help="Cosine similarity is not a metric." />
         <conditional name="low_coverage">
-            <param name="coverage_selector" type="select" label="Choose how to deal with regions without coverage in the pileup">
+            <param name="coverage_selector" type="select" label="Choose how to treat zero coverage positions">
                 <option value="remove" selected = "true">remove all zero coverage positions</option>
                 <option value="keep">keep all zero coverage positions</option>
                 <option value="truncate">truncate zero coverage positions at start and end of pileup</option>
@@ -44,6 +52,18 @@
             <when value="keep">
             </when>
             <when value="truncate">
+            </when>
+        </conditional>
+        <conditional name="select_range">
+            <param name="manual_input" type="select" label="Select pileup range">
+                <option value="keep_range" selected = "true">Use original pileup for distance calculation.</option>
+                <option value="select_range">Manually select pileup's start and end position for distance calculation.</option>
+            </param>
+            <when value="select_range">
+                <param name="start" type="integer" optional="false" min="1" value="1" label="Select one-indexed start base position." help="Positions before start position will be ignored in the distance calculation." />
+                <param name="end" type="integer" optional="false" min="1" value="1" label="Select one-indexed end base position." help="Positions after end position will be ignored in the distance calculation." />
+            </when>
+            <when value="keep_range">
             </when>
         </conditional>
     </inputs>
@@ -56,6 +76,8 @@
             <param name="bam_files" value="quasi1.bam,quasi2.bam" />
             <param name="normalize" value="-n" />
             <param name="coverage_selector" value="truncate" />
+            <param name="manual_input" value="keep_range" />
+            <param name="output_similarity" value="-od" />
             <output name="matrix" ftype="csv" >
                 <assert_contents>
                     <has_text_matching expression="Quasispecies"/>
