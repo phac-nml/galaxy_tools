@@ -55,7 +55,7 @@
             </when>
         </conditional>
         <conditional name="select_range">
-            <param name="manual_input" type="select" label="Select pileup range.">
+            <param name="manual_input" type="select" label="Select pileup range." help="Currently only supports selection of custom start and end position for one single reference.">
                 <option value="keep_range" selected = "true">Use original pileup for distance calculation.</option>
                 <option value="select_range">Manually select pileup's start and end position for distance calculation.</option>
             </param>
@@ -104,7 +104,7 @@ Inputs
 Parameters
 ----------
 1. Normalize pileup (True or False)
-2. Select custom start and end position.
+2. Select custom start and end position. Currently only supports selection of custom start and end position for one single reference.
 3. Choose how to treat zero coverage regions (keep, remove all, or truncate)
 
 -------
