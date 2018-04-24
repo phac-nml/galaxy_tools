@@ -1,0 +1,127 @@
+<tool id="distance" name="Quasispecies Distance" version="0.1.0">
+    <description>Calculate the evolutionary distance between viral quasispecies.</description>
+    <requirements>
+          <requirement type="package" version="0.3.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        #for $bam_file in $bam_files
+        ln -s $bam_file '${bam_file.name}' &&
+        ln -s $bam_file.metadata.bam_index '${bam_file.name}.bai' &&
+        #end for
+
+        quasitools distance $ref_file
+
+        #for $bam_file in $bam_files
+        '${bam_file.name}'
+        #end for
+
+        -o matrix.csv
+
+        $normalize
+
+        #if $low_coverage.coverage_selector == 'keep':
+            -k
+        #else if $low_coverage.coverage_selector == 'remove':
+            -r
+        #else if $low_coverage.coverage_selector == 'truncate':
+            -t
+        #end if
+
+        #if $select_range.manual_input == 'select_range':
+            -s $select_range.start
+            -e $select_range.end
+        #end if
+
+        $output_similarity
+
+    ]]></command>
+    <inputs>
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="bam_files" type="data" format="bam" optional="false" multiple="true" label="BAM files" min="2" help="At least two BAM files are required to perform quasispecies distance comparison."/>
+        <param name="normalize" type="boolean" truevalue="-n" falsevalue="-dn" checked="True" label="Normalize pileups" help="Normalize read count data so that the read counts per 4-tuple (A, C, T, G) sum to one."/>
+        <param name="output_similarity" type="boolean" truevalue="-os" falsevalue="-od" checked="False" label="Output cosine similarity instead of angular cosine distance." help="Cosine similarity is not a distance metric." />
+        <conditional name="low_coverage">
+            <param name="coverage_selector" type="select" label="Choose how to treat zero coverage positions.">
+                <option value="remove" selected = "true">Remove all zero coverage positions.</option>
+                <option value="keep">Keep all zero coverage positions.</option>
+                <option value="truncate">Truncate zero coverage positions at start and end of pileup.</option>
+            </param>
+            <when value="remove">
+            </when>
+            <when value="keep">
+            </when>
+            <when value="truncate">
+            </when>
+        </conditional>
+        <conditional name="select_range">
+            <param name="manual_input" type="select" label="Select pileup range." help="Currently only supports selection of custom start and end position for one single reference.">
+                <option value="keep_range" selected = "true">Use original pileup for distance calculation.</option>
+                <option value="select_range">Manually select pileup's start and end position for distance calculation.</option>
+            </param>
+            <when value="select_range">
+                <param name="start" type="integer" optional="false" min="1" value="1" label="Select one-indexed start base position." help="Positions before start position will be ignored in the distance calculation." />
+                <param name="end" type="integer" optional="false" min="1" value="1" label="Select one-indexed end base position." help="Positions after end position will be ignored in the distance calculation." />
+            </when>
+            <when value="keep_range">
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format="csv" name="matrix" from_work_dir="matrix.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="ref_file" value="hxb2_pol.fas" />
+            <param name="bam_files" value="quasi1.bam,quasi2.bam" />
+            <param name="normalize" value="-n" />
+            <param name="coverage_selector" value="truncate" />
+            <param name="manual_input" value="keep_range" />
+            <param name="output_similarity" value="-od" />
+            <output name="matrix" ftype="csv" >
+                <assert_contents>
+                    <has_text_matching expression="Quasispecies"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Quasispecies Distance
+=====================
+
+Determines the evolutionary distance between viral quasispecies.
+Uses the angular cosine distance function by default.
+
+------
+Inputs
+------
+
+1. FASTA Consensus file
+2. Two or more BAM files (otherwise tool will throw an error)
+
+----------
+Parameters
+----------
+1. Normalize pileup (True or False)
+2. Select custom start and end position. Currently only supports selection of custom start and end position for one single reference.
+3. Choose how to treat zero coverage regions (keep, remove all, or truncate)
+
+-------
+Outputs
+-------
+
+CSV containing distance matrix.
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @misc{GitHubquasitoolsdistance,
+            title = {quasitools distance},
+            publisher = {phac-nml},
+            journal = {GitHub repository},
+            url = {https://github.com/phac-nml/quasitools},
+            }
+        </citation>
+    </citations>
+</tool>
