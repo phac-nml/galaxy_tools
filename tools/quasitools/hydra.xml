@@ -1,7 +1,7 @@
-<tool id="hydra" name="Hydra pipeline" version="0.1.0">
+<tool id="hydra" name="Hydra pipeline" version="0.2.0">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.2.3">quasitools</requirement>
+          <requirement type="package" version="0.3.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -64,8 +64,19 @@
             -mf '$min_freq' 
         #end if
 
-        #if $generate_consensus:
+        #if $consensus.consensus_bool == "true_consensus":
             --generate_consensus 
+
+            #if $consensus.fasta_id.type == "default":
+                --id 
+                #if $data_type.type == "paired":
+                    '${fastq_input1.element_identifier}'_'${fastq_input2.element_identifier}'
+                #elif $data_type.type == "single":
+                    '${fastq_input1.element_identifier}'
+                #end if
+            #elif $consensus.fasta_id.type == "custom":
+                --id '$consensus.fasta_id.custom_id' 
+            #end if
         #end if
 
         #if $filter_ns:
@@ -103,7 +114,27 @@
         <param name="min_depth" type="integer" optional="true" min="0" max="5000" label="Minimum depth" value="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
         <param name="min_ac" type="integer" optional="true" min="0" max="5000" label="Minimum allele count" value="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
         <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
-        <param name="generate_consensus" type="boolean" truevalue="--generate_consensus" falsevalue="" checked="False" label="Generate consensus" />
+        <conditional name="consensus">
+            <param name="consensus_bool" type="select" label="Generate consensus sequence." multiple="false" display="radio">
+                <option value="true_consensus">True</option>
+                <option selected="true" value="false_consensus">False</option>
+            </param>
+            <when value="true_consensus"> 
+                <conditional name="fasta_id">
+                    <param name="type" type="select" label="Specify consensus fasta identifier" multiple="false" display="radio">
+                        <option value="default" >Use fasta dataset name</option>
+                        <option value="custom">Use custom name</option>
+                    </param>
+                    <when value="default">
+                    </when>
+                    <when value="custom">
+                        <param name="custom_id" type="text" optional="false" value="custom_id" label="Fasta identifier" help="Type in a fasta identifier."/>
+                    </when>
+                </conditional>            
+            </when>
+            <when value="false_consensus"> 
+            </when>
+        </conditional>
         <param name="filter_ns" type="boolean" truevalue="--ns" falsevalue="" checked="False" label="Filter out n's" />
     </inputs>
     <outputs>
@@ -115,8 +146,8 @@
         <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
         <data format="vcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
         <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
-        <data format="fasta" label="HyDRA: consensus output" name="output_consensus" from_work_dir="output/consensus.fasta">
-            <filter>generate_consensus</filter>
+        <data format="fasta" label="HyDRA: consensus output" name="output_consensus" from_work_dir="output/consensus.fasta" >
+            <filter>consensus['consensus_bool'] == "true_consensus"</filter>
         </data>
     </outputs>
     <tests>
