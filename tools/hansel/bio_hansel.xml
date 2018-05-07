@@ -1,227 +1,269 @@
-<tool id="bio_hansel" name="Bio Hansel" version="1.3.1">
-    <description>SNV Subtyping with genome assemblies or reads</description>
-    <requirements>
-        <requirement type="package" version="1.3.1">bio_hansel</requirement>
-        <requirement type="package" version="17.2.0">attrs</requirement>
-    </requirements>
-    <command detect_errors="exit_code"><![CDATA[
-        ## Preparing file input.
-        #if $data_type.type == "paired":
+<tool id="bio_hansel" name="bio_hansel" version="2.0.0">
+  <description>SNV subtyping of genome sequence reads or assemblies</description>
+  <requirements>
+    <requirement type="package" version="2.0.0">bio_hansel</requirement>
+  </requirements>
+  <command detect_errors="exit_code">
+<![CDATA[
 
-            ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fastq &&
-            ln -s '$data_type.fastq_input2' '$data_type.fastq_input2.name'.fastq &&
+#import re
 
-        #elif $data_type.type == "collection":
+#if $input.type == 'fasta'
+#set $input_files = '"{}"'.format($input.fasta.name)
+  ln -s "$input.fasta" $input_files &&
+#elif $input.type == 'paired'
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
+#set $_forward = '"{}_1{}"'.format($re.sub(r'_[12]\..+$', '', $input.forward.name), $_forward_ext)
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.reverse.name) else '.fastq'
+#set $_reverse = '"{}_2{}"'.format($re.sub(r'_[12]\..+$', '', $input.reverse.name), $_reverse_ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.forward" $_forward &&
+  ln -s "$input.reverse" $_reverse &&
+#elif $input.type == 'single'
+#set $input_files = '"{}"'.format($input.single.name)
+  ln -s "$input.single" $input_files &&
+#elif $input.type == 'paired_collection'
+#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.forward)) else '.fastq'
+#set $_forward = '"{}_1{}"'.format($input.paired_collection.name, $_forward_ext)
+#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.reverse)) else '.fastq'
+#set $_reverse = '"{}_2{}"'.format($input.paired_collection.name, $_reverse_ext)
+#set $input_files = '{} {}'.format($_forward, $_reverse)
+  ln -s "$input.paired_collection.forward" $_forward &&
+  ln -s "$input.paired_collection.reverse" $_reverse &&
+#end if
 
-            ln -s '$data_type.fastq_input1.forward' '$data_type.fastq_input1.name'_1.fastq &&
-            ln -s '$data_type.fastq_input1.reverse' '$data_type.fastq_input1.name'_2.fastq &&
+## Checking for custom scheme.
+#if $type_of_scheme.scheme_type == "custom":
+  #if $type_of_scheme.scheme_input.is_of_type('fasta'):
+    ln -s '$type_of_scheme.scheme_input' '$type_of_scheme.scheme_input.name' &&
+  #end if
+#end if
 
-        #elif $data_type.type == "single":
-
-            #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fastq &&
-            #end if
-
-            #if $data_type.fastq_input1.is_of_type('fasta'):
-                ln -s '$data_type.fastq_input1' '$data_type.fastq_input1.name'.fasta &&
-            #end if
-
-        #end if
-
-
-        ## Checking for custom scheme.
-        #if $type_of_scheme.scheme_type == "custom":
-            #if $type_of_scheme.scheme_input.is_of_type('fasta'):
-                ln -s '$type_of_scheme.scheme_input' '$type_of_scheme.scheme_input.name' &&
-            #end if
-        #end if
-
-        ## Start the actual command here
-        hansel 
-
-
-        ## Select the scheme
-        -s
-
-        #if $type_of_scheme.scheme_type == "heidelberg":
-            heidelberg
-        #elif $type_of_scheme.scheme_type == "enteritidis":
-            enteritidis
-        #elif $type_of_scheme.scheme_type == "custom":
-            '$type_of_scheme.scheme_input.name'
-        #end if
-
-        ## Use Json output
-        #if $dev_args.use_json == "yes":
-            --json
-        #end if
-
-        #if $kmer_vals.kmer_min
-            --min-kmer-freq $kmer_vals.kmer_min
-        #end if
-
-        #if $kmer_vals.kmer_max
-            --max-kmer-freq $kmer_vals.kmer_max
-        #end if
-
-        #if $qc_vals.low_cov_depth_freq
-            --low-cov-depth-freq $qc_vals.low_cov_depth_freq
-        #end if
-
-        #if $qc_vals.max_missing_tiles
-            --max-missing-tiles $qc_vals.max_missing_tiles
-        #end if
-
-        #if $qc_vals.min_ambiguous_tiles
-            --min-ambiguous-tiles $qc_vals.min_ambiguous_tiles
-        #end if
-
-        #if $qc_vals.max_intermediate_tiles
-            --max-intermediate-tiles $qc_vals.max_intermediate_tiles
-        #end if
-
-        #if $qc_vals.low_coverage_warning
-            --low-cov-warning $qc_vals.low_coverage_warning
-        #end if
-
-        ## Adding more parameters to the command.
-        -vvv -t "\${GALAXY_SLOTS:-1}" -o results.tab -O match_results.tab -S tech_results.tab
-
-
-        ## Entering the file inputs
-
-        #if $data_type.type == "single":
-
-            #if $data_type.fastq_input1.is_of_type('fastqsanger') or $data_type.fastq_input1.is_of_type('fastq'):
-                '$data_type.fastq_input1.name'.fastq
-            #end if
-
-            #if $data_type.fastq_input1.is_of_type('fasta'):
-                '$data_type.fastq_input1.name'.fasta
-            #end if
-
-        #elif $data_type.type =="collection":
-            -p '$data_type.fastq_input1.name'_1.fastq  '$data_type.fastq_input1.name'_2.fastq
-        
-        #elif $data_type.type =="paired":
-            -p '$data_type.fastq_input1.name'.fastq  '$data_type.fastq_input2.name'.fastq
-        #end if
-
-    ]]></command>
-    <inputs>
-        <conditional name="data_type">
-            <param name="type" type="select" label="Specify the read type.">
-                <option value="single">Single-end Data</option>
-                <option value="paired">Paired-end Data</option>
-                <option value="collection">Collection Paired-end Data</option>
-            </param>
-            <when value="single">
-                <param name="fastq_input1" type="data" format="fastqsanger, fastq, fasta" label="Single end read file(s)"/>
-            </when>
-            <when value="paired">
-                <param name="fastq_input1" type="data" format="fastqsanger, fastq" label="Forward paired-end read file"/>
-                <param name="fastq_input2" type="data" format="fastqsanger, fastq" label="Reverse paired-end read file"/>
-            </when>
-            <when value="collection">
-                <param name="fastq_input1" type="data_collection" label="Paired-end reads collection" optional="false" format="fastqsanger, fastq" collection_type="paired" />
-            </when>
-        </conditional>
-        <conditional name="type_of_scheme">
-            <param name="scheme_type" type="select" label="Specify scheme to use. (Heidelberg is default)">
-                <option value="heidelberg">Heidelberg scheme</option>
-                <option value="enteritidis">Enteritidis scheme</option>
-                <option value="custom">Specify your own custom scheme</option>
-            </param>
-            <when value="heidelberg"/>
-            <when value="enteritidis"/>
-            <when value="custom">
-                <param name="scheme_input" type="data" format="fasta" label="Scheme Input"/>
-            </when>
-        </conditional>
-        <!-- K-mer frequencies. -->
-        <section name="kmer_vals" title="K-mer Frequency Thresholds" expanded="False">
-            <param name="kmer_min" argument="--min-kmer-freq" optional="True" type="integer" min="0" label="Min k-mer freq/coverage" value="8" help="default = 8"/>
-            <param name="kmer_max" argument="--max-kmer-freq" optional="True" type="integer" min="1" label="Max k-mer freq/coverage" value="1000" help="default = 1000"/>
-        </section>
-        <!-- Quality Checking Parameters -->
-        <section name="qc_vals" title="Quality Checking Thresholds" expanded="False">
-            <param name="low_cov_depth_freq" argument="--low-cov-depth-freq" optional="True" type="integer" min="0" label="QC: Frequency below this coverage are considered low coverage" value="20" help="default = 20"/>
-            <param name="min_ambiguous_tiles" argument="--min-ambiguous-tiles" optional="True" type="integer" min="0" label="QC: Min number of tiles missing for Ambiguous Result" value="3" help="default = 3"/>
-            <param name="max_missing_tiles" argument="--max-missing-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/>
-            <param name="max_intermediate_tiles" argument="--max-intermediate-tiles" optional="True" type="float" min="0" max="1" label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype" value="0.05" help="default = 0.05, valid values {0.0 - 1.0}"/> 
-            <param name="low_coverage_warning" argument="--low-cov-warning" optional="True" type="integer" min="0" label="QC: Overall tile coverage below this value will trigger a low coverage warning" value="20" help="default = 20"/> 
-        </section>
-        <section name="dev_args" title="Developer Options" expanded="False">
-            <param name="use_json" type="select" label="Enable JSON output" help="Use this option of you need json representations of analysis' details">
-                <option value="no">no</option>
-                <option value="yes">yes</option>
-            </param>
-        </section>
-    </inputs>
-    <outputs>
-        <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
-        <data format="tabular" name="match_results.tab" from_work_dir="match_results.tab" label="match_results.tab"/>
-        <data format="tabular" name="tech_results.tab" from_work_dir="tech_results.tab" label="tech_results.tab"/>
-        <data format="json" name="results.json" from_work_dir="results.tab.json" label="results.json">
-            <filter>dev_args['use_json'] == "yes"</filter>
-        </data>
-        <data format="json" name="match_results.json" from_work_dir="match_results.tab.json" label="match_results.json">
-            <filter>dev_args['use_json'] == "yes"</filter>
-        </data>
-        <data format="json" name="tech_results.json" from_work_dir="tech_results.tab.json" label="tech_results.json">
-            <filter>dev_args['use_json'] == "yes"</filter>
-        </data>
-    </outputs>
-    <tests>
-        <test>
-            <param name="type" value="single"/>
-            <param name="type_of_scheme" value="heidelberg"/>
-            <param name="fastq_input1" value="SRR1002850_SMALL.fasta"/>
-            <output name="results.tab">
-                <assert_contents>
-                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-            <output name="match_results.tab">
-                <assert_contents>
-                    <has_text_matching expression="tilename\s+seq\s+is_revcomp\s+contig_id\s+match_index\s+refposition\s+subtype\s+is_pos_tile\s+sample\s+file_path\s+scheme\s+scheme_version\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-            <output name="tech_results.tab">
-                <assert_contents>
-                    <has_text_matching expression="sample\s+subtype\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-        </test>
-        <test>
-            <param name="type" value="paired"/>
-            <param name="type_of_scheme" value="heidelberg"/>
-            <param name="fastq_input1" value="SRR5646583_SMALL_1.fastq"/>
-            <param name="fastq_input2" value="SRR5646583_SMALL_2.fastq"/>
-            <output name="results.tab">
-                <assert_contents>
-                    <has_text_matching expression="sample\s+scheme\s+scheme_version\s+subtype\s+all_subtypes\s+tiles_matching_subtype\s+are_subtypes_consistent\s+inconsistent_subtypes\s+n_tiles_matching_all\s+n_tiles_matching_all_expected\s+n_tiles_matching_positive\s+n_tiles_matching_positive_expected\s+n_tiles_matching_subtype\s+n_tiles_matching_subtype_expected\s+file_path\s+avg_tile_coverage\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-            <output name="match_results.tab">
-                <assert_contents>
-                    <has_text_matching expression="tilename\s+seq\s+freq\s+refposition\s+subtype\s+is_pos_tile\s+is_kmer_freq_okay\s+sample\s+scheme\s+scheme_version\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-            <output name="tech_results.tab">
-                <assert_contents>
-                    <has_text_matching expression="sample\s+subtype\s+avg_tile_coverage\s+qc_status\s+qc_message"/>
-                </assert_contents>
-            </output>
-        </test>
-    </tests>
-    <help><![CDATA[
+hansel
+  -vvv
+  -t "\${GALAXY_SLOTS:-1}"
+  -o results.tab
+  -O match_results.tab
+  -S tech_results.tab
+  $dev_args.use_json
+  $input_files
+  --scheme
+#if $type_of_scheme.scheme_type == "custom":
+  '$type_of_scheme.scheme_input.name'
+#else:
+  $type_of_scheme.scheme_type
+#end if
+#if $kmer_vals.kmer_min
+  --min-kmer-freq $kmer_vals.kmer_min
+#end if
+#if $kmer_vals.kmer_max
+  --max-kmer-freq $kmer_vals.kmer_max
+#end if
+#if $qc_vals.low_cov_depth_freq
+  --low-cov-depth-freq $qc_vals.low_cov_depth_freq
+#end if
+#if $qc_vals.max_missing_tiles
+  --max-missing-tiles $qc_vals.max_missing_tiles
+#end if
+#if $qc_vals.min_ambiguous_tiles
+  --min-ambiguous-tiles $qc_vals.min_ambiguous_tiles
+#end if
+#if $qc_vals.max_intermediate_tiles
+  --max-intermediate-tiles $qc_vals.max_intermediate_tiles
+#end if
+#if $qc_vals.low_coverage_warning
+  --low-cov-warning $qc_vals.low_coverage_warning
+#end if
+]]>
+  </command>
+  <inputs>
+    <conditional name="input">
+      <param name="type" type="select" label="Sequence input type">
+        <option value="fasta">FASTA</option>
+        <option value="paired">Paired-end FASTQs</option>
+        <option value="single">Single-end FASTQ</option>
+        <option value="paired_collection">Paired-end FASTQ collection</option>
+      </param>
+      <when value="fasta">
+        <param name="fasta"
+          type="data" format="fasta"
+          optional="false"
+          label="FASTA file"
+          />
+      </when>
+      <when value="paired">
+        <param name="forward"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Forward FASTQ file"
+          help="Must have ASCII encoded quality scores"
+          />
+        <param name="reverse"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Reverse FASTQ file"
+          help="File format must match the Forward FASTQ file"
+          />
+      </when>
+      <when value="single">
+        <param name="single"
+          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          optional="false"
+          label="Single-end FASTQ file"
+          />
+      </when>
+      <when value="paired_collection">
+        <param name="paired_collection"
+          type="data_collection" format="fastq,fastqsanger,fastqillumina,fastqsolexa,fastq.gz,txt"
+          collection_type="paired"
+          optional="false"
+          label="Paired-end FASTQ collection"
+          help=""
+          />
+      </when>
+    </conditional>
+    <conditional name="type_of_scheme">
+      <param name="scheme_type" type="select" label="Specify scheme to use. (Heidelberg is default)">
+        <option value="heidelberg">Salmonella Heidelberg subtyping scheme</option>
+        <option value="enteritidis">Salmonella Enteritidis subtyping scheme</option>
+        <option value="custom">Specify your own custom scheme</option>
+      </param>
+      <when value="heidelberg"/>
+      <when value="enteritidis"/>
+      <when value="custom">
+        <param name="scheme_input" type="data" format="fasta" label="Scheme Input"/>
+      </when>
+    </conditional>
+    <!-- K-mer frequencies. -->
+    <section name="kmer_vals" title="K-mer Frequency Thresholds" expanded="False">
+      <param name="kmer_min" type="integer"
+        argument="--min-kmer-freq"
+        optional="true"
+        min="0" value="8"
+        label="Min k-mer frequency/coverage"
+        help="default = 8"/>
+      <param name="kmer_max" type="integer"
+        argument="--max-kmer-freq"
+        optional="true"
+        min="1" value="1000"
+        label="Max k-mer frequency/coverage"
+        help="default = 1000"/>
+    </section>
+    <!-- Quality Checking Parameters -->
+    <section name="qc_vals" title="Quality Checking Thresholds" expanded="False">
+      <param name="low_cov_depth_freq" type="integer"
+        argument="--low-cov-depth-freq"
+        value="20" min="0"
+        optional="true"
+        label="QC: Frequency below this coverage are considered low coverage"
+        help="default = 20"/>
+      <param name="min_ambiguous_tiles" type="integer"
+        argument="--min-ambiguous-tiles"
+        optional="true"
+        value="3" min="0"
+        label="QC: Min number of tiles missing for Ambiguous Result"
+        help="default = 3"/>
+      <param name="max_missing_tiles" type="float"
+        argument="--max-missing-tiles"
+        optional="true"
+        value="0.05" min="0" max="1"
+        label="QC: Decimal Proportion of max allowed missing tiles" help="default = 0.05, valid values {0.0 - 1.0}"/>
+      <param name="max_intermediate_tiles" type="float"
+        argument="--max-intermediate-tiles"
+        optional="true"
+        value="0.05" min="0" max="1"
+        label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype"
+        help="default = 0.05, valid values {0.0 - 1.0}"/> 
+      <param name="low_coverage_warning" type="integer"
+        argument="--low-cov-warning"
+        optional="true"
+        value="20"
+        label="QC: Overall tile coverage below this value will trigger a low coverage warning"
+        help="default = 20"/> 
+    </section>
+    <section name="dev_args" title="Developer Options" expanded="False">
+      <param name="use_json"
+        type="boolean"
+        checked="false"
+        truevalue="--json"
+        falsevalue=""
+        label="Output JSON results"
+        help="Use this option of you need json representations of analysis' details"/>
+    </section>
+  </inputs>
+  <outputs>
+    <data format="tabular" name="results.tab" from_work_dir="results.tab" label="results.tab"/>
+    <data format="tabular" name="match_results.tab" from_work_dir="match_results.tab" label="match_results.tab"/>
+    <data format="tabular" name="tech_results.tab" from_work_dir="tech_results.tab" label="tech_results.tab"/>
+    <data format="json" name="results.json" from_work_dir="results.tab.json" label="results.json">
+      <filter>dev_args['use_json']</filter>
+    </data>
+    <data format="json" name="match_results.json" from_work_dir="match_results.tab.json" label="match_results.json">
+      <filter>dev_args['use_json']</filter>
+    </data>
+    <data format="json" name="tech_results.json" from_work_dir="tech_results.tab.json" label="tech_results.json">
+      <filter>dev_args['use_json']</filter>
+    </data>
+  </outputs>
+  <tests>
+    <test>
+      <conditional name="input">
+        <param name="type" value="fasta"/>
+        <param name="fasta" value="SRR1002850_SMALL.fasta"/>
+      </conditional>
+      <param name="type_of_scheme" value="heidelberg"/>
+      <output name="results.tab"
+        value="SRR1002850_SMALL.fasta-results.tab"
+        ftype="tabular"
+        compare="sim_size"
+        delta="1000">
+      </output>
+      <output name="match_results.tab"
+        value="SRR1002850_SMALL.fasta-match_results.tab"
+        ftype="tabular"
+        compare="sim_size"
+        delta="16000">
+      </output>
+      <output name="tech_results.tab"
+        value="SRR1002850_SMALL.fasta-tech_results.tab"
+        ftype="tabular"
+        lines_diff="0">
+      </output>
+    </test>
+    <test>
+      <conditional name="input">
+        <param name="type" value="paired"/>
+        <param name="forward" value="SRR5646583_SMALL_1.fastq"/>
+        <param name="reverse" value="SRR5646583_SMALL_2.fastq"/>
+      </conditional>
+      <param name="type_of_scheme" value="heidelberg"/>
+      <output name="tech_results.tab"
+        value="SRR5646583_SMALL-tech_results.tab"
+        ftype="tabular"
+        lines_diff="0">
+      </output>
+      <output name="results.tab"
+        value="SRR5646583_SMALL-results.tab"
+        ftype="tabular"
+        compare="sim_size"
+        delta="1000">
+      </output>
+      <output name="match_results.tab"
+        value="SRR5646583_SMALL-match_results.tab"
+        ftype="tabular"
+        compare="sim_size"
+        delta="16000">
+      </output>
+    </test>
+  </tests>
+  <help><![CDATA[
 ***********************************************************
-  bio_hansel - Heidelberg And eNteritidis Snp ELucidation
+bio_hansel
 ***********************************************************
 
-Subtype *Salmonella enterica* subsp. enterica serovar Heidelberg and Enteritidis genomes using *in-silico* 33 bp k-mer SNP subtyping schemes developed by Genevieve Labbe et al.
-Subtype *Salmonella* genome assemblies (FASTA files) and/or whole-genome sequencing reads (FASTQ files)!
+Subtype microbial whole-genome sequencing (WGS) data using SNV targeting k-mer subtyping schemes.
+
+Includes 33 bp k-mer SNV subtyping schemes for Salmonella enterica subsp. enterica serovar Heidelberg and Enteritidis genomes developed by Genevieve Labbe et al.
  
 Usage
 =====
@@ -241,47 +283,24 @@ Analysis of a single FASTA file
 
 Contents of ``results.tab``:
 
-    +------------+------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------+
-    | sample     | scheme     | subtype     | all_subtypes                                   | tiles_matching_subtype                                        | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_total | n_tiles_matching_positive | n_tiles_matching_positive_total | n_tiles_matching_subtype | n_tiles_matching_subtype_total | file_path  |
-    +------------+------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------+
-    | file.fasta | heidelberg | 2.2.2.2.1.4 | 2; 2.2; 2.2.2; 2.2.2.2; 2.2.2.2.1; 2.2.2.2.1.4 | 1037658-2.2.2.2.1.4; 2154958-2.2.2.2.1.4; 3785187-2.2.2.2.1.4 | True                    |                       | 202                  | 202                        | 17                        | 17                              | 3                        | 3                              | file.fasta |
-    +------------+------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------+
-
+    +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
+    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | tiles_matching_subtype                                        | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_expected | n_tiles_matching_positive | n_tiles_matching_positive_expected | n_tiles_matching_subtype | n_tiles_matching_subtype_expected | file_path              | qc_status | qc_message |
+    +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
+    | SRR1002850_SMALL | heidelberg | 0.5.0          | 2.2.2.2.1.4 | 2; 2.2; 2.2.2; 2.2.2.2; 2.2.2.2.1; 2.2.2.2.1.4 | 2154958-2.2.2.2.1.4; 1037658-2.2.2.2.1.4; 3785187-2.2.2.2.1.4 | True                    |                       | 202                  | 202                           | 17                        | 17                                 | 3                        | 3                                 | SRR1002850_SMALL.fasta | PASS      |            |
+    +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
 
 
 Contents of ``match_results.tab``:
 
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | tilename                    | stitle                                | pident | length | mismatch | gapopen | qstart | qend | sstart | send   | evalue | bitscore | qlen | slen   | seq                               | coverage | is_trunc | refposition     | subtype     | is_pos_tile | sample | file_path  | scheme     |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | 775920-2.2.2.2              | NODE_2_length_512016_cov_46.4737_ID_3 | 100    | 33     | 0        | 0       | 1      | 33   | 474875 | 474907 | 2E-11  | 62.1     | 33   | 512016 | GTTCAGGTGCTACCGAGGATCGTTTTTGGTGCG | 1        | False    | 775920          | 2.2.2.2     | True        | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3305400-2.1.1.1     | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 276235 | 276267 | 2E-11  | 62.1     | 33   | 427905 | CATCGTGAAGCAGAACAGACGCGCATTCTTGCT | 1        | False    | negative3305400 | 2.1.1.1     | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3200083-2.1         | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 170918 | 170950 | 2E-11  | 62.1     | 33   | 427905 | ACCCGGTCTACCGCAAAATGGAAAGCGATATGC | 1        | False    | negative3200083 | 2.1         | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3204925-2.2.3.1.5   | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 175760 | 175792 | 2E-11  | 62.1     | 33   | 427905 | CTCGCTGGCAAGCAGTGCGGGTACTATCGGCGG | 1        | False    | negative3204925 | 2.2.3.1.5   | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3230678-2.2.2.1.1.1 | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 201513 | 201545 | 2E-11  | 62.1     | 33   | 427905 | AGCGGTGCGCCAAACCACCCGGAATGATGAGTG | 1        | False    | negative3230678 | 2.2.2.1.1.1 | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3233869-2.1.1.1.1   | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 204704 | 204736 | 2E-11  | 62.1     | 33   | 427905 | CAGCGCTGGTATGTGGCTGCACCATCGTCATTA | 1        | False    | negative3233869 | 2.1.1.1.1   | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3254229-2.2.3.1.3   | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 225064 | 225096 | 2E-11  | 62.1     | 33   | 427905 | CGCCACCACGCGGTTAGCGTCACGCTGACATTC | 1        | False    | negative3254229 | 2.2.3.1.3   | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3257074-2.2.1       | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 227909 | 227941 | 2E-11  | 62.1     | 33   | 427905 | CGGCAACCAGACCGACTACGCCGCCAAGCAGAC | 1        | False    | negative3257074 | 2.2.1       | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3264474-2.2.2.1.1.1 | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 235309 | 235341 | 2E-11  | 62.1     | 33   | 427905 | AATGGCGCCGATCGTCGCCAGATAACCGTTGCC | 1        | False    | negative3264474 | 2.2.2.1.1.1 | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3267927-2.2.2.2.2.1 | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 238762 | 238794 | 2E-11  | 62.1     | 33   | 427905 | AAAGAGAAATATGATGCCAGGCTGATACATGAC | 1        | False    | negative3267927 | 2.2.2.2.2.1 | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3278067-1.1         | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 248902 | 248934 | 2E-11  | 62.1     | 33   | 427905 | TGTGAGTAAGTTGCGCGATATTCTGCTGGATTC | 1        | False    | negative3278067 | 1.1         | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3299717-2.2.3.1.4   | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 270552 | 270584 | 2E-11  | 62.1     | 33   | 427905 | ATGCCGGACAGCAGGCGAAACTCGAACCGGATA | 1        | False    | negative3299717 | 2.2.3.1.4   | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
-    | negative3373069-2.2.2.2.1.1 | NODE_3_length_427905_cov_48.1477_ID_5 | 100    | 33     | 0        | 0       | 1      | 33   | 344011 | 344043 | 2E-11  | 62.1     | 33   | 427905 | CTCTCCAGAAGATGAAGCCCGTGATGCGGCGCA | 1        | False    | negative3373069 | 2.2.2.2.1.1 | False       | out    | file.fasta | heidelberg |
-    +-----------------------------+---------------------------------------+--------+--------+----------+---------+--------+------+--------+--------+--------+----------+------+--------+-----------------------------------+----------+----------+-----------------+-------------+-------------+--------+------------+------------+
+    +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
+    | tilename                  | seq                               | is_revcomp | contig_id                             | match_index | refposition | subtype     | is_pos_tile | sample           | file_path              | scheme     | scheme_version | qc_status | qc_message |
+    +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
+    | 2154958-2.2.2.2.1.4       | GGCGCGCCACGGTTACTCCCCGGTGGTCAGCCG | True       | NODE_1_length_726282_cov_40.4705_ID_1 | 13732       | 2154958     | 2.2.2.2.1.4 | True        | SRR1002850_SMALL | SRR1002850_SMALL.fasta | heidelberg | 0.5.0          | PASS      |            |
+    +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
+    | negative2131791-2.2.3.1.3 | GCTGGGCGAAATGATGCAGTTCACCACTTGCTC | True       | NODE_1_length_726282_cov_40.4705_ID_1 | 36900       | 2131791     | 2.2.3.1.3   | False       | SRR1002850_SMALL | SRR1002850_SMALL.fasta | heidelberg | 0.5.0          | PASS      |            |
+    +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
 
-    Next 196 lines omitted.
+    *Next 201 lines omitted.*
 
 
 
@@ -290,40 +309,31 @@ Analysis of a single FASTQ readset
 
 Contents of ``results.tab``:
 
-    +--------+------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------------------------------------+
-    | sample | scheme     | subtype     | all_subtypes                                   | tiles_matching_subtype                   | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_total | n_tiles_matching_positive | n_tiles_matching_positive_total | n_tiles_matching_subtype | n_tiles_matching_subtype_total | file_path                                |
-    +--------+------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------------------------------------+
-    | 564    | heidelberg | 2.2.1.1.1.1 | 2; 2.2; 2.2.1; 2.2.1.1; 2.2.1.1.1; 2.2.1.1.1.1 | 1983064-2.2.1.1.1.1; 4211912-2.2.1.1.1.1 | True                    |                       | 202                  | 202                        | 20                        | 20                              | 2                        | 2                              | forward.fastqsanger; reverse.fastqsanger |
-    +--------+------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+----------------------------+---------------------------+---------------------------------+--------------------------+--------------------------------+------------------------------------------+
-
+    +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
+    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | tiles_matching_subtype                   | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_expected | n_tiles_matching_positive | n_tiles_matching_positive_expected | n_tiles_matching_subtype | n_tiles_matching_subtype_expected | file_path                                                | avg_tile_coverage | qc_status | qc_message |
+    +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
+    | SRR5646583_SMALL | heidelberg | 0.5.0          | 2.2.1.1.1.1 | 2; 2.2; 2.2.1; 2.2.1.1; 2.2.1.1.1; 2.2.1.1.1.1 | 1983064-2.2.1.1.1.1; 4211912-2.2.1.1.1.1 | True                    |                       | 202                  | 202                           | 20                        | 20                                 | 2                        | 2                                 | ['SRR5646583_SMALL_1.fastq', 'SRR5646583_SMALL_2.fastq'] | 42.631            | PASS      |            |
+    +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
 
 Contents of ``match_results.tab``:
 
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | seq                               | freq | sample | file_path                                | tilename         | is_pos_tile | subtype   | refposition | is_kmer_freq_okay | scheme     |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | ACGGTAAAAGAGGACTTGACTGGCGCGATTTGC | 68   | 564    | forward.fastqsanger; reverse.fastqsanger | 21097-2.2.1.1.1  | True        | 2.2.1.1.1 | 21097       | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | AACCGGCGGTATTGGCTGCGGTAAAAGTACCGT | 77   | 564    | forward.fastqsanger; reverse.fastqsanger | 157792-2.2.1.1.1 | True        | 2.2.1.1.1 | 157792      | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | CCGCTGCTTTCTGAAATCGCGCGTCGTTTCAAC | 67   | 564    | forward.fastqsanger; reverse.fastqsanger | 293728-2.2.1.1   | True        | 2.2.1.1   | 293728      | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | GAATAACAGCAAAGTGATCATGATGCCGCTGGA | 91   | 564    | forward.fastqsanger; reverse.fastqsanger | 607438-2.2.1     | True        | 2.2.1     | 607438      | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | CAGTTTTACATCCTGCGAAATGCGCAGCGTCAA | 87   | 564    | forward.fastqsanger; reverse.fastqsanger | 691203-2.2.1.1   | True        | 2.2.1.1   | 691203      | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
-    | CAGGAGAAAGGATGCCAGGGTCAACACGTAAAC | 33   | 564    | forward.fastqsanger; reverse.fastqsanger | 944885-2.2.1.1.1 | True        | 2.2.1.1.1 | 944885      | True              | heidelberg |
-    +-----------------------------------+------+--------+------------------------------------------+------------------+-------------+-----------+-------------+-------------------+------------+
+    +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
+    | tilename            | seq                               | freq | refposition | subtype   | is_pos_tile | is_kmer_freq_okay | sample           | scheme     | scheme_version | qc_status | qc_message |
+    +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
+    | negative4642573-1.2 | TACCAGGAAGTGCTGGAAGAGTTTAACGAACAT | 62   | 4642573     | 1.2       | False       | True              | SRR5646583_SMALL | heidelberg | 0.5.0          | PASS      |            |
+    +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
+    | 21097-2.2.1.1.1     | GCAAATCGCGCCAGTCAAGTCCTCTTTTACCGT | 42   | 21097       | 2.2.1.1.1 | True        | True              | SRR5646583_SMALL | heidelberg | 0.5.0          | PASS      |            |
+    +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
 
-    Next 200 lines omitted.
+    *Next 202 lines omitted.*
 
 Galaxy wrapper written by Matthew Gopez at the Public Health Agency of Canada, National Microbiology Laboratory.
 
     ]]></help>
     <citations>
         <citation type="bibtex">@ARTICLE{a1,
-            title = {A robust genotyping scheme for *Salmonella enterica* serovar Heidelberg clones circulating in North America.},
-            author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash.},
+            title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
+            author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
             url = {https://github.com/phac-nml/bio_hansel}
             }
         }</citation>
