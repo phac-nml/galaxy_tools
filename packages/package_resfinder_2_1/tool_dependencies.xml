@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="perl" version="5.18.1">
+		<repository name="package_perl_5_18" owner="iuc" prior_installation_required="True" />
+	</package>
+	<package name="bioperl" version="1.6">
+		<repository name="package_bioperl_1_6" owner="iuc" prior_installation_required="True" />
+	</package>
+	<package name="blast" version="2.2.26">
+		<respository name="package_blast_2_2_26" owner="iyad" prior_installation_required="True" />
+	</package>
+	<package name="resfinder" version="2.1">
+		<install version="1.0">
+			<actions>
+				<action type="setup_perl_environment">
+					<repository name="package_perl_5_18" owner="iuc">
+						<package name="perl" version="5.18.1"/>
+					</repository>
+					<package>http://search.cpan.org/CPAN/authors/id/S/SM/SMUELLER/Data-Dumper-2.154.tar.gz</package>
+					<package>http://search.cpan.org/CPAN/authors/id/J/JV/JV/Getopt-Long-2.49.1.tar.gz</package>
+					<package>http://search.cpan.org/CPAN/authors/id/D/DA/DAGOLDEN/File-Temp-0.2304.tar.gz</package>
+					<package>http://search.cpan.org/CPAN/authors/id/D/DA/DAGOLDEN/Try-Tiny-Retry-0.004.tar.gz</package>
+					<package>http://search.cpan.org/CPAN/authors/id/E/ET/ETHER/Try-Tiny-0.24.tar.gz</package>
+				</action>
+				<action type="change_directory">../</action>
+				<action type="shell_command">git clone https://bitbucket.org/genomicepidemiology/resfinder.git</action>
+				<action type="change_directory">resfinder</action>
+				<action type="move_directory_files">
+					<source_directory>.</source_directory>
+					<destination_directory>$INSTALL_DIR/resfinder</destination_directory>
+				</action>
+
+				<action type="set_environment">
+					<environment_variable action="set_to" name="RESFINDER">$INSTALL_DIR/resfinder</environment_variable>
+					<environment_variable action="prepend_to" name="PERL5LIB">$INSTALL_DIR/lib/perl5</environment_variable>
+				</action>
+			</actions>
+		</install>
+	</package>
+</tool_dependency>
