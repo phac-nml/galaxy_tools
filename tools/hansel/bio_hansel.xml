@@ -93,13 +93,13 @@ hansel
       </when>
       <when value="paired">
         <param name="forward"
-          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz"
           optional="false"
           label="Forward FASTQ file"
           help="Must have ASCII encoded quality scores"
           />
         <param name="reverse"
-          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz"
           optional="false"
           label="Reverse FASTQ file"
           help="File format must match the Forward FASTQ file"
@@ -107,14 +107,14 @@ hansel
       </when>
       <when value="single">
         <param name="single"
-          type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa"
+          type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz"
           optional="false"
           label="Single-end FASTQ file"
           />
       </when>
       <when value="paired_collection">
         <param name="paired_collection"
-          type="data_collection" format="fastq,fastqsanger,fastqillumina,fastqsolexa,fastq.gz,txt"
+          type="data_collection" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz,txt"
           collection_type="paired"
           optional="false"
           label="Paired-end FASTQ collection"
@@ -261,7 +261,7 @@ hansel
 bio_hansel
 ***********************************************************
 
-Subtype microbial whole-genome sequencing (WGS) data using SNV targeting k-mer subtyping schemes.
+Subtype microbial whole-genome sequencing (WGS) data using single-nucleotide variant (SNV) targeting k-mer subtyping schemes.
 
 Includes 33 bp k-mer SNV subtyping schemes for Salmonella enterica subsp. enterica serovar Heidelberg and Enteritidis genomes developed by Genevieve Labbe et al.
  
@@ -327,15 +327,15 @@ Contents of ``match_results.tab``:
 
     *Next 202 lines omitted.*
 
-Galaxy wrapper written by Matthew Gopez at the Public Health Agency of Canada, National Microbiology Laboratory.
+Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Health Agency of Canada, National Microbiology Laboratory.
 
     ]]></help>
-    <citations>
-        <citation type="bibtex">@ARTICLE{a1,
-            title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
-            author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
-            url = {https://github.com/phac-nml/bio_hansel}
-            }
-        }</citation>
-    </citations>
+  <citations>
+    <citation type="bibtex">@ARTICLE{a1,
+      title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
+      author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
+      url = {https://github.com/phac-nml/bio_hansel}
+      }
+    }</citation>
+  </citations>
 </tool>
