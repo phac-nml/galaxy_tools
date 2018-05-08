@@ -6,30 +6,44 @@
   <command detect_errors="exit_code">
 <![CDATA[
 
-#import re
+#def is_gzipped_fastq($data_input)
+  ## Is FASTQ data param gzipped type? i.e. either 'fastq.gz' or 'fastqsanger.gz'?
+  #return $data_input.is_of_type('fastqsanger.gz') or $data_input.is_of_type('fastq.gz')
+#end def
 
+#def get_fastq_ext($data_input)
+  ## Get file extension for FASTQ data param
+  #return '.fastq.gz' if $is_gzipped_fastq($data_input) else '.fastq'
+#end def
+
+#def get_paired_fastq_filename($data_input, $name=None, $is_forward=True)
+  ## Get paired FASTQ filename for a data param with appropriate file extension 
+  ## with '_1' or '_2' appended if forward or reverse reads, respectively.
+  #set $name = $name if $name is not None else $data_input.name
+  #set $postfix = '1' if $is_forward else '2'
+  #set $ending = '_{}{}'.format($postfix, $get_fastq_ext($data_input))
+  #return '"{}"'.format($name) if $ending in $name else '"{}{}"'.format($name, $ending)
+#end def
+
+## Create symlinks from Galaxy *.dat to <sample_name>(.fasta|.fastq|.fastq.gz)
 #if $input.type == 'fasta'
 #set $input_files = '"{}"'.format($input.fasta.name)
   ln -s "$input.fasta" $input_files &&
 #elif $input.type == 'paired'
-#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
-#set $_forward = '"{}_1{}"'.format($re.sub(r'_[12]\..+$', '', $input.forward.name), $_forward_ext)
-#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.reverse.name) else '.fastq'
-#set $_reverse = '"{}_2{}"'.format($re.sub(r'_[12]\..+$', '', $input.reverse.name), $_reverse_ext)
-#set $input_files = '{} {}'.format($_forward, $_reverse)
-  ln -s "$input.forward" $_forward &&
-  ln -s "$input.reverse" $_reverse &&
+#set $forward_filename = $get_paired_fastq_filename($input.forward)
+#set $reverse_filename = $get_paired_fastq_filename($input.reverse, is_forward=False)
+#set $input_files = '{} {}'.format($forward_filename, $reverse_filename)
+  ln -s "$input.forward" $forward_filename &&
+  ln -s "$input.reverse" $reverse_filename &&
 #elif $input.type == 'single'
 #set $input_files = '"{}"'.format($input.single.name)
   ln -s "$input.single" $input_files &&
 #elif $input.type == 'paired_collection'
-#set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.forward)) else '.fastq'
-#set $_forward = '"{}_1{}"'.format($input.paired_collection.name, $_forward_ext)
-#set $_reverse_ext = '.fastq.gz' if $re.match(r'.*\.gz$', str($input.paired_collection.reverse)) else '.fastq'
-#set $_reverse = '"{}_2{}"'.format($input.paired_collection.name, $_reverse_ext)
-#set $input_files = '{} {}'.format($_forward, $_reverse)
-  ln -s "$input.paired_collection.forward" $_forward &&
-  ln -s "$input.paired_collection.reverse" $_reverse &&
+#set $forward_filename = $get_paired_fastq_filename($input.paired_collection.forward, $input.paired_collection.name)
+#set $reverse_filename = $get_paired_fastq_filename($input.paired_collection.reverse, $input.paired_collection.name, is_forward=False)
+#set $input_files = '{} {}'.format($forward_filename, $reverse_filename)
+  ln -s "$input.paired_collection.forward" $forward_filename &&
+  ln -s "$input.paired_collection.reverse" $reverse_filename &&
 #end if
 
 ## Checking for custom scheme.
