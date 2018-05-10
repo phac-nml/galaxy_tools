@@ -3,6 +3,13 @@
         <requirement type="package" version="0.2.0">staramr</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #set $named_genomes = ''
+        #for $genome in $genomes
+            #set $_named_genome = '"{}.fasta"'.format($genome.element_identifier)
+            ln -s "$genome" $_named_genome &&
+            #set $named_genomes = $named_genomes + ' ' + $_named_genome
+        #end for
+
         staramr search
 
         --nprocs "\${GALAXY_SLOTS:-1}"
@@ -23,10 +30,10 @@
 
         --pointfinder-organism salmonella
 
-        $genomes
+        $named_genomes
     ]]></command>
     <inputs>
-        <param type="data" name="genomes" format="fasta"/>
+        <param type="data" name="genomes" format="fasta" multiple="true"/>
         <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
                min="0" max="100" help="(--pid-threshold)" />
         <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
