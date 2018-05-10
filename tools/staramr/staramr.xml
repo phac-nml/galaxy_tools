@@ -4,23 +4,46 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         staramr search
+
+        --nprocs "\${GALAXY_SLOTS:-1}"
+
+        --pid-threshold $pid_threshold
+        --percent-length-overlap-resfinder $plength_resfinder
+        --percent-length-overlap-pointfinder $plength_pointfinder
+
+        ${report_all_blast}
+        ${exclude_negatives}
+        ${exclude_resistance_phenotypes}
+
         --output-summary $summary
         --output-resfinder $resfinder
         --output-pointfinder $pointfinder
         --output-settings $settings
         --output-excel $excel
+
         --pointfinder-organism salmonella
+
         $genomes
     ]]></command>
     <inputs>
         <param type="data" name="genomes" format="fasta"/>
+        <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
+               min="0" max="100" help="(--pid-threshold)" />
+        <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
+               min="0" max="100" help="(--percent-length-overlap-resfinder)" />
+        <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
+               min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
+        <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
+               help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
+        <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
+        <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
     </inputs>
     <outputs>
-        <data format="tabular" name="summary" />
-        <data format="tabular" name="resfinder" />
-        <data format="tabular" name="pointfinder" />
-        <data format="tabular" name="settings" />
-        <data format="data" name="excel" />
+        <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
+        <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
+        <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv" />
+        <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
+        <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
     </outputs>
     <help><![CDATA[
         usage: staramr search [-h] [-n NPROCS] [--pid-threshold PID_THRESHOLD]
