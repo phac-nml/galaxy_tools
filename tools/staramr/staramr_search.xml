@@ -27,11 +27,15 @@
 
         --output-summary $summary
         --output-resfinder $resfinder
-        --output-pointfinder $pointfinder
+        #if $use_pointfinder.enable
+            --output-pointfinder $pointfinder
+        #end if
         --output-settings $settings
         --output-excel $excel_proper_extension
 
-        --pointfinder-organism salmonella
+        #if $use_pointfinder.enable
+            --pointfinder-organism $use_pointfinder.organism
+        #end if
 
         $named_genomes
 
@@ -49,11 +53,21 @@
                help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
         <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
         <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
+        <conditional name="use_pointfinder">
+            <param name="enable" type="boolean" label="Enable scanning for point mutations using the PointFinder database" />
+            <when value="true">
+                <param name="organism" type="select" label="Select a pointfinder organism">
+                    <option value="salmonella" selected="true">Salmonella</option>
+                </param>
+            </when>
+       </conditional>
     </inputs>
     <outputs>
         <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
-        <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv" />
+        <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv">
+            <filter>use_pointfinder['enable']</filter>
+        </data>
         <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
         <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
     </outputs>
