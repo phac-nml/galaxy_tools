@@ -10,6 +10,9 @@
             #set $named_genomes = $named_genomes + ' ' + $_named_genome
         #end for
 
+        #set $excel_proper_extension = '"{}.xlsx"'.format($excel)
+        ln -s "$excel" $excel_proper_extension &&
+
         staramr search
 
         --nprocs "\${GALAXY_SLOTS:-1}"
@@ -26,11 +29,13 @@
         --output-resfinder $resfinder
         --output-pointfinder $pointfinder
         --output-settings $settings
-        --output-excel $excel
+        --output-excel $excel_proper_extension
 
         --pointfinder-organism salmonella
 
         $named_genomes
+
+        && rm $excel_proper_extension
     ]]></command>
     <inputs>
         <param type="data" name="genomes" format="fasta" multiple="true"/>
