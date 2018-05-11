@@ -1,4 +1,5 @@
-<tool id="staramr" name="staramr" version="0.2.0">
+<tool id="staramr_search" name="staramr" version="0.2.0">
+    <description>Scans genome assemblies against the ResFinder and PointFinder databases searching for AMR genes.</description>
     <requirements>
         <requirement type="package" version="0.2.0">staramr</requirement>
     </requirements>
@@ -32,6 +33,8 @@
         #end if
         --output-settings $settings
         --output-excel $excel_proper_extension
+
+        --output-hits-dir staramr_hits
 
         #if $use_pointfinder.enable
             --pointfinder-organism $use_pointfinder.organism
@@ -70,6 +73,9 @@
         </data>
         <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
         <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
+        <collection name="blast_hits" type="list" label="${tool.name} on ${on_string}: hits">
+            <discover_datasets pattern="__name_and_ext__" directory="staramr_hits" />
+       </collection>
     </outputs>
     <help><![CDATA[
         usage: staramr search [-h] [-n NPROCS] [--pid-threshold PID_THRESHOLD]
