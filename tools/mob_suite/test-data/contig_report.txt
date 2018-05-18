@@ -1,0 +1,2 @@
+file_id	cluster_id	contig_id	contig_length	circularity_status	rep_type	rep_type_accession	relaxase_type	relaxase_type_accession	mash_nearest_neighbor	 mash_neighbor_distance	repetitive_dna_id	match_type	score	contig_match_start	contig_match_end
+plasmid_476.fasta	476	plasmid_476.fasta|SRR3703080_illumina_unicycler.fasta|8|length=91194|depth=3.25x	91194	Incomplete	IncI1	000145__HE610900_00001	MOBP	NC_019097	CP016520	0.000508006					
