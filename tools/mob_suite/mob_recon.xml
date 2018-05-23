@@ -1,5 +1,5 @@
 <tool id="mob_recon" name="MOB-Recon" version="1.4.1">
-  <description>(Type contigs plus extract plasmid sequences)</description>
+  <description>Type contigs and extract plasmid sequences</description>
   <requirements>
      <requirement type="package" version="1.4.1">mob_suite</requirement>
   </requirements>   
@@ -66,14 +66,11 @@ Tab-delimited report listing information for each input contig on its cluster nu
   </help>
   <citations>
     <citation type="bibtex">
-  @misc{githubseqtk,
-  author = {Robertson James, Nash John},
-  year = {2018},
+  @misc{githubmob-suite,
   title = {MOB-Suite: Software tools for clustering, reconstruction and typing of plasmids from draft assemblies.},
-  publisher = {Microbiology Society Journals},
-  journal = {Microbial Genomics},
-  url = {http://mgen.microbiologyresearch.org/content/journal/mgen},
-  note = {Submitted manuscript}
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/phac-nml/mob-suite},
     }</citation>
   </citations>
 </tool>
