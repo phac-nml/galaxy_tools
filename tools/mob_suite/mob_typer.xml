@@ -1,5 +1,5 @@
 <tool id="mob_typer" name="MOB-Typer" version="1.4.1">
-  <description>(Get the plasmid type and mobility given its sequence)</description>
+  <description>(Get the plasmid type plus mobility given its sequence)</description>
   <requirements>
      <requirement type="package" version="1.4.1">mob_suite</requirement>
   </requirements>   
@@ -61,4 +61,3 @@ Tab-delimited report listing identified plasmid(s) and their predicted mobility.
     }</citation>
   </citations>
 </tool>
-<!--(?P&lt;designation&gt;.+)   ${tool.name} report from ${input.name}-->
