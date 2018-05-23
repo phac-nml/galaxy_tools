@@ -1,7 +1,7 @@
 categories: [Sequence Analysis]
-description: MOB-suite: Software tools for clustering, reconstruction and typing of plasmids from draft assemblies
+description: MOB-suite is a set of software tools for clustering, reconstruction and typing of plasmids from draft assemblies
 name: mob_suite
-owner: nml
+owner: NML at Guelph
 long_description: The MOB-suite is designed to be a modular set of tools for the typing and reconstruction of plasmid sequences from WGS assemblies designed  by Robertson James et al.
 remote_repository_url: https://github.com/phac-nml/mob-suite
 homepage_url: https://github.com/phac-nml/mob-suite
