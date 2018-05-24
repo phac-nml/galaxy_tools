@@ -1,0 +1,61 @@
+<tool id="mob_typer" name="MOB-Typer" version="1.4.1">
+  <description>Get the plasmid type and mobility given its sequence</description>
+  <requirements>
+     <requirement type="package" version="1.4.1">mob_suite</requirement>
+  </requirements>   
+  <command detect_errors="exit_code">
+    ln -s "${input}" "${input.name}";
+    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" --evalue '${adv_param.evalue}' --min_ident '${adv_param.min_ident}' --min_cov '${adv_param.min_cov}' --outdir '.';
+  </command>
+  <inputs>
+    <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
+    <section name="adv_param" title="Advanced parameters" expanded="False">
+      <param name="evalue" label="Minimum e-value threshold for BLAST" type="float"  min="0.000000000000000000001" max="1" value="0.00001"/>
+      <param name="min_ident" label="Minimum sequence identity for BLAST" type="float" min="1" max="100" value="80"/> 
+      <param name="min_cov" label="Minimum percentage coverage of assembly contig by the plasmid reference database to be considered" type="float" min="1" max="100" value="65"/> 
+    </section>  
+  </inputs>
+  <outputs>
+    <data name="outfile1" label="${tool.name}: Report from ${input.name}" format="tabular" hidden="false">
+      <discover_datasets pattern=".+_report\.txt" visible="true" ext="tabular" assign_primary_output="true"/>
+    </data>  
+  </outputs>
+  <tests>
+    <test>
+        <param name="input" value="plasmid_476.fasta" ftype="fasta"/>
+        <assert_stdout>
+            <has_text text="JN253636"/> 
+         </assert_stdout>
+    </test>
+  </tests>
+  <help>
+
+**Syntax**
+
+This tool provides *in-silico* predictions on plasmid typing including identification of replicon, relaxase and mate-pair formation protein types. MOB-typer also predicts mobility of a plasmid (Conjugative, Mobilizable, Non-mobilizable). Do not include multiple unrelated plasmids in the input FASTA file as they will be treated as a single plasmid.
+
+For more information please visit https://github.com/phac-nml/mob-suite/. 
+
+-----
+
+**Input:**
+
+A FASTA file with a single or multiple contigs (e.g. plasmid.fasta):
+
+
+**Output:**
+
+Tab-delimited report listing identified plasmid(s) and their predicted mobility. Refer to https://github.com/phac-nml/mob-suite#mob-typer-report-file-format for the description of each column.
+
+
+  </help>
+  <citations>
+    <citation type="bibtex">
+  @misc{githubmob-suite,
+  title = {MOB-Suite: Software tools for clustering, reconstruction and typing of plasmids from draft assemblies.},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/phac-nml/mob-suite},
+    }</citation>
+  </citations>
+</tool>
