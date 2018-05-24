@@ -4,8 +4,8 @@
      <requirement type="package" version="1.4.1">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
-    ln -s '${input}' '${input.name}';
-    mob_recon  --num_threads \${GALAXY_SLOTS:-4} --infile '${input.name}' --evalue '${adv_param.evalue}'  --unicycler_contigs '${adv_param.unicycler_contigs}' --run_circlator '${adv_param.run_circlator}' --run_typer --outdir '.';
+    ln -s "${input}" "${input.name}";
+    mob_recon  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" --evalue '${adv_param.evalue}'  --unicycler_contigs '${adv_param.unicycler_contigs}' --run_circlator '${adv_param.run_circlator}' --run_typer --outdir '.';
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>

@@ -4,8 +4,8 @@
      <requirement type="package" version="1.4.1">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
-    ln -s '${input}' '${input.name}';
-    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile '${input.name}' --evalue '${adv_param.evalue}' --min_ident '${adv_param.min_ident}' --min_cov '${adv_param.min_cov}' --outdir '.';
+    ln -s "${input}" "${input.name}";
+    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" --evalue '${adv_param.evalue}' --min_ident '${adv_param.min_ident}' --min_cov '${adv_param.min_cov}' --outdir '.';
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
