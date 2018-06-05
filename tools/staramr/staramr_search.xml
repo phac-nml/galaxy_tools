@@ -18,13 +18,13 @@
 
         --nprocs "\${GALAXY_SLOTS:-1}"
 
-        --pid-threshold $pid_threshold
-        --percent-length-overlap-resfinder $plength_resfinder
-        --percent-length-overlap-pointfinder $plength_pointfinder
+        --pid-threshold $advanced.pid_threshold
+        --percent-length-overlap-resfinder $advanced.plength_resfinder
+        --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
-        ${report_all_blast}
-        ${exclude_negatives}
-        ${exclude_resistance_phenotypes}
+        $advanced.report_all_blast
+        $advanced.exclude_negatives
+        $advanced.exclude_resistance_phenotypes
 
         --output-summary $summary
         --output-resfinder $resfinder
@@ -41,21 +41,9 @@
         #end if
 
         $named_genomes
-
-        && rm $excel_proper_extension
     ]]></command>
     <inputs>
         <param type="data" name="genomes" format="fasta" multiple="true"/>
-        <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
-               min="0" max="100" help="(--pid-threshold)" />
-        <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
-               min="0" max="100" help="(--percent-length-overlap-resfinder)" />
-        <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
-               min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
-        <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
-               help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
-        <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
-        <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
         <conditional name="use_pointfinder">
             <param name="enable" type="boolean" label="Enable scanning for point mutations using the PointFinder database" />
             <when value="true">
@@ -63,7 +51,20 @@
                     <option value="salmonella" selected="true">Salmonella</option>
                 </param>
             </when>
-       </conditional>
+            <when value="false" />
+        </conditional>
+        <section name="advanced" title="Advanced options" expanded="false">
+            <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
+                   min="0" max="100" help="(--pid-threshold)" />
+            <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
+                   min="0" max="100" help="(--percent-length-overlap-resfinder)" />
+            <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
+                   min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
+            <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
+                   help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
+            <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
+            <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
+        </section>
     </inputs>
     <outputs>
         <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
@@ -113,7 +114,7 @@
 staramr
 =======
 
-staramr_ scans bacterial genome contigs against both the ResFinder_ and PointFinder_ databases (ResFinder webservice_) and compiles a summary report of detected antimicrobial resistance genes.
+staramr_ scans bacterial genome contigs against both the ResFinder_ and PointFinder_ databases (used by the ResFinder webservice_) and compiles a summary report of detected antimicrobial resistance genes.
 
 Usage
 -----
@@ -220,13 +221,13 @@ Galaxy wrapper written by Aaron Petkau at the National Microbiology Laborator, P
     ]]></help>
     <citations>
         <citation type="bibtex">
-@misc{githubstaramr,
-  author = {Petkau, Aaron},
-  year = {2018},
-  title = {staramr},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  url = {https://github.com/phac-nml/staramr},
-}</citation>
+            @misc{githubstaramr,
+              author = {Petkau, Aaron},
+              year = {2018},
+              title = {staramr},
+              publisher = {GitHub},
+              journal = {GitHub repository},
+              url = {https://github.com/phac-nml/staramr},
+       }</citation>
     </citations>
 </tool>
