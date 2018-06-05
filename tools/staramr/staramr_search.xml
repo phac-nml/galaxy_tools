@@ -75,8 +75,40 @@
         <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
         <collection name="blast_hits" type="list" label="${tool.name} on ${on_string}: hits">
             <discover_datasets pattern="__name_and_ext__" directory="staramr_hits" />
-       </collection>
+        </collection>
     </outputs>
+    <tests>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <conditional name="use_pointfinder">
+                <param name="enable" value="true" />
+                <param name="organism" value="salmonella" />
+            </conditional>
+
+            <output name="summary" file="test1-summary.tsv" ftype="tabular" />
+            <output name="resfinder" file="test1-resfinder.tsv" ftype="tabular" />
+            <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
+            <output_collection name="blast_hits" type="list">
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+                <element name="pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+
+            <output name="summary" file="test2-summary.tsv" ftype="tabular" />
+            <output name="resfinder" file="test2-resfinder.tsv" ftype="tabular" />
+            <output_collection name="blast_hits" type="list">
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test2-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <param name="pid_threshold" value="99.8" />
+
+            <output name="summary" file="test3-summary.tsv" ftype="tabular" />
+        </test>
+    </tests>
     <help><![CDATA[
         usage: staramr search [-h] [-n NPROCS] [--pid-threshold PID_THRESHOLD]
                       [--percent-length-overlap-resfinder PLENGTH_THRESHOLD_RESFINDER]
