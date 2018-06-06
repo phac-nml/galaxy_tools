@@ -212,7 +212,7 @@ BLAST Hits
 
 The dataset collection  **hits** stores fasta files of the specific blast hits. 
 
-Galaxy wrapper written by Aaron Petkau at the National Microbiology Laborator, Public Health Agency of Canada.
+Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, Public Health Agency of Canada.
 
 .. _staramr: https://github.com/phac-nml/staramr
 .. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
