@@ -4,9 +4,11 @@
         <requirement type="package" version="0.2.0">staramr</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #import re
+
         #set $named_genomes = ''
         #for $genome in $genomes
-            #set $_named_genome = '"{}.fasta"'.format($genome.element_identifier)
+            #set $_named_genome = re.sub(r'(\s|\(|\))', '_', '"{}.fasta"'.format($genome.element_identifier))
             ln -s "$genome" $_named_genome &&
             #set $named_genomes = $named_genomes + ' ' + $_named_genome
         #end for
@@ -108,6 +110,12 @@
             <param name="pid_threshold" value="99.8" />
 
             <output name="summary" file="test3-summary.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="genomes" value="16S rc_gyrA rc_beta-lactam spaces (extra:characters).fsa" />
+            <param name="pid_threshold" value="99.8" />
+
+            <output name="summary" file="test4-summary.tsv" ftype="tabular" />
         </test>
     </tests>
     <help><![CDATA[
