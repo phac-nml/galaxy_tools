@@ -278,7 +278,6 @@ The detailed output directory tree looks as follows:
 
     /tmp/hydra_out/
         * align.bam
-        * align.bam.bai
         * coverage_file.csv
         * dr_report.csv
         * filtered.fastq
@@ -291,7 +290,6 @@ The description of each of these directories/files are as follows:
 * __run.conf__: The configuration used when this output was produced.
 * __reads_w_K103N/__: The results directory for the input file reads_w_K103N.fastq
     * __align.bam__: The alignment file in bam format.
-    * __align.bam.bai__: The index to the alignment file.
     * __coverage_file.csv__: A file with one entry per line with the AA position and the coverage at the position.
     * __dr_report.csv__: A report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
     * __filtered.fastq__: The reads remaining after the filtering stage.
