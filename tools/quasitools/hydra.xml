@@ -179,7 +179,6 @@
     </inputs>
     <outputs>
         <data format="bam" label="HyDRA: alignment bam output" name="output_bam" from_work_dir="output/align.bam" />
-        <data format="bam" label="HyDRA: bam.bai output" name="output_bam_bai" from_work_dir="output/align.bam.bai" />
         <data format="csv" label="HyDRA: coverage output" name="output_coverage" from_work_dir="output/coverage_file.csv" />
         <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
         <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
@@ -195,6 +194,7 @@
             <param name="type" value="single"/>
             <param name="fastq_input1" value="forward.fastq" />
             <param name="score_selector" value="mean" />
+            <param name="trim_reads" value="True" />
             <output name="output_coverage">
                 <assert_contents>
                     <has_text text="frame: 0" />
