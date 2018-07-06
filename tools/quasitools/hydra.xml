@@ -95,9 +95,7 @@
             --mean
         #end if
 
-        #if $trim_reads:
-            -tr
-        #end if
+        $trim_reads
 
         -o output
 
@@ -131,7 +129,7 @@
         <param name="min_depth" type="integer" optional="true" min="0" max="5000" label="Minimum depth" value="100" help="Minimum required depth for variant to be considered later on in the pipeline. Defaults to 100." />
         <param name="min_ac" type="integer" optional="true" min="0" max="5000" label="Minimum allele count" value="5" help="Minimum required allele count for variant to be considered later on in the pipeline. Defaults to 5." />
         <param name="min_freq" type="float" optional="true" min="0" max="1" label="Minimum frequency" value="0.01" help="Minimum required frequency for variant to be considered later on in the pipeline. Defaults to 0.01." />
-        <param name="trim_reads" type="boolean" optional="true" checked="False" label="Trim reads" help="Iteratively trim reads based on filter values if enabled." />
+        <param name="trim_reads" type="boolean" optional="true" checked="false" truevalue="-tr" falsevalue="" label="Trim reads" help="Iteratively trim reads based on filter values if enabled." />
         <conditional name="consensus">
             <param name="consensus_bool" type="select" label="Generate consensus sequence." multiple="false" display="radio">
                 <option value="true_consensus">True</option>
@@ -194,7 +192,6 @@
             <param name="type" value="single"/>
             <param name="fastq_input1" value="forward.fastq" />
             <param name="score_selector" value="mean" />
-            <param name="trim_reads" value="True" />
             <output name="output_coverage">
                 <assert_contents>
                     <has_text text="frame: 0" />
