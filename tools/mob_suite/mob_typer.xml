@@ -16,8 +16,8 @@
     </section>  
   </inputs>
   <outputs>
-    <data name="outfile1" label="${tool.name}: Report from ${input.name}" format="tabular" hidden="false">
-      <discover_datasets pattern=".+_report\.txt" visible="true" ext="tabular" assign_primary_output="true"/>
+    <data name="outfile1" label="${tool.name}: Report from ${input.name}" format="tabular" hidden="true">
+      <discover_datasets pattern=".+_report\.txt" visible="true" ext="tabular" assign_primary_output="false"/>
     </data>  
   </outputs>
   <tests>
