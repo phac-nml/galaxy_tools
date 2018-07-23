@@ -41,7 +41,7 @@
           <option value="True">Yes</option>
        </param>   
         <when value="True">
-          <param name="min_mob_evalue_value" type="float" value="0.00001" min="0" max="1" label="e-value (default: 0.00001)"/> 
+          <param name="min_mob_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="e-value (default: 0.00001)"/> 
         </when>  
         <when value="False"/>
       </conditional>
@@ -109,7 +109,7 @@ Tab-delimited report listing identified plasmid(s) and their predicted mobility.
   publisher = {GitHub},
   journal = {GitHub repository},
   doi = {10.1099/mgen.0.000206},
-  url = {https://github.com/phac-nml/mob-suite},
+  url = {https://github.com/phac-nml/mob-suite}
     }</citation>
   </citations>
 </tool>

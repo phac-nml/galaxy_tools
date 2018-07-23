@@ -18,8 +18,6 @@
       --min_length ${adv_param.min_length_condition.min_length_value}
     #end if 
     '--run_typer' --outdir '.';
-    ##print(${adv_param.min_length_condition.min_length_param});
-    ##print(${adv_param.min_length_condition.min_length_value});
   ]]>  
   </command>
   <inputs>
@@ -53,9 +51,6 @@
     <data name="outfile5" format="fasta" label="${tool.name}: Plasmid sequence"  hidden="true">
         <discover_datasets pattern="plasmid_.+\.(?P&lt;ext&gt;.+)" ext="fasta" visible="true" assign_primary_output="false"/>
     </data>
-    <!--collection name="list_output" type="list:list" label="Plasmid Sequences">
-      <discover_datasets pattern="plasmid_.+\.(?P&lt;ext&gt;.+)"  ext="fasta"  visible="true" directory="."/>
-    </collection-->
   </outputs>
   <tests>
     <test>
@@ -103,7 +98,7 @@ Note: Plasmid sequences will not be output if none are found. Some plasmid could
   publisher = {GitHub},
   journal = {GitHub repository},
   doi = {10.1099/mgen.0.000206},
-  url = {https://github.com/phac-nml/mob-suite},
+  url = {https://github.com/phac-nml/mob-suite}
     }</citation>
   </citations>
 </tool>
