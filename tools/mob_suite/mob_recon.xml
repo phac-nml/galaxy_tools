@@ -17,7 +17,7 @@
     #if str($adv_param.min_length_condition.min_length_param) == "True":
       --min_length ${adv_param.min_length_condition.min_length_value}
     #end if 
-    '--run_typer' --outdir '.';
+    --run_typer --outdir '.';
   ]]>  
   </command>
   <inputs>
