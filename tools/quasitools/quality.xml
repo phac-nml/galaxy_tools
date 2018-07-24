@@ -117,6 +117,30 @@
         <test>
             <param name="type" value="single"/>
             <param name="fastq_input1" value="forward.fastq" />
+            <param name="score_selector" value="median" />
+            <param name="trim_reads" value="-tr" />
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_text text="@M01647:10:000000000-ACPHB:1:1101:18589:1580 1:N:0:86" />
+                    <has_text text="CCCCCGG@FFGGGGGGGGGGGGCGGGGGGGGDGFFFGGGGGDEGCFGCFFFGGGGGGGGGGGGGGGGFGGGGGGGGGGFCFCGGGGCGFGGGGFGEGGGGGGGGGGGGGGGGGGGGGFEFGGGGGGF" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
+            <param name="score_selector" value="median" />
+            <param name="qual_selector" value="mask_reads" />
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_text text="@M01647:10:000000000-ACPHB:1:1101:18589:1580 1:N:0:86" />
+                    <has_text text="NNNNNNTACCACATCCCNCNNNNTTNNNNNNNNNNANNTCNNTNNCNNTNCTNNNTNTNNNTGNTGCNTNTTTTTCAGTTCCCTTNGNTGNNGNCTTCAGNNNNTATACTGCATTTACCNTNCNT" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
             <param name="score_selector" value="mean" />
             <output name="output_filtered">
                 <assert_contents>
