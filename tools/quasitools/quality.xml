@@ -1,0 +1,126 @@
+<tool id="quality" name="Quality control" version="0.1.0">
+    <description>Performs quality control on FASTQ reads.</description>
+    <requirements>
+          <requirement type="package" version="0.4.1">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        quasitools quality
+
+        ## Preparing file input.
+        #if $data_type.type == "paired":
+
+            '$data_type.fastq_input1'
+            '$data_type.fastq_input2'
+
+        #elif $data_type.type == "collection":
+
+            '$data_type.fastq_input1.forward'
+            '$data_type.fastq_input1.reverse'
+
+        #elif $data_type.type == "single":
+
+            '$data_type.fastq_input1'
+
+        #end if
+
+        #if $length_cutoff:
+            -lc '$length_cutoff'
+        #end if
+
+        #if $score_cutoff:
+            -sc '$score_cutoff'
+        #end if
+
+        #if $min_read_qual:
+            -rq '$min_read_qual'
+        #end if
+
+        #if $low_quality.qual_selector == "filter_ns":
+            --ns
+        #elif $low_quality.qual_selector == "mask_reads":
+            --mask_reads
+        #end if
+
+        #if $score_type.score_selector == "median":
+            --median
+        #elif $score_type.score_selector == "mean":
+            --mean
+        #end if
+
+        $trim_reads
+
+        -o output
+
+    ]]></command>
+    <inputs>
+        <conditional name="data_type">
+            <param name="type" type="select" label="Specify the read type.">
+                <option value="single">Single-end Data</option>
+                <option value="paired">Paired-end Data</option>
+                <option value="collection">Collection Paired-end Data</option>
+            </param>
+            <when value="single">
+                <param name="fastq_input1" type="data" format="fastq" label="Single end read file(s)"/>
+            </when>
+            <when value="paired">
+                <param name="fastq_input1" type="data" format="fastq" label="Forward paired-end read file"/>
+                <param name="fastq_input2" type="data" format="fastq" label="Reverse paired-end read file"/>
+            </when>
+            <when value="collection">
+                <param name="fastq_input1" type="data_collection" label="Paired-end reads collection" optional="false" format="fastq" collection_type="paired" />
+            </when>
+        </conditional>
+        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose average quality score is less than the specified score will be filtered out. Defaults to 30." />
+        <param name="min_read_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" help="Minimum required quality for a position in a read not to be masked, is masking is enabled. Defaults to 30." />
+        <param name="trim_reads" type="boolean" optional="true" checked="false" truevalue="-tr" falsevalue="" label="Trim reads" help="Iteratively trim reads based on filter values if enabled." />
+        <conditional name="low_quality">
+            <param name="qual_selector" type="select" label="Filter out regions masked, or mask low coverage regions with n's." multiple="false" display="radio">
+                <option value="filter_ns">Filter out regions with n's</option>
+                <option value="mask_reads">Mask low coverage regions with n's</option>
+                <option value="neither" selected="true">Do not filter or mask low coverage regions.</option>
+            </param>
+            <when value="filter_ns">
+            </when>
+            <when value="mask_reads">
+            </when>
+            <when value="neither">
+            </when>
+        </conditional>
+        <conditional name="score_type">
+            <param name="score_selector" type="select" label="Use either median score (default) or mean score for the score cutoff value." multiple="false" display="radio">
+                <option value="median" selected="true">Use median score</option>
+                <option value="mean">Use mean score</option>
+            </param>
+            <when value="median">
+            </when>
+            <when value="mean">
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
+            <param name="score_selector" value="median" />
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_text text="@M01647:10:000000000-ACPHB:1:1101:18589:1580 1:N:0:86" />
+                    <has_text text="CCCCCGG@FFGGGGGGGGGGGGCGGGGGGGGDGFFFGGGGGDEGCFGCFFFGGGGGGGGGGGGGGGGFGGGGGGGGGGFCFCGGGGCGFGGGGFGEGGGGGGGGGGGGGGGGGGGGGFEFGGGGGGF" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Quality
+=======
+
+Perform quality control on FASTQ reads.]]></help>
+    <citations>
+    </citations>
+</tool>
