@@ -1,7 +1,7 @@
 <tool id="hydra" name="Hydra pipeline" version="0.3.0">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.4.0">quasitools</requirement>
+          <requirement type="package" version="0.4.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
