@@ -114,6 +114,17 @@
                 </assert_contents>
             </output>
         </test>
+        <test>
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
+            <param name="score_selector" value="mean" />
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_text text="@M01647:10:000000000-ACPHB:1:1101:10485:1674 1:N:0:86" />
+                    <has_text text="CCCCCGG@FFGGGGGGGGGGGGCGGGGGGGGDGFFFGGGGGDEGCFGCFFFGGGGGGGGGGGGGGGGFGGGGGGGGGGFCFCGGGGCGFGGGGFGEGGGGGGGGGGGGGGGGGGGGGFEFGGGGGGF" />
+                </assert_contents>
+            </output>
+        </test>
     </tests>
     <help><![CDATA[
 
