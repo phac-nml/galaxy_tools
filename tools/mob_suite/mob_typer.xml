@@ -1,23 +1,75 @@
-<tool id="mob_typer" name="MOB-Typer" version="1.4.1">
+<tool id="mob_typer" name="MOB-Typer" version="1.4.5">
   <description>Get the plasmid type and mobility given its sequence</description>
   <requirements>
-     <requirement type="package" version="1.4.1">mob_suite</requirement>
+     <requirement type="package" version="1.4.5">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
+  <![CDATA[
     ln -s "${input}" "${input.name}";
-    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" --evalue '${adv_param.evalue}' --min_ident '${adv_param.min_ident}' --min_cov '${adv_param.min_cov}' --outdir '.';
+    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" 
+    #if str($adv_param.min_rep_evalue_condition.min_rep_evalue_param) == "True":
+      --min_rep_evalue $adv_param.min_rep_evalue_condition.min_rep_evalue_value
+    #end if 
+    #if str($adv_param.min_mob_evalue_condition.min_mob_evalue_param) == "True":
+      --min_mob_evalue $adv_param.min_mob_evalue_condition.min_mob_evalue_value
+    #end if 
+    #if str($adv_param.min_con_evalue_condition.min_con_evalue_param) == "True":
+      --min_con_evalue $adv_param.min_con_evalue_condition.min_con_evalue_value
+    #end if 
+    #if str($adv_param.min_ori_evalue_condition.min_ori_evalue_param) == "True":
+      --min_ori_evalue $adv_param.min_ori_evalue_condition.min_ori_evalue_value
+    #end if 
+    --outdir '.';
+  ]]>
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
     <section name="adv_param" title="Advanced parameters" expanded="False">
-      <param name="evalue" label="Minimum e-value threshold for BLAST" type="float"  min="0.000000000000000000001" max="1" value="0.00001"/>
-      <param name="min_ident" label="Minimum sequence identity for BLAST" type="float" min="1" max="100" value="80"/> 
-      <param name="min_cov" label="Minimum percentage coverage of assembly contig by the plasmid reference database to be considered" type="float" min="1" max="100" value="65"/> 
+      <conditional name="min_rep_evalue_condition">
+        <param name="min_rep_evalue_param" label="Minimum evalue threshold for replicon blastn" type="select" value="False">
+          <option value="False">No</option>
+          <option value="True">Yes</option>
+       </param>   
+        <when value="True">
+          <param name="min_rep_evalue_value" type="float" value="0.00001" min="0" max="1" label="e-value (default: 0.00001)"/> 
+        </when>  
+        <when value="False"/>
+      </conditional>
+      <conditional name="min_mob_evalue_condition">
+        <param name="min_mob_evalue_param" label="Minimum evalue threshold for relaxase tblastn" type="select" value="False">
+          <option value="False">No</option>
+          <option value="True">Yes</option>
+       </param>   
+        <when value="True">
+          <param name="min_mob_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="e-value (default: 0.00001)"/> 
+        </when>  
+        <when value="False"/>
+      </conditional>
+      <conditional name="min_con_evalue_condition">
+        <param name="min_con_evalue_param" label="Minimum evalue threshold for contig blastn" type="select" value="False">
+          <option value="False">No</option>
+          <option value="True">Yes</option>
+       </param>   
+        <when value="True">
+          <param name="min_con_evalue_value" type="float" value="0.00001" min="0" max="1" label="e-value (default: 0.00001)"/> 
+        </when>  
+        <when value="False"/>
+      </conditional>
+      <conditional name="min_ori_evalue_condition">
+        <param name="min_ori_evalue_param" label="Minimum evalue threshold for oriT elements blastn" type="select" value="False">
+          <option value="False">No</option>
+          <option value="True">Yes</option>
+       </param>   
+        <when value="True">
+          <param name="min_ori_evalue_value" type="float" value="0.00001" min="0" max="1" label="e-value (default: 0.00001)"/> 
+        </when>  
+        <when value="False"/>
+      </conditional>
     </section>  
   </inputs>
   <outputs>
-    <data name="outfile1" label="${tool.name}: Report from ${input.name}" format="tabular" hidden="false">
-      <discover_datasets pattern=".+_report\.txt" visible="true" ext="tabular" assign_primary_output="true"/>
+    <data name="outfile1" label="${tool.name}: Plasmid report on ${input.name}" format="tabular">
+      <discover_datasets pattern=".+_report\.txt" visible="true" format="tabular" assign_primary_output="true"/>
     </data>  
   </outputs>
   <tests>
@@ -52,10 +104,12 @@ Tab-delimited report listing identified plasmid(s) and their predicted mobility.
   <citations>
     <citation type="bibtex">
   @misc{githubmob-suite,
+  author = {Robertson J, Nash J},
   title = {MOB-Suite: Software tools for clustering, reconstruction and typing of plasmids from draft assemblies.},
   publisher = {GitHub},
   journal = {GitHub repository},
-  url = {https://github.com/phac-nml/mob-suite},
+  doi = {10.1099/mgen.0.000206},
+  url = {https://github.com/phac-nml/mob-suite}
     }</citation>
   </citations>
 </tool>
