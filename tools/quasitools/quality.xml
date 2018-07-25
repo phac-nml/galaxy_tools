@@ -100,7 +100,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
+        <data format="fastq" label="Quality control output" name="output_filtered" from_work_dir="output/filtered.fastq" />
     </outputs>
     <tests>
         <test>
@@ -164,8 +164,8 @@
     </tests>
     <help><![CDATA[
 @M01647:10:000000000-ACPHB:1:1101:8313:2157 1:N:0:86
-Quality
-=======
+Quality Control
+===============
 
 Perform quality control on FASTQ reads.]]></help>
     <citations>
