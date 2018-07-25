@@ -118,6 +118,18 @@
             <param name="type" value="single"/>
             <param name="fastq_input1" value="forward.fastq" />
             <param name="score_selector" value="median" />
+            <param name="qual_selector" value="filter_ns" />
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_text text="@M01647:10:000000000-ACPHB:1:1101:18589:1580 1:N:0:86" />
+                    <has_text text="CCCCCGG@FFGGGGGGGGGGGGCGGGGGGGGDGFFFGGGGGDEGCFGCFFFGGGGGGGGGGGGGGGGFGGGGGGGGGGFCFCGGGGCGFGGGGFGEGGGGGGGGGGGGGGGGGGGGGFEFGGGGGGF" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="type" value="single"/>
+            <param name="fastq_input1" value="forward.fastq" />
+            <param name="score_selector" value="median" />
             <param name="trim_reads" value="-tr" />
             <output name="output_filtered">
                 <assert_contents>
@@ -151,7 +163,7 @@
         </test>
     </tests>
     <help><![CDATA[
-
+@M01647:10:000000000-ACPHB:1:1101:8313:2157 1:N:0:86
 Quality
 =======
 
