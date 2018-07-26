@@ -1,7 +1,7 @@
 <tool id="hydra" name="Hydra pipeline" version="0.3.0">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.4.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -121,7 +121,7 @@
         <param name="mutation_db" type="data" format="tsv" optional="true" label="Mutation DB" help="Defaults to HIV mutation database." />
         <param name="reporting_threshold" type="integer" optional="true" min="1" max="100" value="1" label="Reporting threshold. Defaults to 1." help="Minimum mutation frequency to report." />
         <param name="consensus_pct" type="integer" optional="true" min="1" max="20" value="20" label="Consensus percentage" help="Minimum mutation frequency to report. Defaults to 20." />
-        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="length_cutoff" type="integer" optional="true" min="1" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
         <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose median or mean quality score (depending on the score type specified) is less than the specified score cutoff value will be filtered out. Defaults to 30." />
         <param name="error_rate" type="float" optional="true" min="0" max="1" label="Error rate" value="0.0021" help="Estimated sequencing error rate. Defaults to 0.0021."/>
         <param name="min_variant_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" help="Minimum required quality for variant to be considered later on in the pipeline. Defaults to 30." />

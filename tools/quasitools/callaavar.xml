@@ -1,15 +1,15 @@
 <tool id="aavariants" name="Amino Acid Variants" version="0.1.0">
     <description>Identifies amino acid mutations</description>
     <requirements>
-        <requirement type="package" version="0.3.1">quasitools</requirement>
+        <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools call aavar $input_bam $ref_file $var_file $input_genes 
+        quasitools call aavar $input_bam $ref_file $var_file $input_genes
 
         #if $mutation_db:
-          $mutation_db 
+          $mutation_db
         #end if
 
         -o output.vcf

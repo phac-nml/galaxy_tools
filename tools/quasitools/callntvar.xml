@@ -1,15 +1,15 @@
 <tool id="callntvar" name="Nucleotide Variants" version="0.1.0">
     <description>Identifies nucleotide variants</description>
     <requirements>
-          <requirement type="package" version="0.3.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-    
+
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools call ntvar $input_bam $ref_file 
+        quasitools call ntvar $input_bam $ref_file
 
         #if $error_rate:
-            -e $error_rate 
+            -e $error_rate
         #end if
 
         -o output.vcf
@@ -36,7 +36,7 @@
         </test>
     </tests>
     <help><![CDATA[
-        
+
 Nucleotide Variants
 ===================
 

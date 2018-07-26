@@ -1,21 +1,21 @@
 <tool id="consensus" name="Consensus Sequence" version="0.2.0">
     <description>Generate a consensus sequence from a BAM file</description>
     <requirements>
-          <requirement type="package" version="0.3.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools consensus $input_bam $ref_file 
+        quasitools consensus $input_bam $ref_file
 
         #if $fasta_id.type == 'default':
-            -i '${input_bam.element_identifier}' 
+            -i '${input_bam.element_identifier}'
         #elif $fasta_id.type == 'custom':
             -i '${fasta_id.custom_id}'
         #end if
 
         #if $base_type.type == 'mixed':
-            -p $base_type.percentage 
+            -p $base_type.percentage
         #end if
 
         -o output.fasta

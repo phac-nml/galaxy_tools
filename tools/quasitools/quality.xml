@@ -1,7 +1,7 @@
 <tool id="quality" name="Quality control" version="0.1.0">
     <description>Performs quality control on FASTQ reads.</description>
     <requirements>
-          <requirement type="package" version="0.4.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -71,7 +71,7 @@
                 <param name="fastq_input1" type="data_collection" label="Paired-end reads collection" optional="false" format="fastq" collection_type="paired" />
             </when>
         </conditional>
-        <param name="length_cutoff" type="integer" optional="true" min="0" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
+        <param name="length_cutoff" type="integer" optional="true" min="1" max="1000" label="Length cutoff" value="100" help="Reads which fall short of the specified length will be filtered out. Defaults to 100." />
         <param name="score_cutoff" type="integer" optional="true" min="0" max="40" label="Score cutoff" value="30" help="Reads whose median or mean quality score (depending on the score type specified) is less than the specified score cutoff value will be filtered out. Defaults to 30." />
         <param name="min_read_qual" type="integer" optional="true" min="1" max="100" label="Minimum quality" value="30" help="Minimum required quality for a position in a read not to be masked, is masking is enabled. Defaults to 30." />
         <param name="trim_reads" type="boolean" optional="true" checked="false" truevalue="-tr" falsevalue="" label="Trim reads" help="Iteratively trim reads based on filter values if enabled." />
