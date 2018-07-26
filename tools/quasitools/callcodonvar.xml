@@ -1,17 +1,17 @@
-<tool id="callcodonvar" name="Codon Variants" version="0.1.0">
+<tool id="callcodonvar" name="Codon Variants" version="0.4.2">
     <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
     <requirements>
-          <requirement type="package" version="0.3.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        cat $input_genes && 
+        cat $input_genes &&
 
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools call codonvar $input_bam $ref_file $offset $input_genes 
+        quasitools call codonvar $input_bam $ref_file $offset $input_genes
 
         #if $error_rate:
-            -e $error_rate 
+            -e $error_rate
         #end if
 
         -o output.csv
@@ -46,7 +46,7 @@
 Codon Variants
 ==============
 
-Call codon variants for a given BAM. A report is generated that details nucleotide variants within a 
+Call codon variants for a given BAM. A report is generated that details nucleotide variants within a
 codon and the resulting AA variants. The report indicates whether the nucleotide variants correspond to
 a synonymous or non-synonymous mutation.
 
