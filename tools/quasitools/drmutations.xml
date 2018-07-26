@@ -1,4 +1,4 @@
-<tool id="drmutations" name="Drug Resistance Mutations" version="0.1.0">
+<tool id="drmutations" name="Drug Resistance Mutations" version="0.4.2">
     <description></description>
     <requirements>
         <requirement type="package" version="0.4.2">quasitools</requirement>

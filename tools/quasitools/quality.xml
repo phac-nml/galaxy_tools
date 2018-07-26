@@ -1,4 +1,4 @@
-<tool id="quality" name="Quality control" version="0.1.0">
+<tool id="quality" name="Quality control" version="0.4.2">
     <description>Performs quality control on FASTQ reads.</description>
     <requirements>
           <requirement type="package" version="0.4.2">quasitools</requirement>

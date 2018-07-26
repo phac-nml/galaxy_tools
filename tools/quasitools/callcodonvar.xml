@@ -1,4 +1,4 @@
-<tool id="callcodonvar" name="Codon Variants" version="0.1.0">
+<tool id="callcodonvar" name="Codon Variants" version="0.4.2">
     <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
     <requirements>
           <requirement type="package" version="0.4.2">quasitools</requirement>

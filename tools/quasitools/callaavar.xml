@@ -1,4 +1,4 @@
-<tool id="aavariants" name="Amino Acid Variants" version="0.1.0">
+<tool id="aavariants" name="Amino Acid Variants" version="0.4.2">
     <description>Identifies amino acid mutations</description>
     <requirements>
         <requirement type="package" version="0.4.2">quasitools</requirement>
