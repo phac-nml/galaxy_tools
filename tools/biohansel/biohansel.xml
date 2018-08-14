@@ -388,6 +388,27 @@ Contents of ``match_results.tab``:
 
     *Next 202 lines omitted.*
 
+
+**Example Subtype Metadata**
+
+A column with name `subtype` must exist and should have subtype designations that would appear in your biohansel results. There are no requirements for the number of columns or contents of those columns in the table - they can contain whatever you want.
+
+
+    +-------------+-------+--------+------------------+
+    | subtype     | clade | source | disease_symptoms |
+    +-------------+-------+--------+------------------+
+    | 1           | I     | geese  | death            |
+    +-------------+-------+--------+------------------+
+    | 1.1         | I     | moose  | burns            |
+    +-------------+-------+--------+------------------+
+    | 2.2.1.1.1   | II    | mouse  | boils            |
+    +-------------+-------+--------+------------------+
+    | 2.2.2.2.1.4 | IIa   | house  | rash             |
+    +-------------+-------+--------+------------------+
+
+The `biohansel` results table will be joined with the subtype metadata table on the `subtype` field so if there are subtype metadata for your `biohansel` results, it will show up in the final output table. For example, if you have a sample that produces a result with subtype "1", there will also be columns "clade", "source" and "disease_symptoms" with "I", "geese" and "death", respectively.
+
+
 Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Health Agency of Canada, National Microbiology Laboratory.
 
     ]]></help>
