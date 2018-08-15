@@ -1,0 +1,241 @@
+<tool id="staramr_search" name="staramr" version="0.2.2">
+    <description>Scans genome assemblies against the ResFinder and PointFinder databases searching for AMR genes.</description>
+    <requirements>
+        <requirement type="package" version="0.2.2">staramr</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #import re
+
+        #set $named_genomes = ''
+        #for $genome in $genomes
+            #set $_named_genome = re.sub(r'(\s|\(|\))', '_', '"{}.fasta"'.format($genome.element_identifier))
+            ln -s "$genome" $_named_genome &&
+            #set $named_genomes = $named_genomes + ' ' + $_named_genome
+        #end for
+
+        #set $excel_proper_extension = '"{}.xlsx"'.format($excel)
+        ln -s "$excel" $excel_proper_extension &&
+
+        staramr search
+
+        --nprocs "\${GALAXY_SLOTS:-1}"
+
+        --pid-threshold $advanced.pid_threshold
+        --percent-length-overlap-resfinder $advanced.plength_resfinder
+        --percent-length-overlap-pointfinder $advanced.plength_pointfinder
+
+        $advanced.report_all_blast
+        $advanced.exclude_negatives
+        $advanced.exclude_resistance_phenotypes
+
+        --output-summary $summary
+        --output-resfinder $resfinder
+        #if $use_pointfinder.enable
+            --output-pointfinder $pointfinder
+        #end if
+        --output-settings $settings
+        --output-excel $excel_proper_extension
+
+        --output-hits-dir staramr_hits
+
+        #if $use_pointfinder.enable
+            --pointfinder-organism $use_pointfinder.organism
+        #end if
+
+        $named_genomes
+    ]]></command>
+    <inputs>
+        <param type="data" name="genomes" format="fasta" multiple="true"/>
+        <conditional name="use_pointfinder">
+            <param name="enable" type="boolean" label="Enable scanning for point mutations using the PointFinder database" />
+            <when value="true">
+                <param name="organism" type="select" label="Select a pointfinder organism">
+                    <option value="salmonella" selected="true">Salmonella</option>
+                </param>
+            </when>
+            <when value="false" />
+        </conditional>
+        <section name="advanced" title="Advanced options" expanded="false">
+            <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
+                   min="0" max="100" help="(--pid-threshold)" />
+            <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
+                   min="0" max="100" help="(--percent-length-overlap-resfinder)" />
+            <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
+                   min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
+            <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
+                   help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
+            <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
+            <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
+        <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
+        <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv">
+            <filter>use_pointfinder['enable']</filter>
+        </data>
+        <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
+        <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
+        <collection name="blast_hits" type="list" label="${tool.name} on ${on_string}: hits">
+            <discover_datasets pattern="__name_and_ext__" directory="staramr_hits" />
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <conditional name="use_pointfinder">
+                <param name="enable" value="true" />
+                <param name="organism" value="salmonella" />
+            </conditional>
+
+            <output name="summary" file="test1-summary.tsv" ftype="tabular" />
+            <output name="resfinder" file="test1-resfinder.tsv" ftype="tabular" />
+            <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
+            <output_collection name="blast_hits" type="list">
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+                <element name="pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+
+            <output name="summary" file="test2-summary.tsv" ftype="tabular" />
+            <output name="resfinder" file="test2-resfinder.tsv" ftype="tabular" />
+            <output_collection name="blast_hits" type="list">
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test2-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <param name="pid_threshold" value="99.8" />
+
+            <output name="summary" file="test3-summary.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="genomes" value="16S rc_gyrA rc_beta-lactam spaces (extra:characters).fsa" />
+            <param name="pid_threshold" value="99.8" />
+
+            <output name="summary" file="test4-summary.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+staramr
+=======
+
+staramr_ scans bacterial genome contigs against both the ResFinder_ and PointFinder_ databases (used by the ResFinder webservice_) and compiles a summary report of detected antimicrobial resistance genes.
+
+Usage
+-----
+
+1. Select your genome contigs (in FASTA format).
+2. Select whether or not you wish to scan your genome for point mutations giving antimicrobial resistance using the PointFinder database. This requires you to specify the specific organism you are scanning (currently only *salmonella* is supported).
+3. Run the tool.
+
+Output
+------
+
+There are 5 different output files produced by `staramr` as well as a collection of additional files.
+
+summary.tsv
+```````````
+
+A summary of all detected AMR genes/mutations in each genome, one genome per line.
+
++------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
+| Isolate ID | Genotype                                                  | Predicted Phenotype                                                                                       |
++============+===========================================================+===========================================================================================================+
+| SRR1952908 | aadA1, aadA2, blaTEM-57, cmlA1, gyrA (S83Y), sul3, tet(A) | streptomycin, ampicillin, chloramphenicol, ciprofloxacin I/R, nalidixic acid, sulfisoxazole, tetracycline |
++------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
+| SRR1952926 | blaTEM-57, gyrA (S83Y), tet(A)                            | ampicillin, ciprofloxacin I/R, nalidixic acid, tetracycline                                               |
++------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+
+
+resfinder.tsv
+`````````````
+
+A tabular file of each AMR gene and additional BLAST information from the **ResFinder** database, one gene per line.
+
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| Isolate ID | Gene       | Predicted Phenotype  | %Identity  | %Overlap  | HSP Length/Total Length  | Contig       | Start  | End   | Accession |
++============+============+======================+============+===========+==========================+==============+========+=======+===========+
+| SRR1952908 | sul3       | sulfisoxazole        | 100.00     | 100.00    | 792/792                  | contig00030  | 2091   | 2882  | AJ459418  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952908 | tet(A)     | tetracycline         | 99.92      | 100.00    | 1200/1200                | contig00032  | 1551   | 2750  | AJ517790  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952908 | cmlA1      | chloramphenicol      | 99.92      | 100.00    | 1260/1260                | contig00030  | 6707   | 5448  | M64556    |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952908 | aadA1      | streptomycin         | 100.00     | 100.00    | 792/792                  | contig00030  | 5355   | 4564  | JQ414041  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952908 | aadA2      | streptomycin         | 99.75      | 100.00    | 792/792                  | contig00030  | 7760   | 6969  | JQ364967  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952908 | blaTEM-57  | ampicillin           | 99.88      | 100.00    | 861/861                  | contig00032  | 6247   | 5387  | FJ405211  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952926 | tet(A)     | tetracycline         | 99.92      | 100.00    | 1200/1200                | contig00027  | 1480   | 2679  | AJ517790  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+| SRR1952926 | blaTEM-57  | ampicillin           | 99.88      | 100.00    | 861/861                  | contig00027  | 6176   | 5316  | FJ405211  |
++------------+------------+----------------------+------------+-----------+--------------------------+--------------+--------+-------+-----------+
+
+pointfinder.tsv
+```````````````
+
+A tabular file of each AMR point mutation and additional BLAST information from the **PointFinder** database, one gene per line.
+
++-------------+--------------+------------------------------------+--------+-----------+----------------------+------------+-----------+--------------------------+--------------+---------+--------+
+| Isolate ID  | Gene         | Predicted Phenotype                | Type   | Position  | Mutation             | %Identity  | %Overlap  | HSP Length/Total Length  | Contig       | Start   | End    |
++=============+==============+====================================+========+===========+======================+============+===========+==========================+==============+=========+========+
+| SRR1952908  | gyrA (S83Y)  | ciprofloxacin I/R, nalidixic acid  | codon  | 83        | TCC -> TAC (S -> Y)  | 99.96      | 100.00    | 2637/2637                | contig00008  | 22801   | 20165  |
++-------------+--------------+------------------------------------+--------+-----------+----------------------+------------+-----------+--------------------------+--------------+---------+--------+
+| SRR1952926  | gyrA (S83Y)  | ciprofloxacin I/R, nalidixic acid  | codon  | 83        | TCC -> TAC (S -> Y)  | 99.96      | 100.00    | 2637/2637                | contig00011  | 157768  | 160404 |
++-------------+--------------+------------------------------------+--------+-----------+----------------------+------------+-----------+--------------------------+--------------+---------+--------+
+
+settings.txt
+````````````
+
+The command-line, database versions, and other settings used to run `staramr`.
+
+::
+
+    command_line                  = staramr search -o out --pointfinder-organism salmonella SRR1952908.fasta SRR1952926.fasta
+    version                       = 0.2.0
+    start_time                    = 2018-06-05 14:41:44
+    end_time                      = 2018-06-05 14:41:47
+    total_minutes                 = 0.05
+    resfinder_db_dir              = staramr/databases/data/dist/resfinder
+    resfinder_db_url              = https://bitbucket.org/genomicepidemiology/resfinder_db.git
+    resfinder_db_commit           = dc33e2f9ec2c420f99f77c5c33ae3faa79c999f2
+    resfinder_db_date             = Tue, 20 Mar 2018 16:49
+    pointfinder_db_dir            = staramr/databases/data/dist/pointfinder
+    pointfinder_db_url            = https://bitbucket.org/genomicepidemiology/pointfinder_db.git
+    pointfinder_db_commit         = ba65c4d175decdc841a0bef9f9be1c1589c0070a
+    pointfinder_db_date           = Fri, 06 Apr 2018 09:02
+    pointfinder_gene_drug_version = 050218
+    resfinder_gene_drug_version   = 050218 
+
+results.xlsx
+````````````
+
+An Excel spreadsheet containing the previous 4 files as separate worksheets.
+
+BLAST Hits
+``````````
+
+The dataset collection  **hits** stores fasta files of the specific blast hits. 
+
+Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, Public Health Agency of Canada.
+
+.. _staramr: https://github.com/phac-nml/staramr
+.. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
+.. _PointFinder: https://bitbucket.org/genomicepidemiology/pointfinder_db
+.. _webservice: https://cge.cbs.dtu.dk/services/ResFinder/
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @misc{githubstaramr,
+              author = {Petkau, Aaron},
+              year = {2018},
+              title = {staramr},
+              publisher = {GitHub},
+              journal = {GitHub repository},
+              url = {https://github.com/phac-nml/staramr},
+       }</citation>
+    </citations>
+</tool>
