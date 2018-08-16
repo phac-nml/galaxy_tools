@@ -56,8 +56,8 @@
       </conditional> 
       <param name="min_rep_evalue" label="Minimum evalue threshold for replicon blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
       <param name="min_mob_evalue" label="Minimum evalue threshold for relaxase tblastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_con_evalue" label="Minimum evalue threshold for relaxase tblastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_rpp_evalue" label="Minimum evalue threshold for contig blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_con_evalue" label="Minimum evalue threshold for contig blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_rpp_evalue" label="Minimum evalue threshold for repetitve elements blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
       <param name="min_rep_ident" label="Minimum sequence identity for replicons" type="integer"  min="0" max="100" value="80"/>
       <param name="min_mob_ident" label="Minimum sequence identity for relaxases" type="integer"  min="0" max="100" value="80"/>
       <param name="min_con_ident" label="Minimum sequence identity for contigs" type="integer"  min="0" max="100" value="80"/>
