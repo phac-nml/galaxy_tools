@@ -1,0 +1,174 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "AMRworkflow",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": "mob_recon",
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool MOB-Recon",
+                    "name": "input"
+                }
+            ],
+            "label": null,
+            "name": "MOB-Recon",
+            "outputs": [
+                {
+                    "name": "seqhits",
+                    "type": "input"
+                },
+                {
+                    "name": "outfile1",
+                    "type": "tabular"
+                },
+                {
+                    "name": "outfile2",
+                    "type": "tabular"
+                },
+                {
+                    "name": "outfile3",
+                    "type": "fasta"
+                },
+                {
+                    "name": "outfile4",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "left": 419,
+                "top": 200
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutfile1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "outfile1"
+                },
+                "HideDatasetActionoutfile2": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "outfile2"
+                },
+                "HideDatasetActionoutfile3": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "outfile3"
+                },
+                "HideDatasetActionoutfile4": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "outfile4"
+                }
+            },
+            "tool_id": "mob_recon",
+            "tool_state": "{\"adv_param\": \"{\\\"run_circlator\\\": \\\"True\\\", \\\"min_length_condition\\\": {\\\"min_length_param\\\": \\\"False\\\", \\\"__current_case__\\\": 1}, \\\"unicycler_contigs\\\": \\\"True\\\"}\", \"input\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"__page__\": null}",
+            "tool_version": "1.4.5",
+            "type": "tool",
+            "uuid": "43305863-2367-4249-b26f-90bb4bf856b6",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "seqhits",
+                    "uuid": "35b28ad2-b616-43fb-9a7c-d2be358f7994"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "staramr_search",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "genomes": {
+                    "id": 0,
+                    "output_name": "seqhits"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool staramr",
+                    "name": "genomes"
+                }
+            ],
+            "label": null,
+            "name": "staramr",
+            "outputs": [
+                {
+                    "name": "blast_hits",
+                    "type": "input"
+                },
+                {
+                    "name": "summary",
+                    "type": "tabular"
+                },
+                {
+                    "name": "resfinder",
+                    "type": "tabular"
+                },
+                {
+                    "name": "pointfinder",
+                    "type": "tabular"
+                },
+                {
+                    "name": "settings",
+                    "type": "txt"
+                },
+                {
+                    "name": "excel",
+                    "type": "xlsx"
+                }
+            ],
+            "position": {
+                "left": 639,
+                "top": 200
+            },
+            "post_job_actions": {
+                "HideDatasetActionexcel": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "excel"
+                },
+                "HideDatasetActionpointfinder": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "pointfinder"
+                },
+                "HideDatasetActionsettings": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "settings"
+                }
+            },
+            "tool_id": "staramr_search",
+            "tool_state": "{\"__page__\": null, \"use_pointfinder\": \"{\\\"enable\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"__rerun_remap_job_id__\": null, \"genomes\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"advanced\": \"{\\\"pid_threshold\\\": \\\"98.0\\\", \\\"exclude_resistance_phenotypes\\\": \\\"false\\\", \\\"exclude_negatives\\\": \\\"false\\\", \\\"plength_resfinder\\\": \\\"60.0\\\", \\\"plength_pointfinder\\\": \\\"95.0\\\", \\\"report_all_blast\\\": \\\"false\\\"}\"}",
+            "tool_version": "0.2.2",
+            "type": "tool",
+            "uuid": "3d6ac657-0b81-4ec8-9c92-9905823ca889",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "blast_hits",
+                    "uuid": "ab3944ae-cd4f-4820-82e4-3cec18e3c296"
+                },
+                {
+                    "label": null,
+                    "output_name": "resfinder",
+                    "uuid": "f929382a-ba34-4130-a21f-7a7e0b1e454b"
+                },
+                {
+                    "label": null,
+                    "output_name": "summary",
+                    "uuid": "51d49673-6c63-4755-b060-590e50f08fba"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "0c87f012-e84c-4afa-850e-17bbac0149d5"
+}

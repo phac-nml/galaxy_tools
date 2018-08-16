@@ -6,9 +6,10 @@
   <command detect_errors="exit_code">
   <![CDATA[  
     #import re
+    #import os.path
     
     #set $named_input = re.sub(r'(\s|\(|\)|:|!)', '_', str($input.element_identifier)+".fasta")
-    ln -s "$input" $named_input &&
+    ln -s "$input" $named_input && 
     
     mob_recon  --num_threads \${GALAXY_SLOTS:-4}  --infile "${named_input}" 
     #if str($adv_param.unicycler_contigs) == "True":
@@ -29,8 +30,7 @@
     --min_con_ident  '${adv_param.min_con_ident}'
     --min_rpp_ident   '${adv_param.min_rpp_ident}'
     --outdir '.' && 
-    mkdir ./sequences && cp plasmid*.fasta chromosome.fasta  ./sequences 2> /dev/null | true 
-
+    mkdir ./sequences && (cp plasmid*.fasta chromosome.fasta ./sequences 2> /dev/null || true)
   ]]>  
   </command>
   <inputs>
