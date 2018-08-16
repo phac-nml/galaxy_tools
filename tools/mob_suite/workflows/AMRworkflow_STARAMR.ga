@@ -33,15 +33,11 @@
                 },
                 {
                     "name": "outfile3",
-                    "type": "fasta"
-                },
-                {
-                    "name": "outfile4",
                     "type": "tabular"
                 }
             ],
             "position": {
-                "left": 419,
+                "left": 200,
                 "top": 200
             },
             "post_job_actions": {
@@ -59,23 +55,18 @@
                     "action_arguments": {},
                     "action_type": "HideDatasetAction",
                     "output_name": "outfile3"
-                },
-                "HideDatasetActionoutfile4": {
-                    "action_arguments": {},
-                    "action_type": "HideDatasetAction",
-                    "output_name": "outfile4"
                 }
             },
             "tool_id": "mob_recon",
-            "tool_state": "{\"adv_param\": \"{\\\"run_circlator\\\": \\\"True\\\", \\\"min_length_condition\\\": {\\\"min_length_param\\\": \\\"False\\\", \\\"__current_case__\\\": 1}, \\\"unicycler_contigs\\\": \\\"True\\\"}\", \"input\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"__page__\": null}",
-            "tool_version": "1.4.5",
+            "tool_state": "{\"adv_param\": \"{\\\"min_length_condition\\\": {\\\"min_length_param\\\": \\\"False\\\", \\\"__current_case__\\\": 1}, \\\"min_con_ident\\\": \\\"80\\\", \\\"min_mob_ident\\\": \\\"80\\\", \\\"min_mob_evalue\\\": \\\"1e-05\\\", \\\"min_rep_evalue\\\": \\\"1e-05\\\", \\\"unicycler_contigs\\\": \\\"True\\\", \\\"min_rep_ident\\\": \\\"80\\\", \\\"min_rpp_evalue\\\": \\\"1e-05\\\", \\\"min_rpp_ident\\\": \\\"80\\\", \\\"run_circlator\\\": \\\"True\\\", \\\"min_con_evalue\\\": \\\"1e-05\\\"}\", \"input\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"__page__\": null}",
+            "tool_version": "1.4.8",
             "type": "tool",
-            "uuid": "43305863-2367-4249-b26f-90bb4bf856b6",
+            "uuid": "017d5861-8836-46a8-8444-0dcaca60eda1",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "seqhits",
-                    "uuid": "35b28ad2-b616-43fb-9a7c-d2be358f7994"
+                    "uuid": "6304bc2b-bcc9-47c4-8e3b-9d2ee5a80433"
                 }
             ]
         },
@@ -125,15 +116,10 @@
                 }
             ],
             "position": {
-                "left": 639,
+                "left": 420,
                 "top": 200
             },
             "post_job_actions": {
-                "HideDatasetActionexcel": {
-                    "action_arguments": {},
-                    "action_type": "HideDatasetAction",
-                    "output_name": "excel"
-                },
                 "HideDatasetActionpointfinder": {
                     "action_arguments": {},
                     "action_type": "HideDatasetAction",
@@ -149,26 +135,31 @@
             "tool_state": "{\"__page__\": null, \"use_pointfinder\": \"{\\\"enable\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"__rerun_remap_job_id__\": null, \"genomes\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"advanced\": \"{\\\"pid_threshold\\\": \\\"98.0\\\", \\\"exclude_resistance_phenotypes\\\": \\\"false\\\", \\\"exclude_negatives\\\": \\\"false\\\", \\\"plength_resfinder\\\": \\\"60.0\\\", \\\"plength_pointfinder\\\": \\\"95.0\\\", \\\"report_all_blast\\\": \\\"false\\\"}\"}",
             "tool_version": "0.2.2",
             "type": "tool",
-            "uuid": "3d6ac657-0b81-4ec8-9c92-9905823ca889",
+            "uuid": "41f8718f-87a0-45d2-b79d-e5afddea1532",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "blast_hits",
-                    "uuid": "ab3944ae-cd4f-4820-82e4-3cec18e3c296"
+                    "uuid": "9e8592ad-71c0-4528-8e8b-efcd3bb9183a"
                 },
                 {
                     "label": null,
                     "output_name": "resfinder",
-                    "uuid": "f929382a-ba34-4130-a21f-7a7e0b1e454b"
+                    "uuid": "2f27a46b-29bf-4abf-9d26-fce4e9fc9dd5"
+                },
+                {
+                    "label": null,
+                    "output_name": "excel",
+                    "uuid": "67549d0b-0480-4c25-8bfd-1fa78cfdb066"
                 },
                 {
                     "label": null,
                     "output_name": "summary",
-                    "uuid": "51d49673-6c63-4755-b060-590e50f08fba"
+                    "uuid": "17c9e48c-234a-4cb7-986d-f88166bfe0a7"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "0c87f012-e84c-4afa-850e-17bbac0149d5"
+    "uuid": "4c695847-5fc7-4020-a125-a500700ab320"
 }
