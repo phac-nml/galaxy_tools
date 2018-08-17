@@ -1,13 +1,17 @@
-<tool id="mob_recon" name="MOB-Recon" version="1.4.5">
+<tool id="mob_recon" name="MOB-Recon" version="1.4.8">
   <description>Type contigs and extract plasmid sequences</description>
   <requirements>
-     <requirement type="package" version="1.4.5">mob_suite</requirement>
+     <requirement type="package" version="1.4.8">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
   <![CDATA[  
-    ln -s "${input}" "${input.name}"; 
+    #import re
+    #import os.path
     
-    mob_recon  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" 
+    #set $named_input = re.sub(r'(\s|\(|\)|:|!)', '_', str($input.element_identifier)+".fasta")
+    ln -s "$input" $named_input && 
+    
+    mob_recon  --num_threads \${GALAXY_SLOTS:-4}  --infile "${named_input}" 
     #if str($adv_param.unicycler_contigs) == "True":
       --unicycler_contigs 
     #end if   
@@ -17,7 +21,16 @@
     #if str($adv_param.min_length_condition.min_length_param) == "True":
       --min_length ${adv_param.min_length_condition.min_length_value}
     #end if 
-    --run_typer --outdir '.';
+    --run_typer --min_rep_evalue '${adv_param.min_rep_evalue}'
+    --min_rep_evalue '${adv_param.min_rep_evalue}'
+    --min_mob_evalue '${adv_param.min_mob_evalue}'
+    --min_con_evalue '${adv_param.min_con_evalue}'
+    --min_rep_ident '${adv_param.min_rep_ident}'
+    --min_mob_ident '${adv_param.min_mob_ident}'
+    --min_con_ident  '${adv_param.min_con_ident}'
+    --min_rpp_ident   '${adv_param.min_rpp_ident}'
+    --outdir '.' && 
+    mkdir ./sequences && (cp plasmid*.fasta chromosome.fasta ./sequences 2> /dev/null || true)
   ]]>  
   </command>
   <inputs>
@@ -32,7 +45,7 @@
         <option value="False">No</option>
       </param>
       <conditional name="min_length_condition">
-        <param name="min_length_param" label="Minimum length of contigs to classify" type="select" value="False">
+        <param name="min_length_param" label="Minimum length of contigs to process" type="select" value="False">
           <option value="False">No</option>
           <option value="True">Yes</option>
        </param>   
@@ -41,22 +54,28 @@
         </when>  
         <when value="False"/>
       </conditional> 
+      <param name="min_rep_evalue" label="Minimum evalue threshold for replicon blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_mob_evalue" label="Minimum evalue threshold for relaxase tblastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_con_evalue" label="Minimum evalue threshold for contig blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_rpp_evalue" label="Minimum evalue threshold for repetitve elements blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
+      <param name="min_rep_ident" label="Minimum sequence identity for replicons" type="integer"  min="0" max="100" value="80"/>
+      <param name="min_mob_ident" label="Minimum sequence identity for relaxases" type="integer"  min="0" max="100" value="80"/>
+      <param name="min_con_ident" label="Minimum sequence identity for contigs" type="integer"  min="0" max="100" value="80"/>
+      <param name="min_rpp_ident" label="Minimum sequence identity for repetitive elements" type="integer"  min="0" max="100" value="80"/>
     </section>  
   </inputs>
   <outputs>
-    <data name="outfile1" format="tabular" from_work_dir="contig_report.txt" label="${tool.name}: Overall contig MOB-recon report"/> 
-    <data name="outfile2" format="tabular" from_work_dir="repetitive_blast_report.txt" label="${tool.name}: Repetitive elements BLAST report"/>
-    <data name="outfile3" format="fasta" from_work_dir="chromosome.fasta" label="${tool.name}: Chromosomal sequences"/>
-    <data name="outfile4" format="tabular" from_work_dir="mobtyper_aggregate_report.txt" label="${tool.name}: Aggregate MOB-typer report for all contigs"/>
-    <data name="outfile5" format="fasta" label="${tool.name}: Plasmid sequence"  hidden="true">
-        <discover_datasets pattern="plasmid_.+\.(?P&lt;ext&gt;.+)" ext="fasta" visible="true" assign_primary_output="false"/>
-    </data>
+    <data name="outfile1" format="tabular" from_work_dir="contig_report.txt" label="${tool.name} on ${on_string}: Overall contig MOB-recon report"/> 
+    <data name="outfile2" format="tabular" from_work_dir="repetitive_blast_report.txt" label="${tool.name} on ${on_string}: Repetitive elements BLAST report"/>
+    <data name="outfile3" format="tabular" from_work_dir="mobtyper_aggregate_report.txt" label="${tool.name} on ${on_string}: Aggregate MOB-typer report for all contigs"/>
+    <collection name="seqhits" type="list" label="${tool.name} on ${on_string}: Extracted sequences (plasmids,chromosome(s))">
+            <discover_datasets pattern="__name_and_ext__" directory="sequences" />
+    </collection>
   </outputs>
   <tests>
     <test>
         <param name="input" value="plasmid_476.fasta" ftype="fasta"/>
         <section name="adv_param">
-         <param name="evalue" value="0.00001"/>
          <param name="unicycler_contigs" value="True"/>
          <param name="run_circlator"  value="True"/>
         </section>
@@ -74,6 +93,10 @@
 This tool reconstructs individual plasmid sequences from draft genome assemblies using the plasmid reference databases.
 
 For more information please visit https://github.com/phac-nml/mob-suite/. 
+
+**Workflow**
+
+ There is a preliminary  Mobilome and Resistome Analysis Workflow linking mob_recon with staramr providing reports on mobilome and resistome https://github.com/phac-nml/mob-suite/. 
 
 -----
 
