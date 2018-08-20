@@ -96,7 +96,7 @@ For more information please visit https://github.com/phac-nml/mob-suite/.
 
 **Workflow**
 
- There is a preliminary  Mobilome and Resistome Analysis Workflow linking mob_recon with staramr providing reports on mobilome and resistome https://github.com/phac-nml/mob-suite/. 
+This preliminary \"Mobilome and Resistome Analysis Workflow\" linking mob_recon with staramr provides reports on mobilome and resistome for a given isolate given a draft genome assembly. The workflow is located in Shared Data --> Workflows --> Mobilome and Resistome Analysis Workflow (MOB-Recon and STARAMR). The workflow file can also be mamanually downloaded from https://raw.githubusercontent.com/phac-nml/galaxy_tools/master/tools/mob_suite/workflows/AMRworkflow_STARAMR.ga.
 
 -----
 
