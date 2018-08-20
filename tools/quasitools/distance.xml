@@ -1,7 +1,7 @@
-<tool id="distance" name="Quasispecies Distance" version="0.1.0">
+<tool id="distance" name="Quasispecies Distance" version="0.4.2">
     <description>Calculate the evolutionary distance between viral quasispecies.</description>
     <requirements>
-          <requirement type="package" version="0.3.1">quasitools</requirement>
+          <requirement type="package" version="0.4.2">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
