@@ -24,6 +24,18 @@
         <data format="tabular" label="substitutions" name="output_substitutions" from_work_dir="subs.tab" />
     </outputs>
 
+    <tests>
+        <test>
+            <param name="query_fasta" value="query.fasta" />
+            <param name="reference_fasta" value="reference.fasta" />
+            <output name="output_substitutions" ftype="tabular" >
+                <assert_contents>
+                    <has_text_matching expression="27"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
     <help><![CDATA[
 Report Substitutions
 =====================
@@ -33,6 +45,21 @@ Aligns a set of query contigs against a set of reference contigs and reports the
 Kurtz, Stefan et al. “Versatile and Open Software for Comparing Large Genomes.” Genome Biology 5.2 (2004): R12. PMC. Web. 22 Aug. 2018.
 
 The alignments are performed in amino acid space. Only the substitutions from the best set of global alignments are reported in the output.
+
+------
+Inputs
+------
+
+1. Query FASTA: A nucleotide or amino acid FASTA query file.
+2. Reference FASTA: A nucleotide or amino acid FASTA reference file.
+
+-------
+Outputs
+-------
+
+1. delta: The MUMmer-format delta file describing the alignment between the contigs.
+2. filtered: The best set of global alignments from the "delta" output.
+3. substitions: A tabular file detailing subsitutions between aligned contigs.
 
 ]]></help>
     <citations>
