@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+import os
+import argparse
+import sys
+import subprocess
+
+from Bio import SeqIO
+
 """
 # =============================================================================
 Copyright Government of Canada 2018
@@ -18,13 +25,6 @@ specific language governing permissions and limitations under the License.
 
 __version__ = '0.1.0'
 
-import os
-import argparse
-import sys
-import subprocess
-
-from Bio import SeqIO
-
 """
 # =============================================================================
 GLOBALS
@@ -35,7 +35,8 @@ FASTA_DIRECTORY = "fasta"
 FILTER_DIRECOTRY = "filter"
 SUBS_DIRECTORY = "substitutions"
 
-HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\t[R]\t[Q]\t[FRM]\t[FRM]\t[TAG]\t[TAG]\n"
+HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\
+    \t[R]\t[Q]\t[FRM]\t[FRM]\t[TAG]\t[TAG]\n"
 
 """
 # =============================================================================
@@ -78,14 +79,18 @@ for record in query:
 # Run promer on each (new) FASTA file:
 for fasta_location in fasta_locations:
 
-    subprocess.check_output(['promer', reference_location, fasta_location], universal_newlines=True)
-    output = subprocess.check_output(['delta-filter', '-g', 'out.delta'], universal_newlines=True)
+    subprocess.check_output(
+        ['promer', reference_location, fasta_location],
+        universal_newlines=True)
+    output = subprocess.check_output(
+        ['delta-filter', '-g', 'out.delta'], universal_newlines=True)
 
     filter_file = open("out.filter", "w")
     filter_file.write(output)
     filter_file.close()
-    
-    output = str(subprocess.check_output(['show-snps', '-T', '-q', 'out.filter'], universal_newlines=True))
+
+    output = str(subprocess.check_output(
+        ['show-snps', '-T', '-q', 'out.filter'], universal_newlines=True))
     output = output.split("\n")[4:]
     output = "\n".join(output)
 
