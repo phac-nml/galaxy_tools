@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 import os
-import argparse
-import sys
 import subprocess
+import sys
 
 from Bio import SeqIO
 
