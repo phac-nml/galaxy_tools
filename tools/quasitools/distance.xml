@@ -90,28 +90,28 @@
 Quasispecies Distance
 =====================
 
-Determines the evolutionary distance between viral quasispecies.
-Uses the angular cosine distance function by default.
+This tool determines the cosine relatedness between viral quasispecies, reporting either angular cosine distance or cosine similarity as measures of relatedness. These measures of relatedness should be understood as approximations for evolutionary distance and might be useful for performing clustering.
 
 ------
 Inputs
 ------
 
-1. FASTA Consensus file
-2. Two or more BAM files (otherwise tool will throw an error)
+1. A reference FASTA.
+2. At least two BAM files generated in coordination with the above reference.
 
 ----------
 Parameters
 ----------
-1. Normalize pileup (True or False)
+
+1. Normalize pileup (True or False).
 2. Select custom start and end position. Currently only supports selection of custom start and end position for one single reference.
-3. Choose how to treat zero coverage regions (keep, remove all, or truncate)
+3. Choose how to treat zero coverage regions (keep, remove all, or truncate).
 
 -------
 Outputs
 -------
 
-CSV containing distance matrix.
+A CSV file containing a matrix of similarities or distances, as requested by the user.
 
     ]]></help>
     <citations>
