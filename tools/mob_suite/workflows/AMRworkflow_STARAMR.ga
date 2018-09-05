@@ -1,0 +1,184 @@
+{
+    "a_galaxy_workflow": "true", 
+    "annotation": "Mobilome and resistome analyses are valuable tools to better characterize genome assemblies for the presence of antibiotic resistance phenotypes and mobile elements such as plasmids. The location of the resistance (chromosome or plasmid) will provide information on potential dissemination potential of the antibiotic resistance genes via horizontal or clonal gene transfer mechanisms (available via the summary.tsv report). This draft workflow will help end-user to potentially qualitatively estimate potential AMR risk for a given isolate along with the underlying mechanisms and the epidemiology of antimicrobial resistance. \n\nPlease provide us with your feedback in order to improve usability and flexibility of the workflow. For more information refer to http://dx.doi.org/10.1099/mgen.0.000206 and https://github.com/phac-nml/staramr. \n\n", 
+    "format-version": "0.1", 
+    "name": "Mobilome and Resistome Analysis Workflow (MOB-Recon and STARAMR)", 
+    "steps": {
+        "0": {
+            "annotation": "", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/nml/mob_suite/mob_recon/1.4.8", 
+            "errors": null, 
+            "id": 0, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool MOB-Recon", 
+                    "name": "input"
+                }
+            ], 
+            "label": null, 
+            "name": "MOB-Recon", 
+            "outputs": [
+                {
+                    "name": "seqhits", 
+                    "type": "input"
+                }, 
+                {
+                    "name": "outfile1", 
+                    "type": "tabular"
+                }, 
+                {
+                    "name": "outfile2", 
+                    "type": "tabular"
+                }, 
+                {
+                    "name": "outfile3", 
+                    "type": "tabular"
+                }
+            ], 
+            "position": {
+                "left": 200, 
+                "top": 200
+            }, 
+            "post_job_actions": {
+                "HideDatasetActionoutfile1": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outfile1"
+                }, 
+                "HideDatasetActionoutfile2": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outfile2"
+                }, 
+                "HideDatasetActionoutfile3": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outfile3"
+                }
+            }, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/nml/mob_suite/mob_recon/1.4.8", 
+            "tool_shed_repository": {
+                "changeset_revision": "2c7f721a4905", 
+                "name": "mob_suite", 
+                "owner": "nml", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"adv_param\": \"{\\\"min_length_condition\\\": {\\\"min_length_param\\\": \\\"False\\\", \\\"__current_case__\\\": 1}, \\\"min_con_ident\\\": \\\"80\\\", \\\"min_mob_ident\\\": \\\"80\\\", \\\"min_mob_evalue\\\": \\\"1e-05\\\", \\\"min_rep_evalue\\\": \\\"1e-05\\\", \\\"unicycler_contigs\\\": \\\"True\\\", \\\"min_rep_ident\\\": \\\"80\\\", \\\"min_rpp_evalue\\\": \\\"1e-05\\\", \\\"min_rpp_ident\\\": \\\"80\\\", \\\"run_circlator\\\": \\\"True\\\", \\\"min_con_evalue\\\": \\\"1e-05\\\"}\", \"input\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__rerun_remap_job_id__\": null, \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"__page__\": null}", 
+            "tool_version": "1.4.8", 
+            "type": "tool", 
+            "uuid": "017d5861-8836-46a8-8444-0dcaca60eda1", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "seqhits", 
+                    "uuid": "6304bc2b-bcc9-47c4-8e3b-9d2ee5a80433"
+                }
+            ]
+        }, 
+        "1": {
+            "annotation": "", 
+            "content_id": "toolshed.g2.bx.psu.edu/repos/nml/staramr/staramr_search/0.2.2", 
+            "errors": null, 
+            "id": 1, 
+            "input_connections": {
+                "genomes": {
+                    "id": 0, 
+                    "output_name": "seqhits"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool staramr", 
+                    "name": "genomes"
+                }
+            ], 
+            "label": null, 
+            "name": "staramr", 
+            "outputs": [
+                {
+                    "name": "blast_hits", 
+                    "type": "input"
+                }, 
+                {
+                    "name": "summary", 
+                    "type": "tabular"
+                }, 
+                {
+                    "name": "resfinder", 
+                    "type": "tabular"
+                }, 
+                {
+                    "name": "pointfinder", 
+                    "type": "tabular"
+                }, 
+                {
+                    "name": "settings", 
+                    "type": "txt"
+                }, 
+                {
+                    "name": "excel", 
+                    "type": "xlsx"
+                }
+            ], 
+            "position": {
+                "left": 420, 
+                "top": 200
+            }, 
+            "post_job_actions": {
+                "HideDatasetActionpointfinder": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "pointfinder"
+                }, 
+                "HideDatasetActionsettings": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "settings"
+                }
+            }, 
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/nml/staramr/staramr_search/0.2.2", 
+            "tool_shed_repository": {
+                "changeset_revision": "9047a1d3d8ea", 
+                "name": "staramr", 
+                "owner": "nml", 
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            }, 
+            "tool_state": "{\"__page__\": null, \"use_pointfinder\": \"{\\\"enable\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"__rerun_remap_job_id__\": null, \"genomes\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"chromInfo\": \"\\\"/galaxy/tool-data/shared/ucsc/chrom/?.len\\\"\", \"advanced\": \"{\\\"pid_threshold\\\": \\\"98.0\\\", \\\"exclude_resistance_phenotypes\\\": \\\"false\\\", \\\"exclude_negatives\\\": \\\"false\\\", \\\"plength_resfinder\\\": \\\"60.0\\\", \\\"plength_pointfinder\\\": \\\"95.0\\\", \\\"report_all_blast\\\": \\\"false\\\"}\"}", 
+            "tool_version": "0.2.2", 
+            "type": "tool", 
+            "uuid": "41f8718f-87a0-45d2-b79d-e5afddea1532", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "blast_hits", 
+                    "uuid": "9e8592ad-71c0-4528-8e8b-efcd3bb9183a"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "resfinder", 
+                    "uuid": "2f27a46b-29bf-4abf-9d26-fce4e9fc9dd5"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "excel", 
+                    "uuid": "67549d0b-0480-4c25-8bfd-1fa78cfdb066"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "summary", 
+                    "uuid": "17c9e48c-234a-4cb7-986d-f88166bfe0a7"
+                }
+            ]
+        }
+    }, 
+    "tags": [
+        "AMR", 
+        "Resistance", 
+        "ResFinder", 
+        "StarAMR", 
+        "MOB-Suite", 
+        "ARGs"
+    ], 
+    "uuid": "d6ce87c0-2d16-4c8c-bea8-6464264565d4"
+}

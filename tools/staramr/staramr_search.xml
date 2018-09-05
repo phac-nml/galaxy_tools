@@ -1,7 +1,7 @@
-<tool id="staramr_search" name="staramr" version="0.2.1">
+<tool id="staramr_search" name="staramr" version="0.2.2">
     <description>Scans genome assemblies against the ResFinder and PointFinder databases searching for AMR genes.</description>
     <requirements>
-        <requirement type="package" version="0.2.1">staramr</requirement>
+        <requirement type="package" version="0.2.2">staramr</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #import re

@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: Heidelberg and Enteritidis SNP Elucidation
+name: biohansel
+owner: nml
+long_description: biohansel - Subtype microbial whole-genome sequencing (WGS) data using SNP targeting k-mer subtyping schemes
+remote_repository_url: https://github.com/phac-nml/biohansel
+homepage_url: https://github.com/phac-nml/biohansel
