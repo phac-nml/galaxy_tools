@@ -1,0 +1,81 @@
+<tool id="helpR" name="helpR" version="0.1.0">
+    <requirements>
+        <requirement type="package" version="1.6.0">r-jsonlite</requirement>
+        <requirement type="package" version="0.1.0">r-here</requirement>
+        <requirement type="package" version="0.7.6">r-dplyr</requirement>
+        <requirement type="package" version="0.2.5">r-purrr</requirement>
+        <requirement type="package" version="0.8.1">r-tidyr</requirement>
+	<requirement type="package" version="1.3.1">r-stringr</requirement>
+        <requirement type="package" version="1.6.0">r-optparse</requirement>
+    </requirements>
+    <command><![CDATA[
+        Rscript $__tool_directory__/mykrobe_parseR.R 
+        
+        #if $input.type =='single'
+            -f "$input.single"
+        #else
+            -d "$input.collection"
+        #end if
+
+        #if $version
+            -v "$version"
+        #end if
+        #if $depth
+            -D "$depth"
+        #end if
+        #if $confidence
+            -c "$confidence"
+        #end if
+        #if $run_name
+            -n "$run_name"
+        #end if
+
+
+    ]]></command>
+    <inputs>
+    <conditional name="input">
+      <param name="type" type="select" label="Sequence Data Type">
+        <option value="single">Single JSON File</option>
+        <option value="collection">Collection of JSON Files</option>
+      </param>
+      <when value="single">
+        <param name="single"
+          type="data" format="json,txt"
+          optional="false"
+          label="Single JSON File (.JSON or .TXT)"
+          />
+      </when>
+      <when value="collection">
+        <param name="collection"
+          type="data_collection" format="json,txt"
+          optional="false"
+          label="Collection of JSON Files (.JSON or .TXT)"
+          />
+      </when>
+    </conditional>
+    <param name="version" type="text"
+        argument="-v"
+        optional="true"
+        label="Mykrobe Workflow Version"/>
+    <param name="depth" type="integer"
+        argument="-D"
+        optional="true"
+        label="Minimum depth of coverage"
+        help="Enter integer values only. Default is 5"/>
+    <param name="confidence" type="integer"
+        argument="-c"
+        optional="true"
+        label="Confidence"
+        help="Minimum genotype confidence for variant genotyping. Enter integer values only. Default is 10"/>
+    <param name="run_name" type="text"
+        argument="-n"
+        optional="true"
+        label="Name of Run"/>
+    </inputs>
+    <outputs>
+        <data name="motifbreakr" format="results" />
+    </outputs>
+    <help><![CDATA[
+        Help Section
+    ]]></help>
+</tool>
