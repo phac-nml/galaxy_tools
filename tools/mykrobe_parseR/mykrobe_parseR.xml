@@ -12,7 +12,7 @@
     <command detect_errors="exit_code"><![CDATA[
         
         
-        #if $input.type =='collection'
+        #if $input.type == 'collection'
             mkdir collection_files &&
             #for $file in $input.collection
                 cp $file collection_files/"$file.name".json &&
