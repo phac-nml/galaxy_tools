@@ -98,6 +98,18 @@ getResults <- function(listelement){
   as_tibble(temp)
 }
 
+sink(stdout(), type = "message")
+
+suppressPackageStartupMessages({
+  library(jsonlite)
+  library(here)
+  library(dplyr)
+  library(purrr)
+  library(tidyr)
+  library(stringr)
+  library(optparse)
+})
+
 # Get command line arguments with optparse
 option_list = list(
   make_option(c("-f", "--file"), 
@@ -341,7 +353,7 @@ report <-
 # Write some output
 # Report as is
 write.csv(report, "output-report.csv", row.names = F)
-message("Writing Susceptibility report to CSV as output-report.csv")
+print("Writing Susceptibility report to CSV as output-report.csv")
 
 # Select specific columns from temp and output them
 temp %>% 
@@ -357,4 +369,7 @@ temp %>%
          lineage_depth) %>%
   distinct() %>%
   write.csv("output-jsondata.csv", row.names = F)
-message("Writing JSON data to CSV as output-jsondata.txt")
+print("Writing JSON data to CSV as output-jsondata.txt")
+sink(NULL, type="message") # close the sink
+
+quit()
