@@ -1,0 +1,61 @@
+<tool id="promer4_substitutions" name="report substitutions" version="1.0">
+    <description>aligns two sets of contigs and reports amino acid substitutions between them</description>
+    <requirements>
+          <requirement type="package" version="3.4.3">python</requirement>
+          <requirement type="package" version="4.0.0beta2">mummer4</requirement>
+          <requirement type="package" version="1.68">biopython</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        python $__tool_directory__/promer_substitutions.py $reference_fasta $query_fasta
+
+    ]]></command>
+
+    <inputs>
+        <param name="reference_fasta" type="data" format="fasta" optional="false" label="Reference FASTA" />
+        <param name="query_fasta" type="data" format="fasta" optional="false" label="Query FASTA" />
+    </inputs>
+
+    <outputs>
+        <data format="tabular" label="substitutions" name="output_substitutions" from_work_dir="snps.tab" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="query_fasta" value="query.fasta" />
+            <param name="reference_fasta" value="reference.fasta" />
+            <output name="output_substitutions" ftype="tabular" >
+                <assert_contents>
+                    <has_text_matching expression="27"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Report Substitutions
+=====================
+
+Aligns a set of query contigs against a set of reference contigs and reports the amino acid differences between the two sets of contigs using MUMmer4 (promer):
+
+Kurtz, Stefan et al. “Versatile and Open Software for Comparing Large Genomes.” Genome Biology 5.2 (2004): R12. PMC. Web. 22 Aug. 2018.
+
+The alignments are performed in amino acid space. Only the substitutions from the best set of global alignments are reported in the output.
+
+------
+Inputs
+------
+
+1. Query FASTA: A nucleotide or amino acid FASTA query file.
+2. Reference FASTA: A nucleotide or amino acid FASTA reference file.
+
+-------
+Outputs
+-------
+
+1. substitions: A tabular file detailing subsitutions between aligned contigs.
+
+]]></help>
+    <citations>
+    </citations>
+</tool>
