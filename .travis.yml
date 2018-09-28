@@ -63,7 +63,7 @@ jobs:
                                 --changed_in_commit_range "$TRAVIS_COMMIT_RANGE" \
                                 --output changed_repositories.list
         - cat changed_repositories.list
-      script:
+          #      script:
           #        - set -e
           #        - |
           #          if [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" ]; then
