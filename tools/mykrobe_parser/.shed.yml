@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: RScript to parse the results of mykrobe predictor.
+name: mykrobe_parser
+owner: nml
+long_description: mykrobe_parser - RScript to parse the results of mykrobe predictor and present them in a LIMS compatible format (.csv)
+remote_repository_url: https://github.com/phac-nml/mykrobe-parser
+homepage_url: https://github.com/phac-nml/mykrobe-parser
