@@ -14,11 +14,11 @@
         #if $input.type == 'collection'
             mkdir collection_files &&
             #for $file in $input.collection
-                cp $file collection_files/"$file.name".json &&
+                cp "$file" collection_files/"$file.name".json &&
             #end for
         #end if
 
-        Rscript $__tool_directory__/mykrobe_parseR.R 
+        Rscript "$__tool_directory__/mykrobe_parseR.R"
 
         #if $input.type =='single'
             -f "$input.single"
@@ -129,7 +129,7 @@ Contact
         <citation type="bibtex">@ARTICLE{a1,
             title = {R Script to parse the results of mykrobe predictor and present them in a LIMS compatible format.},
             author = {Adrian Zetner},
-            url = {https://gitlab.cscscience.ca/AZetner/mykrobe-parser}
+            url = {https://github.com/phac-nml/mykrobe-parser}
             }
         }</citation>
     </citations>
