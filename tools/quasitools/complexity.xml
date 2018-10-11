@@ -1,7 +1,7 @@
-<tool id="complexity" name="Complexity" version="0.4.2.1">
+<tool id="complexity" name="Complexity" version="0.5.0">
     <description>measures the complexity of the quasispecies reads</description>
     <requirements>
-          <requirement type="package" version="0.4.2.1">quasitools</requirement>
+          <requirement type="package" version="0.5.0">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
