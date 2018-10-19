@@ -1,4 +1,4 @@
-#'sudo required' will give us 7,5 GB memory, but has slower startup times, as we start a VM instead of a Container
+# 'sudo required' will give us 7,5 GB memory, but has slower startup times, as we start a VM instead of a Container
 sudo: required
 language: python
 cache: pip
@@ -67,7 +67,7 @@ jobs:
                   - set -e
                   - |
                     if [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" ]; then
-                        while read -r DIR; do planemo shed_update --shed_target toolshed --shed_key $TOOL_SHED_API_KEY --force_repository_creation "$DIR" || exit 1; done < changed_repositories.list
+                        while read -r DIR; do planemo shed_update --shed_target toolshed --shed_email "$SHED_EMAIL" --shed_password "$SHED_PASSWORD" --force_repository_creation "$DIR" || exit 1; done < changed_repositories.list
                     fi
 
 before_install:
