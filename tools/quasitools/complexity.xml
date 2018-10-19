@@ -1,0 +1,44 @@
+<tool id="complexity" name="Complexity" version="0.5.0">
+    <description>measures the complexity of the quasispecies reads</description>
+    <requirements>
+          <requirement type="package" version="0.5.0">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        quasitools complexity $input_fasta > complexity.txt
+
+    ]]></command>
+    <inputs>
+        <param name="input_fasta" type="data" format="fasta" optional="false" label="Aligned FASTA Input" />
+    </inputs>
+    <outputs>
+        <data format="txt" label="Complexity" name="output_complexity" from_work_dir="complexity.txt" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_fasta" value="msa.fasta" />
+            <output name="output_complexity">
+                <assert_contents>
+                    <has_text text="Number of haplotypes (H) : 8" />
+                    <has_text text="Mutation Frequency (Mfe) : 0.75" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Quasispecies Complexity
+=======================
+
+Measure the complexity of quasispecies reads using a variety of measures. The input must be an aligned FASTA file, representing a particular reqion of quasispcies from which to measure the complexity.
+
+The measures of complexity are taken from the following work:
+
+Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2016): 227-237.
+
+
+]]></help>
+    <citations>
+    </citations>
+</tool>
