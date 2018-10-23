@@ -1,4 +1,4 @@
-<tool id="mykrobe_parseR" name="mykrobe_parseR" version="0.1.1">
+<tool id="mykrobe_parseR" name="mykrobe_parseR" version="0.1.2">
     <requirements>
         <requirement type="package" version="3.4.1">r-base</requirement>
         <requirement type="package" version="1.5.0">r-jsonlite</requirement>
