@@ -14,7 +14,7 @@
 	mkdir collection_files &&
 
         #for $file in $input
-            ln -s "$file" collection_files/"$file.element_identifier" &&
+            ln -s "$file" collection_files/"$file.element_identifier".json &&
         #end for
 
         Rscript "$__tool_directory__/mykrobe_parser.R"
