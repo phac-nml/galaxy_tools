@@ -20,13 +20,18 @@
 # August 2018
 
 # Libraries ####
-library(jsonlite, quietly = T)
-library(here, quietly = T)
-suppressMessages(library(dplyr, quietly = T))
-suppressMessages(library(purrr, quietly = T))
-library(tidyr, quietly = T)
-library(stringr, quietly = T)
-library(optparse, quietly = T)
+
+sink(stdout(), type = "message")
+
+suppressPackageStartupMessages({
+  library(jsonlite)
+  library(here)
+  library(dplyr)
+  library(purrr)
+  library(tidyr)
+  library(stringr)
+  library(optparse)
+})
 
 # Define custom functions, variables, and paths. Collect and use CL arguments ####
 
@@ -97,18 +102,6 @@ getResults <- function(listelement){
   # eg. phylo_group is repeated/recycled as many times as there are drugs tested
   as_tibble(temp)
 }
-
-sink(stdout(), type = "message")
-
-suppressPackageStartupMessages({
-  library(jsonlite)
-  library(here)
-  library(dplyr)
-  library(purrr)
-  library(tidyr)
-  library(stringr)
-  library(optparse)
-})
 
 # Get command line arguments with optparse
 option_list = list(
@@ -274,43 +267,53 @@ if (length(predictions.table) == 1){
   stop("No susceptibility results in files specified. Did the testing fail?", call.=FALSE)
 }
 
-# Variants
-# Multiple resistance mutations and confidence per drug in the X_R_mutations column
-# Actual protein changes in Mykrobe_X columns
+# Variants, if present
+if (0 < predictions.table %>% 
+    select(ends_with("_Prediction")) %>% 
+    unlist(use.names = F) %>% 
+    str_count("[R,r]") %>% 
+    sum()){
 
-variants.temp <- 
-  temp %>% 
-  select(file, drug, variants = `variants (gene:alt_depth:wt_depth:conf)`) %>% 
-  mutate(variants = replace(variants, variants == "", NA)) %>% # Make missing data consistent...
-  filter(!is.na(variants)) %>% # ...Then get rid of it
-  mutate(tempcols = paste(drug, "R_mutations", sep = "_")) %>% 
-  mutate(R_mutations = variants) %>% 
-  mutate(variants = strsplit(variants, "__")) %>% # Split the mutations across rows (list first then split across rows)
-  unnest(variants) %>% 
-  separate(variants, c("gene", "mutation"), "_") %>% 
-  mutate(columnname = ifelse(gene %in% c("tlyA", "rrs", "gid"), # Check for columns that include the drug name or not and paste accordingly
-                             paste("Mykrobe", drug, gene, sep = "_"),
-                             paste("Mykrobe", gene, sep = "_"))) %>% 
-  # Extract out the mutation information with a regex that covers all potential genes
-  # This regex looks for whatever is ahead of the first colon and after the last hyphen
-  mutate(mutation = str_match(mutation, "(.*)-.*:")[,2]) %>%
-  select(file, tempcols, R_mutations, columnname, mutation)
+      # Multiple resistance mutations and confidence per drug in the X_R_mutations column
+      # Actual protein changes in Mykrobe_X columns
+      
+      variants.temp <- 
+        temp %>% 
+        select(file, drug, variants = `variants (gene:alt_depth:wt_depth:conf)`) %>% 
+        mutate(variants = replace(variants, variants == "", NA)) %>% # Make missing data consistent...
+        filter(!is.na(variants)) %>% # ...Then get rid of it
+        mutate(tempcols = paste(drug, "R_mutations", sep = "_")) %>% 
+        mutate(R_mutations = variants) %>% 
+        mutate(variants = strsplit(variants, "__")) %>% # Split the mutations across rows (list first then split across rows)
+        unnest(variants) %>% 
+        separate(variants, c("gene", "mutation"), "_") %>% 
+        mutate(columnname = ifelse(gene %in% c("tlyA", "rrs", "gid"), # Check for columns that include the drug name or not and paste accordingly
+                                   paste("Mykrobe", drug, gene, sep = "_"),
+                                   paste("Mykrobe", gene, sep = "_"))) %>% 
+        # Extract out the mutation information with a regex that covers all potential genes
+        # This regex looks for whatever is ahead of the first colon and after the last hyphen
+        mutate(mutation = str_match(mutation, "(.*)-.*:")[,2]) %>%
+        select(file, tempcols, R_mutations, columnname, mutation)
+      
+      # Split each kind of variants into its own temp table then merge
+      variants.1 <- 
+        variants.temp %>% 
+        select(file, tempcols, R_mutations) %>% 
+        distinct() %>% 
+        spread(tempcols, R_mutations)
+      
+      variants.2 <- 
+        variants.temp %>% 
+        select(file, columnname, mutation) %>% 
+        group_by(file, columnname) %>% 
+        summarise(mutation = paste(mutation, collapse = ";")) %>% 
+        spread(columnname, mutation)
+      
+      variants.table <- full_join(variants.1, variants.2, by = "file")
+}else{
+  variants.table <- data.frame(file=predictions.table$file, stringsAsFactors = F)
+}
 
-# Split each kind of variants into its own temp table then merge
-variants.1 <- 
-  variants.temp %>% 
-  select(file, tempcols, R_mutations) %>% 
-  distinct() %>% 
-  spread(tempcols, R_mutations)
-
-variants.2 <- 
-  variants.temp %>% 
-  select(file, columnname, mutation) %>% 
-  group_by(file, columnname) %>% 
-  summarise(mutation = paste(mutation, collapse = ";")) %>% 
-  spread(columnname, mutation)
-
-variants.table <- full_join(variants.1, variants.2, by = "file")
 
 # Make a report ####
 
@@ -369,7 +372,7 @@ temp %>%
          lineage_depth) %>%
   distinct() %>%
   write.csv("output-jsondata.csv", row.names = F)
-print("Writing JSON data to CSV as output-jsondata.txt")
+print("Writing JSON data to CSV as output-jsondata.csv")
 sink(NULL, type="message") # close the sink
 
 quit()
