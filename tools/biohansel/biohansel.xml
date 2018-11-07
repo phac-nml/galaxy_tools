@@ -1,4 +1,4 @@
-<tool id="biohansel" name="biohansel" version="2.1.0">
+<tool id="biohansel" name="biohansel" version="2.1.1">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
     <requirement type="package" version="2.1.0">bio_hansel</requirement>
