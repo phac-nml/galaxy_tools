@@ -5,7 +5,6 @@ import subprocess
 import sys
 
 from Bio import SeqIO
-from Bio.Seq import Seq
 from Bio.SeqIO import FastaIO
 
 """
@@ -59,6 +58,7 @@ def reorient_file(fasta_location, start, end):
 
     SeqIO.write(record, fasta_location, "fasta")
 
+
 """
 # =============================================================================
 PROMER
@@ -78,6 +78,7 @@ def promer(reference_location, query_location):
     filter_file = open("out.filter", "w")
     filter_file.write(output)
     filter_file.close()
+
 
 """
 # =============================================================================
@@ -156,4 +157,3 @@ contigs_file = open(output_location, 'w')
 fasta_writer = FastaIO.FastaWriter(contigs_file, wrap=None)
 fasta_writer.write_file(records)
 contigs_file.close()
-
