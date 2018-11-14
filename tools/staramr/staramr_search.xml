@@ -25,6 +25,7 @@
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
         $advanced.report_all_blast
+        $advanced.no_exclude_genes
         $advanced.exclude_negatives
         $advanced.exclude_resistance_phenotypes
 
@@ -64,6 +65,7 @@
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
+            <param name="no_exclude_genes" type="boolean" checked="true" label="Make use of default exclusion list of genes from ResFinder/PointFinder" truevalue="" falsevalue="--no-exclude-genes" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
             <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
         </section>
