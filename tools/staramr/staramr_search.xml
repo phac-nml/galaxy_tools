@@ -25,9 +25,14 @@
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
         $advanced.report_all_blast
-        $advanced.no_exclude_genes
         $advanced.exclude_negatives
         $advanced.exclude_resistance_phenotypes
+
+        #if str($advanced.exclude_genes.exclude_genes_condition) == 'custom'
+            --exclude-genes-file '${advanced.exclude_genes.exclude_genes_file}'
+        #elif str($advanced.exclude_genes.exclude_genes_condition) == 'none'
+            --no-exclude-genes
+        #end if
 
         --output-summary $summary
         --output-resfinder $resfinder
@@ -65,9 +70,20 @@
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
-            <param name="no_exclude_genes" type="boolean" checked="true" label="Make use of default exclusion list of genes from ResFinder/PointFinder" truevalue="" falsevalue="--no-exclude-genes" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
             <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
+            <conditional name="exclude_genes">
+                <param name="exclude_genes_condition" type="select" label="Exclude certain AMR genes from the results">
+                    <option value="default" select="true">Exclude default list of AMR genes</option>
+                    <option value="custom">Provide a custom list of AMR genes to exclude</option>
+                    <option value="none">Do not exclude any AMR genes</option>
+                </param>
+                <when value="default" />
+                <when value="custom">
+                    <param type="data" name="exclude_genes_file" format="txt,tabular" label="Exclude genes file" />
+                </when>
+                <when value="none" />
+            </conditional>
         </section>
     </inputs>
     <outputs>
@@ -126,7 +142,7 @@
         </test>
         <test>
             <param name="genomes" value="test-aminoglycoside.fsa" />
-            <param name="no_exclude_genes" value="false" />
+            <param name="exclude_genes_condition" value="none" />
 
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
         </test>
