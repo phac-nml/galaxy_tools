@@ -119,6 +119,17 @@
 
             <output name="summary" file="test4-summary.tsv" ftype="tabular" />
         </test>
+        <test>
+            <param name="genomes" value="test-aminoglycoside.fsa" />
+
+            <output name="summary" file="test5-summary.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="genomes" value="test-aminoglycoside.fsa" />
+            <param name="no_exclude_genes" value="false" />
+
+            <output name="summary" file="test6-summary.tsv" ftype="tabular" />
+        </test>
     </tests>
     <help><![CDATA[
 staramr
