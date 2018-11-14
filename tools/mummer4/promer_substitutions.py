@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from Bio import SeqIO
+from Bio.Seq import Seq
 
 """
 # =============================================================================
@@ -39,6 +40,46 @@ HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\
 
 """
 # =============================================================================
+REORIENT FILE
+# =============================================================================
+"""
+def reorient_file(fasta_location, start, end):
+
+    record = list(SeqIO.parse(fasta_location, "fasta"))[0]
+
+    # reversed
+    if start > end:
+        record.seq = record.seq[(end - 1):start].reverse_complement()
+
+    else:
+        record.seq = record.seq[(start - 1):end]
+
+    print(" record.seq length = ")
+    print(len(record.seq))
+    SeqIO.write(record, fasta_location, "fasta")
+
+"""
+# =============================================================================
+PROMER
+# =============================================================================
+"""
+def promer(reference_location, query_location):
+
+    # promer
+    subprocess.check_output(
+        ['promer', reference_location, query_location],
+        universal_newlines=True)
+
+    # filter
+    output = subprocess.check_output(
+        ['delta-filter', '-grq', 'out.delta'], universal_newlines=True)
+
+    filter_file = open("out.filter", "w")
+    filter_file.write(output)
+    filter_file.close()
+
+"""
+# =============================================================================
 MAIN
 # =============================================================================
 """
@@ -50,12 +91,6 @@ query_location = sys.argv[2]
 # Make directories:
 if not os.path.exists(FASTA_DIRECTORY):
     os.mkdir(FASTA_DIRECTORY)
-
-if not os.path.exists(FILTER_DIRECOTRY):
-    os.mkdir(FILTER_DIRECOTRY)
-
-if not os.path.exists(SUBS_DIRECTORY):
-    os.mkdir(SUBS_DIRECTORY)
 
 # Read query FASTA:
 query = list(SeqIO.parse(query_location, "fasta"))
@@ -78,16 +113,29 @@ for record in query:
 # Run promer on each (new) FASTA file:
 for fasta_location in fasta_locations:
 
-    subprocess.check_output(
-        ['promer', reference_location, fasta_location],
-        universal_newlines=True)
+    promer(reference_location, fasta_location)
+
+    # show-coords
     output = subprocess.check_output(
-        ['delta-filter', '-g', 'out.delta'], universal_newlines=True)
+        ['show-coords', '-THrcl', 'out.filter'], universal_newlines=True)
 
-    filter_file = open("out.filter", "w")
-    filter_file.write(output)
-    filter_file.close()
+    if not output:
+        continue
 
+    ref_start = int(output.split()[2])# - 1 # output is 1-indexed
+    ref_end = int(output.split()[3])# - 1
+
+    reorient_file(fasta_location, ref_start, ref_end)
+    promer(reference_location, fasta_location)
+
+    # show-coords
+    output = subprocess.check_output(
+        ['show-coords', '-THrcl', 'out.filter'], universal_newlines=True)
+
+    print("AFTER COORDS:")
+    print(output)
+
+    # show snps
     output = str(subprocess.check_output(
         ['show-snps', '-T', '-q', 'out.filter'], universal_newlines=True))
     output = output.split("\n")[4:]
@@ -96,3 +144,8 @@ for fasta_location in fasta_locations:
     snps_file.write(output)
 
 snps_file.close()
+
+# Write re-oriented files to output:
+#for fasta_location in fasta_locations:
+
+    
