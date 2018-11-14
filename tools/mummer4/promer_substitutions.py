@@ -6,6 +6,7 @@ import sys
 
 from Bio import SeqIO
 from Bio.Seq import Seq
+from Bio.SeqIO import FastaIO
 
 """
 # =============================================================================
@@ -32,8 +33,9 @@ GLOBALS
 """
 
 FASTA_DIRECTORY = "fasta"
-FILTER_DIRECOTRY = "filter"
-SUBS_DIRECTORY = "substitutions"
+
+REF_START = 2
+REF_END = 3
 
 HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\
     \t[R]\t[Q]\t[FRM]\t[FRM]\t[TAG]\t[TAG]\n"
@@ -51,11 +53,10 @@ def reorient_file(fasta_location, start, end):
     if start > end:
         record.seq = record.seq[(end - 1):start].reverse_complement()
 
+    # same orientation
     else:
         record.seq = record.seq[(start - 1):end]
 
-    print(" record.seq length = ")
-    print(len(record.seq))
     SeqIO.write(record, fasta_location, "fasta")
 
 """
@@ -122,8 +123,8 @@ for fasta_location in fasta_locations:
     if not output:
         continue
 
-    ref_start = int(output.split()[2])# - 1 # output is 1-indexed
-    ref_end = int(output.split()[3])# - 1
+    ref_start = int(output.split()[REF_START])
+    ref_end = int(output.split()[REF_END])
 
     reorient_file(fasta_location, ref_start, ref_end)
     promer(reference_location, fasta_location)
@@ -131,9 +132,6 @@ for fasta_location in fasta_locations:
     # show-coords
     output = subprocess.check_output(
         ['show-coords', '-THrcl', 'out.filter'], universal_newlines=True)
-
-    print("AFTER COORDS:")
-    print(output)
 
     # show snps
     output = str(subprocess.check_output(
@@ -145,7 +143,17 @@ for fasta_location in fasta_locations:
 
 snps_file.close()
 
-# Write re-oriented files to output:
-#for fasta_location in fasta_locations:
+# Write all FASTA files into one output:
+output_location = "contigs.fasta"
+records = []
 
-    
+for fasta_location in fasta_locations:
+
+    record = list(SeqIO.parse(fasta_location, "fasta"))[0]
+    records.append(record)
+
+contigs_file = open(output_location, 'w')
+fasta_writer = FastaIO.FastaWriter(contigs_file, wrap=None)
+fasta_writer.write_file(records)
+contigs_file.close()
+
