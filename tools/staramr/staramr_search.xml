@@ -145,6 +145,13 @@
             <param name="exclude_genes_condition" value="none" />
 
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
+        <test>
+            <param name="genomes" value="test-aminoglycoside.fsa" />
+            <param name="exclude_genes_condition" value="custom" />
+            <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
+
+            <output name="summary" file="test6-summary.tsv" ftype="tabular" />
+        </test>
         </test>
     </tests>
     <help><![CDATA[
