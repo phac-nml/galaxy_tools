@@ -151,7 +151,7 @@
             <param name="exclude_genes_condition" value="custom" />
             <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
 
-            <output name="summary" file="test6-summary.tsv" ftype="tabular" />
+            <output name="summary" file="test5-summary.tsv" ftype="tabular" />
         </test>
     </tests>
     <help><![CDATA[
