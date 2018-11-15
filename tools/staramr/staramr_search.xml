@@ -167,6 +167,24 @@ Usage
 2. Select whether or not you wish to scan your genome for point mutations giving antimicrobial resistance using the PointFinder database. This requires you to specify the specific organism you are scanning (currently only *salmonella* is supported).
 3. Run the tool.
 
+Input
+-----
+
+Genomes
+```````
+
+staramr_ takes as input one or more assembled genomes (in FASTA format) to search for AMR genes.
+
+Exclude genes file
+``````````````````
+
+Setting **Provide a custom list of AMR genes to exclude** in the **Advanced options** allows you to pass a file containing a list of genes to exclude from the results. The file must start with a line **#gene_id** and the gene names must correspond to the sequence IDs in the ResFinder/PointFinder databases.  For example:
+
+::
+
+    #gene_id
+    aac(6')-Iaa_1_NC_003197
+
 Output
 ------
 
