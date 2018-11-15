@@ -74,7 +74,7 @@
             <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
             <conditional name="exclude_genes">
                 <param name="exclude_genes_condition" type="select" label="Exclude certain AMR genes from the results">
-                    <option value="default" select="true">Exclude default list of AMR genes</option>
+                    <option value="default" selected="true">Exclude default list of AMR genes</option>
                     <option value="custom">Provide a custom list of AMR genes to exclude</option>
                     <option value="none">Do not exclude any AMR genes</option>
                 </param>
@@ -145,13 +145,13 @@
             <param name="exclude_genes_condition" value="none" />
 
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
+        </test>
         <test>
             <param name="genomes" value="test-aminoglycoside.fsa" />
             <param name="exclude_genes_condition" value="custom" />
             <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
 
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
-        </test>
         </test>
     </tests>
     <help><![CDATA[
