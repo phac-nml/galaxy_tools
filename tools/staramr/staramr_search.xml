@@ -80,7 +80,7 @@
                 </param>
                 <when value="default" />
                 <when value="custom">
-                    <param type="data" name="exclude_genes_file" format="txt,tabular" label="Exclude genes file" />
+                    <param type="data" name="exclude_genes_file" format="txt,tabular" label="Exclude genes file" help="Pass a file containing a list of genes to exclude from the ResFinder/PointFinder results" />
                 </when>
                 <when value="none" />
             </conditional>
