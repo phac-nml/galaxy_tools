@@ -25,12 +25,6 @@ specific language governing permissions and limitations under the License.
 
 __version__ = '0.2.0'
 
-"""
-# =============================================================================
-GLOBALS
-# =============================================================================
-"""
-
 FASTA_DIRECTORY = "fasta"
 
 REF_START = 2
@@ -39,11 +33,7 @@ REF_END = 3
 HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\
     \t[R]\t[Q]\t[FRM]\t[FRM]\t[TAG]\t[TAG]\n"
 
-"""
-# =============================================================================
-REORIENT FILE
-# =============================================================================
-"""
+
 def reorient_file(fasta_location, start, end):
 
     record = list(SeqIO.parse(fasta_location, "fasta"))[0]
@@ -59,11 +49,6 @@ def reorient_file(fasta_location, start, end):
     SeqIO.write(record, fasta_location, "fasta")
 
 
-"""
-# =============================================================================
-PROMER
-# =============================================================================
-"""
 def promer(reference_location, query_location):
 
     # promer
@@ -79,12 +64,6 @@ def promer(reference_location, query_location):
     filter_file.write(output)
     filter_file.close()
 
-
-"""
-# =============================================================================
-MAIN
-# =============================================================================
-"""
 
 # File locations from arguments:
 reference_location = sys.argv[1]
