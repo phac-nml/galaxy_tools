@@ -1,7 +1,7 @@
-<tool id="drmutations" name="Drug Resistance Mutations" version="0.4.2">
+<tool id="drmutations" name="Drug Resistance Mutations" version="0.5.1">
     <description></description>
     <requirements>
-        <requirement type="package" version="0.4.2">quasitools</requirement>
+        <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -58,7 +58,37 @@ Drug Resistance Mutations
 
 Generates a report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
 
+------
+Inputs
+------
+
+1. A BAM file.
+2. A reference FASTA file.
+3. A variants (.vcf) file.
+4. A genes (.bed) file.
+5. A mutation database (.tsv) file.
+
+----------
+Parameters
+----------
+1. The minimum required frequency for a variant to be considered. Defaults to 0.01.
+2. The reporting threshold a mutation must pass to be included in the report.
+
+-------
+Outputs
+-------
+
+A CSV file containing the drug resistant mutations found.
+
     ]]></help>
-    <citations>
-    </citations>
+	<citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolsdrmutations,
+			title = {quasitools drmutations},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+			</citation>   
+	</citations>
 </tool>

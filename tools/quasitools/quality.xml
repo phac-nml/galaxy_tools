@@ -1,7 +1,7 @@
-<tool id="quality" name="Quality control" version="0.4.2">
+<tool id="quality" name="Quality control" version="0.5.1">
     <description>Performs quality control on FASTQ reads.</description>
     <requirements>
-          <requirement type="package" version="0.4.2">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -168,5 +168,13 @@ Quality Control
 
 Perform quality control on FASTQ reads.]]></help>
     <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolsquality,
+			title = {quasitools quality},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
     </citations>
 </tool>
