@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from Bio import SeqIO
+from Bio.SeqIO import FastaIO
 
 """
 # =============================================================================
@@ -22,26 +23,47 @@ specific language governing permissions and limitations under the License.
 # =============================================================================
 """
 
-__version__ = '0.1.0'
-
-"""
-# =============================================================================
-GLOBALS
-# =============================================================================
-"""
+__version__ = '0.2.0'
 
 FASTA_DIRECTORY = "fasta"
-FILTER_DIRECOTRY = "filter"
-SUBS_DIRECTORY = "substitutions"
+
+REF_START = 2
+REF_END = 3
 
 HEADER_ROW = "[P1]\t[SUB]\t[SUB]\t[P2]\t[BUFF]\t[DIST]\
     \t[R]\t[Q]\t[FRM]\t[FRM]\t[TAG]\t[TAG]\n"
 
-"""
-# =============================================================================
-MAIN
-# =============================================================================
-"""
+
+def reorient_file(fasta_location, start, end):
+
+    record = list(SeqIO.parse(fasta_location, "fasta"))[0]
+
+    # reversed
+    if start > end:
+        record.seq = record.seq[(end - 1):start].reverse_complement()
+
+    # same orientation
+    else:
+        record.seq = record.seq[(start - 1):end]
+
+    SeqIO.write(record, fasta_location, "fasta")
+
+
+def promer(reference_location, query_location):
+
+    # promer
+    subprocess.check_output(
+        ['promer', reference_location, query_location],
+        universal_newlines=True)
+
+    # filter
+    output = subprocess.check_output(
+        ['delta-filter', '-grq', 'out.delta'], universal_newlines=True)
+
+    filter_file = open("out.filter", "w")
+    filter_file.write(output)
+    filter_file.close()
+
 
 # File locations from arguments:
 reference_location = sys.argv[1]
@@ -50,12 +72,6 @@ query_location = sys.argv[2]
 # Make directories:
 if not os.path.exists(FASTA_DIRECTORY):
     os.mkdir(FASTA_DIRECTORY)
-
-if not os.path.exists(FILTER_DIRECOTRY):
-    os.mkdir(FILTER_DIRECOTRY)
-
-if not os.path.exists(SUBS_DIRECTORY):
-    os.mkdir(SUBS_DIRECTORY)
 
 # Read query FASTA:
 query = list(SeqIO.parse(query_location, "fasta"))
@@ -78,16 +94,26 @@ for record in query:
 # Run promer on each (new) FASTA file:
 for fasta_location in fasta_locations:
 
-    subprocess.check_output(
-        ['promer', reference_location, fasta_location],
-        universal_newlines=True)
+    promer(reference_location, fasta_location)
+
+    # show-coords
     output = subprocess.check_output(
-        ['delta-filter', '-g', 'out.delta'], universal_newlines=True)
+        ['show-coords', '-THrcl', 'out.filter'], universal_newlines=True)
 
-    filter_file = open("out.filter", "w")
-    filter_file.write(output)
-    filter_file.close()
+    if not output:
+        continue
 
+    ref_start = int(output.split()[REF_START])
+    ref_end = int(output.split()[REF_END])
+
+    reorient_file(fasta_location, ref_start, ref_end)
+    promer(reference_location, fasta_location)
+
+    # show-coords
+    output = subprocess.check_output(
+        ['show-coords', '-THrcl', 'out.filter'], universal_newlines=True)
+
+    # show snps
     output = str(subprocess.check_output(
         ['show-snps', '-T', '-q', 'out.filter'], universal_newlines=True))
     output = output.split("\n")[4:]
@@ -96,3 +122,17 @@ for fasta_location in fasta_locations:
     snps_file.write(output)
 
 snps_file.close()
+
+# Write all FASTA files into one output:
+output_location = "contigs.fasta"
+records = []
+
+for fasta_location in fasta_locations:
+
+    record = list(SeqIO.parse(fasta_location, "fasta"))[0]
+    records.append(record)
+
+contigs_file = open(output_location, 'w')
+fasta_writer = FastaIO.FastaWriter(contigs_file, wrap=None)
+fasta_writer.write_file(records)
+contigs_file.close()
