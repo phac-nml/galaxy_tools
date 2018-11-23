@@ -1,7 +1,7 @@
 <tool id="aacoverage" name="Amino Acid Coverage" version="0.4.2">
     <description>Builds an aa census and returns its coverage</description>
     <requirements>
-          <requirement type="package" version="0.4.2">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -45,5 +45,13 @@ A file with one entry per line with the AA position and the coverage at the posi
 
     ]]></help>
     <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolsaacoverage,
+			title = {quasitools aacoverage},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
     </citations>
 </tool>
