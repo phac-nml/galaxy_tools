@@ -1,7 +1,7 @@
-<tool id="callntvar" name="Nucleotide Variants" version="0.4.2">
+<tool id="callntvar" name="Nucleotide Variants" version="0.5.1">
     <description>Identifies nucleotide variants</description>
     <requirements>
-          <requirement type="package" version="0.4.2">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -18,7 +18,7 @@
     <inputs>
         <param name="input_bam" type="data" format="bam" optional="false" label="Bam file" />
         <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
-        <param name="error_rate" type="float" optional="true" min="0" max="1" value="0.01" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.01."/>
+        <param name="error_rate" type="float" optional="true" min="0" max="1" value="0.0021" label="Error rate" help="Estimated sequencing error rate. Defaults to 0.0021."/>
     </inputs>
     <outputs>
         <data format="vcf" name="output" from_work_dir="output.vcf" />
@@ -30,7 +30,9 @@
             <output name="output" >
                 <assert_contents>
                     <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
-                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s69\sPASS\sDP=157;AC=12;AF=0.0764" />
+                    <has_text_matching expression="hxb2_pol\s606\s.\sa\sc\s100\sPASS\sDP=157;AC=12;AF=0.0764" />
+                    <has_text_matching expression="hxb2_pol\s812\s.\sg\sa\s58\sPASS\sDP=634;AC=10;AF=0.0158" />
+                    <has_text_matching expression="hxb2_pol\s2278\s.\sc\st\s54\sPASS\sDP=557;AC=9;AF=0.0162" />
                 </assert_contents>
             </output>
         </test>
@@ -44,5 +46,13 @@ Call nucleotide variants for a given BAM file and a supplied reference file.
 
     ]]></help>
     <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolscallntvar,
+			title = {quasitools callntvar},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
     </citations>
 </tool>

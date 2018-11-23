@@ -1,7 +1,7 @@
-<tool id="consensus" name="Consensus Sequence" version="0.4.2">
+<tool id="consensus" name="Consensus Sequence" version="0.5.1">
     <description>Generate a consensus sequence from a BAM file</description>
     <requirements>
-          <requirement type="package" version="0.4.2">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -89,5 +89,13 @@ When there is zero coverage or no bases meet the percentage threshold (only when
 
     ]]></help>
     <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolsconsensus,
+			title = {quasitools consensus},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
     </citations>
 </tool>
