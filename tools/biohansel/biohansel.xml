@@ -1,4 +1,4 @@
-<tool id="biohansel" name="biohansel" version="2.1.2">
+<tool id="biohansel" name="biohansel" version="2.1.3">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
     <requirement type="package" version="2.1.0">bio_hansel</requirement>
@@ -118,7 +118,7 @@ hansel
   $type_of_scheme.scheme_type
 #end if
 #if $subtype_metadata_filename
-  --scheme-metadata $subtype_metadata_filename
+  --scheme-metadata '$subtype_metadata_filename'
 #end if
 #if $kmer_vals.kmer_min
   --min-kmer-freq $kmer_vals.kmer_min
