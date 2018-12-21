@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: EC-Typer - in silico serotyping of Escherichia coli species
+name: ectyper
+owner: nml
+long_description: EC-Typer is a standalone serotyping module for Escherichia coli typing. It supports fasta and fastq file formats. Designed by Chad Liang et al.
+remote_repository_url: https://github.com/phac-nml/ecoli_serotyping
+homepage_url: https://github.com/phac-nml/ecoli_serotyping
