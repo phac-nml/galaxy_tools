@@ -56,7 +56,7 @@
             <has_text text="O22"/> 
             <has_text text="H8"/> 
       </assert_stderr>
-      <output name="output.tsv" ftype="tabular" >
+      <output name="output_result" file="output.tsv" ftype="tabular" >
           <assert_contents>
               <has_text_matching expression="O22"/>
          </assert_contents>
