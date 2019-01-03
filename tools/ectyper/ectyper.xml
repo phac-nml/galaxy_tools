@@ -67,7 +67,7 @@
   <help>
 **Syntax**
 
-This tool identifies the serotype of Escherichia coli genome sequences based on a set of *wzm/wzy*, *wzx/wzy* and *fliC/flkA/flmA* alleles corresponding to O and H antigens, respectively. 
+This tool identifies the serotype of Escherichia coli genome sequences based on a set of *wzm/wzt*, *wzx/wzy* and *fliC/flkA/flmA* alleles corresponding to O and H antigens, respectively. 
 
 For more information please visit https://github.com/phac-nml/ecoli_serotyping. 
 
@@ -86,7 +86,7 @@ Tab-delimited report listing identified O and H antigens together with correspon
 
 **Parameters (Optional):**
 
-  - **Print the allele sequences as the final columns of the output?** Turn ON/OFF addition of the actual O and H antigen corresponding allelic sequences in the report
+  - **Print the allele sequences as the final columns of the output?** Turn ON/OFF addition of the actual O and H antigen allelic sequences in the report
   - **Enable E. coli species verification:** Turn ON/OFF for more rigorous species verification (recommended)
   - **Include log file in the run outputs?:** Turn ON/OFF optional output of the ectyper log file for a more detailed results assessment
 
