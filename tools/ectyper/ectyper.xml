@@ -19,6 +19,10 @@
     ln -s "${input}" "${input.name}" &&
     #set $genomes = $input.name
   #end if
+
+  #if $mash_input
+    ln -s "${mash_input}" mash_sketch.msh &&
+  #end if
  
   ectyper  --cores \${GALAXY_SLOTS:-4} 
   --input "${genomes}" 
@@ -27,6 +31,9 @@
   #if $adv_param.verifyEcoli
     --verify
   #end if
+  #if $mash_input
+    --refseq mash_sketch.msh
+  #end if   
   #if $adv_param.alleleSequence
     --sequence
   #end if
@@ -34,7 +41,8 @@
   ]]>
   </command>
   <inputs>
-    <param name="input" type="data"  format="fastq,fasta" label="Input(s)" help="FASTA or FASTQ file(s) with contig(s)"/>
+    <param name="input" type="data"  format="fastq,fasta" label="Genome(s) input(s)" help="FASTA or FASTQ file(s) with contig(s)"/>
+    <param name="mash_input" type="data" optional="true" format="binary" label="Mash genome sketches (Optional)" help="Optionally provide MASH sketches to find closest genome (in case O/H typing fails)"/>
     <section name="adv_param" title="Advanced parameters" expanded="False">
       <param name="min_percentIdentity" type="integer" value="90" min="1" max="100"/>
       <param name="percentLength" type="integer" value="50" min="1" max="100"/>
@@ -75,8 +83,9 @@ For more information please visit https://github.com/phac-nml/ecoli_serotyping.
 
 **Input:**
 
-Accepts a variety of inputs including single or multiple FASTQ and/or FASTA file(s). Inputs might contain pure raw reads, but for more accurate results draft assemblies are recommended.
+Accepts a variety of inputs including single or multiple FASTQ and/or FASTA file(s). Inputs might contain pure raw reads, but for more accurate results draft assemblies are recommended. 
 
+Optionally select a MASH RefSeq genome sketch (version 2.0 and above) for cases when O/H typing would fail. Download RefSeq genome sketch containing 91,283 genomes with 1000 hashes each directly from https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh . 
 
 **Output:**
 
