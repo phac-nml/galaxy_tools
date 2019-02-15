@@ -1,8 +1,12 @@
-<tool id="staramr_search" name="staramr" version="0.3.0">
+<tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder and PointFinder databases searching for AMR genes.</description>
+    <macros>
+	    <token name="@VERSION@">0.4.0</token>
+    </macros>
     <requirements>
-        <requirement type="package" version="0.3.0">staramr</requirement>
+        <requirement type="package" version="@VERSION@">staramr</requirement>
     </requirements>
+    <version_command>staramr --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
         #import re
 
@@ -57,6 +61,7 @@
             <when value="true">
                 <param name="organism" type="select" label="Select a pointfinder organism">
                     <option value="salmonella" selected="true">Salmonella</option>
+                    <option value="campylobacter">Campylobacter</option>
                 </param>
             </when>
             <when value="false" />
@@ -164,7 +169,7 @@ Usage
 -----
 
 1. Select your genome contigs (in FASTA format).
-2. Select whether or not you wish to scan your genome for point mutations giving antimicrobial resistance using the PointFinder database. This requires you to specify the specific organism you are scanning (currently only *salmonella* is supported).
+2. Select whether or not you wish to scan your genome for point mutations giving antimicrobial resistance using the PointFinder database. This requires you to specify the specific organism you are scanning (currently only *salmonella* and *campylobacter* is supported).
 3. Run the tool.
 
 Input
