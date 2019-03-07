@@ -340,7 +340,7 @@ Subtype microbial whole-genome sequencing (WGS) data using single-nucleotide pol
 1) Select the sequence data you wish to subtype (FASTAs or FASTQs)
 2) Select subtyping scheme (e.g. *Salmonella enterica* serovar Heidelberg subtyping scheme, *Salmonella enterica* serovar Enteritidis subtyping scheme, or your own custom `biohansel` compatible subtyping scheme)
 3) [Optional] Select your subtype metadata information table to include subtype metadata along with your subtype results
-4) Click ``Execute``git push --set-upstream origin hansel_upgrade
+4) Click ``Execute``
 
 For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_.
 
