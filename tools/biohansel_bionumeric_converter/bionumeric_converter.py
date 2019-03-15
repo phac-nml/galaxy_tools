@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         '-o',
         '--output',
-        default='output',
+        default='output.csv',
         help='Specify output name')
     args = parser.parse_args()
     tsv_file = args.filename
