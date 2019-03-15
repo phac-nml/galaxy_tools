@@ -42,14 +42,12 @@ def comma_remover(tsv_file):
 
 
 def qc_shortener(df):
-    count = 0
-    while count != len(df.index):
+    for count in df.index:
         message = str(df.at[count, 'qc_message'])
         if len(message) > 150:
             results = message.find('|')
             new_message = "Truncated after first '|' : " + message[0:results]
             df['qc_message'] = df['qc_message'].replace(message, new_message)
-        count += 1
     return df
 
 # Converter function:
