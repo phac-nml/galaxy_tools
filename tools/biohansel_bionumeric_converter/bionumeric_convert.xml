@@ -14,7 +14,7 @@
     <tests>
         <test>
             <param name="Input" value="results.tab"/>
-            <output name="output" value="output.csv"/>
+            <output name="output" value="output"/>
         </test>
     </tests>
     <help><![CDATA[
