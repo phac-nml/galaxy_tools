@@ -25,8 +25,8 @@ def main():
     out_name = args.output
 
     no_comma_tsv = comma_remover(tsv_file)
-    short_qc = qc_shortener(no_comma_tsv)
-    tsv_to_csv(short_qc, out_name)
+    df = qc_shortener(no_comma_tsv)
+    df.to_csv(out_name, index=False)
 
 # Remove comma function:
 
@@ -49,13 +49,6 @@ def qc_shortener(df):
             new_message = "Truncated after first '|' : " + message[0:results]
             df['qc_message'] = df['qc_message'].replace(message, new_message)
     return df
-
-# Converter function:
-
-
-def tsv_to_csv(df, out_name):
-    # Write balues to a comma-separated values file
-    df.to_csv(out_name, index=False)
 
 
 if __name__ == '__main__':
