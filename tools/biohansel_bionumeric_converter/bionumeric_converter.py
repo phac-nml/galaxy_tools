@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 # Import dependancies needed
-import pandas as pd
-
 import argparse
+
+import pandas as pd
 
 # Define the main function:
 
