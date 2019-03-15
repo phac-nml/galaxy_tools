@@ -3,7 +3,7 @@
         <requirement type="package" version="0.24.1">pandas</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python $__tool_directory__/bionumeric_converter.py -f '$Input' -o '$output'
+        $__tool_directory__/bionumeric_converter.py -f '$Input' -o '$output'
     ]]></command>
     <inputs>
         <param type="data" name="Input" format="tabular"/>
@@ -14,7 +14,7 @@
     <tests>
         <test>
             <param name="Input" value="results.tab"/>
-            <output name="output.csv" value="output.csv"/>
+            <output name="output" value="output.csv"/>
         </test>
     </tests>
     <help><![CDATA[

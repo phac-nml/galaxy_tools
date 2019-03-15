@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 # Import dependancies needed
 import pandas as pd
 import numpy as np
 import argparse
 
-#Def the main function
+#Define the main function:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -14,7 +16,7 @@ def main():
     parser.add_argument(
         '-o',
         '--output',
-        default='output.csv',
+        default='output',
         help='Specify output name')
     args = parser.parse_args()
     tsv_file = args.filename
@@ -24,7 +26,7 @@ def main():
     short_qc = qc_shortener(no_comma_tsv)
     tsv_to_csv(short_qc, out_name)
 
-# Remove comma function
+# Remove comma function:
 def comma_remover(tsv_file):
     # Create a table from the tsv file as an input into the dataframe.
     df = pd.read_csv(tsv_file,sep ='\t')
@@ -32,7 +34,7 @@ def comma_remover(tsv_file):
     no_comma_tsv = df.replace(',', '/', regex=True)
     return no_comma_tsv
 
-# Shorten QC results    
+# Shorten QC results:    
 def qc_shortener(df):
     count = 0
     while count != len(df.index):
@@ -44,7 +46,7 @@ def qc_shortener(df):
         count += 1
     return df
 
-# Converter function
+# Converter function:
 def tsv_to_csv(df, out_name):
     # Write balues to a comma-separated values file
     df.to_csv(out_name,index=False)
