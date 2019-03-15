@@ -1,0 +1,17 @@
+<tool id="bionumeric_convert" name="Biohansel Bionumeric Converter" version="0.1.0">
+    <requirements>
+        <requirement type="package" version="0.24.1">pandas</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python $__tool_directory__/bionumeric_converter.py -f '$Input'
+    ]]></command>
+    <inputs>
+        <param type="data" name="Input" format="tabular" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="output.csv" from_work_dir="output.csv" label="Output.csv" />
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
