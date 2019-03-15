@@ -1,4 +1,4 @@
-categories: [Supplementary]
+categories: [Text Manipulation]
 description: Convert BioHansel output data to a Bionumerics friendly form
 name: biohansel_bionumeric_converter 
 owner: nml
