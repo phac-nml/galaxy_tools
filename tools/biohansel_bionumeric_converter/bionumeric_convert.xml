@@ -1,4 +1,5 @@
-<tool id="bionumeric_convert" name="Biohansel Bionumeric Converter" version="0.1.0">
+<tool id="bionumeric_convert" name="biohansel2bionumerics" version="0.1.0">
+    <description>- biohansel output made bionumerics friendly</description>
     <requirements>
         <requirement type="package" version="0.24.1">pandas</requirement>
     </requirements>
@@ -20,21 +21,20 @@
     <help><![CDATA[
         **What it does**
 
-        This tool is a supplementary script that takes BioHansel output data and converts it into a format compatible with bionumerics.
+        This tool is a supplementary script that takes *only* BioHansel output data and converts it into a format compatible with bionumerics.
 
-        **Specific modifications**
+        **How to run it**
+
+        1. Input any of your BioHansel output files (tech_results.tab, match_results.tab, and results.tab)
+        2. Click Execute
+
+        **Specific modifications done on the data**
 
         1. Converts all commas in the output to "/"
-        2. Shortens biohansel qc_messages if they are over 150 characters
+        2. Shortens BioHansel qc_messages if they are over 150 characters
         3. Converts the .tab file to a .csv file
 
     ]]></help>
     <citations>
-        <citation type="bibtex">@ARTICLE{a1,
-            title = {BioHansel Bionumeric Convert},
-            author = {Darian Hole},
-            url = {https://github.com/phac-nml/galaxy_tools/}
-            }
-        }</citation>
     </citations>
 </tool>
