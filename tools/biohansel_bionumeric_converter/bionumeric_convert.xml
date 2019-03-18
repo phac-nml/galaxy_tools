@@ -1,5 +1,5 @@
 <tool id="bionumeric_convert" name="biohansel2bionumerics" version="0.1.0">
-    <description>- biohansel output made bionumerics friendly</description>
+    <description>compliant results</description>
     <requirements>
         <requirement type="package" version="0.24.1">pandas</requirement>
     </requirements>
