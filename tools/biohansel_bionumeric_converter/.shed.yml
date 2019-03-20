@@ -1,0 +1,5 @@
+categories: [Text Manipulation]
+description: Convert BioHansel output data to a Bionumerics friendly form
+name: biohansel_bionumeric_converter 
+owner: nml
+homepage_url: https://github.com/phac-nml/galaxy_tools
