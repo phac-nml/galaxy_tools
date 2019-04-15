@@ -1,23 +1,23 @@
 <tool id="tree_relabel" name="Tree Relabeler" version="1.0.0">
-	<command interpreter="perl">
-		nml_tree_relabeler.pl -i $treefile -t $tabfile -o $output -d $delim 
-	</command>
+    <command interpreter="perl">
+        nml_tree_relabeler.pl -i $treefile -t $tabfile -o $output -d $delim 
+    </command>
 
-	<description>Relabels the tips of a newick formatted tree.</description>
+    <description>Relabels the tips of a newick formatted tree.</description>
 
-	<inputs>
-		<param name="treefile" type="data" format="txt" label="The newick formated tree file to be relabeled:" optional="false"/>
-		<param name="tabfile" type="data" format="txt" label="The tab separated file containing the current labels and the info to be added to the labels" optional="false"/>
-		<param name="delim" type="text" label="Delimiter for new tip labels (space, _, etc)" optional="true" help="If left blank, labels of updated tips will be separated by spaces."/>
-	</inputs>
-	<stdio>
-		<exit_code range="1"  level="fatal"   description="Error opening a file."/>
-		<exit_code range="2"  level="fatal"   description="Error with tree format."/>
-	</stdio>
-	<outputs>
-		<data format="txt" name="output"/>
-	</outputs>
-<help>
+    <inputs>
+        <param name="treefile" type="data" format="txt" label="The newick formated tree file to be relabeled:" optional="false"/>
+        <param name="tabfile" type="data" format="txt" label="The tab separated file containing the current labels and the info to be added to the labels" optional="false"/>
+        <param name="delim" type="text" label="Delimiter for new tip labels (space, _, etc)" optional="true" help="If left blank, labels of updated tips will be separated by spaces."/>
+    </inputs>
+    <stdio>
+        <exit_code range="1"  level="fatal"   description="Error opening a file."/>
+        <exit_code range="2"  level="fatal"   description="Error with tree format."/>
+    </stdio>
+    <outputs>
+        <data format="txt" name="output"/>
+    </outputs>
+    <help>
 
 What it does
 ============
@@ -49,5 +49,5 @@ Tab delimted file
 
 Desired delimiter for updated tip labels
 
-</help>
+    </help>
 </tool>
