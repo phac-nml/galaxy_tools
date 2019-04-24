@@ -1,29 +1,29 @@
 categories:
-- Text Manipulation 
+        - Text Manipulation 
 description: Relabels the tips of a newick formatted tree. 
 long_description: |
-What it does
-This tool provides a means for relabeling the tips of a newick formatted tree.
+        What it does
+        This tool provides a means for relabeling the tips of a newick formatted tree.
 
-It takes a newick format tree file to modify tip labels and a tab-delimited file containing current tip labels and additional information to add to the tips in 2 or more columns.
+        It takes a newick format tree file to modify tip labels and a tab-delimited file containing current tip labels and additional information to add to the tips in 2 or more columns.
 
-Usage
-Header row of the tab delimited file must start with a '#'. An example is below:
+        Usage
+        Header row of the tab delimited file must start with a '#'. An example is below:
 
-label outbreak year location
-orgs1 outbreak1 year1 location1
-orgs2 outbreak2 year2 location2
-and so on.
+        label outbreak year location
+        orgs1 outbreak1 year1 location1
+        orgs2 outbreak2 year2 location2
+        and so on.
 
-The information in the tab file is inserted into the tree file so the new information will appear on the tip labels.
+        The information in the tab file is inserted into the tree file so the new information will appear on the tip labels.
 
-Input
-Newick format tree
+        Input
+        Newick format tree
 
-Tab delimted file
+        Tab delimted file
 
-Desired delimiter for updated tip labels
+        Desired delimiter for updated tip labels
 name: Tree Relabeler
-owner: PHAC/NML
+owner: nml
 remote_repository_url: https://github.com/phac-nml/galaxy_tools/blob/master/tools/tree_relabeler
 type: unrestricted
