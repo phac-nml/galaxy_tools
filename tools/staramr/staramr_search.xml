@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
-    <description>Scans genome assemblies against the ResFinder and PointFinder databases searching for AMR genes.</description>
+    <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.4.0</token>
+	    <token name="@VERSION@">0.5.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -26,6 +26,7 @@
 
         --pid-threshold $advanced.pid_threshold
         --percent-length-overlap-resfinder $advanced.plength_resfinder
+        --percent-length-overlap-resfinder $advanced.plength_plasmidfinder
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
         $advanced.report_all_blast
@@ -39,7 +40,9 @@
         #end if
 
         --output-summary $summary
+        --output-detailed-summary $detailed_summary
         --output-resfinder $resfinder
+        --output-plasmidfinder $plasmidfinder
         #if $use_pointfinder.enable
             --output-pointfinder $pointfinder
         #end if
@@ -50,6 +53,7 @@
 
         #if $use_pointfinder.enable
             --pointfinder-organism $use_pointfinder.organism
+
         #end if
 
         $named_genomes
@@ -73,6 +77,8 @@
                    min="0" max="100" help="(--percent-length-overlap-resfinder)" />
             <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
+            <param name="plength_plasmidfinder" type="float" label="Percent length overlap of BLAST hit for PlasmidFinder database" value="60.0"
+                   min="0" max="100" help="(--percent-length-overlap-plasmidfinder)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
@@ -93,7 +99,9 @@
     </inputs>
     <outputs>
         <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
+        <data format="tabular" name="detailed_summary" label="${tool.name} on ${on_string}: detailed_summary.tsv" />
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
+        <data format="tabular" name="plasmidfinder" label="${tool.name} on ${on_string}: plasmidfinder.tsv" />
         <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv">
             <filter>use_pointfinder['enable']</filter>
         </data>
@@ -106,13 +114,16 @@
     <tests>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <!-- <param name="advanced.exclude_negatives" value="false" /> -->
             <conditional name="use_pointfinder">
                 <param name="enable" value="true" />
                 <param name="organism" value="salmonella" />
             </conditional>
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
+            <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
             <output name="resfinder" file="test1-resfinder.tsv" ftype="tabular" />
+            <output name="plasmidfinder" file="test1-plasmidfinder.tsv" ftype="tabular" />
             <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
             <output_collection name="blast_hits" type="list">
                 <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
@@ -272,7 +283,7 @@ The command-line, database versions, and other settings used to run `staramr`.
 results.xlsx
 ````````````
 
-An Excel spreadsheet containing the previous 4 files as separate worksheets.
+An Excel spreadsheet containing the previous 5 files as separate worksheets.
 
 BLAST Hits
 ``````````
@@ -283,6 +294,7 @@ Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, 
 
 .. _staramr: https://github.com/phac-nml/staramr
 .. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
+.. _PlasmidFinder: https://bitbucket.org/genomicepidemiology/plasmidfinder_db
 .. _PointFinder: https://bitbucket.org/genomicepidemiology/pointfinder_db
 .. _webservice: https://cge.cbs.dtu.dk/services/ResFinder/
     ]]></help>
