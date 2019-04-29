@@ -26,7 +26,7 @@
 
         --pid-threshold $advanced.pid_threshold
         --percent-length-overlap-resfinder $advanced.plength_resfinder
-        --percent-length-overlap-resfinder $advanced.plength_plasmidfinder
+        --percent-length-overlap-plasmidfinder $advanced.plength_plasmidfinder
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
         $advanced.report_all_blast
@@ -39,11 +39,15 @@
             --no-exclude-genes
         #end if
 
+        #if str($advanced.plasmidfinder_type.plasmidfinder_type_condition) != 'default'
+            --plasmidfinder-database-type '${advanced.plasmidfinder_type.plasmidfinder_type_condition}'
+        #end if
+
         --output-summary $summary
         --output-detailed-summary $detailed_summary
         --output-resfinder $resfinder
         --output-plasmidfinder $plasmidfinder
-        #if $use_pointfinder.enable
+        #if str($use_pointfinder.use_pointfinder_condition) != 'default'
             --output-pointfinder $pointfinder
         #end if
         --output-settings $settings
@@ -51,9 +55,8 @@
 
         --output-hits-dir staramr_hits
 
-        #if $use_pointfinder.enable
-            --pointfinder-organism $use_pointfinder.organism
-
+        #if str($use_pointfinder.use_pointfinder_condition) != 'default'
+            --pointfinder-organism '${use_pointfinder.use_pointfinder_condition}'
         #end if
 
         $named_genomes
@@ -61,14 +64,11 @@
     <inputs>
         <param type="data" name="genomes" format="fasta" multiple="true"/>
         <conditional name="use_pointfinder">
-            <param name="enable" type="boolean" label="Enable scanning for point mutations using the PointFinder database" />
-            <when value="true">
-                <param name="organism" type="select" label="Select a pointfinder organism">
-                    <option value="salmonella" selected="true">Salmonella</option>
-                    <option value="campylobacter">Campylobacter</option>
-                </param>
-            </when>
-            <when value="false" />
+            <param name="use_pointfinder_condition" type="select" label="Enable scanning for point mutations using the PointFinder database">
+                <option value="default" selected="true">Disable PointFinder</option>
+                <option value="salmonella">Salmonella</option>
+                <option value="campylobacter">Campylobacter</option>
+            </param>
         </conditional>
         <section name="advanced" title="Advanced options" expanded="false">
             <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
@@ -95,6 +95,13 @@
                 </when>
                 <when value="none" />
             </conditional>
+            <conditional name="plasmidfinder_type">
+                <param name="plasmidfinder_type_condition" type="select" label="Specify PlasmidFinder Database type">
+                    <option value="default" selected="true">Include all available database types</option>
+                    <option value="gram_positive">Gram Positive</option>
+                    <option value="enterobacteriaceae">Enterobacteriaceae</option>
+                </param>
+            </conditional>
         </section>
     </inputs>
     <outputs>
@@ -114,10 +121,8 @@
     <tests>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
-            <!-- <param name="advanced.exclude_negatives" value="false" /> -->
             <conditional name="use_pointfinder">
-                <param name="enable" value="true" />
-                <param name="organism" value="salmonella" />
+                <param name="use_pointfinder_condition" value="salmonella" />
             </conditional>
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
