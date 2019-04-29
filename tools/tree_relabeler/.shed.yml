@@ -23,7 +23,7 @@ long_description: |
         Tab delimted file
 
         Desired delimiter for updated tip labels
-name: Tree Relabeler
+name: tree_relabeler
 owner: nml
 remote_repository_url: https://github.com/phac-nml/galaxy_tools/blob/master/tools/tree_relabeler
 type: unrestricted
