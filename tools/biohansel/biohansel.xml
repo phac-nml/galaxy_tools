@@ -342,7 +342,7 @@ Subtype microbial whole-genome sequencing (WGS) data using single-nucleotide pol
 3) [Optional] Select your subtype metadata information table to include subtype metadata along with your subtype results
 4) Click ``Execute``
 
-For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_.
+For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_ or the `biohansel readthedocs page.
 
 
 **Example analysis results of a single FASTA file**
@@ -421,7 +421,7 @@ Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Hea
     <citation type="bibtex">@ARTICLE{a1,
       title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
       author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
-      url = {https://github.com/phac-nml/bio_hansel}
+      url = {https://github.com/phac-nml/biohansel}
       }
     }</citation>
   </citations>
