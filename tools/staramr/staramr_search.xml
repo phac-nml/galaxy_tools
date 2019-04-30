@@ -39,15 +39,15 @@
             --no-exclude-genes
         #end if
 
-        #if str($advanced.plasmidfinder_type.plasmidfinder_type_condition) != 'default'
-            --plasmidfinder-database-type '${advanced.plasmidfinder_type.plasmidfinder_type_condition}'
+        #if str($advanced.plasmidfinder_type) != 'include_all'
+            --plasmidfinder-database-type '${advanced.plasmidfinder_type}'
         #end if
 
         --output-summary $summary
         --output-detailed-summary $detailed_summary
         --output-resfinder $resfinder
         --output-plasmidfinder $plasmidfinder
-        #if str($use_pointfinder.use_pointfinder_condition) != 'default'
+        #if str($use_pointfinder) != 'disabled'
             --output-pointfinder $pointfinder
         #end if
         --output-settings $settings
@@ -55,21 +55,19 @@
 
         --output-hits-dir staramr_hits
 
-        #if str($use_pointfinder.use_pointfinder_condition) != 'default'
-            --pointfinder-organism '${use_pointfinder.use_pointfinder_condition}'
+        #if str($use_pointfinder) != 'disabled'
+            --pointfinder-organism '${use_pointfinder}'
         #end if
 
         $named_genomes
     ]]></command>
     <inputs>
         <param type="data" name="genomes" format="fasta" multiple="true"/>
-        <conditional name="use_pointfinder">
-            <param name="use_pointfinder_condition" type="select" label="Enable scanning for point mutations using the PointFinder database">
-                <option value="default" selected="true">Disable PointFinder</option>
-                <option value="salmonella">Salmonella</option>
-                <option value="campylobacter">Campylobacter</option>
-            </param>
-        </conditional>
+        <param name="use_pointfinder" type="select" label="Enable scanning for point mutations using the PointFinder database">
+            <option value="disabled" selected="true">Disable PointFinder</option>
+            <option value="salmonella">Salmonella</option>
+            <option value="campylobacter">Campylobacter</option>
+        </param>
         <section name="advanced" title="Advanced options" expanded="false">
             <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
                    min="0" max="100" help="(--pid-threshold)" />
@@ -95,13 +93,11 @@
                 </when>
                 <when value="none" />
             </conditional>
-            <conditional name="plasmidfinder_type">
-                <param name="plasmidfinder_type_condition" type="select" label="Specify PlasmidFinder Database type">
-                    <option value="default" selected="true">Include all available database types</option>
-                    <option value="gram_positive">Gram Positive</option>
-                    <option value="enterobacteriaceae">Enterobacteriaceae</option>
-                </param>
-            </conditional>
+            <param name="plasmidfinder_type" type="select" label="Specify PlasmidFinder Database type">
+                <option value="include_all" selected="true">Include all available database types</option>
+                <option value="gram_positive">Gram Positive</option>
+                <option value="enterobacteriaceae">Enterobacteriaceae</option>
+            </param>
         </section>
     </inputs>
     <outputs>
@@ -110,7 +106,7 @@
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
         <data format="tabular" name="plasmidfinder" label="${tool.name} on ${on_string}: plasmidfinder.tsv" />
         <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv">
-            <filter>use_pointfinder['enable']</filter>
+            <filter>use_pointfinder != "disabled"</filter>
         </data>
         <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
         <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
@@ -121,9 +117,7 @@
     <tests>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
-            <conditional name="use_pointfinder">
-                <param name="use_pointfinder_condition" value="salmonella" />
-            </conditional>
+            <param name="use_pointfinder" value="salmonella" />
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
