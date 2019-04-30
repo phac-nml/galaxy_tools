@@ -1,4 +1,4 @@
-<tool id="refseq_masher_contains" name="RefSeq Masher Contains" version="0.1.1">
+<tool id="refseq_masher_contains" name="RefSeq Masher Contains" version="0.1.2">
   <description>
     Find NCBI RefSeq Genomes contained in your sequences
   </description>
@@ -9,9 +9,10 @@
 <![CDATA[
 
 #import re
+#import os
 
 #if $input.type == 'fasta'
-#set $input_files = '"{}"'.format($input.fasta.name)
+#set $input_files = '"{}.fasta"'.format(os.path.splitext($input.fasta.name)[0])
   ln -s "$input.fasta" $input_files &&
 #elif $input.type == 'paired'
 #set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
