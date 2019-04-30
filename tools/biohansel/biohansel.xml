@@ -342,7 +342,7 @@ Subtype microbial whole-genome sequencing (WGS) data using single-nucleotide pol
 3) [Optional] Select your subtype metadata information table to include subtype metadata along with your subtype results
 4) Click ``Execute``
 
-For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_ or the `biohansel readthedocs page.
+For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_ or the `biohansel readthedocs page <https://bio-hansel.readthedocs.io/en/readthedocs/index.html>`_.
 
 
 **Example analysis results of a single FASTA file**
