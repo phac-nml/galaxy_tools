@@ -39,7 +39,7 @@ def qc_shortener(df):
         try:
             if len(message) > 150:
                 df.at[i, 'qc_message'] = message[0:150]
-                df.at[i, 'qc_message_2'] = message[150:]
+                df.at[i, 'qc_message_2'] = message[150:300]
                 if len(message) > 300:
                     df.at[i, 'qc_message_3'] = message[300:450]
         except TypeError:
