@@ -1,2 +1,2 @@
-Isolate ID	Genotype	Predicted Phenotype
-test-aminoglycoside.fsa	aac(6')-Iaa	gentamicin
+Isolate ID	Genotype	Predicted Phenotype	Plasmid Genes
+test-aminoglycoside.fsa	aac(6')-Iaa	gentamicin	None
