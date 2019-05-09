@@ -1,2 +1,2 @@
-Isolate ID	Genotype	Predicted Phenotype
-test-aminoglycoside.fsa	None	Sensitive
+Isolate ID	Genotype	Predicted Phenotype	Plasmid Genes
+test-aminoglycoside.fsa	None	Sensitive	None
