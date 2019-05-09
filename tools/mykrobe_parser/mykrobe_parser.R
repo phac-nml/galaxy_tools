@@ -291,7 +291,7 @@ if (0 < predictions.table %>%
         mutate(variants = strsplit(variants, "__")) %>% # Split the mutations across rows (list first then split across rows)
         unnest(variants) %>% 
         separate(variants, c("gene", "mutation"), "_") %>% 
-        mutate(columnname = ifelse(gene %in% c("tlyA", "rrs", "eis", "gid"), # Check for columns that include the drug name or not and paste accordingly
+        mutate(columnname = ifelse(gene %in% c("gyrA", "tlyA", "rrs", "eis", "gid"), # Check for columns that include the drug name or not and paste accordingly
                                    paste("Mykrobe", drug, gene, sep = "_"),
                                    paste("Mykrobe", gene, sep = "_"))) %>% 
         # Extract out the mutation information with a regex that covers all potential genes
