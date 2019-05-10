@@ -33,15 +33,18 @@ def main():
 # Shorten QC results:
 
 
+def splittingstrings(string, length):
+    return (string[0+i:length+i] for i in range(0, len(string), length))
+
+
 def qc_shortener(df):
     for i, row in df.iterrows():
         message = row['qc_message']
         try:
-            if len(message) > 150:
-                df.at[i, 'qc_message'] = message[0:150]
-                df.at[i, 'qc_message_2'] = message[150:300]
-                if len(message) > 300:
-                    df.at[i, 'qc_message_3'] = message[300:450]
+            message_list = list(splittingstrings(message, 150))
+            df.at[i, 'qc_message'] = message_list[0]
+            for val in range(1, len(message_list)):
+                df.at[i, f'qc_message_{val}'] = message_list[val]
         except TypeError:
             pass
     return df

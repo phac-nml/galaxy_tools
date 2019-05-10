@@ -34,7 +34,7 @@
         **Specific modifications done to the data**
 
         1. Converts all commas in the output to "/"
-        2. Splits Biohansel qc_message column into multiple columns if the message is longer than 150 characters (up to 450 characters at the moment)
+        2. Splits Biohansel qc_message column into multiple columns if the message is longer than 150 characters
         3. Converts the .tab or .tsv file to a .csv file
 
     ]]></help>
