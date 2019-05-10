@@ -1,4 +1,4 @@
-<tool id="refseq_masher_matches" name="RefSeq Masher Matches" version="0.1.1">
+<tool id="refseq_masher_matches" name="RefSeq Masher Matches" version="0.1.2">
   <description>
     Find closest matching NCBI RefSeq Genomes to your sequences
   </description>
@@ -9,9 +9,10 @@
 <![CDATA[
 
 #import re
+#import os
 
 #if $input.type == 'fasta'
-#set $input_files = '"{}"'.format($input.fasta.name)
+#set $input_files = '"{}.fasta"'.format(os.path.splitext($input.fasta.name)[0])
   ln -s "$input.fasta" $input_files &&
 #elif $input.type == 'paired'
 #set $_forward_ext = '.fastq.gz' if $re.match(r'.*\.gz$', $input.forward.name) else '.fastq'
@@ -182,7 +183,7 @@ RefSeq Masher - Genomic Distance
 Find what NCBI RefSeq genomes most closely match your sequence data using Mash_ with a Mash sketch database of 54,925 NCBI RefSeq Genomes.
 
 
-Source code available on Github at https://github.com/phac-nml/refseq_masher
+Source code available on Github at github.com/phac-nml/refseq_masher
 
 
 `matches` - find the closest matching NCBI RefSeq Genomes in your input sequences
@@ -217,7 +218,7 @@ With the FNA.GZ_ file for *Salmonella enterica* subsp. enterica serovar Enteriti
 
 
     # download sequence file
-    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/GCF_000329025.1_ASM32902v1_genomic.fna.gz
+    wget ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/GCF_000329025.1_ASM32902v1_genomic.fna.gz
 
     # find RefSeq matches
     refseq_masher -vv matches GCF_000329025.1_ASM32902v1_genomic.fna.gz
@@ -268,7 +269,7 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this work except in compliance with the License. You may obtain a copy of the
 License at:
 
-http://www.apache.org/licenses/LICENSE-2.0
+www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -280,9 +281,9 @@ Contact
 
 **Gary van Domselaar**: gary.vandomselaar@phac-aspc.gc.ca
 
-.. _Mash: https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0997-x
-.. _FNA.GZ: ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/GCF_000329025.1_ASM32902v1_genomic.fna.gz
-.. _CHS44: ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/
+.. _Mash: genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0997-x
+.. _FNA.GZ: ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/GCF_000329025.1_ASM32902v1_genomic.fna.gz
+.. _CHS44: ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/329/025/GCF_000329025.1_ASM32902v1/
 
 
 ]]>
