@@ -44,7 +44,7 @@ def qc_shortener(df):
             message_list = list(splittingstrings(message, 150))
             df.at[i, 'qc_message'] = message_list[0]
             for val in range(1, len(message_list)):
-                df.at[i, f'qc_message_{val}'] = message_list[val]
+                df.at[i, 'qc_message_{}'.format(val)] = message_list[val]
         except TypeError:
             pass
     return df
