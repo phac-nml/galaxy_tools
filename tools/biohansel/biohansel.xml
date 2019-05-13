@@ -1,4 +1,4 @@
-<tool id="biohansel" name="biohansel" version="2.1.5">
+<tool id="biohansel" name="biohansel" version="2.1.6">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
     <requirement type="package" version="2.1.1">bio_hansel</requirement>
@@ -72,7 +72,7 @@
 #end if
 
 ## Checking for custom scheme.
-#if $type_of_scheme.scheme_type == "custom":
+#if $type_of_scheme.scheme_check == "custom":
   #if $type_of_scheme.scheme_input.is_of_type('fasta'):
     ln -s '$type_of_scheme.scheme_input' '$type_of_scheme.scheme_input.name' &&
   #end if
@@ -112,7 +112,7 @@ hansel
   $dev_args.use_json
   $input_files
   --scheme
-#if $type_of_scheme.scheme_type == "custom":
+#if $type_of_scheme.scheme_check == "custom":
   '$type_of_scheme.scheme_input.name'
 #else:
   $type_of_scheme.scheme_type
@@ -189,19 +189,23 @@ hansel
       </when>
     </conditional>
     <conditional name="type_of_scheme">
-      <param name="scheme_type" type="select"
-        label="SNP Subtyping Scheme"
-        help="Select the SNP subtyping scheme you wish to subtype with">
-        <option value="heidelberg">Salmonella Heidelberg subtyping scheme</option>
-        <option value="enteritidis">Salmonella Enteritidis subtyping scheme</option>
-        <option value="custom">Specify your own custom scheme</option>
+      <param name="scheme_check" type="select"
+        label="Subtyping Schemes"
+        help="Use included scheme or custom">
+        <option value="standard">Included Biohansel Schemes</option>
+        <option value="custom">Select User Custom Scheme</option>
       </param>
-      <when value="heidelberg"/>
-      <when value="enteritidis"/>
+      <when value="standard">
+        <param name="scheme_type" type="select"
+          label="Included SNP Subtyping Scheme">
+          <option value="heidelberg">Salmonella Heidelberg subtyping scheme</option>
+          <option value="enteritidis">Salmonella Enteritidis subtyping scheme</option>
+        </param>
+      </when>
       <when value="custom">
         <param name="scheme_input" 
           type="data" format="fasta" 
-          label="Your biohansel SNP Subtyping Scheme"/>
+          label="Your Custom Biohansel SNP Subtyping Scheme"/>
       </when>
     </conditional>
     <param name="subtype_metadata"
