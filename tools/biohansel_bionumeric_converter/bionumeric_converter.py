@@ -14,7 +14,7 @@ def main():
         '-f',
         '--filename',
         required=True,
-        help='Specify your tsv input')
+        help='Specify your biohansel tsv or other tabular separated input')
     parser.add_argument(
         '-o',
         '--output',
@@ -24,30 +24,27 @@ def main():
     tsv_file = args.filename
     out_name = args.output
 
-    no_comma_tsv = comma_remover(tsv_file)
-    df = qc_shortener(no_comma_tsv)
+    df_input = pd.read_csv(tsv_file, sep='\t')
+
+    df_no_comma = df_input.replace(',', '/', regex=True)
+    df = qc_shortener(df_no_comma)
     df.to_csv(out_name, index=False)
-
-# Remove comma function:
-
-
-def comma_remover(tsv_file):
-    # Create a table from the tsv file as an input into the dataframe.
-    df = pd.read_csv(tsv_file, sep='\t')
-    # Change all commas to / in the QC message
-    no_comma_tsv = df.replace(',', '/', regex=True)
-    return no_comma_tsv
 
 # Shorten QC results:
 
 
+def splittingstrings(string, length):
+    return (string[0+i:length+i] for i in range(0, len(string), length))
+
+
 def qc_shortener(df):
-    for count in df.index:
-        message = str(df.at[count, 'qc_message'])
+    for i, row in df.iterrows():
+        message = str(row['qc_message'])
         if len(message) > 150:
-            results = message.find('|')
-            new_message = "Truncated after first '|' : " + message[0:results]
-            df['qc_message'] = df['qc_message'].replace(message, new_message)
+            message_list = list(splittingstrings(message, 150))
+            df.at[i, 'qc_message'] = message_list[0]
+            for val in range(1, len(message_list)):
+                df.at[i, 'qc_message_{}'.format(val)] = message_list[val]
     return df
 
 
