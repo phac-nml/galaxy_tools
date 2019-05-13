@@ -39,14 +39,12 @@ def splittingstrings(string, length):
 
 def qc_shortener(df):
     for i, row in df.iterrows():
-        message = row['qc_message']
-        try:
+        message = str(row['qc_message'])
+        if len(message) > 150:
             message_list = list(splittingstrings(message, 150))
             df.at[i, 'qc_message'] = message_list[0]
             for val in range(1, len(message_list)):
                 df.at[i, 'qc_message_{}'.format(val)] = message_list[val]
-        except TypeError:
-            pass
     return df
 
 
