@@ -1,4 +1,4 @@
-Isolate ID	Gene	Predicted Phenotype	%Identity	%Overlap	HSP Length/Total Length	Contig	Start	End	Accession	Data Type
+Isolate ID	Gene/Plasmid	Predicted Phenotype	%Identity	%Overlap	HSP Length/Total Length	Contig	Start	End	Accession	Data Type
 16S-rc_gyrA-rc_beta-lactam.fsa	None									Plasmid
 16S-rc_gyrA-rc_beta-lactam.fsa	16S_rrsD (C1065T)	spectinomycin	99.94	100.0	1544/1544	16S_rrsD	1604	61		Resistance
 16S-rc_gyrA-rc_beta-lactam.fsa	blaIMP-42	ampicillin, amoxicillin/clavulanic acid, cefoxitin, ceftriaxone, meropenem	99.73	100.0	741/741	16S_rrsD	4381	5121	AB753456	Resistance
