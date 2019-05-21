@@ -1,7 +1,7 @@
-<tool id="biohansel" name="biohansel" version="2.1.6">
+<tool id="biohansel" name="biohansel" version="2.2.0">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
-    <requirement type="package" version="2.1.1">bio_hansel</requirement>
+    <requirement type="package" version="2.2.0">bio_hansel</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -129,14 +129,14 @@ hansel
 #if $qc_vals.low_cov_depth_freq
   --low-cov-depth-freq $qc_vals.low_cov_depth_freq
 #end if
-#if $qc_vals.max_missing_tiles
-  --max-missing-tiles $qc_vals.max_missing_tiles
+#if $qc_vals.max_missing_kmers
+  --max-missing-kmers $qc_vals.max_missing_kmers
 #end if
-#if $qc_vals.min_ambiguous_tiles
-  --min-ambiguous-tiles $qc_vals.min_ambiguous_tiles
+#if $qc_vals.min_ambiguous_kmers
+  --min-ambiguous-kmers $qc_vals.min_ambiguous_kmers
 #end if
-#if $qc_vals.max_intermediate_tiles
-  --max-intermediate-tiles $qc_vals.max_intermediate_tiles
+#if $qc_vals.max_intermediate_kmers
+  --max-intermediate-kmers $qc_vals.max_intermediate_kmers
 #end if
 #if $qc_vals.low_coverage_warning
   --low-cov-warning $qc_vals.low_coverage_warning
@@ -200,6 +200,9 @@ hansel
           label="Included SNP Subtyping Scheme">
           <option value="heidelberg">Salmonella Heidelberg subtyping scheme</option>
           <option value="enteritidis">Salmonella Enteritidis subtyping scheme</option>
+          <option value="typhi">Salmonella Typhi subtyping scheme</option>
+          <option value="typhimurium">Salmonella Typhimurium subtyping scheme</option>
+          <option value="tb_speciation">Mycobacterium Tuberculosis subtyping scheme</option>
         </param>
       </when>
       <when value="custom">
@@ -237,28 +240,28 @@ hansel
         optional="true"
         label="QC: Frequency below this coverage are considered low coverage"
         help="default = 20"/>
-      <param name="min_ambiguous_tiles" type="integer"
-        argument="--min-ambiguous-tiles"
+      <param name="min_ambiguous_kmers" type="integer"
+        argument="--min-ambiguous-kmers"
         optional="true"
         value="3" min="0"
-        label="QC: Min number of tiles missing for Ambiguous Result"
+        label="QC: Min number of kmers missing for Ambiguous Result"
         help="default = 3"/>
-      <param name="max_missing_tiles" type="float"
-        argument="--max-missing-tiles"
+      <param name="max_missing_kmers" type="float"
+        argument="--max-missing-kmers"
         optional="true"
         value="0.05" min="0" max="1"
-        label="QC: Decimal Proportion of max allowed missing tiles" help="default = 0.05, valid values {0.0 - 1.0}"/>
-      <param name="max_intermediate_tiles" type="float"
-        argument="--max-intermediate-tiles"
+        label="QC: Decimal Proportion of max allowed missing kmers" help="default = 0.05, valid values {0.0 - 1.0}"/>
+      <param name="max_intermediate_kmers" type="float"
+        argument="--max-intermediate-kmers"
         optional="true"
         value="0.05" min="0" max="1"
-        label="QC: Decimal Proportion of max allowed missing tiles for an intermediate subtype"
+        label="QC: Decimal Proportion of max allowed missing kmers for an intermediate subtype"
         help="default = 0.05, valid values {0.0 - 1.0}"/> 
       <param name="low_coverage_warning" type="integer"
         argument="--low-cov-warning"
         optional="true"
         value="20"
-        label="QC: Overall tile coverage below this value will trigger a low coverage warning"
+        label="QC: Overall kmer coverage below this value will trigger a low coverage warning"
         help="default = 20"/> 
     </section>
     <section name="dev_args" title="Developer Options" expanded="False">
@@ -342,11 +345,11 @@ Subtype microbial whole-genome sequencing (WGS) data using single-nucleotide pol
 **Usage**
 
 1) Select the sequence data you wish to subtype (FASTAs or FASTQs)
-2) Select subtyping scheme (e.g. *Salmonella enterica* serovar Heidelberg subtyping scheme, *Salmonella enterica* serovar Enteritidis subtyping scheme, or your own custom `biohansel` compatible subtyping scheme)
+2) Select subtyping scheme (e.g. *Salmonella enterica* serovar Heidelberg, Enteritidis, Typhimurium, or Typhi subtyping scheme, or your own custom `biohansel` compatible subtyping scheme)
 3) [Optional] Select your subtype metadata information table to include subtype metadata along with your subtype results
 4) Click ``Execute``
 
-For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_.
+For more information, visit `the biohansel project page <https://github.com/phac-nml/biohansel>`_ or the `biohansel read the docs page <https://bio-hansel.readthedocs.io/en/readthedocs/>`_.
 
 
 **Example analysis results of a single FASTA file**
@@ -354,7 +357,7 @@ For more information, visit `the biohansel project page <https://github.com/phac
 Contents of ``results.tab``:
 
     +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
-    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | tiles_matching_subtype                                        | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_expected | n_tiles_matching_positive | n_tiles_matching_positive_expected | n_tiles_matching_subtype | n_tiles_matching_subtype_expected | file_path              | qc_status | qc_message |
+    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | kmers_matching_subtype                                        | are_subtypes_consistent | inconsistent_subtypes | n_kmers_matching_all | n_kmers_matching_all_expected | n_kmers_matching_positive | n_kmers_matching_positive_expected | n_kmers_matching_subtype | n_kmers_matching_subtype_expected | file_path              | qc_status | qc_message |
     +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
     | SRR1002850_SMALL | heidelberg | 0.5.0          | 2.2.2.2.1.4 | 2; 2.2; 2.2.2; 2.2.2.2; 2.2.2.2.1; 2.2.2.2.1.4 | 2154958-2.2.2.2.1.4; 1037658-2.2.2.2.1.4; 3785187-2.2.2.2.1.4 | True                    |                       | 202                  | 202                           | 17                        | 17                                 | 3                        | 3                                 | SRR1002850_SMALL.fasta | PASS      |            |
     +------------------+------------+----------------+-------------+------------------------------------------------+---------------------------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+------------------------+-----------+------------+
@@ -363,7 +366,7 @@ Contents of ``results.tab``:
 Contents of ``match_results.tab``:
 
     +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
-    | tilename                  | seq                               | is_revcomp | contig_id                             | match_index | refposition | subtype     | is_pos_tile | sample           | file_path              | scheme     | scheme_version | qc_status | qc_message |
+    | kmername                  | seq                               | is_revcomp | contig_id                             | match_index | refposition | subtype     | is_pos_kmer | sample           | file_path              | scheme     | scheme_version | qc_status | qc_message |
     +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
     | 2154958-2.2.2.2.1.4       | GGCGCGCCACGGTTACTCCCCGGTGGTCAGCCG | True       | NODE_1_length_726282_cov_40.4705_ID_1 | 13732       | 2154958     | 2.2.2.2.1.4 | True        | SRR1002850_SMALL | SRR1002850_SMALL.fasta | heidelberg | 0.5.0          | PASS      |            |
     +---------------------------+-----------------------------------+------------+---------------------------------------+-------------+-------------+-------------+-------------+------------------+------------------------+------------+----------------+-----------+------------+
@@ -380,7 +383,7 @@ Contents of ``match_results.tab``:
 Contents of ``results.tab``:
 
     +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
-    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | tiles_matching_subtype                   | are_subtypes_consistent | inconsistent_subtypes | n_tiles_matching_all | n_tiles_matching_all_expected | n_tiles_matching_positive | n_tiles_matching_positive_expected | n_tiles_matching_subtype | n_tiles_matching_subtype_expected | file_path                                                | avg_tile_coverage | qc_status | qc_message |
+    | sample           | scheme     | scheme_version | subtype     | all_subtypes                                   | kmers_matching_subtype                   | are_subtypes_consistent | inconsistent_subtypes | n_kmers_matching_all | n_kmers_matching_all_expected | n_kmers_matching_positive | n_kmers_matching_positive_expected | n_kmers_matching_subtype | n_kmers_matching_subtype_expected | file_path                                                | avg_kmer_coverage | qc_status | qc_message |
     +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
     | SRR5646583_SMALL | heidelberg | 0.5.0          | 2.2.1.1.1.1 | 2; 2.2; 2.2.1; 2.2.1.1; 2.2.1.1.1; 2.2.1.1.1.1 | 1983064-2.2.1.1.1.1; 4211912-2.2.1.1.1.1 | True                    |                       | 202                  | 202                           | 20                        | 20                                 | 2                        | 2                                 | ['SRR5646583_SMALL_1.fastq', 'SRR5646583_SMALL_2.fastq'] | 42.631            | PASS      |            |
     +------------------+------------+----------------+-------------+------------------------------------------------+------------------------------------------+-------------------------+-----------------------+----------------------+-------------------------------+---------------------------+------------------------------------+--------------------------+-----------------------------------+----------------------------------------------------------+-------------------+-----------+------------+
@@ -388,7 +391,7 @@ Contents of ``results.tab``:
 Contents of ``match_results.tab``:
 
     +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
-    | tilename            | seq                               | freq | refposition | subtype   | is_pos_tile | is_kmer_freq_okay | sample           | scheme     | scheme_version | qc_status | qc_message |
+    | kmername            | seq                               | freq | refposition | subtype   | is_pos_kmer | is_kmer_freq_okay | sample           | scheme     | scheme_version | qc_status | qc_message |
     +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
     | negative4642573-1.2 | TACCAGGAAGTGCTGGAAGAGTTTAACGAACAT | 62   | 4642573     | 1.2       | False       | True              | SRR5646583_SMALL | heidelberg | 0.5.0          | PASS      |            |
     +---------------------+-----------------------------------+------+-------------+-----------+-------------+-------------------+------------------+------------+----------------+-----------+------------+
@@ -424,8 +427,8 @@ Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Hea
   <citations>
     <citation type="bibtex">@ARTICLE{a1,
       title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
-      author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
-      url = {https://github.com/phac-nml/bio_hansel}
+      author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, David Son, Darian Hole, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
+      url = {https://github.com/phac-nml/biohansel}
       }
     }</citation>
   </citations>
