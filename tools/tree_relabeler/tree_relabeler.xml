@@ -1,4 +1,4 @@
-<tool id="tree_relabel" name="Tree Relabeler" version="1.0.0">
+<tool id="tree_relabel" name="Tree Relabeler" version="1.0.1">
     <description>Relabels the tips of a newick formatted tree.</description>
 
     <requirements>
@@ -16,7 +16,7 @@
     </command>
 
     <inputs>
-        <param name="treefile" type="data" format="txt" label="The newick formated tree file to be relabeled:" optional="false"/>
+        <param name="treefile" type="data" format="nhx" label="The newick formated tree file to be relabeled:" optional="false"/>
         <param name="tabfile" type="data" format="txt" label="The tab separated file containing the current labels and the info to be added to the labels" optional="false"/>
         <param name="delim" type="text" label="Delimiter for new tip labels (space, _, etc)" optional="true" help="If left blank, labels of updated tips will be separated by spaces."/>
     </inputs>
