@@ -7,6 +7,7 @@
 <![CDATA[
 
 #import re
+#import os
 
 ## Illumina FASTQ naming regular expression (https://github.com/phac-nml/biohansel/issues/38)
 #set global $ILLUMINA_REGEX = $re.compile(r'^([\w\-\_]+)_S\d+_L\d{3}_R(\d)_001\.fastq(\.gz)?$')
@@ -52,7 +53,7 @@
 
 ## Create symlinks from Galaxy *.dat to <sample_name>(.fasta|.fastq|.fastq.gz)
 #if $input.type == 'fasta'
-  #set $input_files = '"{}"'.format($input.fasta.name)
+  #set $input_files = '"{}.fasta"'.format(os.path.splitext($input.fasta.name)[0])
   ln -s "$input.fasta" $input_files &&
 #elif $input.type == 'paired'
   #set $forward_filename = $get_paired_fastq_filename($input.forward)
