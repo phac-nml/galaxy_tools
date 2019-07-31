@@ -1,7 +1,7 @@
 <tool id="dnds" name="dNdS Report" version="0.5.1">
     <description>Calculate the dN/dS value for each region in a bed file</description>
     <requirements>
-          <requirement type="package" version="0.5.1">quasitools</requirement>
+          <requirement type="package" version="0.7.0">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
