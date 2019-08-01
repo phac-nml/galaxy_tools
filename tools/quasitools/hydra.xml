@@ -1,7 +1,7 @@
 <tool id="hydra" name="Hydra pipeline" version="0.5.1">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -214,9 +214,16 @@
             </output>
             <output name="output_hydra">
                 <assert_contents>
-                    <has_text_matching expression="#CHROM"/>
-                    <has_text_matching expression="DP=805;AC=245;AF=0.3043" />
-                    <has_text_matching expression="DP=2503;AC=28;AF=0.0112" />
+                    <has_text_matching expression="#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\s576\s.\sa\sg\s100\sPASS\sDP=805;AC=245;AF=0.3043" />
+                    <has_text_matching expression="hxb2_pol\s958\s.\sc\sa\s100\sPASS\sDP=2503;AC=28;AF=0.0112" />
+                </assert_contents>
+            </output>
+            <output name="output_aa_mt">
+                <assert_contents>
+                    <has_text_matching expression="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s101\sP\sPASS\s0.1423\s1574\sWC=aaa;MC=CCa;MCF=0.1423;CAT=NNRTI;SRVL=Yes" />
+                    <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
                 </assert_contents>
             </output>
            
