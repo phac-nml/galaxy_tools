@@ -1,4 +1,4 @@
-<tool id="complexity_bam" name="quasitools complexity BAM" version="0.7.0">
+<tool id="complexity_bam" name="Complexity BAM" version="0.7.0">
     <requirements>
         <requirement type="package" version="0.7.0">quasitools</requirement>
     </requirements>

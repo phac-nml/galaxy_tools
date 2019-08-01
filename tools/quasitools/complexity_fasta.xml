@@ -1,4 +1,4 @@
-<tool id="complexity_fasta" name="quasitools complexity BAM" version="0.7.0">    
+<tool id="complexity_fasta" name="Complexity FASTA" version="0.7.0">    
     <requirements>
         <requirement type="package" version="0.7.0">quasitools</requirement>
     </requirements>
@@ -16,7 +16,7 @@
     <tests>
         <test>
             <param name="input_fasta" value="msa.fasta" />
-            <output name="output_complexity">
+            <output name="output">
                 <assert_contents>
                     <has_text text="Number of Haplotypes" />
 		    <has_text text="8" />
