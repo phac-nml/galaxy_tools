@@ -1,0 +1,41 @@
+<tool id="concat_collection" name="Concatenate Collection" version="1.0">
+    <description>who knows mate, not me</description>
+    <command detect_errors="exit_code"><![CDATA[
+    mkdir -p output &&
+
+    #for $i, $input in enumerate($input1)
+        #set for_name = 'output{}_1.fastq'.format($i)
+        #set rev_name = 'output{}_2.fastq'.format($i)
+        cat '$input.forward' > ./output/'$for_name' &&
+        cat '$input.reverse' > ./output/'$rev_name' &&
+    #end for
+
+    #for $i, $input in enumerate($input2)
+        #set for_name = 'output{}_1.fastq'.format($i)
+        #set rev_name = 'output{}_2.fastq'.format($i)
+        cat '$input.forward' >> ./output/'$for_name' &&
+        cat '$input.reverse' >> ./output/'$rev_name' &&
+    #end for
+
+    echo 'done'
+
+    ]]></command>
+    <inputs>
+        <param name="input1" type="data_collection" label="Input" help="Input to be split." />
+        <param name="input2" type="data_collection" label="Input2" help="Input collection..." />
+    </inputs>
+    <outputs>
+        <collection format_source="input1" type="list" name="output" label="concat_data" >
+            <discover_datasets pattern="__name_and_ext__" directory="output" type_source="input1" visible="false" />
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+    aaaa
+
+    ]]></help>
+</tool>
