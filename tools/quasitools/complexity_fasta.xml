@@ -4,7 +4,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        quasitools complexity fasta $input_fasta -o output.csv
+        quasitools complexity fasta '$input_fasta' -o output.csv
 
     ]]></command>
     <inputs>
