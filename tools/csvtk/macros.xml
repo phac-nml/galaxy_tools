@@ -1,0 +1,7 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="0.18.2">csvtk</requirement>
+        </requirements>
+    </xml>
+</macros>

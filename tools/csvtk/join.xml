@@ -1,0 +1,52 @@
+<tool id="csvtk-join" name="csvtk-join" version="0.1.0">
+    <description>tables by column</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+    csvtk join 
+
+        #if $in_1.is_of_type("tabular")
+            -t
+        #end if
+        -i 
+        #if $unmatched.yes
+            -k 
+            --fill $unwanted.fill_value
+        #end if
+        -F -f '$in_text' '$in_1' '$in_2' > joined
+    
+
+    ]]></command>
+    <inputs>
+        <param type="data" name="in_1" format="csv,tabular" optional="false" label="input 1" help="idk" />
+        <param type="data" name="in_2" format="csv,tabular" optional="false" label="input 2" help="idk 2" />
+        <param type="text" name="in_text" optional="false" label="Join on which column" help="idk 333"/>
+        <conditional name="unmatched" >
+            <param name="wanted" type="select" label="Keep unmatched columns">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </param>
+            <when value="yes">
+                <param name="fill_value" type="text" label="What to fill columns with" />
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="joined" from_work_dir="joined" label="$in_1.name joined to $in_2.name by column $in_text" />
+    </outputs>
+    <tests>
+        <test>
+            
+        </test>
+    </tests>
+    <help><![CDATA[
+        
+        Who knows, not me!
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
