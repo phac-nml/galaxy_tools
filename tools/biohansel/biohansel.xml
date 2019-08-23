@@ -215,8 +215,8 @@ hansel
     <param name="subtype_metadata"
       type="data" format="tabular,csv"
       optional="true"
-      label="Scheme Subtype Metadata Table [Optional]"
-      help="CSV or tab-delimited format only. Must contain a 'subtype' column."
+      label="Scheme Subtype Metadata Table (tsv, csv) [Optional]"
+      help="CSV or tab-delimited format (.tsv) only. Must contain a column called 'subtype'."
       />
     <!-- K-mer frequencies. -->
     <section name="kmer_vals" title="K-mer Frequency Thresholds" expanded="False">
