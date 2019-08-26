@@ -6,24 +6,39 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
+    #set $columns = $column_text.in_text
+    #set $in_col = $columns.replace(',', ';')
+
     csvtk join 
 
         #if $in_1.is_of_type("tabular")
             -t
         #end if
         -i 
-        #if $unmatched.yes
+        #if $unmatched.wanted == 'yes'
             -k 
             --fill $unwanted.fill_value
         #end if
-        -F -f '$in_text' '$in_1' '$in_2' > joined
+        -F -f '$in_col' '$in_1' '$in_2' > joined
     
 
     ]]></command>
     <inputs>
         <param type="data" name="in_1" format="csv,tabular" optional="false" label="input 1" help="idk" />
-        <param type="data" name="in_2" format="csv,tabular" optional="false" label="input 2" help="idk 2" />
-        <param type="text" name="in_text" optional="false" label="Join on which column" help="idk 333"/>
+        <param type="data" name="in_2" format="csv,tabular" optional="false" label="input 1" help="idk" />
+        <conditional name="column_text" >
+            <param name="select" type="select" label="Select to join on column or string" >
+                <option value="column">Column</option>
+                <option value="string">String</option>
+            </param>
+            <when value="column">
+                <param name="in_text" label="Select columns to join" type="data_column" data_ref="in_1" format_source="in_1"
+                        multiple="True" force_select="True" />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text" optional="false" label="Join on which column" help="idk 333"/>
+            </when>
+        </conditional>
         <conditional name="unmatched" >
             <param name="wanted" type="select" label="Keep unmatched columns">
                 <option value="no">No</option>
@@ -35,7 +50,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format_source="in_1" name="joined" from_work_dir="joined" label="$in_1.name joined to $in_2.name by column $in_text" />
+        <data format_source="in_1" name="joined" from_work_dir="joined" label="$in_1.name by column $column_text.in_text" />
     </outputs>
     <tests>
         <test>
@@ -47,6 +62,5 @@
         Who knows, not me!
 
     ]]></help>
-    <citations>
-    </citations>
+    <expand macro="citations" />
 </tool>

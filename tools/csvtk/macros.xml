@@ -4,4 +4,13 @@
             <requirement type="package" version="0.18.2">csvtk</requirement>
         </requirements>
     </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">@ARTICLE{a1,
+                title = {csvtk - CSV/TSV Toolkit},
+                url = {https://github.com/shenwei356/csvtk}
+                }
+            }</citation>
+        </citations>
+    </xml>
 </macros>
