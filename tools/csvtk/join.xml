@@ -14,7 +14,7 @@
     ###################
     ## Start Command ##
     ###################
-    csvtk join -i
+    csvtk join -i --num-cpus "\${GALAXY_SLOTS:-1}"
 
         ## Set Tabular input/output flag if first input is tabular ##
         #############################################################
@@ -41,7 +41,6 @@
         
         ## To output ##
         ###############
-        --num-cpus "\${GALAXY_SLOTS:-1}"
         > joined
     
 
@@ -116,6 +115,35 @@ It will join together the columns that have a matching value and create an outpu
 
 Columns that are not matching will be discarded unless 'Keep Unmatched Columns' is set to 'Yes'
 
+Input Data
+##########
+
+::
+
+    **Limitations of Input Data**
+
+    1. The CSV parser requires all the lines have same number of fields/columns.
+        Even lines with spaces will cause error.
+
+            IE don't use tables such as this:
+
+            +--------+--------+--------+--------+
+            | Head 1 | Head 2 | Head 3 | Head 4 |
+            +========+========+========+========+
+            | 1      |        | 3      |        |
+            +--------+--------+--------+--------+
+            | this   | will   |        | break  |
+            +--------+--------+--------+--------+
+
+    2. Csvtk thinks your files have header row. Make sure they do!
+
+    3. Column names should be unique!
+
+    4. By default, lines starting with "#" or "$" will be ignored, if in the header row
+
+    5. Do not mix use digital fields and column names.
+
+
 Usage
 #####
 
@@ -161,23 +189,23 @@ Usage
 
     Here, we use the column header name as a way to match up the columns. This would be using "Name" as the input
 
-    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+
-    | Name | Colour | Food     |       | Name | Sport    | Column 3 |       | Column 4 | Name | Column 5 |
-    +======+========+==========+   +   +======+==========+==========+   +   +==========+======+==========+
-    | Joe  | Red    | Pancakes |       | Joe  | Swimming | Yes      |       | Yes      | Joe  | Yes      |
-    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+
+    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+----------+
+    | Name | Colour | Food     |       | Name | Sport    | Column 3 |       | Column 4 | Name | Column 5 | Column 6 |
+    +======+========+==========+   +   +======+==========+==========+   +   +==========+======+==========+==========+
+    | Joe  | Red    | Pancakes |       | Joe  | Swimming | Yes      |       | Yes      | Joe  | Yes      | Yes      |
+    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+----------+
     | John | Green  | Potatos  |
     +------+--------+----------+       
 
-    ------------------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------------------------
 
     Would give the following table:
 
-    +------+--------+----------+----------+----------+----------+----------+
-    | Name | Colour | Food     | Sport    | Column 3 | Column 4 | Column 5 |
-    +======+========+==========+==========+==========+==========+==========+
-    | Joe  | Red    | Pancakes | Swimming | Yes      | Yes      | Yes      |
-    +------+--------+----------+----------+----------+----------+----------+
+    +------+--------+----------+----------+----------+----------+----------+----------+
+    | Name | Colour | Food     | Sport    | Column 3 | Column 4 | Column 5 | Column 6 |
+    +======+========+==========+==========+==========+==========+==========+==========+
+    | Joe  | Red    | Pancakes | Swimming | Yes      | Yes      | Yes      | Yes      |
+    +------+--------+----------+----------+----------+----------+----------+----------+
 
 ----
 
