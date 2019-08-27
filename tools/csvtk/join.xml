@@ -124,16 +124,7 @@ Input Data
 
     1. The CSV parser requires all the lines have same number of fields/columns.
         Even lines with spaces will cause error.
-
-            IE don't use tables such as this:
-
-            +--------+--------+--------+--------+
-            | Head 1 | Head 2 | Head 3 | Head 4 |
-            +========+========+========+========+
-            | 1      |        | 3      |        |
-            +--------+--------+--------+--------+
-            | this   | will   |        | break  |
-            +--------+--------+--------+--------+
+        Example bad table below.
 
     2. Csvtk thinks your files have header row. Make sure they do!
 
@@ -143,6 +134,17 @@ Input Data
 
     5. Do not mix use digital fields and column names.
 
+Example bad table:
+
++--------+--------+--------+--------+
+| Head 1 | Head 2 | Head 3 | Head 4 |
++========+========+========+========+
+| 1      | 2      | 3      |        |
++--------+--------+--------+--------+
+| this   | will   |        | break  |
++--------+--------+--------+--------+
+
+----
 
 Usage
 #####

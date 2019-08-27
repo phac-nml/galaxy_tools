@@ -196,8 +196,6 @@ Although be aware that some features may not be available and some small changes
 
 **Notable changes from their documentation:**
 
-- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match) (Galaxy limitation)
-
 - Column Names are Case Sensitive
 
     ]]></help>
