@@ -1,4 +1,4 @@
-<tool id="collapse_dataset" name="Collapse Collection" version="4.0">
+<tool id="collapse_dataset" name="Collapse Collection" version="4.1">
   <description>into single dataset in order of the collection</description>
   <command>
     <![CDATA[
@@ -53,7 +53,7 @@
     <param name="one_header" type="boolean" display="checkboxes" label="Keep one header line" help="Combine first line of each file as the header for the final dataset. Useful when same header line is found in all files."/>
      <conditional name="filename">
 
-     <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
+     <param name="add_name" type="boolean" display="checkboxes" label="Prepend File name"/>
      <when value="true">
        <param name="place_name" type="select" label="Where to add dataset name">
          <option value="same_once">Same line and only once per dataset</option>
