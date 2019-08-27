@@ -8,6 +8,7 @@
         <citations>
             <citation type="bibtex">@ARTICLE{a1,
                 title = {csvtk - CSV/TSV Toolkit},
+                author = {Wei Shen},
                 url = {https://github.com/shenwei356/csvtk}
                 }
             }</citation>
