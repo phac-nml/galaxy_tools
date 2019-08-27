@@ -58,7 +58,7 @@
             </param>
             <when value="column">
                 <param type="data_column" name="in_text"
-                        data_ref="in_1" format_source="in_1"
+                        data_ref="in_1"
                         multiple="True" force_select="True"
                         label="Select column numbers"
                         help="Select columns that will be used to join the input datasets. Column headers
@@ -80,9 +80,9 @@
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
             </param>
+            <when value="no" />
             <when value="yes">
                 <param type="text" name="fill_value"
-                default=""
                 label="What to fill unmatched columns with"
                 help="Specify value to fill into all of the columns with no data" />
             </when>
@@ -93,7 +93,15 @@
     </outputs>
     <tests>
         <test>
-            
+            <param name="in_1" value="csv.csv,data.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="Person" />
+            </conditional>
+            <conditional name="unmatched" >
+                <param name="wanted" value="no" />
+            </conditional>
+            <output name="joined" file="joined.csv" ftype="csv" />
         </test>
     </tests>
     <help><![CDATA[
@@ -113,7 +121,7 @@ Usage
 
 **Ex. Matching based on column 1:**
 
-.. code:: bash
+::
 
     +------+--------+----------+           +----------+----------+----------+
     | Name | Colour | Food     |           | Username | Sport    | Column 3 |
@@ -149,7 +157,7 @@ Usage
 
 **Ex. Matching based on name:**
 
-.. code:: bash
+::
 
     Here, we use the column header name as a way to match up the columns. This would be using "Name" as the input
 
@@ -175,7 +183,7 @@ Usage
 
 **Ex. Matching data in multiple columns:**
 
-.. code:: bash
+::
 
     If using multiple columns, the values that are found to be the same in both columns will be put in the output.
     If only one matches, or neither matches, then that row is not included in the output
