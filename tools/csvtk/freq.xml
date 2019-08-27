@@ -1,0 +1,205 @@
+<tool id="csvtk-freq" name="csvtk-freq" version="0.1.0">
+    <description>of value in column</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+    ###################
+    ## Start Command ##
+    ###################
+
+    csvtk freq -i --num-cpus "\${GALAXY_SLOTS:-1}" '$in_1'
+
+        ## Set Tabular input/output flag if input is tabular ##
+        #######################################################
+        #if $in_1.is_of_type("tabular"):
+            -t -T
+        #end if
+
+        ## Specify fields for freq ##
+        #############################
+        -F -f '$column_text.in_text' 
+
+        ## Sorting? ##
+        ##############
+        #if $sorting.want_sort == 'yes_sort'
+
+            #if $sorting.how_sort == 'frequency'
+                -n
+            #elif $sorting.how_sort == 'alphabetical'
+                -k
+            #end if
+
+            #if $sorting.reverse_sort == 'yes_reverse'
+                -r
+            #end if
+        #end if
+
+        ## To output ##
+        ###############
+        > freq
+
+    ]]></command>
+    <inputs>
+        <param type="data" name="in_1" format="csv,tabular"
+        multiple="false" optional="false"
+        label="Specify TSV or CSV file"
+        help="Input a TSV or CSV file to find the frequency of a value in the column(s)" />
+        <conditional name="column_text" >
+            <param type="select" name="select"
+                label="Find Frequency based on" >
+                <option value="column">Column Number(s)</option>
+                <option value="string">Column Name(s)</option>
+            </param>
+            <when value="column">
+                <param type="data_column" name="in_text"
+                        data_ref="in_1"
+                        multiple="True" force_select="True"
+                        label="Select column number(s)"
+                        help="Select column(s) to find the frequency of values. Column headers
+                        DON'T have to match, just the values in the columns" />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                optional="false"
+                label="Find frequency in column name(s)"
+                help="Specify column name(s) to find the frequency of. Multiple names can be given if separated by a ' , '." />
+            </when>
+        </conditional>
+        <conditional name="sorting" >
+            <param type="select" name="want_sort"
+            label="Sort Output Columns?"
+            help="Change the order of output column(s)">
+                <option value="no_sort">No</option>
+                <option value="yes_sort">Yes</option>
+            </param>
+            <when value="no_sort" />
+            <when value="yes_sort">
+                <param type="select" name="how_sort" label="How to Sort Output">
+                    <option value="frequency">Frequency (Low -> High)</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </param>
+                <param type="select" name="reverse_sort" label="Reverse Sort" help="Sort in reverse order. IE. highest to lowest or reverse alphabetical" >
+                    <option value="no_reverse">No</option>
+                    <option value="yes_reverse">Yes</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="freq" from_work_dir="freq" label="$in_1.name frequency of column(s) $column_text.in_text" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="blood_type.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2,3" />
+            </conditional>
+            <conditional name="sorting" >
+                <param name="want_sort" value="no_sort" />
+            </conditional>
+            <output name="freq" file="frequency.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Freq Help
+-----------------
+
+Info
+####
+Find the frequency of the selected field(s) based on the column name(s).
+
+If one column is selected, the frequency will be the number of times each value is found in the column. These can further be sorted if so desired
+
+Examples can be found in the usage section below!
+
+Input Data
+##########
+
+::
+
+    **Limitations of Input Data**
+
+    1. The CSV parser requires all the lines have same number of fields/columns.
+        Even lines with spaces will cause error.
+        Example bad table below.
+
+    2. Csvtk thinks your files have header row. Make sure they do!
+
+    3. Column names should be unique!
+
+    4. By default, lines starting with "#" or "$" will be ignored, if in the header row
+
+    5. Do not mix use digital fields and column names.
+
+Example bad table:
+
++--------+--------+--------+--------+
+| Head 1 | Head 2 | Head 3 | Head 4 |
++========+========+========+========+
+| 1      | 2      | 3      |        |
++--------+--------+--------+--------+
+| this   | will   |        | break  |
++--------+--------+--------+--------+
+
+----
+
+Usage
+#####
+
+To run csvtk-freq, all you need is a valid (as defined above) CSV or TSV and the column(s) that you want the frequency of.
+
+**Ex. of frequency with one column:**
+
++------------+-----------+
+| Blood Type | Frequency |
++============+===========+
+| A          | 31        |
++------------+-----------+
+| B          | 103       |
++------------+-----------+
+| etc.       | etc.      |
++------------+-----------+
+
+----
+
+**Ex. of frequency with more than one column for frequency:**
+
++---------+------------+-----------+
+| Name    | Blood Type | Frequency |
++=========+============+===========+
+| Bob     | A          | 4         |
++---------+------------+-----------+
+| Jacob   | B          | 5         |
++---------+------------+-----------+
+| Matthew | O          | 12        |
++---------+------------+-----------+
+| Darian  | AB         | 1         |
++---------+------------+-----------+
+
+With multiple columns, you end up getting the frequency of how many times the values from each column
+are found together. In this example from an input dataset of names and bloodtypes, we can find the frequency that
+each name in our database is a certain bloodtype. 
+
+Here, we can note that there are 4 people named bob with blood type A.
+
+----
+
+More Information
+################
+For information from the creators of csvtk, please visit their site `here <https://bioinf.shenwei.me/csvtk/usage/#join>`_.
+Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+
+**Notable changes from their documentation:**
+
+- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match) (Galaxy limitation)
+
+- Column Names are Case Sensitive
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
