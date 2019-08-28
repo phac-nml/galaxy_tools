@@ -1,0 +1,186 @@
+<tool id="csvtk-split" name="csvtk-split" version="0.1.0">
+    <description>table into multiple files</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+    mkdir -p ./output &&
+    #set input_name = $in_1.name
+    ln -s '$in_1' $input_name &&
+
+    ###################
+    ## Start Command ##
+    ###################
+
+    csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}" -i '$input_name'
+
+        ## Set Tabular input/output flag if input is tabular ##
+        #######################################################
+        #if $in_1.is_of_type("tabular"):
+            -t -T
+        #end if
+
+        ## Specify fields for splitting ##
+        ##################################
+        -f '$column_text.in_text' 
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
+    </inputs>
+    <outputs>
+        <collection name="list_split" type="list" label="${in_1.name} split on column ${column_text.in_text}">
+            <discover_datasets pattern="__designation_and_ext__" directory="output" visible="false" format="csv,tabular"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="csv.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <output_collection name="list_split" type="list">
+                <element name="csv-bob" file="csv-bob.csv" ftype="csv" />
+                <element name="csv-darian" file="csv-darian.csv" ftype="csv" />
+                <element name="csv-jack" file="csv-jack.csv" ftype="csv" />
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Split Help
+------------------
+
+Info
+####
+Split input csv/tsv files into multiple csv/tsv files based on a column number(s) or name(s).
+
+This tool will generate as many output files as there are unique data points in the selected column(s).
+
+Examples below after the input data warning.
+
+Input Data
+##########
+
+::
+
+    **Limitations of Input Data**
+
+    1. The CSV parser requires all the lines have same number of fields/columns.
+        Even lines with spaces will cause error.
+        Example bad table below.
+
+    2. Csvtk thinks your files have a header row. Make sure they do!
+
+    3. Column names should be unique!
+
+    4. By default, lines starting with "#" or "$" will be ignored, if in the header row
+
+    5. Do not mix use digital fields and column names.
+
+Example bad table:
+
++--------+--------+--------+--------+
+| Head 1 | Head 2 | Head 3 | Head 4 |
++========+========+========+========+
+| 1      | 2      | 3      |        |
++--------+--------+--------+--------+
+| this   | will   |        | break  |
++--------+--------+--------+--------+
+
+----
+
+Usage
+#####
+Here we will demonstrate what the tool does when 1 column is selected or when 2+ columns are selected.
+
+**Ex. Split input based on column 1:**
+
+::
+
+    Suppose we have the following input table that we want to split on column 2, the 'Colour' column:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+
+    | Fred   | Blue   | Apples   |
+    +--------+--------+----------+
+    | Darian | Blue   | Pancakes |
+    +--------+--------+----------+
+    | Dustin | Red    | Apples   |
+    +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    --------------------------------------------------------------------------------
+
+    Splitting would yield the following 2 tables:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+           +--------+--------+----------+
+    | Fred   | Blue   | Apples   |           | Name   | Colour | Food     |
+    +--------+--------+----------+     +     +========+========+==========+ 
+    | Darian | Blue   | Pancakes |           | Dustin | Red    | Apples   |
+    +--------+--------+----------+           +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    ---------------------------------------------------------------------------------
+
+----
+
+**Ex. Split on 2 columns:**
+
+::
+
+    Suppose keep the same input but instead split on both the 'Colour' and 'Food' columns:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+
+    | Fred   | Blue   | Apples   |
+    +--------+--------+----------+
+    | Darian | Blue   | Pancakes |
+    +--------+--------+----------+
+    | Dustin | Red    | Apples   |
+    +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    --------------------------------------------------------------------------------------------------------
+
+    This split would yield the following three output files:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |       +--------+--------+----------+       +--------+--------+----------+
+    +========+========+==========+       | Name   | Colour | Food     |       | Name   | Colour | Food     |
+    | Fred   | Blue   | Apples   |   +   +========+========+==========+   +   +========+========+==========+
+    +--------+--------+----------+       | Darian | Blue   | Pancakes |       | Dustin | Red    | Apples   |
+    | Frank  | Blue   | Apples   |       +--------+--------+----------+       +--------+--------+----------+
+    +--------+--------+----------+
+
+    Here, the value in the cell has to match for both columns for them to be output together. Frank and Fred
+    like apples and the colour blue so they get put together. And even though Darian likes the colour blue, he
+    prefers pancakes and thus gets his own output file.
+
+----
+
+More Information
+################
+For information from the creators of csvtk, please visit their site `here <https://bioinf.shenwei.me/csvtk/usage/#join>`_.
+Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+
+**Notable changes from their documentation:**
+
+- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match) (Galaxy limitation)
+
+- Column Names are Case Sensitive
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

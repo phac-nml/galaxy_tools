@@ -1,5 +1,5 @@
 <tool id="csvtk-join" name="csvtk-join" version="0.1.0">
-    <description>tables by column</description>
+    <description>tables by column(s)</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -46,31 +46,8 @@
 
     ]]></command>
     <inputs>
-        <param type="data" name="in_1" format="csv,tabular"
-        multiple="true" optional="false"
-        label="Specify TSV or CSV file inputs"
-        help="Input as many tsv or csv files to join. HOWEVER, they must all be the **same file type** or the tool will fail/not give results!" />
-        <conditional name="column_text" >
-            <param type="select" name="select" label="Join inputs based on" >
-                <option value="column">Column Numbers</option>
-                <option value="string">Column Name</option>
-            </param>
-            <when value="column">
-                <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="True" force_select="True"
-                        label="Select column numbers"
-                        help="Select columns that will be used to join the input datasets. Column headers
-                        DON'T have to match, just the values in the columns" />
-            </when>
-            <when value="string">
-                <param type="text" name="in_text"
-                optional="false"
-                label="Join on column name"
-                help="Specify column name to join inputs on. Multiple names can be given if separated by a ' , '.
-                Please see the help section for examples on using multiple keys" />
-            </when>
-        </conditional>
+        <expand macro="multi_input"/>
+        <expand macro="fields_input"/>
         <conditional name="unmatched" >
             <param type="select" name="wanted"
             label="Keep Unmatched Columns?"
@@ -110,7 +87,7 @@ Csvtk - Join Help
 
 Info
 ####
-Csvtk-Join is used to join two or more csv/tsv files together by either a column number or a column key.
+Csvtk-Join is used to join two or more csv/tsv files together by either a column number or a column key/name.
 It will join together the columns that have a matching value and create an output csv/tsv file (depending upon input file type).
 
 Columns that are not matching will be discarded unless 'Keep Unmatched Columns' is set to 'Yes'
@@ -126,7 +103,7 @@ Input Data
         Even lines with spaces will cause error.
         Example bad table below.
 
-    2. Csvtk thinks your files have header row. Make sure they do!
+    2. Csvtk thinks your files have a header row. Make sure they do!
 
     3. Column names should be unique!
 

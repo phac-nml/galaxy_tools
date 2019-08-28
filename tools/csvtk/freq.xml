@@ -1,5 +1,5 @@
 <tool id="csvtk-freq" name="csvtk-freq" version="0.1.0">
-    <description>of value in column</description>
+    <description>of value in column(s)</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -43,31 +43,8 @@
 
     ]]></command>
     <inputs>
-        <param type="data" name="in_1" format="csv,tabular"
-        multiple="false" optional="false"
-        label="Specify TSV or CSV file"
-        help="Input a TSV or CSV file to find the frequency of a value in the column(s)" />
-        <conditional name="column_text" >
-            <param type="select" name="select"
-                label="Find Frequency based on" >
-                <option value="column">Column Number(s)</option>
-                <option value="string">Column Name(s)</option>
-            </param>
-            <when value="column">
-                <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="True" force_select="True"
-                        label="Select column number(s)"
-                        help="Select column(s) to find the frequency of values. Column headers
-                        DON'T have to match, just the values in the columns" />
-            </when>
-            <when value="string">
-                <param type="text" name="in_text"
-                optional="false"
-                label="Find frequency in column name(s)"
-                help="Specify column name(s) to find the frequency of. Multiple names can be given if separated by a ' , '." />
-            </when>
-        </conditional>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
         <conditional name="sorting" >
             <param type="select" name="want_sort"
             label="Sort Output Columns?"
@@ -89,7 +66,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format_source="in_1" name="freq" from_work_dir="freq" label="$in_1.name frequency of column(s) $column_text.in_text" />
+        <data format_source="in_1" name="freq" from_work_dir="freq" label="${in_1.name} frequency of column(s) ${column_text.in_text}" />
     </outputs>
     <tests>
         <test>
@@ -111,9 +88,9 @@ Csvtk - Freq Help
 
 Info
 ####
-Find the frequency of the selected field(s) based on the column name(s).
+Find the frequency of the data based on the selected column(s).
 
-If one column is selected, the frequency will be the number of times each value is found in the column. These can further be sorted if so desired
+If one column is selected, the frequency will be the number of times each value is found in the column. These can further be sorted if so desired.
 
 Examples can be found in the usage section below!
 
@@ -128,7 +105,7 @@ Input Data
         Even lines with spaces will cause error.
         Example bad table below.
 
-    2. Csvtk thinks your files have header row. Make sure they do!
+    2. Csvtk thinks your files have a header row. Make sure they do!
 
     3. Column names should be unique!
 
