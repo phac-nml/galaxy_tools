@@ -6,15 +6,22 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-    ## Set the fields to join column(s) on.
-    #######################################################################
+    ## Set the fields to join column(s) on ##
+    #########################################
     #set $split_on = str($column_text.in_text)
 
 
     ###################
     ## Start Command ##
     ###################
-    csvtk join -i --num-cpus "\${GALAXY_SLOTS:-1}"
+    csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
+
+        ## Add additional flags as specified ##
+        #######################################
+        $ignore_case
+        $illegal_rows
+        $empty_rows
+        $header
 
         ## Set Tabular input/output flag if first input is tabular ##
         #############################################################
@@ -30,12 +37,12 @@
 
         ## Specify fields to join ##
         ############################
-        -F -f '$split_on' 
+        -F -f '$split_on'
         
         ## Fill columns if wanted ##
         ############################
         #if $unmatched.wanted == 'yes':
-            -k 
+            -k
             --fill '$unmatched.fill_value'
         #end if
         
@@ -48,6 +55,10 @@
     <inputs>
         <expand macro="multi_input"/>
         <expand macro="fields_input"/>
+        <expand macro="ignore_case"/>
+        <expand macro="header"/>
+        <expand macro="illegal_rows"/>
+        <expand macro="empty_rows"/>
         <conditional name="unmatched" >
             <param type="select" name="wanted"
             label="Keep Unmatched Columns?"
@@ -65,7 +76,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format_source="in_1" name="joined" from_work_dir="joined" label="$in_1[0].name joined by column $column_text.in_text" />
+        <data format_source="in_1" name="joined" from_work_dir="joined" label="${in_1[0].name} joined by column ${column_text.in_text}" />
     </outputs>
     <tests>
         <test>
@@ -92,36 +103,8 @@ It will join together the columns that have a matching value and create an outpu
 
 Columns that are not matching will be discarded unless 'Keep Unmatched Columns' is set to 'Yes'
 
-Input Data
-##########
+@HELP_INPUT_DATA@
 
-::
-
-    **Limitations of Input Data**
-
-    1. The CSV parser requires all the lines have same number of fields/columns.
-        Even lines with spaces will cause error.
-        Example bad table below.
-
-    2. Csvtk thinks your files have a header row. Make sure they do!
-
-    3. Column names should be unique!
-
-    4. By default, lines starting with "#" or "$" will be ignored, if in the header row
-
-    5. Do not mix use digital fields and column names.
-
-Example bad table:
-
-+--------+--------+--------+--------+
-| Head 1 | Head 2 | Head 3 | Head 4 |
-+========+========+========+========+
-| 1      | 2      | 3      |        |
-+--------+--------+--------+--------+
-| this   | will   |        | break  |
-+--------+--------+--------+--------+
-
-----
 
 Usage
 #####
@@ -217,16 +200,8 @@ Usage
 
 ----
 
-More Information
-################
-For information from the creators of csvtk, please visit their site `here <https://bioinf.shenwei.me/csvtk/usage/#join>`_.
-Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+@HELP_END_STATEMENT@
 
-**Notable changes from their documentation:**
-
-- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match) (Galaxy limitation)
-
-- Column Names are Case Sensitive
 
     ]]></help>
     <expand macro="citations" />

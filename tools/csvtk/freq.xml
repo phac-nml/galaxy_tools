@@ -10,7 +10,14 @@
     ## Start Command ##
     ###################
 
-    csvtk freq -i --num-cpus "\${GALAXY_SLOTS:-1}" '$in_1'
+    csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
+
+        ## Add additional flags as specified ##
+        #######################################
+        $ignore_case
+        $illegal_rows
+        $empty_rows
+        $header
 
         ## Set Tabular input/output flag if input is tabular ##
         #######################################################
@@ -18,9 +25,13 @@
             -t -T
         #end if
 
+        ## Set Input ##
+        ###############
+        '$in_1'
+
         ## Specify fields for freq ##
         #############################
-        -F -f '$column_text.in_text' 
+        -F -f '$column_text.in_text'
 
         ## Sorting? ##
         ##############
@@ -45,6 +56,10 @@
     <inputs>
         <expand macro="singular_input" />
         <expand macro="fields_input" />
+        <expand macro="ignore_case"/>
+        <expand macro="header"/>
+        <expand macro="illegal_rows"/>
+        <expand macro="empty_rows"/>
         <conditional name="sorting" >
             <param type="select" name="want_sort"
             label="Sort Output Columns?"
@@ -94,36 +109,8 @@ If one column is selected, the frequency will be the number of times each value 
 
 Examples can be found in the usage section below!
 
-Input Data
-##########
+@HELP_INPUT_DATA@
 
-::
-
-    **Limitations of Input Data**
-
-    1. The CSV parser requires all the lines have same number of fields/columns.
-        Even lines with spaces will cause error.
-        Example bad table below.
-
-    2. Csvtk thinks your files have a header row. Make sure they do!
-
-    3. Column names should be unique!
-
-    4. By default, lines starting with "#" or "$" will be ignored, if in the header row
-
-    5. Do not mix use digital fields and column names.
-
-Example bad table:
-
-+--------+--------+--------+--------+
-| Head 1 | Head 2 | Head 3 | Head 4 |
-+========+========+========+========+
-| 1      | 2      | 3      |        |
-+--------+--------+--------+--------+
-| this   | will   |        | break  |
-+--------+--------+--------+--------+
-
-----
 
 Usage
 #####
@@ -166,14 +153,8 @@ Here, we can note that there are 4 people named bob with blood type A.
 
 ----
 
-More Information
-################
-For information from the creators of csvtk, please visit their site `here <https://bioinf.shenwei.me/csvtk/usage/#join>`_.
-Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+@HELP_END_STATEMENT@
 
-**Notable changes from their documentation:**
-
-- Column Names are Case Sensitive
 
     ]]></help>
     <expand macro="citations" />

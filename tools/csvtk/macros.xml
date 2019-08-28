@@ -16,6 +16,32 @@
         label="Specify an input TSV or CSV file"
         help="Input a TSV or CSV file to work on" />
     </xml>
+    <xml name="ignore_case">
+        <param type="boolean" name="ignore_case"
+        falsevalue="" truevalue="-i"
+        checked="true"
+        label="Ignore cell case?"
+        help="ABC == abc" />
+    </xml>
+    <xml name="header">
+        <param type="boolean" name="header"
+        falsevalue="-H" truevalue=""
+        checked="true"
+        label="Input file has a header line"
+        help="Specify if input has a header line" />
+    </xml>
+    <xml name="illegal_rows">
+        <param type="boolean" name="illegal_rows"
+        falsevalue="" truevalue="-I"
+        label="Ignore illegal rows"
+        help="Ignore illegal rows (only needed if input has illegal rows)" />
+    </xml>
+    <xml name="empty_rows">
+        <param type="boolean" name="empty_rows"
+        falsevalue="" truevalue="-E"
+        label="Ignore empty rows"
+        help="Ignore rows with no data (only needed if input has empty rows)" />
+    </xml>
     <xml name="fields_input">
         <conditional name="column_text" >
             <param type="select" name="select" label="Select columns based on" >
@@ -39,6 +65,47 @@
             </when>
         </conditional>
     </xml>
+    <token name="@HELP_INPUT_DATA@">
+Input Data
+##########
+
+::
+
+    **Limitations of Input Data**
+
+    1. The CSV parser requires all the lines have same number of fields/columns.
+        Even lines with spaces will cause error.
+        Example bad table below.
+
+    2. Column names should be unique!
+
+    3. By default, lines starting with "#" or "$" will be ignored, if in the header row
+
+Example bad table:
+
++--------+--------+--------+--------+
+| Head 1 | Head 2 | Head 3 | Head 4 |
++========+========+========+========+
+| 1      | 2      | 3      |        |
++--------+--------+--------+--------+
+| this   | will   |        | break  |
++--------+--------+--------+--------+
+
+----
+    </token>
+    <token name="@HELP_END_STATEMENT@">
+More Information
+################
+For information from the creators of csvtk, please visit their site at: https://bioinf.shenwei.me/csvtk/
+
+Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+
+**Notable changes from their documentation:**
+
+- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match)
+
+- Column Names are Case Sensitive
+    </token>
     <xml name="citations">
         <citations>
             <citation type="bibtex">@ARTICLE{a1,
