@@ -1,4 +1,4 @@
-<tool id="csvtk-join" name="csvtk-join" version="0.1.0">
+<tool id="csvtk-join" name="csvtk-join" version="@WRAPPER_VERSION@">
     <description>tables by column(s)</description>
     <macros>
         <import>macros.xml</import>
