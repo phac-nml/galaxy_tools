@@ -8,7 +8,7 @@
 
     ## Set the fields to join column(s) on ##
     #########################################
-    #set $split_on = str($column_text.in_text)
+    #set $split_on = str(${column_text.in_text})
 
 
     ###################
