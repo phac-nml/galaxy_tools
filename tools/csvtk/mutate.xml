@@ -195,7 +195,8 @@ https://regexr.com/
     | 100 cfu     | No       | Yes       |
     +-------------+----------+-----------+ 
 
-    Now, if we were to set "Fill Non-matches" to "No", then we would get the following table using the same inputs:
+    Now, if we were to set "Fill Non-matches" to "No", then we would get the following table using the same inputs
+    other than the change to fill non-matches:
 
     +-------------+----------+-----------+----------+
     | Colonies    | Catalase | Coagulase | Exponent |
