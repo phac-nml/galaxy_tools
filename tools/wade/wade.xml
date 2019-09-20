@@ -1,0 +1,108 @@
+<tool id="wade" name="Wade" version="0.1" description="description here please">
+    <requirements>
+        <requirement type="package" version="3.4.1">r-base</requirement>
+        <requirement type="package" version="2.52.0">bioconductor-biostrings</requirement>
+        <requirement type="package" version="2.2.0">r-devtools</requirement>
+        <requirement type="package" version="0.8.3">r-dplyr</requirement>
+        <requirement type="package" version="3.2.1">r-ggplot2</requirement>
+        <requirement type="package" version="0.1">r-here</requirement>
+        <requirement type="package" version="1.6.0">r-jsonlite</requirement>
+	<requirement type="package" version="0.3.2">r-purrr</requirement>
+        <requirement type="package" version="1.95_4.12">r-rcurl</requirement>
+        <requirement type="package" version="1.4.3">r-reshape2</requirement>
+        <requirement type="package" version="1.4.0">r-stringr</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript "$__tool_directory__/wade.R"
+
+    ]]></command>
+    <inputs>
+    <param name="input"
+        type="data" format="fasta"
+        optional="false"
+        multiple="true"
+        label="Contig Fasta file(s)"/>
+    <conditional name="mode">
+      <param name="type" type="select" label="Analysis Group">
+        <option value="GAS">GAS</option>
+        <option value="GONO">GONO</option>
+        <option value="PNEUMO">PNEUMO</option>
+      </param>
+      <when value="GAS">
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="arg_ref_card">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="emm">EMM Typing</option>
+          <option value="mlst">MLST Type</option>
+          <option value="tp">Toxin Profile</option>
+          <option value="vfdb">VFDB (Virulence Factor Database</option>
+          <option value="vf">Virulence Factors</option>
+        </param>
+      </when>
+      <when value="GONO">
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="mlst">MLST Type</option>
+          <option value="ngmast">NG-MAST Type</option>
+          <option value="ngstar">NG-STAR Type</option>
+          <option value="23s">23S rRNA Alleles</option>
+        </param>
+      </when>
+      <when value="PNEUMO">
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="arg_ref_card">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="mlst">MLST Type</option>
+          <option value="vfdb">VFDB (Virulence Factor Database</option>
+          <option value="vf">Virulence Factors</option>
+          <option value="23s">23S rRNA Alleles</option>
+        </param>
+      </when>
+    </conditional>    
+    </inputs>
+    <outputs>
+        <data name="output" format="tsv" label="Results"/>
+    </outputs>
+    <tests>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+==============
+Wade
+==============
+
+R Script to generate results
+
+=====
+Legal 
+=====
+
+Copyright Government of Canada 2019
+
+Written by: National Microbiology Laboratory, Public Health Agency of Canada
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this work except in compliance with the License. You may obtain a copy of the
+License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+=======
+Contact
+=======
+
+**Gary van Domselaar**: gary.vandomselaar@canada.ca
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {R Script to generate results.},
+            author = {Adrian Zetner},
+            url = {https://github.com/phac-nml/wade}
+            }
+        }</citation>
+    </citations>
+</tool>

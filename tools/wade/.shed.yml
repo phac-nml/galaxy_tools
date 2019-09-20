@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: RScript to generate results
+name: wade
+owner: nml
+long_description: wade - RScript to generate results
+remote_repository_url: https://github.com/phac-nml/wade
+homepage_url: https://github.com/phac-nml/wade
