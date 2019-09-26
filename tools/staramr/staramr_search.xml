@@ -116,10 +116,9 @@
         </collection>
     </outputs>
     <tests>
-
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
-	    <param name="use_pointfinder" value="salmonella" /> 
+            <param name="use_pointfinder" value="salmonella" /> 
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
