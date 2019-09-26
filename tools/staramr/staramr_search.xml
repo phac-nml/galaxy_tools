@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.5.1</token>
+	    <token name="@VERSION@">0.6.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -101,6 +101,7 @@
         </section>
     </inputs>
     <outputs>
+	<data format="tabular" name="mlst" label="${tool.name} on ${on_string}: mlst.tsv" />
         <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
         <data format="tabular" name="detailed_summary" label="${tool.name} on ${on_string}: detailed_summary.tsv" />
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
@@ -115,9 +116,10 @@
         </collection>
     </outputs>
     <tests>
+
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
-            <param name="use_pointfinder" value="salmonella" />
+	    <param name="use_pointfinder" value="salmonella" /> 
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
@@ -204,7 +206,21 @@ Setting **Provide a custom list of AMR genes to exclude** in the **Advanced opti
 Output
 ------
 
-There are 5 different output files produced by `staramr` as well as a collection of additional files.
+There are 6 different output files produced by `staramr` as well as a collection of additional files.
+
+mlst.tsv
+````````````````````
+
+A tabular file of each multi-locus sequence type (MLST) and it's corresponding locus/alleles, one genome per line.
+
++------------+--------------+-----------------------------------+------------+------------+------------+------------+------------+------------+------------+
+| Isolate ID | Scheme       | Sequence Type                     | Locus 1    | Locus 2    | Locus 3    | Locus 4    | Locus 5    | Locus 6    | Locus 7    |
++============+==============+===================================+============+============+============+============+============+============+============+
+| SRR1952908 | senterica    | 11                                | aroC(5)    | dnaN(2)    | hemD(3)    | hisD(7)    | purE(6)    | sucA(6)    | thrA(11)   |
++------------+--------------+-----------------------------------+------------+------------+------------+------------+------------+------------+---+--------+
+| SRR1952926 | senterica    | 11                                | aroC(5)    | dnaN(2)    | hemD(3)    | hisD(7)    | purE(6)    | sucA(6)    | thrA(11)   |
++------------+--------------+-----------------------------------+------------+------------+------------+------------+------------+------------+------------+
+
 
 summary.tsv
 ```````````
@@ -336,7 +352,7 @@ The command-line, database versions, and other settings used to run `staramr`.
 ::
 
     command_line                  = staramr search -o out --pointfinder-organism salmonella SRR1952908.fasta SRR1952926.fasta
-    version                       = 0.5.1
+    version                       = 0.6.0
     start_time                    = 2019-04-25 16:01:32
     end_time                      = 2019-04-25 16:01:34
     total_minutes                 = 0.04
