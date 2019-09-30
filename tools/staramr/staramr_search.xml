@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.6.0</token>
+	    <token name="@VERSION@">0.6.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -351,7 +351,7 @@ The command-line, database versions, and other settings used to run `staramr`.
 ::
 
     command_line                  = staramr search -o out --pointfinder-organism salmonella SRR1952908.fasta SRR1952926.fasta
-    version                       = 0.6.0
+    version                       = 0.6.1
     start_time                    = 2019-04-25 16:01:32
     end_time                      = 2019-04-25 16:01:34
     total_minutes                 = 0.04
