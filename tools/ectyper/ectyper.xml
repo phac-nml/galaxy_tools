@@ -75,9 +75,11 @@
   <help>
 **Syntax**
 
+
 This tool identifies the serotype of assembled or assembly-free Escherichia coli genome sample based on a set of either *wzm/wzt* or *wzx/wzy* and *fliC/flkA/flmA* alleles corresponding to O and H antigens, respectively.
 The non-E.coli genomes and other Escherichia genus species are successfully identified and well handled. The 0.9.0 version improves tool sensitivy when target alleles are truncated or
 poorly covered by raw reads.
+
 
 For more information please visit https://github.com/phac-nml/ecoli_serotyping. 
 
@@ -90,6 +92,7 @@ Accepts a variety of inputs including both single and/or multiple FASTQ and/or F
 The default MASH RefSeq genome sketch is included and updated every 6 months, but one can supply custom sketch file for species identification.
 
 One can download RefSeq genome sketch containing approximately 91,283 genomes from https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh.
+
 
 **Output:**
 

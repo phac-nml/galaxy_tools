@@ -226,6 +226,7 @@
                     <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
                 </assert_contents>
             </output>
+           
             <output name="output_stats">
                 <assert_contents>
                     <has_text text="Input Size: 25000"/>

@@ -1,2 +1,2 @@
-Isolate ID	Genotype	Predicted Phenotype
-16S-rc_gyrA-rc_beta-lactam.fsa	blaIMP-42	ampicillin, amoxicillin/clavulanic acid, cefoxitin, ceftriaxone, meropenem
+Isolate ID	Genotype	Predicted Phenotype	Plasmid	Scheme	Sequence Type
+16S-rc_gyrA-rc_beta-lactam.fsa	blaIMP-42	ampicillin, amoxicillin/clavulanic acid, cefoxitin, ceftriaxone, meropenem	None	-	-

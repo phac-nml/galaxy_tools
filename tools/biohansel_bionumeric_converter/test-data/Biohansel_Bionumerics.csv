@@ -1,0 +1,4 @@
+sample,subtype,avg_tile_coverage,qc_status,qc_message,qc_message_1
+SRR1645238,1.3,43.345,PASS,,
+SRR1753252,1.1,32.33,PASS,FAIL: This is a test of the cut off system. The data is good and as such I have to manually type this message in to get it to cut off. I am adding in ,5 comas /////
+SRR1928313,1.1.1,555.11,PASS,,
