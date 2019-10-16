@@ -1,7 +1,7 @@
-<tool id="biohansel" name="biohansel" version="2.2.0">
+<tool id="biohansel" name="biohansel" version="2.4.0">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
-    <requirement type="package" version="2.2.0">bio_hansel</requirement>
+    <requirement type="package" version="2.4.0">bio_hansel</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -427,8 +427,8 @@ Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Hea
     ]]></help>
   <citations>
     <citation type="bibtex">@ARTICLE{a1,
-      title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
-      author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, David Son, Darian Hole, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
+      title = {Rapid and robust genotyping of highly clonal bacterial pathogens using BioHansel, a SNP-based k-mer search pipeline},
+      author = {Geneviève Labbé, Peter Kruczkiewicz, Philip Mabon, James Robertson, Justin Schonfeld, Daniel Kein, Marisa A. Rankin, Matthew Gopez, Darian Hole, David Son, Natalie Knox, Chad R. Laing, Kyrylo Bessonov, Eduardo Taboada, Catherine Yoshida, Roger P. Johnson, Gary Van Domselaar, John H.E. Nash},
       url = {https://github.com/phac-nml/biohansel}
       }
     }</citation>
