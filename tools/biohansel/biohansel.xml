@@ -1,7 +1,7 @@
-<tool id="biohansel" name="biohansel" version="2.2.0">
+<tool id="biohansel" name="biohansel" version="2.4.0">
   <description>SNP subtyping of genome sequence reads or assemblies</description>
   <requirements>
-    <requirement type="package" version="2.2.0">bio_hansel</requirement>
+    <requirement type="package" version="2.4.0">bio_hansel</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -203,7 +203,7 @@ hansel
           <option value="enteritidis">Salmonella Enteritidis subtyping scheme</option>
           <option value="typhi">Salmonella Typhi subtyping scheme</option>
           <option value="typhimurium">Salmonella Typhimurium subtyping scheme</option>
-          <option value="tb_speciation">Mycobacterium Tuberculosis subtyping scheme</option>
+          <option value="tb_lineage">Mycobacterium Tuberculosis subtyping scheme</option>
         </param>
       </when>
       <when value="custom">
@@ -213,10 +213,10 @@ hansel
       </when>
     </conditional>
     <param name="subtype_metadata"
-      type="data" format="tabular,csv"
+      type="data" format="tabular"
       optional="true"
-      label="Scheme Subtype Metadata Table [Optional]"
-      help="CSV or tab-delimited format only. Must contain a 'subtype' column."
+      label="Scheme Subtype Metadata Table (tsv) [Optional]"
+      help="Tab-delimited format only (.tsv) to add metadata table to results. Must contain a column called 'subtype'."
       />
     <!-- K-mer frequencies. -->
     <section name="kmer_vals" title="K-mer Frequency Thresholds" expanded="False">
@@ -405,7 +405,7 @@ Contents of ``match_results.tab``:
 **Example Subtype Metadata**
 
 A column with name `subtype` must exist and should have subtype designations that would appear in your biohansel results. There are no requirements for the number of columns or contents of those columns in the table - they can contain whatever you want.
-
+Metadata must be structured in a tab-delimited format (.tsv) to be a valid input.
 
     +-------------+-------+--------+------------------+
     | subtype     | clade | source | disease_symptoms |
@@ -427,8 +427,8 @@ Galaxy wrapper written by Matthew Gopez and Peter Kruczkiewicz at the Public Hea
     ]]></help>
   <citations>
     <citation type="bibtex">@ARTICLE{a1,
-      title = {A robust genotyping scheme for Salmonella enterica serovar Heidelberg clones circulating in North America},
-      author = {Geneviève Labbé, James Robertson, Peter Kruczkiewicz, Marisa Rankin, Matthew Gopez, Chad R. Laing, Philip Mabon, Kim Ziebell, Aleisha R. Reimer, Lorelee Tschetter, Gary Van Domselaar, Sadjia Bekal, Kimberley A. MacDonald, Linda Hoang, Linda Chui, Danielle Daignault, Durda Slavic, Frank Pollari, E. Jane Parmley, David Son, Darian Hole, Elissa Giang, Lok Kan Lee, Jonathan Moffat, Joanne MacKinnon, Roger Johnson, John H.E. Nash},
+      title = {Rapid and robust genotyping of highly clonal bacterial pathogens using BioHansel, a SNP-based k-mer search pipeline},
+      author = {Geneviève Labbé, Peter Kruczkiewicz, Philip Mabon, James Robertson, Justin Schonfeld, Daniel Kein, Marisa A. Rankin, Matthew Gopez, Darian Hole, David Son, Natalie Knox, Chad R. Laing, Kyrylo Bessonov, Eduardo Taboada, Catherine Yoshida, Anil Nichani, Roger P. Johnson, Gary Van Domselaar, John H.E. Nash},
       url = {https://github.com/phac-nml/biohansel}
       }
     }</citation>
