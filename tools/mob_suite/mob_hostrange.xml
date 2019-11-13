@@ -1,0 +1,77 @@
+<tool id="mob_hostrange" name="MOB-Hostrange" version="2.0.2+galaxy0">
+    <description>
+        Provides information on plasmid reproductive host range and transfer rate using both sequencing
+        and experimental data from public databases (NCBI) and publications (PubMED).
+    </description>
+  <requirements>
+     <requirement type="package" version="2.0.2">mob_suite</requirement>
+  </requirements>   
+  <command detect_errors="exit_code">
+  <![CDATA[
+    mob_hostrange  --num_threads \${GALAXY_SLOTS:-4}
+      ${exact_match}
+      ${loose_match}
+      ${host_range_detailed}
+      --inputseq "${inputseq}"
+      --outdir 'outdir';
+  ]]>
+  </command>
+  <inputs>
+      <param name="inputseq" type="data" format="fasta" label="Input" help="plasmid FASTA file"/>
+      <param name="exact_match" type="boolean" truevalue="--exact_match" falsevalue="" />
+      <param name="loose_match" type="boolean" truevalue="--loose_match" falsevalue=""/>
+      <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue=""/>
+      <param name="replicon_name" type="text" />
+      <param name="relaxase_name" type="text" />
+      <param name="relaxase_accession" type="text" />
+      <param name="cluster_id" type="text" />
+  </inputs>
+  <outputs>
+    <data name="hostrange_phylostats" label="${tool.name}: Phylostats report on ${input.name}" format="tabular">
+      <discover_datasets pattern=".+hostrange_phylostats\.txt" visible="true" format="tabular" assign_primary_output="true"/>
+    </data>
+    <data name="hostrange_report" label="${tool.name}: Hostrange report on ${input.name}" format="tabular">
+      <discover_datasets pattern=".+hostrange_report\.txt" visible="true" format="tabular" assign_primary_output="true"/>
+    </data>
+  </outputs>
+  <tests>
+    <test>
+        <param name="inputseq" value="plasmid_476.fasta" ftype="fasta"/>
+        <assert_stdout>
+            <has_text text="RefSeq Plasmid database found no hits"/> 
+         </assert_stdout>
+    </test>
+  </tests>
+  <help>
+
+**Syntax**
+
+This tool provides information on plasmid reproductive host range and transfer rate using both sequencing and experimental data from public databases (NCBI) and publications (PubMED). The predicted host range represents a range of putative hosts where a given plasmid can stably replicate and be maintained by the host. The host range module makes no source attribution predictions of a plasmid.
+
+For more information please visit https://github.com/phac-nml/mob-suite/. 
+
+-----
+
+**Input:**
+
+A FASTA file with a single or multiple contigs (e.g. plasmid.fasta):
+
+
+**Output:**
+
+Tab-delimited reports listing predicted hostrange information. Refer to https://github.com/phac-nml/mob-suite#mob-hostrange-report-file-format for the description of each column.
+
+
+  </help>
+  <citations>
+    <citation type="bibtex">
+  @misc{githubmob-suite,
+  author = {Robertson J, Nash J},
+  title = {MOB-Suite: Software tools for clustering, reconstruction and typing of plasmids from draft assemblies.},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  doi = {10.1099/mgen.0.000206},
+  url = {https://github.com/phac-nml/mob-suite}
+    }</citation>
+  </citations>
+</tool>
