@@ -16,7 +16,7 @@
    --min_mob_ident '$adv_param.min_mob_ident'
    --min_ori_ident '$adv_param.min_ori_ident'
    --min_mpf_ident '$adv_param.min_mpf_ident'
-    --outdir '.';
+    --outdir 'outdir';
   ]]>
   </command>
   <inputs>
@@ -34,16 +34,16 @@
     </section>  
   </inputs>
   <outputs>
-    <data name="outfile1" label="${tool.name}: Plasmid report on ${input.name}" format="tabular">
-      <discover_datasets pattern=".+_report\.txt" visible="true" format="tabular" assign_primary_output="true"/>
+    <data name="plasmid_report" label="${tool.name}: Plasmid report on ${input.name}" format="tabular">
+      <discover_datasets directory="outdir" pattern=".+_report\.txt" visible="true" format="tabular" assign_primary_output="true"/>
     </data>  
   </outputs>
   <tests>
     <test>
         <param name="input" value="plasmid_476.fasta" ftype="fasta"/>
-        <assert_stdout>
-            <has_text text="JN253636"/> 
-         </assert_stdout>
+        <assert_stderr>
+            <has_text text="CP015838"/>
+         </assert_stderr>
     </test>
   </tests>
   <help>
