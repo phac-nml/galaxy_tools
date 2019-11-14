@@ -8,19 +8,31 @@
   </requirements>   
   <command detect_errors="exit_code">
   <![CDATA[
-    mob_hostrange  --num_threads \${GALAXY_SLOTS:-4}
+    mob_hostrange
       ${exact_match}
       ${loose_match}
       ${host_range_detailed}
+      #if str(${replicon_name}) != ""
+        --replicon_name '${replicon_name}'
+      #end if
+      #if str(${relaxase_name}) != ""
+        --relaxase_name '${relaxase_name}'
+      #end if
+      #if str(${relaxase_accession}) != ""
+        --relaxase_accession '${relaxase_accession}'
+      #end if
+      #if str(${cluster_id}) != ""
+        --cluster_id '${cluster_id}'
+      #end if
       --inputseq "${inputseq}"
-      --outdir 'outdir';
+      --outdir '.';
   ]]>
   </command>
   <inputs>
       <param name="inputseq" type="data" format="fasta" label="Input" help="plasmid FASTA file"/>
-      <param name="exact_match" type="boolean" truevalue="--exact_match" falsevalue="" />
-      <param name="loose_match" type="boolean" truevalue="--loose_match" falsevalue=""/>
-      <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue=""/>
+      <param name="exact_match" type="boolean" truevalue="--exact_match" falsevalue="" checked="false"/>
+      <param name="loose_match" type="boolean" truevalue="--loose_match" falsevalue="" checked="false"/>
+      <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue="" checked="false"/>
       <param name="replicon_name" type="text" />
       <param name="relaxase_name" type="text" />
       <param name="relaxase_accession" type="text" />
@@ -28,18 +40,18 @@
   </inputs>
   <outputs>
     <data name="hostrange_phylostats" label="${tool.name}: Phylostats report on ${input.name}" format="tabular">
-      <discover_datasets pattern=".+hostrange_phylostats\.txt" visible="true" format="tabular" assign_primary_output="true"/>
+      <discover_datasets pattern=".+hostrange_phylostats\.txt" visible="true" format="tabular" />
     </data>
     <data name="hostrange_report" label="${tool.name}: Hostrange report on ${input.name}" format="tabular">
-      <discover_datasets pattern=".+hostrange_report\.txt" visible="true" format="tabular" assign_primary_output="true"/>
+      <discover_datasets pattern=".+hostrange_report\.txt" visible="true" format="tabular" />
     </data>
   </outputs>
   <tests>
     <test>
         <param name="inputseq" value="plasmid_476.fasta" ftype="fasta"/>
-        <assert_stdout>
+        <assert_stderr>
             <has_text text="RefSeq Plasmid database found no hits"/> 
-         </assert_stdout>
+         </assert_stderr>
     </test>
   </tests>
   <help>
