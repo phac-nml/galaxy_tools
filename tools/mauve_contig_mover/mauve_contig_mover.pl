@@ -1,13 +1,12 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use strict;
-#use warnings;
+use warnings;
 use Data::Dumper;
 use Getopt::Long;
 use Pod::Usage;
 use File::Copy;
 use File::Basename;
-#use Archive::Zip;
 
 
 my ($output, $reference_gbk, $reference_dat, $draft_fasta, $draft_dat, $alignment_file, $fasta_file, $html_file, $help, $best_alignment, 

@@ -8,7 +8,14 @@
    </requirements>
    <command detect_errors="exit_code">
 <![CDATA[
-export path2jar=`find \$JAVA_HOME -name 'Mauve.jar'` && perl '$__tool_directory__/mauve_contig_mover.pl' -r $reference -d $draft -o $html_file.files_path -a $alignment_file -f $fasta_file -l $html_file
+export path2jar=`find \$JAVA_HOME -name 'Mauve.jar'` && 
+perl '$__tool_directory__/mauve_contig_mover.pl' 
+-r '$reference' 
+-d '$draft' 
+-o '$html_file.files_path'
+-a '$alignment_file' 
+-f '$fasta_file' 
+-l '$html_file'
 ]]>
    </command>
    <inputs>
