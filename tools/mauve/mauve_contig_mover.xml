@@ -1,0 +1,73 @@
+<tool id="mauve_contig_mover" name="Mauve Contig Mover" version="1.0.10">
+   <description>MCM can be used to order a draft genome relative to a related reference genome.</description>
+   <requirements>
+	   <requirement type="package" version="2.4.0.r4736">mauve</requirement>
+	   <requirement type="package" version="3.23">mummer</requirement>
+	   <requirement type="package" version="1.3.1=h470a237_0">libgenome</requirement>
+	   <requirement type="package" version="snapshot_2015_02_13">progressivemauve</requirement>
+   </requirements>
+   <command detect_errors="exit_code">
+<![CDATA[
+export path2jar=`find \$JAVA_HOME -name 'Mauve.jar'` && perl '$__tool_directory__/mauve_contig_mover.pl' -r $reference -d $draft -o $html_file.files_path -a $alignment_file -f $fasta_file -l $html_file
+]]>
+   </command>
+   <inputs>
+	   <param name="reference" type="data" format="fasta,genbank" label="Reference Sequence"/>
+	   <param name="draft" type="data" format="fasta" label="Draft Genome"/>
+	   <param name="output" size="30" type="text" value="output" label="Please specify a name for the output files" />
+   </inputs>
+   <outputs>
+	   <data name="html_file" format="html" label="${output}_mauve_summary.html" />
+	   <data name="alignment_file" format="text" label="${output}_alignment" />
+	   <data name="fasta_file" format="fasta" label="${output}.fasta" />
+   </outputs>
+
+
+
+
+<tests>
+   <test>
+      <param name="reference" value="reference.gbk"/>
+      <param name="draft" value="draft.fasta"/>
+      <param name="output" value="output" />
+      <output name="fasta_file" value="output.fasta"/>
+      <output name="html_file" value="output.html"/>
+      <output name="alignment_file">
+	      <assert_contents>
+		      <has_text text="> 1:1-150297 + "/>
+		      <has_text text="atggtcaaaggtgcgagaaggataatggtgcaggccacaagctctagtgctggcaagacgcttctgtgtttgtgtttgtg"/>
+		      <has_text text="> 2:0-0 +"/>
+		      <has_text text="--------------------------------------------------------------------------------"/>
+		      <has_text text="> 2:1-275 +"/>
+		      <has_text text="gatacaaaaaccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagggggggggggggggggggg"/>
+	      </assert_contents>
+      </output>
+
+   </test>
+</tests>
+<help>
+**What it does**
+The Mauve Contig Mover (MCM) can be used to order a draft genome relative to a related reference genome. The Mauve Contig Mover can ease a comparative study between draft and reference sequences by ordering draft contigs according to a reference genome.  In many cases, true rearrangements in the draft relative to the reference can be identified.  The quality of the reorder is limited by the distance between the sequences, as indicated by the amount of shared gene content among the two organisms.  A more distant reference will usually yield fewer ordered draft genome contigs, and may also induce erroneous placements of draft contigs.  In addition to ordering contigs, MCM also orient them in the most likely orientation, and, if annotated sequence features are specified in an input file (e.g. with GenBank format input for the draft), MCM will output adjusted coordinates ranges for the features In many cases, true rearrangements in the draft relative to the reference can be identified.  The quality of the reorder is limited by the distance between the sequences, as indicated by the amount of shared gene content among the two organisms.  A more distant reference will usually yield fewer ordered draft genome contigs, and may also induce erroneous placements of draft contigs.  In addition to ordering contigs, MCM also orient them in the most likely orientation, and, if annotated sequence features are specified in an input file (e.g. with GenBank format input for the draft), MCM will output adjusted coordinates ranges for the features.
+For more information, visit http://asap.ahabs.wisc.edu/mauve/index.php
+
+
+**Input Formats**
+
+-- Reference Sequence: Enter a genbank or fasta file containing the reference sequence.
+
+-- Draft Genome: Enter a fasta file containing the draft genome to reorder.
+
+
+**Output**
+
+This tool will give you three output files:
+
+-- Fasta file: Contains the ordered contigs according to the last alignment done by Mauve
+
+-- Alignment file: An XMFA file. This file can be opened using the Mauve Graphical Interface
+
+-- HTML file: A summary of the alignments performed by Mauve. Downloading the contents of this file will give a zip file containing the Mauve output folder.
+
+</help>
+
+</tool>
