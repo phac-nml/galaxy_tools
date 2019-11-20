@@ -6,26 +6,22 @@
 	</requirements>
 <command detect_errors="exit_code">
 	bash '$__tool_directory__/abacas.sh'
-	$input_ref
-	$input_query
-	$ordered_contigs
-	$use_bin
-	$non
-	$append_bin
-	$out_bin
-	$out_crunch
-	$out_gaps
-	$out_fasta
-	$out_tab
-	$out_unused
-	$out_multi
-	$out_binmulti
-	$out_nonpseudo
-
+	'$input_ref'
+	'$input_query'
+	'$ordered_contigs'
+	'$use_bin'
+	'$non'
+	'$append_bin'
+	'$out_bin'
+	'$out_crunch'
+	'$out_gaps'
+	'$out_fasta'
+	'$out_tab'
+	'$out_unused'
+	'$out_multi'
+	'$out_binmulti'
+	'$out_nonpseudo'
 </command>
-
-
-
 		<inputs>
 			<param name="input_ref" type="data" format="fasta" label="Reference sequence" />
 			<param name="input_query" type="data" format="fasta" label="Sequence query file"/>
@@ -46,7 +42,6 @@
 				<option value="no">No</option>
 			</param>
 		</inputs>
-
 		<outputs>
 			<data name="out_crunch" format="tabular" label="ACT crunch file"/>
 			<data name="out_tab" format="tabular" label="tab files"/>
@@ -64,11 +59,10 @@
 				<filter>non=="yes"</filter>
 			</data>
 		</outputs>
-
 <tests>
    <test>
-      <param name="input_ref" value="test_18.fasta"/>
-      <param name="input_query" value="test_19.fasta"/>
+      <param name="input_ref" value="reference_sequence.fasta"/>
+      <param name="input_query" value="sequence_query.fasta"/>
       <param name="ordered_contigs" value="no" />
       <param name="use_bin" value="no" />
       <param name="non" value="no" />
@@ -80,22 +74,12 @@
       <output name="out_unused" value="out_unused"/>
       <output name="out_bin">
 	      <assert_contents>
-		      <has_text text="NODE_6617_length_6"/>
-
+		      <has_text text ="NODE_1_length_1"/>
+		      <has_text text ="NODE_2_length_10"/>
 	      </assert_contents>
-
-
       </output>
    </test>
 </tests>
-
-
-
+<help>
+</help>
 </tool>
-
-			
-		
-		
-
-
-

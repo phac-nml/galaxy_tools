@@ -1,1 +1,14 @@
-ID   
+ID   NODE_1_length_500
+FT   contig          1..110
+FT                   /systematic_id="NODE_4_length_110"
+FT                   /method="mummer"
+FT                   /Contig_coverage="100.00"
+FT                   /Percent_identity="100.00"
+FT                   /colour="4"
+FT   contig          400..500
+FT                   /systematic_id="NODE_3_length_101"
+FT                   /method="mummer"
+FT                   /Contig_coverage="100.00"
+FT                   /Percent_identity="100.00"
+FT                   /Overlapping="YES"
+FT                   /colour="5"
