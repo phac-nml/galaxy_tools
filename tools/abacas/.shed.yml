@@ -1,0 +1,7 @@
+categories: [Contiguate]
+description: Order and Orientate Contigs
+name: abacas
+owner: nml
+long_description: abacas - Rapidly contiguate (align, order, orientate), visualize and design primers to close gaps on shotgun assembled contigs based on a reference sequence
+remote_repository_url: https://github.com/phac-nml/abacas
+homepage_url: https://github.com/phac-nml/abacas
