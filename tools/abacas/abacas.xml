@@ -81,5 +81,16 @@
    </test>
 </tests>
 <help>
+	<![CDATA[ABACAS is intended to rapidly contiguate (align, order, orientate), visualize and design primers to close gaps on shotgun assembled contigs based on a reference sequence]]>
 </help>
+<citations>
+	<citation type="bibtex">
+		@misc{sourceforgeABACAS,
+                title = {ABACAS: Algorithm Based Automatic Contiguation of Assembled Sequences},
+                publisher = {BioMalPar Consortium and Wellcome Trust Sanger Institute},
+                journal = {SourceForge},
+                url = {http://abacas.sourceforge.net/index.html},
+                }
+	</citation>
+</citations>
 </tool>
