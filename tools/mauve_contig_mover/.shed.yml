@@ -1,6 +1,6 @@
-categories: [Comparative Analysis]
+categories: [Sequence Analysis]
 description: Order a draft genome relative to a related reference genome
-name: mauve contig mover
+name: mauve_contig_mover
 owner: nml
 long_description: mauve contig mover - Ease a comparative study between draft and reference sequences by ordering draft contigs according to the reference genome
 remote_repository_url: https://github.com/phac-nml/mauve_contig_mover
