@@ -1,4 +1,4 @@
-categories: [Comparative Analysis]
+categories: [Sequence Analysis]
 description: Order a draft genome relative to a related reference genome
 name: mauve contig mover
 owner: nml
