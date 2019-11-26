@@ -83,16 +83,16 @@
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
             <param name="plength_plasmidfinder" type="float" label="Percent length overlap of BLAST hit for PlasmidFinder database" value="60.0"
                    min="0" max="100" help="(--percent-length-overlap-plasmidfinder)" />
-	    <param name="genome_size_lower_bound" type="integer" label="The lower bound for our genome size for the quality metrics" value="4000000"
-                    help="(--genome-size-lower-bound)" />
+            <param name="genome_size_lower_bound" type="integer" label="The lower bound for our genome size for the quality metrics" value="4000000"
+                   help="(--genome-size-lower-bound)" />
             <param name="genome_size_upper_bound" type="integer" label="The upper bound for our genome size for the quality metrics" value="6000000"
-                    help="(--genome-size-upper-bound)" />
+                   help="(--genome-size-upper-bound)" />
             <param name="minimum_N50_value" type="integer" label="The minimum N50 value for the quality metrics" value="10000"
-                    help="(--minimum-N50-value)" />
+                   help="(--minimum-N50-value)" />
             <param name="minimum_contig_length" type="integer" label="The minimum contig length for the quality metrics" value="300"
-                    help="(--minimum-contig-length)" />
+                   help="(--minimum-contig-length)" />
             <param name="unacceptable_number_contigs" type="integer" label="The number of contigs, under the minimum contig length which is unacceptable for the quality metrics" value="1000"
-                    help="(--unacceptable-number-contigs)" />
+                   help="(--unacceptable-number-contigs)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
