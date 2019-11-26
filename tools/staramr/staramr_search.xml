@@ -191,7 +191,7 @@
             <param name="genome_size_upper_bound" value="10" />
 
             <output name="summary" file="test8-summary.tsv" ftype="tabular"/>
-	    </test>
+        </test>
     </tests>
     <help><![CDATA[
 staramr
