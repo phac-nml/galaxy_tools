@@ -1,18 +1,18 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.6.1</token>
+	    <token name="@VERSION@">0.7.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
     </requirements>
     <version_command>staramr --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
-        #import re
+	#import re
 
-        #set $named_genomes = ''
+	#set $named_genomes = ''
         #for $genome in $genomes
-            #set $_named_genome = re.sub(r'(\s|\(|\)|\/)', '_', '"{}.fasta"'.format($genome.element_identifier))
+            #set $_named_genome = re.sub(r'(\s|\(|\)|\/)', '_', '"{}".fasta'.format($genome.element_identifier))
             ln -s '$genome' $_named_genome &&
             #set $named_genomes = $named_genomes + ' ' + $_named_genome
         #end for
@@ -22,7 +22,14 @@
 
         staramr search
 
-        --nprocs "\${GALAXY_SLOTS:-1}"
+	--nprocs "\${GALAXY_SLOTS:-1}"
+
+	--genome-size-lower-bound $advanced.genome_size_lower_bound
+        --genome-size-upper-bound $advanced.genome_size_upper_bound
+        --minimum-N50-value $advanced.minimum_N50_value
+        --minimum-contig-length $advanced.minimum_contig_length
+	--unacceptable-number-contigs $advanced.unacceptable_number_contigs
+
 
         --pid-threshold $advanced.pid_threshold
         --percent-length-overlap-resfinder $advanced.plength_resfinder
@@ -68,7 +75,7 @@
             <option value="salmonella">Salmonella</option>
             <option value="campylobacter">Campylobacter</option>
         </param>
-        <section name="advanced" title="Advanced options" expanded="false">
+	<section name="advanced" title="Advanced options" expanded="false">
             <param name="pid_threshold" type="float" label="Percent identity threshold for BLAST" value="98.0"
                    min="0" max="100" help="(--pid-threshold)" />
             <param name="plength_resfinder" type="float" label="Percent length overlap of BLAST hit for ResFinder database" value="60.0"
@@ -76,7 +83,17 @@
             <param name="plength_pointfinder" type="float" label="Percent length overlap of BLAST hit for PointFinder database" value="95.0"
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
             <param name="plength_plasmidfinder" type="float" label="Percent length overlap of BLAST hit for PlasmidFinder database" value="60.0"
-                   min="0" max="100" help="(--percent-length-overlap-plasmidfinder)" />
+		    min="0" max="100" help="(--percent-length-overlap-plasmidfinder)" />
+	    <param name="genome_size_lower_bound" type="integer" label="The lower bound for our genome size for the quality metrics" value="4000000"
+                    help="(--genome-size-lower-bound)" />
+            <param name="genome_size_upper_bound" type="integer" label="The upper bound for our genome size for the quality metrics" value="6000000"
+                    help="(--genome-size-upper-bound)" />
+            <param name="minimum_N50_value" type="integer" label="The minimum N50 value for the quality metrics" value="10000"
+                    help="(--minimum-N50-value)" />
+            <param name="minimum_contig_length" type="integer" label="The minimum contig length for the quality metrics" value="300"
+                    help="(--minimum-contig-length)" />
+            <param name="unacceptable_number_contigs" type="integer" label="The number of contigs, under the minimum contig length which is unacceptable for the quality metrics" value="1000"
+                    help="(--unacceptable-number-contigs)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
@@ -169,6 +186,13 @@
 
             <output name="summary" file="test5-summary.tsv" ftype="tabular" />
         </test>
+	<test>
+	    <param name="genomes" value="test-aminoglycoside.fsa" />
+	    <param name="genome_size_lower_bound" value="1" />
+	    <param name="genome_size_upper_bound" value="10" />
+
+	    <output name="summary" file="test8-summary.tsv" ftype="tabular"/>
+	</test>
     </tests>
     <help><![CDATA[
 staramr
