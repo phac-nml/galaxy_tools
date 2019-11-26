@@ -30,7 +30,6 @@
         --minimum-contig-length $advanced.minimum_contig_length
         --unacceptable-number-contigs $advanced.unacceptable_number_contigs
 
-
         --pid-threshold $advanced.pid_threshold
         --percent-length-overlap-resfinder $advanced.plength_resfinder
         --percent-length-overlap-plasmidfinder $advanced.plength_plasmidfinder
