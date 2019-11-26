@@ -12,7 +12,7 @@
 
 	#set $named_genomes = ''
         #for $genome in $genomes
-            #set $_named_genome = re.sub(r'(\s|\(|\)|\/)', '_', '"{}".fasta'.format($genome.element_identifier))
+            #set $_named_genome = re.sub(r'(\s|\(|\)|\/)', '_', '"{}.fasta"'.format($genome.element_identifier))
             ln -s '$genome' $_named_genome &&
             #set $named_genomes = $named_genomes + ' ' + $_named_genome
         #end for
