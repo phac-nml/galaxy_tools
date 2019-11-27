@@ -1,19 +1,22 @@
-<tool id="wade" name="Wade" version="0.1" description="description here please">
+<tool id="wade" name="Wade" version="0.1" description="identify regions of interest">
     <requirements>
-        <requirement type="package" version="3.4.1">r-base</requirement>
-        <requirement type="package" version="2.52.0">bioconductor-biostrings</requirement>
-        <requirement type="package" version="2.2.0">r-devtools</requirement>
-        <requirement type="package" version="0.8.3">r-dplyr</requirement>
-        <requirement type="package" version="3.2.1">r-ggplot2</requirement>
-        <requirement type="package" version="0.1">r-here</requirement>
-        <requirement type="package" version="1.6.0">r-jsonlite</requirement>
-	<requirement type="package" version="0.3.2">r-purrr</requirement>
-        <requirement type="package" version="1.95_4.12">r-rcurl</requirement>
-        <requirement type="package" version="1.4.3">r-reshape2</requirement>
-        <requirement type="package" version="1.4.0">r-stringr</requirement>
+        <requirement type="package" version="0.2.3">wade</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript "$__tool_directory__/wade.R"
+
+        #for $i in $input#
+          cp '$i' '$i.element_identifier' &&
+        #end for
+
+        #set $samples = ','.join([$i.element_identifier for $i in ( $input )])
+
+        Rscript --vanilla -e 'library(wade); source(file = system.file("exec/wade_cmd.R", package = "wade"))'
+
+        -d 'output'
+        -o '$mode.type'
+        -t '$mode.subtype'
+
+        -s $samples
 
     ]]></command>
     <inputs>
@@ -30,35 +33,37 @@
       </param>
       <when value="GAS">
         <param name="subtype" type="select" label="Select specific analysis">
-          <option value="arg_ref_card">ARG-ANNOT/Resfinder/CARD</option>
-          <option value="emm">EMM Typing</option>
-          <option value="mlst">MLST Type</option>
-          <option value="tp">Toxin Profile</option>
-          <option value="vfdb">VFDB (Virulence Factor Database</option>
-          <option value="vf">Virulence Factors</option>
+          <option value="AMR">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="EMM">EMM Typing</option>
+          <option value="MLST">MLST Type</option>
+          <option value="VFDB">VFDB (Virulence Factor Database)</option>
+          <option value="MASTER">Master blaster</option>
         </param>
       </when>
       <when value="GONO">
         <param name="subtype" type="select" label="Select specific analysis">
-          <option value="mlst">MLST Type</option>
-          <option value="ngmast">NG-MAST Type</option>
-          <option value="ngstar">NG-STAR Type</option>
-          <option value="23s">23S rRNA Alleles</option>
+          <option value="MLST">MLST Type</option>
+          <option value="NGMAST">NG-MAST Type</option>
+          <option value="NGSTAR">NG-STAR Type</option>
+          <option value="rRNA23S">23S rRNA Alleles</option>
+          <option value="MASTER">Master blaster</option>
         </param>
       </when>
       <when value="PNEUMO">
         <param name="subtype" type="select" label="Select specific analysis">
-          <option value="arg_ref_card">ARG-ANNOT/Resfinder/CARD</option>
-          <option value="mlst">MLST Type</option>
-          <option value="vfdb">VFDB (Virulence Factor Database</option>
-          <option value="vf">Virulence Factors</option>
-          <option value="23s">23S rRNA Alleles</option>
+          <option value="AMR">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="MLST">MLST Type</option>
+          <option value="VFDB">VFDB (Virulence Factor Database)</option>
+          <option value="rRNA23S">23S rRNA Alleles</option>
+          <option value="MASTER">Master blaster</option>
         </param>
       </when>
-    </conditional>    
+    </conditional>
     </inputs>
     <outputs>
-        <data name="output" format="tsv" label="Results"/>
+      <data name="report" format="csv">
+        <discover_datasets pattern="__designation_and_ext__" directory="output" visible="true" />
+      </data>
     </outputs>
     <tests>
         <test>
