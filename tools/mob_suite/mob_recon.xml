@@ -1,7 +1,7 @@
-<tool id="mob_recon" name="MOB-Recon" version="1.4.8">
+<tool id="mob_recon" name="MOB-Recon" version="1.4.9.1+galaxy0">
   <description>Type contigs and extract plasmid sequences</description>
   <requirements>
-     <requirement type="package" version="1.4.8">mob_suite</requirement>
+     <requirement type="package" version="1.4.9.1">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
   <![CDATA[  
