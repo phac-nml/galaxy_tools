@@ -1,6 +1,7 @@
-<tool id="wade" name="Wade" version="0.1" description="identify regions of interest">
+<tool id="wade" name="Wade" version="0.2.4+galaxy0">
+    <description>identify regions of interest</description>
     <requirements>
-        <requirement type="package" version="0.2.3">wade</requirement>
+        <requirement type="package" version="0.2.4">wade</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -16,7 +17,7 @@
         -o '$mode.type'
         -t '$mode.subtype'
 
-        -s $samples
+        -s '$samples'
 
     ]]></command>
     <inputs>
@@ -67,6 +68,14 @@
     </outputs>
     <tests>
         <test>
+          <param name="input" value="SC19-2806-A.fasta"/>
+          <output name='report'>
+            <discovered_dataset designation="GAS_dbpipeline_WADE">
+              <assert_contents>
+                <has_text text="SampleNo" />
+              </assert_contents>
+            </discovered_dataset>
+          </output>
         </test>
     </tests>
     <help><![CDATA[
