@@ -1,4 +1,4 @@
-<tool id="wade" name="Wade" version="0.2.4+galaxy0">
+<tool id="wade" name="Wade" version="0.2.4+galaxy1">
     <description>identify regions of interest</description>
     <requirements>
         <requirement type="package" version="0.2.4">wade</requirement>
@@ -22,10 +22,10 @@
     ]]></command>
     <inputs>
     <param name="input"
-        type="data" format="fasta"
+        type="data" format="fasta,vcf"
         optional="false"
         multiple="true"
-        label="Contig Fasta file(s)"/>
+        label="Contig Fasta/VCF file(s)"/>
     <conditional name="mode">
       <param name="type" type="select" label="Analysis Group">
         <option value="GAS">GAS</option>
