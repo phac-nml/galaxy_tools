@@ -1,7 +1,7 @@
-<tool id="wade" name="Wade" version="0.2.4+galaxy1">
+<tool id="wade" name="Wade" version="0.2.5+galaxy0">
     <description>identify regions of interest</description>
     <requirements>
-        <requirement type="package" version="0.2.4">wade</requirement>
+        <requirement type="package" version="0.2.5">wade</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
