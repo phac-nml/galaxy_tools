@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: identify regions of interest
+name: wade
+owner: nml
+long_description: wade - identify regions of interest
+remote_repository_url: https://github.com/phac-nml/wade
+homepage_url: https://github.com/phac-nml/wade
