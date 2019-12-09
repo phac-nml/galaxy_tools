@@ -1,4 +1,4 @@
-<tool id="wade" name="Wade" version="0.2.5+galaxy0">
+<tool id="wade" name="Wade" version="0.2.5+galaxy1">
     <description>identify regions of interest</description>
     <requirements>
         <requirement type="package" version="0.2.5">wade</requirement>
@@ -41,22 +41,19 @@
     <inputs>
     <conditional name="mode">
       <param name="type" type="select" label="Analysis Group">
-        <option value="GAS">GAS</option>
-        <option value="GONO">GONO</option>
-        <option value="PNEUMO">PNEUMO</option>
+        <option value="GAS">Streptococcus pyogenes</option>
+        <option value="GONO">Streptococcus pneumoniae</option>
+        <option value="PNEUMO">Neisseria gonorrhoeae</option>
       </param>
       <when value="GAS">
-
-        <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
-
         <param name="subtype" type="select" label="Select specific analysis">
           <option value="AMR">ARG-ANNOT/Resfinder/CARD</option>
           <option value="EMM">EMM Typing</option>
           <option value="MLST">MLST Type</option>
           <option value="VFDB">VFDB (Virulence Factor Database)</option>
-          <option value="MASTER">Master blaster</option>
+          <option value="MASTER">AMR/Toxin/Virulence Profiler</option>
         </param>
-
+        <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
       </when>
       <when value="GONO">
 
@@ -66,7 +63,7 @@
           <option value="NGMAST">NG-MAST Type</option>
           <option value="NGSTAR">NG-STAR Type</option>
           <option value="rRNA23S">23S rRNA Alleles</option>
-          <option value="MASTER">Master blaster</option>
+          <option value="MASTER">AMR/NG-STAR Profiler</option>
         </param>
         <when value="rRNA23S">
           <param name="input" type="data" format="vcf" multiple="true" label="VCF file(s)"/>
@@ -94,7 +91,7 @@
           <option value="MLST">MLST Type</option>
           <option value="VFDB">VFDB (Virulence Factor Database)</option>
           <option value="rRNA23S">23S rRNA Alleles</option>
-          <option value="MASTER">Master blaster</option>
+          <option value="MASTER">AMR/Virulence Profiler</option>
         </param>
         <when value="rRNA23S">
           <param name="input" type="data" format="vcf" multiple="true" label="VCF file(s)"/>
