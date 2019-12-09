@@ -1,0 +1,177 @@
+<tool id="wade" name="Wade" version="0.2.5+galaxy0">
+    <description>identify regions of interest</description>
+    <requirements>
+        <requirement type="package" version="0.2.5">wade</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+
+
+        #if $mode.type == 'GAS':
+
+          #for $i in $mode.input#
+            cp '$i' '$i.element_identifier' &&
+          #end for
+
+          #set $samples = ','.join([$i.element_identifier for $i in ( $mode.input )])
+          #set $subtype = $mode.subtype
+
+        #else:
+
+          #for $i in $mode.subtype_input.input#
+            cp '$i' '$i.element_identifier' &&
+          #end for
+
+          #set $samples = ','.join([$i.element_identifier for $i in ( $mode.subtype_input.input )])
+          #set $subtype = $mode.subtype_input.subtype
+
+        #end if
+
+        Rscript --vanilla -e 'library(wade); source(file = system.file("exec/wade_cmd.R", package = "wade"))'
+
+        -d 'output'
+
+        -o '$mode.type'
+
+        -t '$subtype'
+
+        -s '$samples'
+
+    ]]></command>
+    <inputs>
+    <conditional name="mode">
+      <param name="type" type="select" label="Analysis Group">
+        <option value="GAS">GAS</option>
+        <option value="GONO">GONO</option>
+        <option value="PNEUMO">PNEUMO</option>
+      </param>
+      <when value="GAS">
+
+        <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="AMR">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="EMM">EMM Typing</option>
+          <option value="MLST">MLST Type</option>
+          <option value="VFDB">VFDB (Virulence Factor Database)</option>
+          <option value="MASTER">Master blaster</option>
+        </param>
+
+      </when>
+      <when value="GONO">
+
+        <conditional name="subtype_input">
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="MLST">MLST Type</option>
+          <option value="NGMAST">NG-MAST Type</option>
+          <option value="NGSTAR">NG-STAR Type</option>
+          <option value="rRNA23S">23S rRNA Alleles</option>
+          <option value="MASTER">Master blaster</option>
+        </param>
+        <when value="rRNA23S">
+          <param name="input" type="data" format="vcf" multiple="true" label="VCF file(s)"/>
+        </when>
+        <when value="MLST">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="NGMAST">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="NGSTAR">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="MASTER">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        </conditional>
+
+      </when>
+      <when value="PNEUMO">
+
+        <conditional name="subtype_input">
+        <param name="subtype" type="select" label="Select specific analysis">
+          <option value="AMR">ARG-ANNOT/Resfinder/CARD</option>
+          <option value="MLST">MLST Type</option>
+          <option value="VFDB">VFDB (Virulence Factor Database)</option>
+          <option value="rRNA23S">23S rRNA Alleles</option>
+          <option value="MASTER">Master blaster</option>
+        </param>
+        <when value="rRNA23S">
+          <param name="input" type="data" format="vcf" multiple="true" label="VCF file(s)"/>
+        </when>
+        <when value="AMR">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="MLST">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="VFDB">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        <when value="MASTER">
+          <param name="input" type="data" format="fasta" multiple="true" label="Contig Fasta file(s)"/>
+        </when>
+        </conditional>
+
+      </when>
+    </conditional>
+    </inputs>
+    <outputs>
+      <data name="report" format="csv">
+        <discover_datasets pattern="__designation_and_ext__" directory="output" visible="true" />
+      </data>
+    </outputs>
+    <tests>
+        <test>
+          <param name="input" value="SC19-2806-A.fasta"/>
+          <output name='report'>
+            <discovered_dataset designation="GAS_dbpipeline_WADE">
+              <assert_contents>
+                <has_text text="SampleNo" />
+              </assert_contents>
+            </discovered_dataset>
+          </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+==============
+Wade
+==============
+
+R Script to generate results
+
+=====
+Legal 
+=====
+
+Copyright Government of Canada 2019
+
+Written by: National Microbiology Laboratory, Public Health Agency of Canada
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this work except in compliance with the License. You may obtain a copy of the
+License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+=======
+Contact
+=======
+
+**Gary van Domselaar**: gary.vandomselaar@canada.ca
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {R Script to generate results.},
+            author = {Adrian Zetner},
+            url = {https://github.com/phac-nml/wade}
+            }
+        }</citation>
+    </citations>
+</tool>

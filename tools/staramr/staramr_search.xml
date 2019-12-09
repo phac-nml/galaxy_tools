@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.6.1</token>
+	    <token name="@VERSION@">0.7.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -23,6 +23,12 @@
         staramr search
 
         --nprocs "\${GALAXY_SLOTS:-1}"
+
+        --genome-size-lower-bound $advanced.genome_size_lower_bound
+        --genome-size-upper-bound $advanced.genome_size_upper_bound
+        --minimum-N50-value $advanced.minimum_N50_value
+        --minimum-contig-length $advanced.minimum_contig_length
+        --unacceptable-number-contigs $advanced.unacceptable_number_contigs
 
         --pid-threshold $advanced.pid_threshold
         --percent-length-overlap-resfinder $advanced.plength_resfinder
@@ -77,6 +83,16 @@
                    min="0" max="100" help="(--percent-length-overlap-pointfinder)" />
             <param name="plength_plasmidfinder" type="float" label="Percent length overlap of BLAST hit for PlasmidFinder database" value="60.0"
                    min="0" max="100" help="(--percent-length-overlap-plasmidfinder)" />
+            <param name="genome_size_lower_bound" type="integer" label="The lower bound for our genome size for the quality metrics" value="4000000"
+                   help="(--genome-size-lower-bound)" />
+            <param name="genome_size_upper_bound" type="integer" label="The upper bound for our genome size for the quality metrics" value="6000000"
+                   help="(--genome-size-upper-bound)" />
+            <param name="minimum_N50_value" type="integer" label="The minimum N50 value for the quality metrics" value="10000"
+                   help="(--minimum-N50-value)" />
+            <param name="minimum_contig_length" type="integer" label="The minimum contig length for the quality metrics" value="300"
+                   help="(--minimum-contig-length)" />
+            <param name="unacceptable_number_contigs" type="integer" label="The number of contigs, under the minimum contig length which is unacceptable for the quality metrics" value="1000"
+                   help="(--unacceptable-number-contigs)" />
             <param name="report_all_blast" type="boolean" label="Report all BLAST results" truevalue="--report-all-blast" falsevalue=""
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
@@ -168,6 +184,13 @@
             <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
 
             <output name="summary" file="test5-summary.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="genomes" value="test-aminoglycoside.fsa" />
+            <param name="genome_size_lower_bound" value="1" />
+            <param name="genome_size_upper_bound" value="10" />
+
+            <output name="summary" file="test8-summary.tsv" ftype="tabular"/>
         </test>
     </tests>
     <help><![CDATA[
