@@ -5,8 +5,8 @@
   </requirements>   
   <command detect_errors="exit_code">
   <![CDATA[
-    ln -s "${input}" "${input.name}";
-    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile "${input.name}" 
+    ln -s '${input}' '${input.name}' &&
+    mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile '${input.name}'
    --min_rep_evalue '$adv_param.min_rep_evalue_value'
    --min_mob_evalue '$adv_param.min_mob_evalue_value'
    --min_con_evalue '$adv_param.min_con_evalue_value'

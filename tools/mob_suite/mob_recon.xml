@@ -8,10 +8,10 @@
     #import re
     #import os.path
     
-    #set $named_input = re.sub(r'(\s|\(|\)|:|!)', '_', str($input.element_identifier)+".fasta")
-    ln -s "$input" $named_input && 
+    #set $named_input = re.sub(r'(\s|\(|\)|:|!)', '_', str($input.element_identifier)+'.fasta')
+    ln -s '$input' '$named_input' &&
     
-    mob_recon  --num_threads \${GALAXY_SLOTS:-4}  --infile "${named_input}" 
+    mob_recon  --num_threads \${GALAXY_SLOTS:-4}  --infile '${named_input}'
     #if str($adv_param.unicycler_contigs) == "True":
       --unicycler_contigs 
     #end if   
@@ -19,7 +19,7 @@
       --run_circlator 
     #end if 
     #if str($adv_param.min_length_condition.min_length_param) == "True":
-      --min_length ${adv_param.min_length_condition.min_length_value}
+      --min_length '${adv_param.min_length_condition.min_length_value}'
     #end if 
     --run_typer --min_rep_evalue '${adv_param.min_rep_evalue}'
     --min_rep_evalue '${adv_param.min_rep_evalue}'
