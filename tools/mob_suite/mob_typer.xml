@@ -1,7 +1,7 @@
-<tool id="mob_typer" name="MOB-Typer" version="2.0.2+galaxy0">
+<tool id="mob_typer" name="MOB-Typer" version="2.0.5+galaxy0">
   <description>Get the plasmid type and mobility given its sequence</description>
   <requirements>
-     <requirement type="package" version="2.0.2">mob_suite</requirement>
+     <requirement type="package" version="2.0.5">mob_suite</requirement>
   </requirements>   
   <command detect_errors="exit_code">
   <![CDATA[
