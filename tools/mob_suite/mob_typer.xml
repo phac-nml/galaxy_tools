@@ -8,9 +8,7 @@
   <![CDATA[
     ln -s '${input}' '${input.name}' &&
     mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile '${input.name}'
-    #if str($host_range_detailed) == "True":
-      --host_range_detailed 
-    #end if
+    ${host_range_detailed}
    --min_rep_evalue '$adv_param.min_rep_evalue_value'
    --min_mob_evalue '$adv_param.min_mob_evalue_value'
    --min_con_evalue '$adv_param.min_con_evalue_value'
@@ -25,7 +23,7 @@
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
-    <param name="host_range_detailed" type="boolean" checked="true" label="Perform detailed host range analysis" />
+    <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue="" checked="true" label="Perform detailed host range analysis" />
     <section name="adv_param" title="Advanced parameters" expanded="False">
       <param name="min_rep_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for replicon blastn"/> 
       <param name="min_mob_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for relaxase tblastn"/> 
@@ -36,7 +34,7 @@
       <param name="min_mob_ident" label="Minimum sequence identity for relaxases" type="integer"  min="0" max="100" value="80"/>
       <param name="min_ori_ident" label="Minimum sequence identity for oriT elements" type="integer"  min="0" max="100" value="90"/>
       <param name="min_mpf_ident" label="Minimum sequence identity for mpf elements" type="integer"  min="0" max="100" value="80"/>
-    </section>  
+    </section>
   </inputs>
   <outputs>
     <data name="plasmid_report" label="${tool.name}: Plasmid report on ${input.name}" format="tabular">
@@ -44,15 +42,28 @@
     </data>
     <data name="refseq_hostrange_phylogeny_tree" label="${tool.name} on ${on_string}: RefSeq Host Range Phylogeny Tree" format="newick">
       <discover_datasets directory="outdir" pattern=".+_refseqhostrange_phylogeny_tree\.nwk" format="newick" />
-      <filter>str(host_range_detailed)=='True'</filter>
+      <filter>host_range_detailed</filter>
     </data>
   </outputs>
   <tests>
     <test>
-        <param name="input" value="plasmid_476.fasta" ftype="fasta"/>
-        <assert_stderr>
-            <has_text text="CP015838"/>
-         </assert_stderr>
+      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
+      <param name="host_range_detailed" value="True" />
+      <output name="plasmid_report">
+        <assert_contents>
+          <has_text text="000145__HE610900_00001"/>
+            <has_n_columns n="31" />
+            </assert_contents>
+      </output>
+    </test>
+    <test>
+      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
+      <param name="host_range_detailed" value="True" />
+      <output name="refseq_hostrange_phylogeny_tree">
+        <assert_contents>
+          <has_text text="(624:1,984897:1)"/> 
+        </assert_contents>
+      </output>
     </test>
   </tests>
   <help>
