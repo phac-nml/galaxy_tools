@@ -50,6 +50,15 @@
     <data name="literature_hostrange_ascii_tree" from_work_dir="outdir/*_literaturehostrange_asci_tree.txt" label="${tool.name} on ${on_string}: Literature Host Range ASCII Tree" format="txt">
       <filter>host_range_detailed</filter>
     </data>
+    <data name="literature_report" from_work_dir="outdir/*_literature_report.txt" label="${tool.name} on ${on_string}: Literature Report" format="tabular">
+      <filter>host_range_detailed</filter>
+    </data>
+    <data name="refseq_hostrange_report" from_work_dir="outdir/*_refseqhostrange_report.txt" label="${tool.name} on ${on_string}: RefSeq Host Range Report" format="tabular">
+      <filter>host_range_detailed</filter>
+    </data>
+    <data name="refseq_hostrange_phylostats" from_work_dir="outdir/*_refseqhostrange_phylostats.txt" label="${tool.name} on ${on_string}: RefSeq Host Range Phylogeny Stats" format="tabular">
+      <filter>host_range_detailed</filter>
+    </data>
   </outputs>
   <tests>
     <test>
@@ -84,7 +93,13 @@
       <param name="host_range_detailed" value="True" />
       <output name="refseq_hostrange_ascii_tree">
         <assert_contents>
-          <has_line line="-order, Enterobacterales                        |-species, Escherichia coli-no rank, Escherichia coli PCN061"/> 
+          <has_text text="order, Enterobacterales"/>
+          <has_text text="family, Enterobacteriaceae"/>
+          <has_text text="genus, Shigella"/>
+          <has_text text="species, Escherichia coli"/>
+          <has_text text="genus, Serratia"/>
+          <has_text text="species, Serratia marcescens"/>
+          <has_text text="species, Klebsiella pneumoniae"/>
         </assert_contents>
       </output>
     </test>
@@ -93,7 +108,46 @@
       <param name="host_range_detailed" value="True" />
       <output name="literature_hostrange_ascii_tree">
         <assert_contents>
-          <has_line line="-family, Enterobacteriaceae-species, Klebsiella pneumoniae"/> 
+          <has_text text="family, Enterobacteriaceae"/>
+          <has_text text="species, Escherichia coli"/>
+          <has_text text="species, Klebsiella pneumoniae"/>
+          <has_text text="subspecies, Salmonella enterica subsp. enterica"/>
+        </assert_contents>
+      </output>
+    </test>
+    <test>
+      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
+      <param name="host_range_detailed" value="True" />
+      <output name="literature_report">
+        <assert_contents>
+          <has_text text="IncI1"/>
+          <has_text text="R64"/>
+          <has_text text="pHNRD174"/>
+          <has_text text="pKHSB1"/>
+          <has_text text="pCTXM1-MU2"/>
+          <has_text_matching expression="family\tEnterobacteriaceae"/>
+          <has_text_matching expression="order\tEnterobacteriales"/>
+        </assert_contents>
+      </output>
+    </test>
+    <test>
+      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
+      <param name="host_range_detailed" value="True" />
+      <output name="refseq_hostrange_report">
+        <assert_contents>
+          <has_text text="IncI1"/>
+          <has_text text="Enterobacterales"/> 
+        </assert_contents>
+      </output>
+    </test>
+    <test>
+      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
+      <param name="host_range_detailed" value="True" />
+      <output name="refseq_hostrange_phylostats">
+        <assert_contents>
+          <has_line_matching expression="rank\tsci_name\tdb_hits\tconvergance_rank\tconvergance_sci_name"/>
+          <has_line_matching expression="family\tEnterobacteriaceae\t351"/>
+          <has_line_matching expression="genus\tSalmonella\t113"/> 
         </assert_contents>
       </output>
     </test>
