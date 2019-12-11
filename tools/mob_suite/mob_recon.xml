@@ -2,7 +2,8 @@
   <description>Type contigs and extract plasmid sequences</description>
   <requirements>
      <requirement type="package" version="2.0.5">mob_suite</requirement>
-  </requirements>   
+  </requirements>
+  <version_command>mob_recon --version</version_command>
   <command detect_errors="exit_code">
   <![CDATA[  
     #import re
