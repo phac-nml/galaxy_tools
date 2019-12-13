@@ -1,0 +1,29 @@
+<tool id="concat_fastqs" name="Concat R1 and R2 fastq" version="0.2">
+  <description>Combine forward and reverse fastqs files </description>
+  <command>
+	cat $texts.forward $texts.reverse > $output
+  </command>
+  <inputs>
+     <param name="texts" type="data_collection" label="Paired Collection of Fastq reads" help="" optional="false" collection_type="paired" />
+  </inputs>
+  <outputs>
+    <data name="output"  format="fastqsanger" label="$texts.name"></data>
+  
+  </outputs>
+  <tests>
+	  <test>
+	    <param name="texts">
+        <collection type="paired">
+          <element name="forward" value="forward.fastq" />
+          <element name="reverse" value="reverse.fastq" />
+        </collection>
+      </param>
+      <output name="output" file="output.fastq" />      
+
+	  </test>
+
+  </tests>
+  <help>
+<![CDATA[Concat is used to concatenate two files]]>
+  </help>
+</tool>
