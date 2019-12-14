@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<tool id="patrist" name="PATRIST" version="@VERSION@">
+    <description>extract patristic distance from a tree</description>
+    <macros>
+        <token name="@VERSION@">0.1.2</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="2.7.11">python</requirement>
+        <requirement type="package">biopython</requirement>
+    </requirements>
+    <version_command>python '$__tool_directory__/patrist.py'</version_command>
+    <command detect_errors="aggressive">
+<![CDATA[
+python $__tool_directory__/patrist.py 
+
+#if $minimize:
+    --minimize 
+#end if
+#if $keep_ties:
+    --keep_ties 
+#end if
+--overwrite 
+
+$tree $cutoff $outfile
+]]>
+    </command>
+    <inputs>
+        <param format="nhx" name="tree" type="data" multiple="false" label="Newick tree file" />
+        <param name="cutoff" type="float" value="0.5" label="Maximum patristic distance" />
+        <param name="minimize" type="boolean" truevalue="" falsevalue="" checked="false" label="Report no more than one nearest neighbour per tip" />
+        <param name="keep_ties" type="boolean" truevalue="" falsevalue="" checked="false" label="If more than one tip has the same patristic distance report all as nearest neighbours" />
+    </inputs>
+    <outputs>
+        <data name="outfile" format="csv" label="${tool.name} on ${on_string}:outfile.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="tree" value="tree.nhx" />
+            <param name="cutoff" value="0.5" />
+            <output name="outfile" file="outfile.csv" ftype="csv" lines_diff="0" />
+        </test>
+    </tests>
+    <help>
+<![CDATA[
+
+===========
+Description
+===========
+
+.. class:: infomark
+
+Patrist will rapidly extract patristic distances from a tree for clustering tips
+below a user-defined threshold.
+
+.. _Patrist: https://gist.github.com/ArtPoon/7330231e74201ded54b87142a1d6cd02
+
+-----
+Input
+-----
+
+'tree', <input> file containing Newick tree string.
+
+----------
+Parameters
+----------
+
+'cutoff', Maximum patristic distance.
+'--minimize', Report no more than one nearest neighbour per tip.
+'--keep_ties', If more than one tip has the same patristic distance report all as nearest neighbours.
+
+------
+Output
+------
+
+'outfile', <output> file to write results in CSV format.' The script overwrites any file with the current file name in the output directory.
+
+]]>
+    </help>
+    <citations>
+    </citations>
+</tool>
