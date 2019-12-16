@@ -5,23 +5,23 @@
         <token name="@VERSION@">0.1.2</token>
     </macros>
     <requirements>
-        <requirement type="package" version="2.7.11">python</requirement>
-        <requirement type="package">biopython</requirement>
+        <requirement type="package" version="3.8.0">python</requirement>
+        <requirement type="package" version="1.74">biopython</requirement>
     </requirements>
     <version_command>python '$__tool_directory__/patrist.py'</version_command>
     <command detect_errors="aggressive">
 <![CDATA[
-python $__tool_directory__/patrist.py 
+python '$__tool_directory__/patrist.py' 
 
-#if $minimize:
+#if '$minimize':
     --minimize 
 #end if
-#if $keep_ties:
+#if '$keep_ties':
     --keep_ties 
 #end if
 --overwrite 
 
-$tree $cutoff $outfile
+'$tree' '$cutoff' '$outfile'
 ]]>
     </command>
     <inputs>

@@ -132,7 +132,7 @@ def main():
     assert args.cutoff > 0, 'Cutoff %f must be greater than 0.' % (args.cutoff)
 
     if os.path.exists(args.outfile) and not args.overwrite:
-        print 'Output file', args.outfile, 'already exists, use --overwrite.'
+        print ('Output file', args.outfile, 'already exists, use --overwrite.')
         sys.exit()
 
     outfile = open(args.outfile, 'w')
@@ -141,7 +141,7 @@ def main():
     trees = Phylo.parse(args.tree, 'newick')
     for treenum, tree in enumerate(trees):
         results = find_short_edges(tree, args.cutoff)
-        for key, dist in results.iteritems():
+        for key, dist in results.items():
             outfile.write('%d,%s,%s,%f\n' % (treenum, key[0], key[1], dist))
 
     outfile.close()
