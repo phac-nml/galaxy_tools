@@ -7,7 +7,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        python $__tool_directory__/promer_substitutions.py $reference_fasta $query_fasta
+        python '$__tool_directory__/promer_substitutions.py' '$reference_fasta' '$query_fasta'
 
     ]]></command>
 
@@ -20,13 +20,13 @@
         <data format="tabular" label="substitutions" name="output_substitutions" from_work_dir="snps.tab" />
         <data format="fasta" label="contigs" name="output_contigs" from_work_dir="contigs.fasta" />
     </outputs>
-were
+
     <tests>
         <test>
             <param name="query_fasta" value="query.fasta" />
-	    <param name="reference_fasta" value="reference.fasta" />
-	    <output name="output_substitutions" file="snps.tab" ftype="tabular" />
-	    <output name="output_contigs" file="contigs.fasta" ftype="fasta" />
+            <param name="reference_fasta" value="reference.fasta" />
+            <output name="output_substitutions" file="snps.tab" ftype="tabular" />
+            <output name="output_contigs" file="contigs.fasta" ftype="fasta" />
         </test>
     </tests>
 
