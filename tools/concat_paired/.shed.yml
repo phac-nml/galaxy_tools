@@ -1,4 +1,4 @@
-categories: [Assembly]
+categories: [Text Manipulation]
 description: Concatenate paired datasets
 name: concat_paired
 owner: nml
