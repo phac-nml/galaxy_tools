@@ -1,7 +1,7 @@
 <tool id="concat_fastqs" name="Concat R1 and R2 fastq" version="0.2">
   <description>Combine forward and reverse fastqs files </description>
   <command>
-	cat $texts.forward $texts.reverse > $output
+	cat '$texts.forward' '$texts.reverse' > '$output'
   </command>
   <inputs>
      <param name="texts" type="data_collection" label="Paired Collection of Fastq reads" help="" optional="false" collection_type="paired" />

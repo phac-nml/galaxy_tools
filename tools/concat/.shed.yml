@@ -1,7 +1,0 @@
-categories: [Assembly]
-description: concatenate
-name: concat
-owner: nml
-long_description: concat - Concatenates two files into a resulting file
-remote_repository_url: https://github.com/phac-nml/concat
-homepage_url: https://github.com/phac-nml/concat
