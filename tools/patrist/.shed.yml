@@ -1,0 +1,7 @@
+categories: [Phylogenetics]
+description: Extract Patristic Distance From a Tree
+name: patrist
+owner: nml
+long_description: patrist - Patrist will rapidly extract patristic distances from a tree for clustering tips below a user-defined threshold.
+remote_repository_url: https://github.com/phac-nml/patrist
+homepage_url: https://gist.github.com/ArtPoon/7330231e74201ded54b87142a1d6cd02
