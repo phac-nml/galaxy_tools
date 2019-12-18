@@ -1,0 +1,7 @@
+categories: [Assembly]
+description: Aligns two sets of contigs and reports amino acid substitutions between them
+name: promer
+owner: nml
+long_description: promer - Aligns two sets of contigs and reports amino acid substitutions between them
+remote_repository_url: https://github.com/phac-nml/promer
+homepage_url: https://github.com/phac-nml/promer
