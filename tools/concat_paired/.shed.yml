@@ -1,0 +1,7 @@
+categories: [Text Manipulation]
+description: Concatenate paired datasets
+name: concat_paired
+owner: nml
+long_description: concat - Concatenates (list) paired collection into a single list
+remote_repository_url: https://github.com/phac-nml/concat
+homepage_url: https://github.com/phac-nml/concat
