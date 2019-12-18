@@ -1,0 +1,4 @@
+categories: [Sequence Analysis]
+description: Fixes Spades Fasta ids
+name: SPAdes fasta header fixer
+owner: nml
