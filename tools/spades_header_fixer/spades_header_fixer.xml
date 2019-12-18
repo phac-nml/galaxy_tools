@@ -10,12 +10,11 @@
   <tests>
     <test>
          <param name="input" value="spades_before.fasta" />
-         <output name="spades_header_fixed" file="spades_header_fixed.fasta" ftype="fasta"/>
+         <output name="output" file="spades_header_fixed.fasta" ftype="fasta"/>
     </test>
   </tests>
 
 	<help>
 	
-
 	</help>
 </tool>
