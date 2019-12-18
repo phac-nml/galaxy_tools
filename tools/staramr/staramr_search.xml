@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.7.0</token>
+	    <token name="@VERSION@">0.7.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -249,13 +249,11 @@ summary.tsv
 
 A summary of all detected AMR genes/mutations in each genome, one genome per line.
 
-+------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------+
-| Isolate ID | Genotype                                                  | Predicted Phenotype                                                                                       | Plasmid                             |
-+============+===========================================================+===========================================================================================================+=====================================+
-| SRR1952908 | aadA1, aadA2, blaTEM-57, cmlA1, gyrA (S83Y), sul3, tet(A) | streptomycin, ampicillin, chloramphenicol, ciprofloxacin I/R, nalidixic acid, sulfisoxazole, tetracycline | ColpVC, IncFIB(S), IncFII(S), IncI1 |
-+------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------+
-| SRR1952926 | blaTEM-57, gyrA (S83Y), tet(A)                            | ampicillin, ciprofloxacin I/R, nalidixic acid, tetracycline                                               | ColpVC, IncFIB(S), IncFII(S), IncI1 |
-+------------+-----------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+-------------------------------------+
+| Isolate ID | Quality Module | Genotype                                                  | Predicted Phenotype                                                                                       | Plasmid                             | Scheme    | Sequence Type | Genome Length | N50 value | Number of Contigs Greater Than Or Equal To 300 bp | Quality Module Feedback |
+|------------|----------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------------------------------|-----------|---------------|---------------|-----------|---------------------------------------------------|-------------------------|
+| SRR1952908 | Passed         | aadA1, aadA2, blaTEM-57, cmlA1, gyrA (S83Y), sul3, tet(A) | streptomycin, ampicillin, chloramphenicol, ciprofloxacin I/R, nalidixic acid, sulfisoxazole, tetracycline | ColpVC, IncFIB(S), IncFII(S), IncI1 | senterica | 11            | 4796082       | 225419    | 59                                                |                         |
+| SRR1952926 | Passed         | blaTEM-57, gyrA (S83Y), tet(A)                            | ampicillin, ciprofloxacin I/R, nalidixic acid, tetracycline                                               | ColpVC, IncFIB(S), IncFII(S), IncI1 | senterica | 11            | 4794071       | 225380    | 50                                                |                         |
+
 
 detailed_summary.tsv
 ````````````````````
@@ -374,7 +372,7 @@ The command-line, database versions, and other settings used to run `staramr`.
 ::
 
     command_line                  = staramr search -o out --pointfinder-organism salmonella SRR1952908.fasta SRR1952926.fasta
-    version                       = 0.6.1
+    version                       = 0.7.1
     start_time                    = 2019-04-25 16:01:32
     end_time                      = 2019-04-25 16:01:34
     total_minutes                 = 0.04
