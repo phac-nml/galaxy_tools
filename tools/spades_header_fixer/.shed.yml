@@ -1,4 +1,6 @@
-categories: [Sequence Analysis]
+categories: [Fasta Manipulation]
 description: Fixes Spades Fasta ids
 name: spades_fasta_header_fixer
 owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools
+homepage_url: https://github.com/phac-nml/galaxy_tools

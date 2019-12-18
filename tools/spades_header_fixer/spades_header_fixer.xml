@@ -1,8 +1,8 @@
 <tool id="spades_header_fixer" name="SPAdes fasta header fixer" version="1.1.1">
 	<description>Fixes Spades Fasta ids</description>
-	<command >sed -r "s/>NODE(_[0-9]+)_(.*)/>${input.name}\1 \2/g" $input >$output</command>
+	<command >sed -r "s/>NODE(_[0-9]+)_(.*)/>${input.element_identifier}\1 \2/g" $input >$output</command>
 	<inputs>
-		<param name="input" type="data" format="fasta" label="fix these fasta headers"/>
+		<param name="input" type="data" format="fasta" label="Fix these fasta headers"/>
 		</inputs>
 	<outputs>
 		<data name="output" format="fasta"/>
@@ -14,7 +14,19 @@
     </test>
   </tests>
 
-	<help>
-	
-	</help>
+	<help><![CDATA[
+    SPAdes fasta header fixer
+    =======
+
+    The SPAdes header fixer tool replaces the default value of NODE from SPAdes fasta header(s) to either a filename or a collection identifier.
+	]]></help>
+
+  <citations>
+        <citation type="bibtex">@ARTICLE{a1,
+            title = {SPAdes fasta header fixer},
+            author = {Philip Mabon},
+            url = {https://github.com/phac-nml/galaxy_tools}
+            }
+        }</citation>
+    </citations>
 </tool>
