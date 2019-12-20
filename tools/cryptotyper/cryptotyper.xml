@@ -1,0 +1,111 @@
+<tool id="cryptotyper" name = "cryptotyper" version = "1.1">
+  <description> Crypto-typer is a standalone tool to determine species and subtype based on 18S and gp60 markers. </description>
+  <requirements>
+    <requirement type="package" version ="1.1">crypto_typer</requirement>
+  </requirements>
+  <command detect_errors="exit_code">
+     <![CDATA[
+
+     #set $ref_file=''
+     #set $ref_name=''
+
+
+     #if $reference.ref.value in ("no")
+        ln -s "${reference.db}" "${reference.db.name}" &&
+        #set $ref_file = $reference.db.name
+     #end if
+
+     ##cp $ref_file '.';
+     ##makeblastdb -in $ref_name -dbtype 'nucl' -parse_seqids;
+
+     #set $files = ''
+     #if hasattr($primers.abi_input, '__iter__')
+       #for $i in $primers.abi_input
+          ln -s "${i}" "${i.name}" &&
+          #if len($files) > 0
+            #set $files = $files + ',' + str($i.name)
+          #else
+            #set $files = str($i.name)
+          #end if      
+        #end for
+     #else
+        ln -s "${primers.abi_input}" "${primers.abi_input.name}" &&
+        #set $files = $primers.abi_input.name
+     #end if
+
+     #if $primers.seqtype.value in ("contig")
+        crypto_typer -i "$files" -m "$marker" -t "$primers.seqtype" -f "$primers.f_name" -r "$primers.r_name" -o "result";
+     #elif $primers.seqtype.value in ("forward")
+        crypto_typer -i "$files" -m "$marker" -t "$primers.seqtype" -f "" -o "result";
+     #elif $primers.seqtype.value in ("reverse")
+        crypto_typer -i "$files" -m "$marker" -t "$primers.seqtype" -r "" -o "result";
+     #end if
+     ]]>
+  </command>
+  <inputs>
+      <param name="marker" type="select" label="Marker">
+          <option value="18S">18S</option>
+          <option value="gp60">gp60</option>
+      </param>
+      <conditional name="reference">
+        <param name="ref" type="select" label="Use default reference file?">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </param>
+        <when value="no">
+            <param name="db" type="data" format="fasta" label="Reference Database File:" help=".fa file type"/>
+        </when>
+      </conditional>
+      <conditional name="primers">
+        <param name="seqtype" type="select" label="Type of Sequences">
+            <option value="forward">Forward Only</option>
+            <option value="reverse">Reverse Only</option>
+            <option value="contig">Contig</option>
+        </param>
+        <when value="contig">
+          <param name="abi_input" type="data_collection" format="ab1" label="Paired Sequencing File(s)" help=".ab1 file type"/>
+          <param name="f_name" type="text" label="Forward Primer Name:"/>
+          <param name="r_name" type="text" label="Reverse Primer Name:"/>
+        </when>
+        <when value="forward">
+          <param name="abi_input" type="data" format="ab1" label="Forward Sequencing File(s)" help=".ab1 file type"/>
+
+        </when>
+        <when value="reverse">
+          <param name="abi_input" type="data" format="ab1" label="Reverse Sequencing File(s)" help=".ab1 file type"/>
+        </when>
+     </conditional>  
+  </inputs>
+  <outputs>
+    <data name="outfile" format="fasta" from_work_dir="result_crypto_typer_report.fa" label="${tool.name}_${primers.abi_input.name}_results"/>
+  </outputs>
+  <help>
+
+**Syntax**
+
+Crypto-typer is a standalone tool to *in-silico*  determine species and subtype based on 18S and gp60 markers.
+For more information please visit https://github.com/phac-nml/mob-suite/.
+
+-----
+
+**Input:**
+
+A AB1 file with covering either gp60 or 18S amplicon:
+
+
+**Output:**
+
+FASTA file containing deconvoluted sequences and also identification of the *Cryptosporidium* species
+  </help>
+  <citations>
+    <citation type="bibtex">
+  @misc{githubcrypto-typer,
+  author = {Yanta C, Guy R},
+  title = {Crypto-typer: standalone tool to determine Cryptosporidium species and subtype based on 18S and gp60 markers},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/christineyanta/crypto_typer}
+    }</citation>
+  </citations>
+
+</tool>
