@@ -1,0 +1,81 @@
+<tool id="pneumocat"
+      name="PneumoCaT"
+      version="0.1.0">
+    <requirements>
+        <requirement type="package" version="1.2.1">pneumocat</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    
+    #import os
+
+    #if $input.type == "paired"
+        #set $for_input = "{}.fastq".format(os.path.splitext($input.forward.name)[0])
+        #set $rev_input = "{}.fastq".format(os.path.splitext($input.reverse.name)[0])
+        ln -s  "$input.forward" ./$for_input &&
+        ln -s  "$input.reverse" ./$rev_input &&
+
+    #else
+        #set $for_input = "{}.fastq".format(os.path.splitext($input.fastq_collection.forward.name)[0])
+        #set $rev_input = "{}.fastq".format(os.path.splitext($input.fastq_collection.reverse.name)[0])
+        ln -s "$input.fastq_collection.forward" $for_input &&
+        ln -s "$input.fastq_collection.reverse" $rev_input &&
+
+    #end if
+
+    PneumoCaT.py -1 "$for_input" -2 "$rev_input" -o outputs --threads "\${GALAXY_SLOTS:-1}" --cleanup
+
+    ]]></command>
+    <inputs>
+        <conditional name="input">
+            <param name="type" type="select" label="Sequence Data Type">
+                <option value="paired">Paired-end reads (FASTQ)</option>
+                <option value="paired_collection">Paired-end reads collection (FASTQ)</option>
+            </param>
+            <when value="paired">
+                <param name="forward"
+                    type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz"
+                    optional="false"
+                    label="Forward reads (FASTQ)"
+                    help="Must have ASCII encoded quality scores"
+                />
+                <param name="reverse"
+                    type="data" format="fastq,fastqsanger,fastq.gz,fastqsanger.gz"
+                    optional="false"
+                    label="Reverse reads (FASTQ)"
+                    help="File format must match the Forward FASTQ file"
+                />
+            </when>
+            <when value="paired_collection">
+                <param name="fastq_collection"
+                    type="data_collection" format="fastq,fastqsanger"
+                    collection_type="paired"
+                    optional="false"
+                    label="Paired-end reads collection (FASTQ)"
+                />
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format="txt" name="coverage_summary" from_work_dir="outputs/coverage_summary.txt" label="coverage summary"/>
+        <data format="xml" name="results" from_work_dir="outputs/*.results.xml" label="${input.forward.name} results"/>
+        <data format="xml" name="specific_results" from_work_dir="outputs/SNP_based_serotyping/*.results.xml" label="${input.forward.name} specific results"/>
+        <data format="yml" name="yml_results" from_work_dir="outputs/SNP_based_serotyping/variant_summary.yml" label="${input.forward.name} variant summary"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="type" value="paired_collection"/>
+            <param name="fastq_collection">
+            <collection type="paired">
+            <element name="forward" value="PHESPV0253.R1.fastq.gz" />
+            <element name="reverse" value="PHESPV0253.R2.fastq.gz" />
+            </collection>
+            </param>
+
+            <output name="coverage_summary.txt" file="coverage_summary.txt"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+aaaa
+    ]]></help>
+</tool>
