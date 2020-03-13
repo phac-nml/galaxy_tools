@@ -1,9 +1,9 @@
-<tool id="pneumocat"
-      name="PneumoCaT"
-      version="0.1.0">
-    <requirements>
-        <requirement type="package" version="1.2.1">pneumocat</requirement>
-    </requirements>
+<tool id="pneumocat" name="PneumoCaT" version="@VERSION@">
+    <description> Pneumococcal Capsular Typing of illumina reads</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
     
     #import os
@@ -59,7 +59,6 @@
         <data format="txt" name="coverage_summary" from_work_dir="outputs/coverage_summary.txt" label="coverage summary"/>
         <data format="xml" name="results" from_work_dir="outputs/*.results.xml" label="${input.forward.name} results"/>
         <data format="xml" name="specific_results" from_work_dir="outputs/SNP_based_serotyping/*.results.xml" label="${input.forward.name} specific results"/>
-        <data format="yml" name="yml_results" from_work_dir="outputs/SNP_based_serotyping/variant_summary.yml" label="${input.forward.name} variant summary"/>
     </outputs>
     <tests>
         <test>
@@ -70,7 +69,6 @@
             <element name="reverse" value="PHESPV0253.R2.fastq.gz" />
             </collection>
             </param>
-
             <output name="coverage_summary.txt" file="coverage_summary.txt"/>
         </test>
     </tests>
@@ -78,4 +76,5 @@
     
 aaaa
     ]]></help>
+    <expand macro="citations" />
 </tool>
