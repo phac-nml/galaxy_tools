@@ -4,27 +4,56 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="exit_code">
+<![CDATA[
+
+#import os
+#import re
+
+#def check_ending($name, $forward_read=True)
+    ## Pneumocat needs to have name_1.fastq and name_2.fastq to work
+    ## Check for correct ending and change ending if needed
+
+    #if re.search(r'(\.|_)\S*(1|2)*$', $name)
+        #if $forward_read
+            #return re.sub(r'(\.|_)\S*(1|2)*$', '_R1.fastq', $name)
+        #else
+            #return re.sub(r'(\.|_)\S*(1|2)*$', '_R2.fastq', $name)
+        #end if
     
-    #import os
-
-    #if $input.type == 'paired'
-        #set $for_input = '{}.fastq'.format(os.path.splitext($input.forward.name)[0])
-        #set $rev_input = '{}.fastq'.format(os.path.splitext($input.reverse.name)[0])
-        ln -s  '$input.forward' ./$for_input &&
-        ln -s  '$input.reverse' ./$rev_input &&
-
     #else
-        #set $for_input = '{}.fastq'.format(os.path.splitext($input.fastq_collection.forward.name)[0])
-        #set $rev_input = '{}.fastq'.format(os.path.splitext($input.fastq_collection.reverse.name)[0])
-        ln -s '$input.fastq_collection.forward' $for_input &&
-        ln -s '$input.fastq_collection.reverse' $rev_input &&
-
+        #if $forward_read
+            #return '{}_R1.fastq'.format($name)
+        #else
+            #return '{}_R2.fastq'.format($name)
+        #end if
     #end if
+#end def
 
-    PneumoCaT.py -1 '$for_input' -2 '$rev_input' -o outputs --threads '\${GALAXY_SLOTS:-1}' --cleanup
 
-    ]]></command>
+#if $input.type == 'paired'
+    #set $initial = re.sub('[^\w_]', '_', os.path.splitext($input.forward.name)[0])
+    
+    #set $for_input = $check_ending($initial)
+    #set $rev_input = $check_ending($initial, forward_read=False)
+
+    ln -s  '$input.forward' ./$for_input &&
+    ln -s  '$input.reverse' ./$rev_input &&
+
+#elif $input.type == 'paired_collection'
+    #set $initial = re.sub('[^\w_]', '_', os.path.splitext($input.fastq_collection.forward.name)[0])
+    
+    #set $for_input = $check_ending($initial)
+    #set $rev_input = $check_ending($initial, forward_read=False)
+
+    ln -s  '$input.fastq_collection.forward' ./$for_input &&
+    ln -s  '$input.fastq_collection.reverse' ./$rev_input &&
+
+#end if
+
+PneumoCaT.py -1 '$for_input' -2 '$rev_input' -o outputs --threads '\${GALAXY_SLOTS:-1}' --cleanup
+]]>
+    </command>
     <inputs>
         <conditional name="input">
             <param name="type" type="select" label="Sequence Data Type">
@@ -57,10 +86,10 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format="txt" name="coverage_summary" from_work_dir="outputs/coverage_summary.txt" label="${input.forward.name} Coverage Summary"/>
-        <data format="xml" name="results" from_work_dir="outputs/*.results.xml" label="${input.forward.name} Results"/>
-        <data format="xml" name="specific_results" from_work_dir="outputs/SNP_based_serotyping/*.results.xml" label="${input.forward.name} Serotype Distinction"/>
-        <data format="txt" name="variant_summary" from_work_dir="outputs/SNP_based_serotyping/variant_summary.yml" label="Variant Summary"/>
+        <data format="txt" name="coverage_summary" from_work_dir="outputs/coverage_summary.txt" label="PneumoCaT Coverage Summary.txt"/>
+        <data format="xml" name="results" from_work_dir="outputs/*.results.xml" label="PneumoCaT Results.xml"/>
+        <data format="xml" name="specific_results" from_work_dir="outputs/SNP_based_serotyping/*.results.xml" label="PneumoCaT Serotype Distinction.xml"/>
+        <data format="txt" name="variant_summary" from_work_dir="outputs/SNP_based_serotyping/variant_summary.yml" label="PneumoCaT Variant Summary.yml"/>
     </outputs>
     <tests>
         <test>
@@ -72,10 +101,80 @@
             <output name="coverage_summary" file="coverage_summary.txt" />
             <output name="results" file="results.xml" />
         </test>
+        <test>
+            <conditional name="input">
+                <param name="type" value="paired_collection" />
+                <param name="fastq_collection">
+                    <collection type="paired">
+                        <element name="forward" value="09N_R1.fastq.gz" ftype="fastq.gz" />
+                        <element name="reverse" value="09N_R2.fastq.gz" ftype="fastq.gz" />
+                    </collection>
+                </param>
+            </conditional>
+            <output name="coverage_summary" file="coverage_summary.txt" />
+            <output name="results" file="results.xml" />
+        </test>
     </tests>
-    <help><![CDATA[
+    <help>
+<![CDATA[
     
-aaaa
-    ]]></help>
+PneumoCaT
+---------
+
+PneumoCaT (Pneumococcal Capsular Typing) uses a two-step step approach to assign capsular type to
+S.pneumoniae genomic data (Illumina). More info can be found at the `PneumoCaT github page <https://github.com/phe-bioinformatics/PneumoCaT>`_
+
+Program Steps
+#############
+
+- **Step 1:** Reads from each readset are mapped to capsular locus sequences for all known capsular types using bowtie2
+
+    - This step is considered successful if the readset matches > 90% to one or more capsular locus sequences
+
+        - If only a singular capsular locus is matched, PneumoCaT terminates and reports that as the assigned capsular type
+    
+        - If more than 1 loci are matched then the tool moves to step 2
+
+- **Step 2:** Variant calling with the capsular type variant database
+
+    - Used to distinguish serotypes within a serogroup/genogroup
+
+Please note PneumoCaT applies a quality metric requiring a mean depth of 20 reads across the mapped sequence
+and a minimum depth of 5 reads for mapping. The report will retrun "Failed" if these conditions are not met.
+
+Inputs
+######
+
+- **Paired-end Illumina reads** with one of the following example formats is prefered:
+
+    - <name>_1.fastq and <name>_2.fastq
+
+    - <name>_R1.fastq and <name>_R2.fastq
+
+    - <name>_R1.fastqsanger.gz and <name>_R2.fastqsanger.gz
+
+- If the reads are not formatted as above, the wrapper will append _R1.fastq and _R2.fastq to allow function
+
+Outputs
+#######
+
+Please see `**PneumoCaTs interpreting results document** <https://github.com/phe-bioinformatics/PneumoCaT/blob/master/Documentation/InterpretingResults.pdf>`_
+for full up-to-date information on how to interpret PneumoCaT results.
+
+Galaxy will output 4 results running PneumoCaT with 2 of the results only appearing if **Step 2** variant calling is done
+
+**1. Coverage Summary.txt** -- Always output unless fails --
+
+**2. Results.xml** -- Always output unless fails --
+
+**3. Serotype distinction.xml** -- Step 2 Required --
+
+**4. Variant Summary.txt** -- Step 2 Required --
+
+
+**Note** - Galaxy will always output files 3 and 4 even if step 2 is not done. In these cases, the files will have no data.
+
+]]>
+    </help>
     <expand macro="citations" />
 </tool>
