@@ -15,12 +15,12 @@
     <tests>
         <test>
             <param name="input1" value="test_genes.txt"/>
-            <output name="output1"/>
+            <output name="output1">
                 <assert_contents>
                     <has_text text="CCR5" />
                 </assert_contents>
             </output>
-            <output name="output2"/>
+            <output name="output2">
                 <assert_contents>
                     <has_text text="Chromosome\tPosition_Start\tRSID\tReference_Allele\tAlternate_Allele\tScore\tQuality\tLoF_Variant\tLoF_Annotation\tHGNC_Symbol	Ensembl Code" />
                     <has_text text="3\t46414935\trs938517991\tAT\tA\t9974.16\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
