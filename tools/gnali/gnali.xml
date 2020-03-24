@@ -3,24 +3,32 @@
         <requirement type="package" version="0.1">gnali</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        gnali -i '$input1' -o '$input2'
+        gnali -i '$input1' -o output
     ]]></command>
     <inputs>
         <param type="data" name="input1" format="txt" />
-        <param type="text" name="input2" optional="true"/>
     </inputs>
     <outputs>
-        <data format="dir" name="output1" from_work_dir="$input2/" />
-        <data name="output2" format="txt" from_work_dir="$input2/Nonessential_Host_Genes_(Basic).txt" />
-        <data name="output3" format="txt" from_work_dir="$input2/Nonessential_Host_Genes_(Detailed).txt" />
+        <data name="output1" format="txt" from_work_dir="output/Nonessential_Host_Genes_(Basic).txt" />
+        <data name="output2" format="txt" from_work_dir="output/Nonessential_Host_Genes_(Detailed).txt" />
     </outputs>
     <tests>
         <test>
             <param name="input1" value="test_genes.txt"/>
-            <param name="input2" value="results"/>
-            <output name="output1" file="results/"/>
-            <output name="output2" file="results/Nonessential_Host_Genes_(Basic).txt"/>
-            <output name="output3" file="results/Nonessential_Host_Genes_(Detailed).txt"/>
+            <output name="output1"/>
+                <assert_contents>
+                    <has_text text="CCR5" />
+                </assert_contents>
+            </output>
+            <output name="output2"/>
+                <assert_contents>
+                    <has_text text="Chromosome\tPosition_Start\tRSID\tReference_Allele\tAlternate_Allele\tScore\tQuality\tLoF_Variant\tLoF_Annotation\tHGNC_Symbol	Ensembl Code" />
+                    <has_text text="3\t46414935\trs938517991\tAT\tA\t9974.16\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                    <has_text text="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t74264261.52	PASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                    <has_text text="3\t46415066\trs146972949\tC\tT\t120238.89\tPASS\tT\tstop_gained	CCR5\tENSG00000160791" />
+                    <has_text text="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t1947603.90\tPASS\t-\tframeshift_variant\tCCR5\tENSG000001607915" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
