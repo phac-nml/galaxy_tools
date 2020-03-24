@@ -1,3 +1,7 @@
 *output*
 *pybiomart*
 
+# venv stuff
+bin/
+lib/
+pyvenv.cfg
