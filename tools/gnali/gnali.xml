@@ -3,24 +3,24 @@
         <requirement type="package" version="0.1">gnali</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        gnali -i '$input1' -o output
+        gnali -i '$test_genes' -o output
     ]]></command>
     <inputs>
-        <param type="data" name="input1" format="txt" />
+        <param type="data" name="test_genes" label="Test genes" format="txt" />
     </inputs>
     <outputs>
-        <data name="output1" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
-        <data name="output2" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
+        <data name="basic_output" label="gNALI basic output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
+        <data name="detailed_output" label="gNALI detailed output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
     </outputs>
     <tests>
         <test>
-            <param name="input1" value="test_genes.txt"/>
-            <output name="output1">
+            <param name="test_genes" value="test_genes.txt"/>
+            <output name="basic_output">
                 <assert_contents>
                     <has_text text="CCR5" />
                 </assert_contents>
             </output>
-            <output name="output2">
+            <output name="detailed_output">
                 <assert_contents>
                     <has_text_matching expression="Chromosome\tPosition_Start\tRSID\tReference_Allele\tAlternate_Allele\tScore\tQuality\tLoF_Variant\tLoF_Annotation\tHGNC_Symbol\tEnsembl Code" />
                     <has_text_matching expression="3\t46414935\trs938517991\tAT\tA\t9974.16\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
@@ -32,30 +32,46 @@
         </test>
     </tests>
     <help><![CDATA[
-        usage: 
-            gNALI [-h] -i INPUT_FILE [-o OUTPUT_DIR] [-f]
 
-Given a list of genes to test, gNALI finds all potential loss of function
-variants of those genes.
+gNALI - Gene Nonessentiality and Loss-of-function Identifier
+============================================================
 
-optional arguments:
-    -h, --help            show this help message and exit
-    -i INPUT_FILE, --input_file INPUT_FILE
-                            File of genes to test. Accepted formats: csv, txt
-    -o OUTPUT_DIR, --output_dir OUTPUT_DIR
-                            Name of output directory. Default: results-ID/
-    -f, --force           Force existing output folder to be overwritten
+gNALI is a tool to find (high confidence) potential loss-of-function variants of genes.
+
+
+Authors
+-------
+
+gNALI was developed by Xia Liu.
+
+
+Usage
+-----
+
+Accepted input formats: csv, txt, tsv
+
+Your input file should contain a list of genes(as HGNC symbols) to test. 
+It should not contain any blank lines until the end of the list.
+
+Example input:
+
+    CCR5
+    ALCAM
+
+There will be two output files:
+    1. A basic output file, containing genes (as HGNC symbols) with nonessential, loss-of-function variants.
+    2. A detailed output file, with more information on the variants.
 
     ]]></help>
     <citations>
         <citation type="bibtex">
-@misc{github0.1,
-  author = {LastTODO, FirstTODO},
-  year = {TODO},
-  title = {0.1},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  url = {https://github.com/phac-nml/gnali/tree/release/0.1},
-}</citation>
+    @misc{GitHubgnali,
+    author = {Xia, Liu},
+    year = {2020},
+    title = {gnali},
+    publisher = {phac-nml},
+    journal = {GitHub repository},
+    url = {https://github.com/phac-nml/gnali/tree/release/0.1},
+    }</citation>
     </citations>
 </tool>
