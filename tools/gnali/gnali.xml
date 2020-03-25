@@ -53,12 +53,8 @@ Accepted input formats: csv, txt, tsv
 Your input file should contain a list of genes(as HGNC symbols) to test. 
 It should not contain any blank lines until the end of the list.
 
-Example input:
-
-    CCR5
-    ALCAM
-
 There will be two output files:
+
     1. A basic output file, containing genes (as HGNC symbols) with nonessential, loss-of-function variants.
     2. A detailed output file, with more information on the variants.
 
