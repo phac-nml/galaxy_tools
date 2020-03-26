@@ -1,0 +1,7 @@
+categories: [Variant Analysis]
+description: A tool to find nonessential, loss-of-function gene variants
+name: gnali
+owner: nml
+long_description: Find nonessential, high-confidence loss-of-function gene variants based on the GRCh37 dataset.
+remote_repository_url: https://github.com/phac-nml/gnali/tree/release/0.1
+homepage_url: https://github.com/phac-nml/gnali/tree/release/0.1
