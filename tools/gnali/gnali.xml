@@ -1,4 +1,5 @@
-<tool id="gnali" name="Get nonessential, LoF variants" version="0.1.0" python_template_version="3.6">
+<tool id="gnali" name="gNALI" version="0.1.0" python_template_version="3.6">
+    <description>Get nonessential, LoF variants</description>
     <requirements>
         <requirement type="package" version="0.1">gnali</requirement>
     </requirements>
