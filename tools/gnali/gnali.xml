@@ -68,7 +68,7 @@ There will be two output files:
     title = {gnali},
     publisher = {phac-nml},
     journal = {GitHub repository},
-    url = {https://github.com/phac-nml/gnali/tree/release/0.1},
+    url = {https://github.com/phac-nml/gnali/},
     }</citation>
     </citations>
 </tool>
