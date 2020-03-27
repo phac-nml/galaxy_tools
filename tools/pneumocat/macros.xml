@@ -1,0 +1,14 @@
+<macros>
+    <token name="@VERSION@">1.2.1</token>
+    <xml name="requirements">
+        <requirements>
+        <requirement type="package" version="@VERSION@">pneumocat</requirement>
+            <yield/>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.7717/peerj.2477</citation>
+        </citations>
+    </xml>
+</macros>
