@@ -1,4 +1,4 @@
-<tool id="csvtk-mutate" name="csvtk-mutate" version="@WRAPPER_VERSION@">
+<tool id="csvtk-mutate" name="csvtk-mutate" version="@VERSION@">
     <description>new column by regular expression</description>
     <macros>
         <import>macros.xml</import>
@@ -6,42 +6,41 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-    ###################
-    ## Start Command ##
-    ###################
-    csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
+###################
+## Start Command ##
+###################
+csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
 
-        ## Add additional flags as specified ##
-        #######################################
-        $ignore_case
-        $illegal_rows
-        $empty_rows
-        $header
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $illegal_rows
+    $empty_rows
+    $header
 
-        ## Set Tabular input/output flag if first input is tabular ##
-        #############################################################
-        #if $in_1.is_of_type("tabular"):
-            -t -T
-        #end if
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
 
-        ## Set input files ##
-        #####################
-        '$in_1'
+    ## Set input files ##
+    #####################
+    '$in_1'
 
-        ## Specify fields to use ##
-        ###########################
-        -f '${column_text.in_text}'
-        
-        ## Column Name and pattern ##
-        ############################
-        -n '$column_name_input'
-        -p "($pattern_input)"
-        $fill_na
-        
-        ## To output ##
-        ###############
-        > mutated
+    ## Specify fields to use ##
+    ###########################
+    -f '${column_text.in_text}'
     
+    ## Column Name and pattern ##
+    ############################
+    -n '$column_name_input'
+    -p "($pattern_input)"
+    $fill_na
+    
+    ## To output ##
+    ###############
+    > mutated
 
     ]]></command>
     <inputs>

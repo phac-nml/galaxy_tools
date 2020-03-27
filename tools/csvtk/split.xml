@@ -1,4 +1,4 @@
-<tool id="csvtk-split" name="csvtk-split" version="@WRAPPER_VERSION@">
+<tool id="csvtk-split" name="csvtk-split" version="@VERSION@">
     <description>table into multiple files</description>
     <macros>
         <import>macros.xml</import>
@@ -6,40 +6,40 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-    ## Create directory and set input name ##
-    #########################################
-    mkdir -p ./output &&
+## Create directory and set input name ##
+#########################################
+mkdir -p ./output &&
 
-    #set input_name = $in_1.name
-    ln -s '$in_1' $input_name &&
+#set input_name = $in_1.name
+ln -s '$in_1' $input_name &&
 
 
-    ###################
-    ## Start Command ##
-    ###################
+###################
+## Start Command ##
+###################
 
-    csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
+csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
 
-        ## Add additional flags as specified ##
-        #######################################
-        $ignore_case
-        $illegal_rows
-        $empty_rows
-        $header
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $illegal_rows
+    $empty_rows
+    $header
 
-        ## Set Tabular input/output flag if input is tabular ##
-        #######################################################
-        #if $in_1.is_of_type("tabular"):
-            -t -T
-        #end if
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
 
-        ## Set Input ##
-        ###############
-        '$input_name'
+    ## Set Input ##
+    ###############
+    '$input_name'
 
-        ## Specify fields for splitting ##
-        ##################################
-        -f '$column_text.in_text'
+    ## Specify fields for splitting ##
+    ##################################
+    -f '$column_text.in_text'
 
     ]]></command>
     <inputs>
@@ -98,11 +98,11 @@ Here we will demonstrate what the tool does when 1 column is selected or when 2+
     +--------+--------+----------+
     | Name   | Colour | Food     |
     +========+========+==========+
-    | Fred   | Blue   | Apples   |
+    | Eric   | Blue   | Apples   |
     +--------+--------+----------+
     | Darian | Blue   | Pancakes |
     +--------+--------+----------+
-    | Dustin | Red    | Apples   |
+    | Daniel | Red    | Apples   |
     +--------+--------+----------+
     | Frank  | Blue   | Apples   |
     +--------+--------+----------+
@@ -114,9 +114,9 @@ Here we will demonstrate what the tool does when 1 column is selected or when 2+
     +--------+--------+----------+
     | Name   | Colour | Food     |
     +========+========+==========+           +--------+--------+----------+
-    | Fred   | Blue   | Apples   |           | Name   | Colour | Food     |
+    | Eric   | Blue   | Apples   |           | Name   | Colour | Food     |
     +--------+--------+----------+     +     +========+========+==========+ 
-    | Darian | Blue   | Pancakes |           | Dustin | Red    | Apples   |
+    | Darian | Blue   | Pancakes |           | Daniel | Red    | Apples   |
     +--------+--------+----------+           +--------+--------+----------+
     | Frank  | Blue   | Apples   |
     +--------+--------+----------+
@@ -134,11 +134,11 @@ Here we will demonstrate what the tool does when 1 column is selected or when 2+
     +--------+--------+----------+
     | Name   | Colour | Food     |
     +========+========+==========+
-    | Fred   | Blue   | Apples   |
+    | Eric   | Blue   | Apples   |
     +--------+--------+----------+
     | Darian | Blue   | Pancakes |
     +--------+--------+----------+
-    | Dustin | Red    | Apples   |
+    | Daniel | Red    | Apples   |
     +--------+--------+----------+
     | Frank  | Blue   | Apples   |
     +--------+--------+----------+
@@ -150,12 +150,12 @@ Here we will demonstrate what the tool does when 1 column is selected or when 2+
     +--------+--------+----------+
     | Name   | Colour | Food     |       +--------+--------+----------+       +--------+--------+----------+
     +========+========+==========+       | Name   | Colour | Food     |       | Name   | Colour | Food     |
-    | Fred   | Blue   | Apples   |   +   +========+========+==========+   +   +========+========+==========+
-    +--------+--------+----------+       | Darian | Blue   | Pancakes |       | Dustin | Red    | Apples   |
+    | Eric   | Blue   | Apples   |   +   +========+========+==========+   +   +========+========+==========+
+    +--------+--------+----------+       | Darian | Blue   | Pancakes |       | Daniel | Red    | Apples   |
     | Frank  | Blue   | Apples   |       +--------+--------+----------+       +--------+--------+----------+
     +--------+--------+----------+
 
-    Here, the value in the cell has to match for both columns for them to be output together. Frank and Fred
+    Here, the value in the cell has to match for both columns for them to be output together. Frank and Eric
     like apples and the colour blue so they get put together. And even though Darian likes the colour blue, he
     prefers pancakes and thus gets his own output file.
 

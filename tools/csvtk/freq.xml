@@ -1,4 +1,4 @@
-<tool id="csvtk-freq" name="csvtk-freq" version="@WRAPPER_VERSION@">
+<tool id="csvtk-freq" name="csvtk-freq" version="@VERSION@">
     <description>of value in column(s)</description>
     <macros>
         <import>macros.xml</import>
@@ -6,51 +6,51 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-    ###################
-    ## Start Command ##
-    ###################
+###################
+## Start Command ##
+###################
 
-    csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
+csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
 
-        ## Add additional flags as specified ##
-        #######################################
-        $ignore_case
-        $illegal_rows
-        $empty_rows
-        $header
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $illegal_rows
+    $empty_rows
+    $header
 
-        ## Set Tabular input/output flag if input is tabular ##
-        #######################################################
-        #if $in_1.is_of_type("tabular"):
-            -t -T
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## Specify fields for freq ##
+    #############################
+    -F -f '$column_text.in_text'
+
+    ## Sorting? ##
+    ##############
+    #if $sorting.want_sort == 'yes_sort'
+
+        #if $sorting.how_sort == 'frequency'
+            -n
+        #elif $sorting.how_sort == 'alphabetical'
+            -k
         #end if
 
-        ## Set Input ##
-        ###############
-        '$in_1'
-
-        ## Specify fields for freq ##
-        #############################
-        -F -f '$column_text.in_text'
-
-        ## Sorting? ##
-        ##############
-        #if $sorting.want_sort == 'yes_sort'
-
-            #if $sorting.how_sort == 'frequency'
-                -n
-            #elif $sorting.how_sort == 'alphabetical'
-                -k
-            #end if
-
-            #if $sorting.reverse_sort == 'yes_reverse'
-                -r
-            #end if
+        #if $sorting.reverse_sort == 'yes_reverse'
+            -r
         #end if
+    #end if
 
-        ## To output ##
-        ###############
-        > freq
+    ## To output ##
+    ###############
+    > freq
 
     ]]></command>
     <inputs>
