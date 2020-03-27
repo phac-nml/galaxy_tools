@@ -1,0 +1,119 @@
+<tool id="ivar-trim" name="iVar-Trim" version="@VERSION@">
+    <description> Primer positions in a BED file are used to clip matching BAM file</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code">
+<![CDATA[
+
+#import re
+#import os
+
+#set $bam_name = '{}.bam'.format(os.path.splitext($input_bam.name)[0])
+#set $bed_name = '{}.bed'.format(os.path.splitext($input_bed.name)[0])
+
+ln -s '$input_bam' '$bam_name' &&
+ln -s '$input_bed' '$bed_name' &&
+
+ivar trim
+    -i '$bam_name'
+    -b '$bed_name'
+    -p output.primertrim.bam
+    -q $adv.min_length
+    -m $adv.min_qual
+    -s $adv.width
+    $adv.include_no_primers
+
+]]>
+    </command>
+    <inputs>
+        <param type="data" name="input_bam" format="bam"
+            optional="false"
+            label="Input Sorted BAM file with aligned reads"
+            />
+        <param type="data" name="input_bed" format="bed"
+            optional="false"
+            multiple="false"
+            label="Input BED file"
+            help="with primer sequences and positions matching the BAM file"
+            />
+        <section name="adv" title="Advanced Options" expanded="true">
+            <param type="integer" name="min_length" value="30"
+                min="1"
+                label="Minimum length of a read to keep after trimming"
+                />
+            <param type="integer" name="min_qual" value="20"
+                min="0"
+                max="42"
+                label="Minimum quality threshold for sliding window to pass"
+                />
+            <param type="integer" name="width" value="4"
+                min="1"
+                label="Width of sliding window"
+                help="Window slides from the 5' to the 3' end and if at any point the average base quality in the window falls below the threshold, the remaining read is soft clipped"
+                />
+            <param type="boolean" name="include_no_primers"
+                falsevalue=""
+                truevalue="-e"
+                checked="false"
+                label="Include reads with no primer"
+                />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="data" name="output" from_work_dir="./output.primertrim.bam" label="iVar Trimmed" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="output.sorted.bam" />
+            <param name="input_bed" value="input.bed" />
+            <output name="output">
+                <assert_contents>
+                    <has_size value="517400" delta="1000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+<![CDATA[
+
+iVar-Trim
+---------
+
+Tool Info
+#########
+
+From the `manual <https://andersen-lab.github.io/ivar/html/manualpage.html>`_:
+
+iVar trim uses primer positions supplied in a BED file to soft clop primer sequences from an aligned and sorted BAD file.
+Following this, the reads are trimmed on a quality threshold using a sliding window. The window slides from the 5' to the
+3' end and if at any point the average base quality in that window falls below the threshold, the remaining read is soft-clipped.
+If after trimming the length of the read is greater than the minimum length specified, the read is written to the new trimmed BAM file.
+
+Inputs
+######
+
+Requires
+++++++++
+
+- BAM file --> sorted with aligned reads to trim primers from
+- BED file --> containing primer sequences and positions matching BAM file
+
+Optional 
+++++++++
+
+- Minimum length of read to retain after trimming
+- Minimum quality threshold for sliding window
+- Width of sliding window
+- Inclusion of reads without primers
+
+Outputs
+#######
+
+- Trimmed BAM file with primers removed
+
+]]>
+    </help>
+    <expand macro="citations" />
+</tool>

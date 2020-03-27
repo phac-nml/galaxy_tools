@@ -1,0 +1,59 @@
+<tool id="ivar-consensus" name="iVar-Consensus" version="@VERSION@">
+    <description> In Progress!</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code">
+<![CDATA[
+
+#set $outname = '{}.consensus'.format(os.path.splitext($input_bam.name)[0])
+
+samtools mpileup -A -d 6000000 -B -Q 0 --reference '$input_reference' '$input_bam' | ivar consensus -p '$outname'
+
+]]>
+    </command>
+    <inputs>
+        <param type="data" name="input_bam" format="bam"
+            optional="false"
+            label="Input Sorted BAM file"
+            />
+        <param type="data" name="input_reference" format="fasta"
+            optional="false"
+            label="Input Reference Genome"
+            help="Must match the BAM file"
+            />
+        <section name="samtool" title="Samtools mpileup Parameters" expanded="true">
+            <param type="integer" name="test" label="test" value="10"/>
+        </section>
+        <section name="consensus" title="iVar Consensus Parameters" expanded="true">
+            <param type="data" name="aaa" format="txt" label="aaa"/>
+        </section>
+    </inputs>
+    <outputs>
+        <data format="fasta" name="fasta_out" from_work_dir="*.fa" label="consensus fa" />
+        <data format="txt" name="quality_out" from_work_dir="*.qual.txt" label="consensus quality" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_bam" value="consensus.primertrim.bam" />
+            <param name="input_reference" value="NC_045512.2.fa" />
+            <output name="fasta_out">
+                <assert_contents>
+                    <has_text_matching expression="AGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTA" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+<![CDATA[
+    
+iVar
+----
+
+Currently in progress!
+
+]]>
+    </help>
+    <expand macro="citations" />
+</tool>
