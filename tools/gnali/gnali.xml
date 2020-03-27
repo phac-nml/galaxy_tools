@@ -9,7 +9,7 @@
     <inputs>
         <param type="data" name="test_genes" label="Test genes" format="txt" help="Specify a list of genes as HGNC symbols, separated by newline characters" />
         <param type="select" name="database" label="Database" format="txt" help="Database to query" >
-            <option value="gnomad2.1.1">gnomAD2.1.1 (GRCh37/hg19)</option>
+            <option value="gnomad2.1.1" selected="true">gnomAD2.1.1 (GRCh37/hg19)</option>
         </param>
     </inputs>
     <outputs>
