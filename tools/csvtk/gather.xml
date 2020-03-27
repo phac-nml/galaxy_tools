@@ -1,0 +1,102 @@
+<tool id="csvtk-gather" name="csvtk-gather" version="@VERSION@">
+    <description>test</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specify fields to join ##
+    ############################
+    -F -f '$column_text.in_text'
+
+    ## Specific inputs ##
+    #####################
+    -k '$key_string'
+    -v '$value_string'
+    
+    ## To output ##
+    ###############
+    > gathered
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <expand macro="fields_input"/>
+        <param name="key_string" type="text"
+            optional="false"
+            label="Name of Key Column"
+            help="Set name of key column that gathered field will output to"
+            />
+        <param name="value_string" type="text"
+            optional="false"
+            label="Name of Value Column"
+            />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" from_work_dir="gathered" name="gathered" label="${in_1.name} gathered on column(s) ${column_text.in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="csv.csv" />
+            <param name="key_string" value="1" />
+            <param name="value_string" value="2" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <output name="gathered" file="gathered.csv" ftype="csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Gather Help
+-------------------
+
+Info
+####
+ddd
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. 1 - gg**
+gg
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

@@ -19,9 +19,10 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
     ## Add additional flags as specified ##
     #######################################
     $ignore_case
-    $illegal_rows
-    $empty_rows
-    $header
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
 
     ## Set Tabular input/output flag if first input is tabular ##
     #############################################################
@@ -54,14 +55,12 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
     <inputs>
         <expand macro="multi_input"/>
         <expand macro="fields_input"/>
-        <expand macro="ignore_case"/>
-        <expand macro="header"/>
-        <expand macro="illegal_rows"/>
-        <expand macro="empty_rows"/>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
         <conditional name="unmatched" >
             <param type="select" name="wanted"
-            label="Keep Unmatched Columns?"
-            help="Include unmatched columns in output results?"
+                label="Keep Unmatched Columns?"
+                help="Include unmatched columns in output results?"
             >
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
@@ -69,8 +68,9 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
             <when value="no" />
             <when value="yes">
                 <param type="text" name="fill_value"
-                label="What to fill unmatched columns with"
-                help="Specify value to fill into all of the columns with no data" />
+                    label="What to fill unmatched columns with"
+                    help="Specify value to fill into all of the columns with no data"
+                    />
             </when>
         </conditional>
     </inputs>
@@ -198,6 +198,9 @@ Usage
     +------+----------+----------+----------+
 
 ----
+
+@HELP_COLUMNS@
+
 
 @HELP_END_STATEMENT@
 

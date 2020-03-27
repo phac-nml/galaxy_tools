@@ -15,9 +15,10 @@ csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
     ## Add additional flags as specified ##
     #######################################
     $ignore_case
-    $illegal_rows
-    $empty_rows
-    $header
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
 
     ## Set Tabular input/output flag if input is tabular ##
     #######################################################
@@ -56,14 +57,12 @@ csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
     <inputs>
         <expand macro="singular_input" />
         <expand macro="fields_input" />
-        <expand macro="ignore_case"/>
-        <expand macro="header"/>
-        <expand macro="illegal_rows"/>
-        <expand macro="empty_rows"/>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
         <conditional name="sorting" >
             <param type="select" name="want_sort"
-            label="Sort Output Columns?"
-            help="Change the order of output column(s)">
+                label="Sort Output Columns?"
+                help="Change the order of output column(s)">
                 <option value="no_sort">No</option>
                 <option value="yes_sort">Yes</option>
             </param>
@@ -152,6 +151,9 @@ each name in our database is a certain bloodtype.
 Here, we can note that there are 4 people named bob with blood type A.
 
 ----
+
+@HELP_COLUMNS@
+
 
 @HELP_END_STATEMENT@
 

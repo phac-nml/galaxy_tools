@@ -14,9 +14,10 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
     ## Add additional flags as specified ##
     #######################################
     $ignore_case
-    $illegal_rows
-    $empty_rows
-    $header
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
 
     ## Set Tabular input/output flag if first input is tabular ##
     #############################################################
@@ -55,37 +56,40 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
                         data_ref="in_1"
                         multiple="False" force_select="True"
                         label="Analyze column number"
-                        help="Select column to mutate data from" />
+                        help="Select column to mutate data from"
+                        />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
-                optional="False"
-                label="Analyze column name"
-                help="Specify column name to pull data out of with Regex" />
+                    optional="False"
+                    label="Analyze column name"
+                    help="Specify column name to pull data out of with Regex"
+                    />
             </when>
         </conditional>
-        <expand macro="ignore_case"/>
-        <expand macro="header"/>
-        <expand macro="illegal_rows"/>
-        <expand macro="empty_rows"/>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
         <param type="text" name="pattern_input"
-        value=".+"
-        label="Set regex search pattern"
-        optional="false"
-        help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
-        Regex help can be found below">
+            value=".+"
+            label="Set regex search pattern"
+            optional="false"
+            help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
+            Regex help can be found below"
+            >
             <sanitizer sanitize="False"/>
         </param>
         <param type="text" name="column_name_input"
-        value="new_column"
-        label="Set new column name"
-        optional="false"
-        help="Specify output column name for the matched data" />
+            value="new_column"
+            label="Set new column name"
+            optional="false"
+            help="Specify output column name for the matched data"
+            />
         <param type="boolean" name="fill_na"
-        falsevalue="--na" truevalue=""
-        checked="true"
-        label="Fill Non-matches"
-        help="If NO, mutate will create a blank cell where no regex matches. If YES, if no matches, the full cell value will be copied" />
+            falsevalue="--na" truevalue=""
+            checked="true"
+            label="Fill Non-matches"
+            help="If NO, mutate will create a blank cell where no regex matches. If YES the full cell value will be copied of non-matched columns"
+            />
     </inputs>
     <outputs>
         <data format_source="in_1" name="mutated" from_work_dir="mutated" 
@@ -211,8 +215,8 @@ https://regexr.com/
 
 ----
 
-If your having trouble with the regular expressions, please play around with the builder, it is a great resource to
-practice and improve your statements to get better values!
+If your having trouble with the regular expressions, please play around with a builder, there are many online 
+and they are a great resource to practice and improve your statements to get better values!
 
 ----
 

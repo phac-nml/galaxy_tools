@@ -23,9 +23,10 @@ csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
     ## Add additional flags as specified ##
     #######################################
     $ignore_case
-    $illegal_rows
-    $empty_rows
-    $header
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
 
     ## Set Tabular input/output flag if input is tabular ##
     #######################################################
@@ -45,10 +46,8 @@ csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
     <inputs>
         <expand macro="singular_input" />
         <expand macro="fields_input" />
-        <expand macro="ignore_case"/>
-        <expand macro="header"/>
-        <expand macro="illegal_rows"/>
-        <expand macro="empty_rows"/>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
     </inputs>
     <outputs>
         <collection name="list_split" type="list" label="${in_1.name} split on column ${column_text.in_text}">
