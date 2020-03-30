@@ -1,0 +1,77 @@
+<tool id="gnali" name="gNALI" version="0.1.0" python_template_version="3.6">
+    <description>Get nonessential, LoF variants</description>
+    <requirements>
+        <requirement type="package" version="0.1">gnali</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        gnali -i '$test_genes' -o output
+    ]]></command>
+    <inputs>
+        <param type="data" name="test_genes" label="Test genes" format="txt" help="Specify a list of genes as HGNC symbols, separated by newline characters" />
+        <param type="select" name="database" label="Database" format="txt" help="Database to query" >
+            <option value="gnomad2.1.1" selected="true">gnomAD2.1.1 (GRCh37/hg19)</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="basic_output" label="gNALI basic output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
+        <data name="detailed_output" label="gNALI detailed output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="test_genes" value="test_genes.txt"/>
+            <output name="basic_output">
+                <assert_contents>
+                    <has_text text="CCR5" />
+                </assert_contents>
+            </output>
+            <output name="detailed_output">
+                <assert_contents>
+                    <has_text_matching expression="Chromosome\tPosition_Start\tRSID\tReference_Allele\tAlternate_Allele\tScore\tQuality\tLoF_Variant\tLoF_Annotation\tHGNC_Symbol\tEnsembl Code" />
+                    <has_text_matching expression="3\t46414935\trs938517991\tAT\tA\t9974.16\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                    <has_text_matching expression="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t74264261.52\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                    <has_text_matching expression="3\t46415066\trs146972949\tC\tT\t120238.89\tPASS\tT\tstop_gained\tCCR5\tENSG00000160791" />
+                    <has_text_matching expression="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t1947603.90\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+gNALI - Gene Nonessentiality and Loss-of-function Identifier
+============================================================
+
+gNALI is a tool to find (high confidence) potential loss-of-function variants of genes.
+
+
+Authors
+-------
+
+gNALI was developed by Xia Liu.
+
+
+Usage
+-----
+
+Accepted input formats: csv, txt, tsv
+
+Your input file should contain a list of genes (as HGNC symbols) to test, separated by newline characters.
+It should not contain any blank lines until the end of the list.
+
+There will be two output files:
+
+    1. A basic output file, containing genes (as HGNC symbols) with nonessential, loss-of-function variants.
+    2. A detailed output file, with more information on the variants.
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+    @misc{GitHubgnali,
+    author = {Xia, Liu},
+    year = {2020},
+    title = {gnali},
+    publisher = {phac-nml},
+    journal = {GitHub repository},
+    url = {https://github.com/phac-nml/gnali/},
+    }</citation>
+    </citations>
+</tool>
