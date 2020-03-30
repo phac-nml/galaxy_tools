@@ -1,0 +1,152 @@
+<tool id="csvtk-uniq" name="csvtk-unique" version="@VERSION@">
+    <description> first values in column(s)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk uniq --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## Specify fields for freq ##
+    #############################
+    -F -f '$column_text.in_text'
+
+    ## To output ##
+    ###############
+    > uniq
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="uniq" from_work_dir="uniq" label="${in_1.name} unique values in column(s) ${column_text.in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="blood_type.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2,3" />
+            </conditional>
+            <output name="uniq" file="uniq.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Unique Help
+-------------------
+
+Info
+####
+
+Csvtk unique pulls the first unique values from the column(s) specified to create
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-uniq, all you need is a valid (as defined above) CSV or TSV and the column(s) that you want the to find unique values in.
+
+**Ex. Unique on one column:**
+
+Suppose you had a table as such
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+| Frank  | Blue   | Apples   |
++--------+--------+----------+
+
+If you ran csvtk-unique on the Colour column, you would end up with the following table:
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+
+As only the first instance of the value in the column is kept.
+
+----
+
+**Ex. Unique on more than one column:**
+
+Same input table
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+| Frank  | Blue   | Apples   |
++--------+--------+----------+
+
+Now if you ran csvtk-unique on the Colour and Food column, you would end up with the following table:
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+
+Only the last row was not kept as there was already a unique pair found of "Blue" and "Apples".
+
+**Note:** If you want to only have the unique values of the columns and get rid of the additional columns, run a "cut program" to cut out the wanted columns
+and then csvtk unique to only get the wanted values.
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

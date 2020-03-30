@@ -148,7 +148,7 @@ Row 3 is not returned back as its column 2 is not greater than 50. However, if *
 it would be returned as its column 3 does satisfy its part of the expression
 
 
-**Note** - Multiple columns can only be specified with a "-"
+**Note:** - Multiple columns can only be specified with a "-"
 
 ----
 
