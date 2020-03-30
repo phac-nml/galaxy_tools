@@ -36,7 +36,7 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
     ## Column Name and pattern ##
     ############################
     -n '$column_name_input'
-    -p "($pattern_input)"
+    -p '($pattern_input)'
     $fill_na
     
     ## To output ##
@@ -74,9 +74,13 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
             label="Set regex search pattern"
             optional="false"
             help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
-            Regex help can be found below"
+            Regex help can be found below. The ' character is also invalid"
             >
-            <sanitizer sanitize="False"/>
+            <sanitizer>
+                <valid initial="string.printable">
+                    <remove value="&apos;"/>
+                </valid>
+            </sanitizer>
         </param>
         <param type="text" name="column_name_input"
             value="new_column"
@@ -119,6 +123,10 @@ new column is created using that matched data.
 
 The regex input for this tool is structured such that your regular expression **does not** need to start with with quotes or brackets. You can
 start your expression with a `^` or just go straight into it
+
+.. class:: warningmark
+
+    Single quotes are not allowed!
 
 For example:
 
@@ -215,8 +223,8 @@ https://regexr.com/
 
 ----
 
-If your having trouble with the regular expressions, please play around with a builder, there are many online 
-and they are a great resource to practice and improve your statements to get better values!
+If your having trouble with the regular expressions, please play around with a builder, there are many others online 
+and they are great resources to improve your regex statements or test them before use!
 
 ----
 

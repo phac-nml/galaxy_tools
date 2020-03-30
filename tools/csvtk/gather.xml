@@ -1,5 +1,5 @@
 <tool id="csvtk-gather" name="csvtk-gather" version="@VERSION@">
-    <description>test</description>
+    <description> column(s) into key-value pairs</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -28,8 +28,8 @@ csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
     #####################
     $in_1
 
-    ## Specify fields to join ##
-    ############################
+    ## Specify fields to use ##
+    ###########################
     -F -f '$column_text.in_text'
 
     ## Specific inputs ##
@@ -78,7 +78,8 @@ Csvtk - Gather Help
 
 Info
 ####
-ddd
+
+Csvtk gather gathers columns into key-value pairs
 
 @HELP_INPUT_DATA@
 
@@ -86,8 +87,77 @@ ddd
 Usage
 #####
 
-**Ex. 1 - gg**
-gg
+**Ex. Gather with column 1:**
+
+Suppose we had the following table:
+
++---------+------------+-----------+
+| Name    | Blood Type | Frequency |
++=========+============+===========+
+| Bob     | A          | 4         |
++---------+------------+-----------+
+| Jacob   | B          | 5         |
++---------+------------+-----------+
+| Matthew | O          | 12        |
++---------+------------+-----------+
+| Daniel  | AB         | 1         |
++---------+------------+-----------+
+
+If we did a gather on column 1 creating a key column called "Key" and a value column called "Output"
+we would get the following result.
+
++------------+-----------+------+---------+
+| Blood Type | Frequency | Key  | Output  |
++============+===========+======+=========+
+| A          | 4         | Name | Bob     |
++------------+-----------+------+---------+
+| B          | 4         | Name | Jacob   |
++------------+-----------+------+---------+
+| O          | 12        | Name | Matthew |
++------------+-----------+------+---------+
+| AB         | 1         | Name | Daniel  |
++------------+-----------+------+---------+
+
+----
+
+**Ex. Gather with 2 columns:**
+
+Same starting table
+
++---------+------------+-----------+
+| Name    | Blood Type | Frequency |
++=========+============+===========+
+| Bob     | A          | 4         |
++---------+------------+-----------+
+| Jacob   | B          | 5         |
++---------+------------+-----------+
+| Matthew | O          | 12        |
++---------+------------+-----------+
+| Daniel  | AB         | 1         |
++---------+------------+-----------+
+
+Now, if we specify the input columns as "1,2" to get columns 1 and 2 targeted as the key columns (called key),
+we get the following output:
+
++-----------+------------+---------+
+| Frequency | Key        | Output  |
++===========+============+=========+
+| 4         | Name       | Bob     |
++-----------+------------+---------+
+| 4         | Blood Type | A       |
++-----------+------------+---------+
+| 4         | Name       | Jacob   |
++-----------+------------+---------+
+| 4         | Blood Type | B       |
++-----------+------------+---------+
+| 12        | Name       | Matthew |
++-----------+------------+---------+
+| 12        | Blood Type | O       |
++-----------+------------+---------+
+| 1         | Name       | Daniel  |
++-----------+------------+---------+
+| 1         | Blood Type | AB      |
++-----------+------------+---------+
 
 ----
 
