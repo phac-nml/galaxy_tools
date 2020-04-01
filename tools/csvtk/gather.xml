@@ -37,6 +37,16 @@ csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
     -k '$key_string'
     -v '$value_string'
     
+    ## Keep only Key/value columns ##
+    #################################
+    #if $only_input_columns == 'Yes'
+        | csvtk cut -F -f '$key_string','$value_string'
+
+        #if $in_1.is_of_type("tabular"):
+            -t -T
+        #end if
+    #end if
+
     ## To output ##
     ###############
     > gathered
@@ -53,6 +63,12 @@ csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
         <param name="value_string" type="text"
             optional="false"
             label="Name of Value Column"
+            />
+        <param name="only_input_columns" type="boolean"
+            truevalue="Yes"
+            falsevalue="No"
+            label="Keep only Key and Value column(s) generated"
+            help="Removes all columns but the input labeled key and value columns"
             />
         <expand macro="global_parameters" />
     </inputs>

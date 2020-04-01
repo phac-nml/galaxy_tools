@@ -28,7 +28,7 @@
             />
     </xml>
     <xml name="global_parameters">
-        <section name="global_param" title="csvtk Global Parameters" expanded="true">
+        <section name="global_param" title="csvtk Global Parameters" expanded="false">
             <param type="boolean" name="header"
                 falsevalue="-H" truevalue=""
                 checked="true"

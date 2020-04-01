@@ -55,13 +55,11 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
     <inputs>
         <expand macro="multi_input"/>
         <expand macro="fields_input"/>
-        <expand macro="ignore_case" />
-        <expand macro="global_parameters" />
         <conditional name="unmatched" >
             <param type="select" name="wanted"
                 label="Keep Unmatched Columns?"
                 help="Include unmatched columns in output results?"
-            >
+                >
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
             </param>
@@ -73,6 +71,8 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
                     />
             </when>
         </conditional>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
     </inputs>
     <outputs>
         <data format_source="in_1" name="joined" from_work_dir="joined" label="${in_1[0].name} joined by column ${column_text.in_text}" />
@@ -108,7 +108,7 @@ Columns that are not matching will be discarded unless 'Keep Unmatched Columns' 
 Usage
 #####
 
-**Ex. Matching based on column 1:**
+**Ex. Joining based on column 1:**
 
 ::
 
@@ -144,11 +144,14 @@ Usage
 
 ----
 
-**Ex. Matching based on name:**
+**Ex. Joining based on the column named "Name":**
 
 ::
 
-    Here, we use the column header name as a way to match up the columns. This would be using "Name" as the input
+    Here, we use the column header name as a way to match up the columns. This is especially useful if the wanted
+    column has the same name but is not located in the same location as seen below.
+
+    Matching on the "Name" column would look as such:
 
     +------+--------+----------+       +------+----------+----------+       +----------+------+----------+----------+
     | Name | Colour | Food     |       | Name | Sport    | Column 3 |       | Column 4 | Name | Column 5 | Column 6 |

@@ -144,8 +144,10 @@ Now if we use the expression "2-3>50" to filter on, we would pull out:
 | LPn-1         | 100        | 1000000  |
 +---------------+------------+----------+
 
-Row 3 is not returned back as its column 2 is not greater than 50. However, if **Any** is set to Yes, then
-it would be returned as its column 3 does satisfy its part of the expression
+Row 3 is not returned back as its column 2 is not greater than 50. 
+
+However, if **Any** is set to Yes, then Row 3 would be returned as its column 3 is greater than 50
+making it satisfy one part of the expression.
 
 
 **Note:** - Multiple columns can only be specified with a "-"
