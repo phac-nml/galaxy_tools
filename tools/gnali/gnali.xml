@@ -21,6 +21,7 @@
             <param name="test_genes" value="test_genes.txt"/>
             <output name="basic_output">
                 <assert_contents>
+                    <has_text text="HGNC_Symbol" />
                     <has_text text="CCR5" />
                 </assert_contents>
             </output>
@@ -33,6 +34,48 @@
                     <has_text_matching expression="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t1947603.90\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
                 </assert_contents>
             </output>
+        </test>
+        <test>
+            <param name="test_genes" value="patch.txt"/>
+                <output name="basic_output">
+                    <assert_contents>
+                        <has_text text="HGNC_Symbol" />
+                        <has_text text="CCR5" />
+                        <has_text text="RPEL1" />
+                        <has_text text="OTOGL" />
+                        <has_text text="PKD1L2" />
+                        <has_text text="COL6A5" />
+                        <has_text text="DCP1A" />
+                        <has_text text="KRT10" />
+                    </assert_contents>
+                </output>
+                <output name="detailed_output">
+                    <assert_contents>
+                        <has_text_matching expression="Chromosome\tPosition_Start\tRSID\tReference_Allele\tAlternate_Allele\tScore\tQuality\tLoF_Variant\tLoF_Annotation\tHGNC_Symbol\tEnsembl Code" />
+                        <has_text_matching expression="10\t105005931\trs61746130\tC\tT\t4480914.72\tPASS\tT\tstop_gained\tRPEL1\tENSG00000235376" />
+                        <has_text_matching expression="12\t80770908\trs1222716200\tC\tT\t4175.99\tPASS\tT\tstop_gained\tOTOGL\tENSG00000165899" />
+                        <has_text_matching expression="16\t81242148\trs752607955\tGTT\tG\t218022105.25\tPASS\t-\tframeshift_variant\tPKD1L2\tENSG00000166473" />
+                        <has_text_matching expression="16\t81242198\trs7499011\tG\tA\t124146106.95\tPASS\tA\tstop_gained\tPKD1L2\tENSG00000166473" />
+                        <has_text_matching expression="3\t130114290\trs115380050\tC\tT\t105366.23\tPASS\tT\tstop_gained\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130139996\trs139339125\tG\tT\t576280.08\tPASS\tT\tsplice_acceptor_variant\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130159309\t.\tAAT\tA\t3284.41\tPASS\t-\tframeshift_variant\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130159330\trs2201717\tC\tT\t8770317.31\tPASS\tT\tstop_gained\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130187662\trs115375867\tG\tT\t1785133.61\tPASS\tT\tstop_gained\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130190720\trs11355796\tAT\tA\t157372019.43\tPASS\t-\tframeshift_variant\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t53324819\trs782498227\tATGGCAC\tA\t304085671.95\tPASS\t-\tsplice_donor_variant&amp;intron_variant\tDCP1A\tENSG00000162290" />
+                        <has_text_matching expression="3\t46414935\trs938517991\tAT\tA\t9974.16\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                        <has_text_matching expression="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t74264261.52\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                        <has_text_matching expression="3\t46415066\trs146972949\tC\tT\t120238.89\tPASS\tT\tstop_gained\tCCR5\tENSG00000160791" />
+                        <has_text_matching expression="16\t81242148\trs752607955\tGTT\tG\t12370921.18\tPASS\t-\tframeshift_variant\tPKD1L2\tENSG00000166473" />
+                        <has_text_matching expression="16\t81242198\trs7499011\tG\tA\t7423817.85\tPASS\tA\tstop_gained\tPKD1L2\tENSG00000166473" />
+                        <has_text_matching expression="17\t38975327\trs764791942\tT\tTAGCCGCCGCC\t282793.87\tPASS\tAGCCGCCGCC\tframeshift_variant\tKRT10\tENSG00000186395" />
+                        <has_text_matching expression="17\t38975329\trs762667965\tG\tGAGCTT\t238711.24\tPASS\tAGCTT\tframeshift_variant\tKRT10\tENSG00000186395" />
+                        <has_text_matching expression="3\t130159330\trs2201717\tC\tT\t165579.83\tPASS\tT\tstop_gained\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t130190720\trs11355796\tAT\tA\t14066881.99\tPASS\t-\tframeshift_variant\tCOL6A5\tENSG00000172752" />
+                        <has_text_matching expression="3\t53324819\trs782498227\tATGGCAC\tA\t17202744.04\tPASS\t-\tsplice_donor_variant&amp;intron_variant\tDCP1A\tENSG00000162290" />
+                        <has_text_matching expression="3\t46414943\trs775750898\tTACAGTCAGTATCAATTCTGGAAGAATTTCCAG\tT\t1947603.90\tPASS\t-\tframeshift_variant\tCCR5\tENSG00000160791" />
+                    </assert_contents>
+                </output>
         </test>
     </tests>
     <help><![CDATA[
@@ -75,3 +118,4 @@ There will be two output files:
     }</citation>
     </citations>
 </tool>
+
