@@ -1,0 +1,116 @@
+<tool id="csvtk-histogram" name="csvtk-plot-histogram" version="@VERSION@">
+    <description> based on column</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk plot hist --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specific Plot Parameters ##
+    ##############################
+    -f '${column_text.in_text}'
+    --color-index $colour
+
+    ## General Plot Parameters ##
+    #############################
+
+    #if $plot_parameters.title
+    --title '$plot_parameters.title'
+    #end if
+
+    #if $plot_parameters.x_label
+    --xlab '$plot_parameters.x_label'
+    #end if
+
+    #if $plot_parameters.min_x
+    --x-min '$plot_parameters.min_x'
+    #end if
+
+    #if $plot_parameters.max_x
+    --x-max '$plot_parameters.max_x'
+    #end if
+
+    #if $plot_parameters.y_label
+    --ylab '$plot_parameters.y_label'
+    #end if
+
+    #if $plot_parameters.min_y
+    --y-min '$plot_parameters.min_y'
+    #end if
+
+    #if $plot_parameters.max_y
+    --y-max '$plot_parameters.max_y'
+    #end if
+    
+    ## To output ##
+    ###############
+    > plot.png
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <expand macro="plot_field" />
+        <param name="colour" type="integer"
+            min="1" max="7"
+            value="1"
+            argument="--color-index"
+            label="Select colour scheme"
+            help="Choose a number from 1-7"
+            />
+        <expand macro="global_plot_parameters" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format="png" from_work_dir="plot.png" name="out_plot" label="${in_1.name} column ${column_text.in_text} histogram" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2" />
+            </conditional>
+            <output name="out_plot" value="plot.png" ftype="png" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Histogram Help
+----------------------
+
+Info
+####
+
+Specify a column from an input dataset to generate a counts histogram of.
+
+@HELP_INPUT_DATA@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
