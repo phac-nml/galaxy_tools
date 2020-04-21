@@ -66,6 +66,7 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
             <when value="no" />
             <when value="yes">
                 <param type="text" name="fill_value"
+                    argument="--fill"
                     label="What to fill unmatched columns with"
                     help="Specify value to fill into all of the columns with no data"
                     />

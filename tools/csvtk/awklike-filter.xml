@@ -45,6 +45,7 @@ csvtk filter2 --num-cpus "\${GALAXY_SLOTS:-1}"
         <expand macro="singular_input"/>
         <param name="in_text" type="text"
             optional="false"
+            argument="-f"
             label="Awk-like artithmetic/string expression"
             >
             <help><![CDATA[
@@ -62,6 +63,7 @@ Ex. '$age>12' or '$1 > $3' or '$name=="abc"' or '$1 % 2 == 0'. More info is avai
             checked="false"
             truevalue="-n"
             falsevalue=""
+            argument="-n"
             label="Print initial line number as the first column"
             />
         <expand macro="global_parameters" />
@@ -101,7 +103,7 @@ Supported operators and types:
     - Comparators: > >= < <= == != =~ !~
     - Logical ops: || &&
     - Numeric constants, as 64-bit floating point (12345.678)
-    - String constants (double quotes: 'foobar')
+    - String constants (double quotes: "foobar")
     - Date constants (double quotes)
     - Boolean constants: true false
     - Parenthesis to control order of evaluation ( )

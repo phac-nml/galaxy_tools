@@ -23,6 +23,7 @@
         <param type="boolean" name="ignore_case"
             falsevalue="" truevalue="-i"
             checked="true"
+            argument="-i"
             label="Ignore cell case?"
             help="ABC == abc"
             />
@@ -32,23 +33,27 @@
             <param type="boolean" name="header"
                 falsevalue="-H" truevalue=""
                 checked="true"
+                argument="-H"
                 label="Input file has a header line"
                 />
             <param type="boolean" name="illegal_rows"
                 falsevalue="" truevalue="-I"
                 checked="false"
+                argument="-I"
                 label="Ignore illegal rows"
                 help="Use if file has illegal rows as defined in the help section"
                 />
             <param type="boolean" name="empty_rows"
                 falsevalue="" truevalue="-E"
                 checked="false"
+                argument="-E"
                 label="Ignore empty rows"
                 help="Ignore rows with no data (only needed if input has empty rows)"
                 />
             <param type="boolean" name="lazy_quotes"
                 falsevalue="" truevalue="-l"
                 checked="false"
+                argument="-l"
                 label="File has Lazy quotes"
                 help="(TSV files only) If Yes, a quote may appear in an unquoted field and a non-doubled quote may appear in a quoted field"
                 />
@@ -56,7 +61,7 @@
     </xml>
     <xml name="fields_input">
         <conditional name="column_text" >
-            <param type="select" name="select" label="Select input columns based on" >
+            <param type="select" name="select" label="Select input columns based on" argument="-F -f">
                 <option value="string">Column Name(s)</option>
                 <option value="column">Column Number(s)</option>
             </param>

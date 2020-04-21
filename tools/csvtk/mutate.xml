@@ -47,7 +47,7 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
     <inputs>
         <expand macro="singular_input"/>
         <conditional name="column_text" >
-            <param type="select" name="select" label="Select column based on" >
+            <param type="select" name="select" label="Select column based on" argument="-f">
                 <option value="column">Column Number</option>
                 <option value="string">Column Name</option>
             </param>
@@ -67,10 +67,9 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
                     />
             </when>
         </conditional>
-        <expand macro="ignore_case" />
-        <expand macro="global_parameters" />
         <param type="text" name="pattern_input"
             value=".+"
+            argument="-p"
             label="Set regex search pattern"
             optional="false"
             help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
@@ -84,6 +83,7 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
         </param>
         <param type="text" name="column_name_input"
             value="new_column"
+            argument="-n"
             label="Set new column name"
             optional="false"
             help="Specify output column name for the matched data"
@@ -91,9 +91,12 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
         <param type="boolean" name="fill_na"
             falsevalue="--na" truevalue=""
             checked="true"
+            argument="--na"
             label="Fill Non-matches"
             help="If NO, mutate will create a blank cell where no regex matches. If YES the full cell value will be copied of non-matched columns"
             />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
     </inputs>
     <outputs>
         <data format_source="in_1" name="mutated" from_work_dir="mutated" 

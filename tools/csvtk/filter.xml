@@ -46,6 +46,7 @@ csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
         <expand macro="singular_input"/>
         <param name="in_text" type="text"
             optional="false"
+            argument="-F -f"
             label="Specify column(s) and numeric expression to filter for"
             help="Give column name/number and the numeric expression that you want to evaluate. Example: 'frequency>4'. See help below for more examples"
             >
@@ -59,14 +60,16 @@ csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
             checked="false"
             truevalue="-n"
             falsevalue=""
+            argument="-n"
             label="Print initial line number as the first column"
             />
         <param name="any" type="boolean"
             checked="false"
             truevalue="--any"
             falsevalue=""
-            label="Any"
-            help="Return row if any row value satisfies the condition. For multiple columns filters only"
+            argument="--any"
+            label="Return row if any row value satisfies the condition"
+            help="For multiple column filters only"
             />
         <expand macro="global_parameters" />
     </inputs>

@@ -57,11 +57,13 @@ csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
         <expand macro="fields_input"/>
         <param name="key_string" type="text"
             optional="false"
+            argument="-k"
             label="Name of Key Column"
             help="Set name of key column that gathered field will output to"
             />
         <param name="value_string" type="text"
             optional="false"
+            argument="-v"
             label="Name of Value Column"
             />
         <param name="only_input_columns" type="boolean"

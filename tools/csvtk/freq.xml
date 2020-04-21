@@ -69,12 +69,12 @@ csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
             <when value="no_sort" />
             <when value="yes_sort">
                 <param type="select" name="how_sort" label="How to Sort Output">
-                    <option value="frequency">Frequency (Low -> High)</option>
-                    <option value="alphabetical">Alphabetical</option>
+                    <option value="frequency" argument="-n">Frequency (Low -> High)</option>
+                    <option value="alphabetical" argument="-k">Alphabetical</option>
                 </param>
                 <param type="select" name="reverse_sort" label="Reverse Sort" help="Sort in reverse order. IE. highest to lowest or reverse alphabetical" >
                     <option value="no_reverse">No</option>
-                    <option value="yes_reverse">Yes</option>
+                    <option value="yes_reverse" argument="-r">Yes</option>
                 </param>
             </when>
         </conditional>
