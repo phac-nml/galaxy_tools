@@ -5,8 +5,9 @@
     </macros>
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
+#import re
 
-#set bamname = str($input1.name)
+#set bamname = re.sub('[^\s\w-]', '_', str($input1.name))
 ln -sf '$input1' '$bamname' &&
 ln -sf '${input1.metadata.bam_index}' '${bamname}.bai' &&
 
