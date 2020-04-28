@@ -1,0 +1,86 @@
+<tool id="bamclipper" name="BAMClipper" version="@VERSION@+galaxy0">
+    <description> Remove gene-specific primer sequences from BAM alignments of PCR amplicons by soft-clipping with BEDPE file</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+#set bamname = str($input1.name)
+ln -sf '$input1' '$bamname' &&
+ln -sf '${input1.metadata.bam_index}' '${bamname}.bai' &&
+
+bamclipper.sh -b '$bamname' -p '$primer_pairs' -n "\${GALAXY_SLOTS:-1}"
+    #if $optional.upstream:
+        -u '$optional.upstream'
+    #end if
+    #if $optional.downstream:
+        -d '$optional.downstream'
+    #end if
+
+    ]]></command>
+    <inputs>
+        <param name="input1" type="data" format="bam"
+            label="Input Bam file"
+            argument="-b"
+            />
+        <param name="primer_pairs" type="data" format="bedpe, interval"
+            label="BEDPE file of primer pair locations"
+            argument="-p"
+            />
+        <section name="optional" title="Optional Parameters" expanded="false" >
+            <param name="upstream" type="integer" optional="true"
+                label="Upstream"
+                argument="-u"
+                help="Number of nucleotides upstream of the 5' most nucleotide of the primer (in addition to 5' most nucleotide of primer) for assigning
+                alignments to primers based on the alignment starting position. Default 1"
+                />
+            <param name="downstream" type="integer" optional="true"
+                label="Downstream"
+                argument="-d"
+                help="Number of nucleotides downstream to the 5' most nucleotide of primer (in addition to 5' most nucleotide of primer) for assigning
+                alignments to primers based on the alignment starting position. Default 5"
+                />
+        </section>
+    </inputs>
+    <outputs>
+        <data format_source="input1" from_work_dir="*.primerclipped.bam" name="output" label="${input1.name}.primerclipped" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="SRR2075598.bam" />
+            <param name="primer_pairs" value="trusight_myeloid.bedpe" />
+            <output name="output" file="SRR2075598.primerclipped.bam" ftype="bam" />
+        </test>
+        <test>
+            <param name="input1" value="SRR2075598.bam" />
+            <param name="primer_pairs" value="trusight_myeloid.bedpe" />
+            <section name="optional">
+                <param name="upstream" value="1" />
+                <param name="downstream" value="5" />
+            </section>
+            <output name="output" file="SRR2075598.primerclipped.bam" ftype="bam" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Bamclipper
+----------
+
+Soft-clip gene-specific primers from BAM alignment file based on genomic coordinates of primer pairs in BEDPE format
+to produce a new bam file called NAME.primerclipped.bam and its associated bam index (NAME.primerclipped.bam.bai)
+
+Example primer pair BEDPE file lines:
+
+::
+
+    chr1	115256390	115256417	chr1	115256622	115256650
+    chr1	115258642	115258664	chr1	115258876	115258903
+    chr10	89692737	89692767	chr10	89692971	89692998
+    chr10	89692943	89692970	chr10	89693177	89693206
+    chr10	89717567	89717596	chr10	89717775	89717802
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool> 
