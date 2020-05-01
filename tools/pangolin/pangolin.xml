@@ -1,4 +1,4 @@
-<tool id="pangolon" name="Pangolin" version="@VERSION@+galaxy0">
+<tool id="pangolin" name="Pangolin" version="@VERSION@+galaxy0">
     <description> CoV-2019 Phylogenetic Assignment of Named Global Outbreak LINeages</description>
     <macros>
         <import>macros.xml</import>
@@ -6,8 +6,9 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length'
+pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' &&
 
+sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
     ]]></command>
     <inputs>
         <param name="input1" type="data" format="fasta"
@@ -25,12 +26,12 @@ pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' 
         </section>
     </inputs>
     <outputs>
-        <data format="csv" from_work_dir="lineage_report.csv" name="lineage_report" label="${input1.name}_lineage_report" />
+        <data format="tabular" from_work_dir="lineage_report.tsv" name="lineage_report" label="${input1.name}_lineage_report" />
     </outputs>
     <tests>
         <test>
             <param name="input1" value="test_seqs.fasta" />
-            <output name="lineage_report" value="lineage_report.csv" />
+            <output name="lineage_report" value="lineage_report.tsv" />
         </test>
     </tests>
     <help><![CDATA[

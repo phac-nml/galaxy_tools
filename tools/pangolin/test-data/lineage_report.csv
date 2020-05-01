@@ -1,7 +1,0 @@
-taxon,lineage,SH-alrt,UFbootstrap,lineages_version,status,note
-Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17,B,100,100,2020-04-27,passed_qc,
-USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16,B.1,100,100,2020-04-27,passed_qc,
-This_seq_has_no_seq,None,0,0,2020-04-27,fail,seq_len:0
-This_seq_is_too_short,None,0,0,2020-04-27,fail,seq_len:2997
-This_seq_has_lots_of_Ns,None,0,0,2020-04-27,fail,N_content:0.98
-This_seq_is_literally_just_N,None,0,0,2020-04-27,fail,N_content:1.0
