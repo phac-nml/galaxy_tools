@@ -1,0 +1,73 @@
+<tool id="pangolon" name="Pangolin" version="@VERSION@+galaxy0">
+    <description> CoV-2019 Phylogenetic Assignment of Named Global Outbreak LINeages</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length'
+
+    ]]></command>
+    <inputs>
+        <param name="input1" type="data" format="fasta"
+            label="Input multi-sequence fasta file"
+            />
+        <section name="additional" title="Additional Parameters" expanded="false">
+            <param name="max_ambig" type="float" value="0.5" min="0" max="1.0"
+                label="Maximum proportion of Ns allowed to attempt assignment"
+                argument="--max-ambig"
+                />
+            <param name="min_length" type="integer" value="10000" min="0"
+                label="Minimum query length to attempt assignment"
+                argument="--min-length"
+                />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="csv" from_work_dir="lineage_report.csv" name="lineage_report" label="${input1.name}_lineage_report" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="test_seqs.fasta" />
+            <output name="lineage_report" value="lineage_report.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Pangolin
+--------
+
+Pangolin assigns SARS-CoV-2 genome sequences in fasta format to global lineages from `Rambaut et al. <https://doi.org/10.1101/2020.04.17.046086>`_.
+To do this, Pangolin employs the use of external programs including: `iqtree <http://www.iqtree.org/#download>`_, `mafft <https://mafft.cbrc.jp/alignment/software/>`_,
+and `snakemake <https://snakemake.readthedocs.io/en/stable/index.html>`_.
+
+More information can be obtained from the authors github site: https://github.com/hCoV-2019/pangolin
+
+--------------
+
+**Input** - Multi sequence fasta file
+
+
+**Output** - lineage report:
+
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Taxon   | Lineage | aLRT | UFbootstrap | lineages_version | status    | note      |
++=========+=========+======+=============+==================+===========+===========+
+| Sample1 | A.1     | 100  | 60          | 2020-04-27       | passed_qc |           |
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Sample2 | B.1     | 80   | 80          | 2020-04-27       | passed_qc |           |
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Sample3 | B.1.4   | 60   | 100         | 2020-04-27       | fail      | seq_len:0 |
++---------+---------+------+-------------+------------------+-----------+-----------+
+
+
+Resources for interpreting aLRT and UFbootstrap values:
+
+- `IQ_TREE: Assessing branch supports with single branch tests <http://www.iqtree.org/doc/Tutorial#assessing-branch-supports-with-single-branch-tests>`_
+
+- `IQ_TREE: Command Reference <http://www.iqtree.org/doc/Command-Reference>`_
+
+    ]]></help>
+    <expand macro="citations" />
+</tool> 
