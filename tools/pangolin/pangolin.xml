@@ -6,7 +6,7 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' &&
+pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' $additional.write_tree &&
 
 sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
     ]]></command>
@@ -23,15 +23,44 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
                 label="Minimum query length to attempt assignment"
                 argument="--min-length"
                 />
+            <param name="write_tree" type="boolean" checked="false"
+                truevalue="--write-tree"
+                falsevalue=""
+                label="Write guide trees"
+                help="Output a collection of trees with each query sequence placed in the guide tree"
+                />
         </section>
     </inputs>
     <outputs>
         <data format="tabular" from_work_dir="lineage_report.tsv" name="lineage_report" label="${input1.name}_lineage_report" />
+        <collection name="pangolin_trees" type="list" label="${tool.name} Trees">
+            <filter>additional['write_tree']</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.tree" directory="pangolin_trees/" format="iqtree" />
+        </collection>
     </outputs>
     <tests>
         <test>
             <param name="input1" value="test_seqs.fasta" />
             <output name="lineage_report" value="lineage_report.tsv" />
+        </test>
+        <test>
+            <param name="input1" value="test_seqs.fasta" />
+            <section name="additional">
+                <param name="write_tree" value="true" />
+            </section>
+            <output name="lineage_report" value="lineage_report.tsv" />
+            <output_collection name="pangolin_trees" type="list">
+                <element name="USA_NY-NYUMC7_2020_EPI_ISL_418192__USA_New_York_Manhattan_2020-03-16" ftype="iqtree">
+                    <assert_contents>
+                        <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    </assert_contents>
+                </element>
+                <element name="Japan_DP0779_2020_EPI_ISL_416626__Japan_unknown__2020-02-17" ftype="iqtree">
+                    <assert_contents>
+                        <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    </assert_contents>
+                </element>
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
