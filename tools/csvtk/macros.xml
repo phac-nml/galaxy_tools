@@ -216,6 +216,9 @@ Example bad table:
 | this   | will   |        | break  |
 +--------+--------+--------+--------+
 
+Bad tables may work if both the "Ignore Illegal Rows" and "Ignore Empty Rows" global parameters are set to "Yes".
+But there is no guarentee of that!
+
 ----
     </token>
     <token name="@HELP_END_STATEMENT@">

@@ -91,7 +91,7 @@ Csvtk - Collapse Help
 Info
 ####
 
-Csvtk collapse combines one field with selected fields as keys for what to combine
+Csvtk concatenate 
 
 @HELP_INPUT_DATA@
 
@@ -99,52 +99,35 @@ Csvtk collapse combines one field with selected fields as keys for what to combi
 Usage
 #####
 
-To run csvtk-collapse, all you need is a valid (as defined above) CSV or TSV file with a column you want to use
-to collapse on based on any number of key column(s)
+To run csvtk-concatenate, all you need is one or more valid (as defined above) CSV or TSV files (of the same type) to concatenate together
 
-**Example collapse with one key column**
+**Example Concatenate**
 
-Input table:
+::
 
-+--------+--------+----------+
-| Name   | Colour | Food     |
-+========+========+==========+
-| Eric   | Blue   | Apples   |
-+--------+--------+----------+
-| Darian | Blue   | Pancakes |
-+--------+--------+----------+
-| Daniel | Red    | Apples   |
-+--------+--------+----------+
-| Emily  | Blue   | Apples   |
-+--------+--------+----------+
+    If you have the following two files:
 
-Now if you wanted to find out who has the same favourite colour, you would specify the key column as "Colour" (-F -f)
-and the value column as "Name" (-v) to generate the following table:
+    +-------+--------+           +-------+------+
+    | Name  | Colour |           | Name  | Food |
+    +=======+========+     +     +=======+======+
+    | Steve | Blue   |           | Fred  | Eggs |
+    +-------+--------+           +-------+------+
+                                 | Steve | Ham  |
+                                 +-------+------+
 
-+--------+---------------------+
-| Colour | Name                |
-+========+=====================+
-| Red    | Daniel              |
-+--------+---------------------+
-| Blue   | Eric; Darian; Emily |
-+--------+---------------------+
+    -----------------------------------------------
 
---------
+    They would concatenate to:
 
-**Example collapse with two key columns**
+    +-------+--------+
+    | Name  | Colour |
+    +=======+========+
+    | Steve | Blue   |
+    +-------+--------+
+    | Steve |        |
+    +-------+--------+
 
-Same input table, now our key columns are "Colour" and "Food" which could be input as "2,3" (-F -f)
-and the same value column which would generate the following table:
-
-+--------+----------+-------------+
-| Colour | Food     | Name        |
-+========+==========+=============+
-| Blue   | Pancakes | Darian      |
-+--------+----------+-------------+
-| Red    | Apples   | Daniel      |
-+--------+----------+-------------+
-| Blue   | Apples   | Eric; Emily |
-+--------+----------+-------------+
+    If you want, you can fill the empty cell with any set of characters so long as it doesn't contain an apostraphe (')
 
 ----
 
