@@ -1,5 +1,5 @@
 <tool id="csvtk-concat" name="csvtk-concatenate" version="@VERSION@+@GALAXY_VERSION@">
-    <description> one field with selected fields as keys</description>
+    <description> concatenate CSV/TSV files by rows</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -91,7 +91,9 @@ Csvtk - Collapse Help
 Info
 ####
 
-Csvtk concatenate 
+Csvtk concatenate CSV/TSV files by rows
+
+**Order is important to input and the first file input will determine the header names!**
 
 @HELP_INPUT_DATA@
 
@@ -99,7 +101,7 @@ Csvtk concatenate
 Usage
 #####
 
-To run csvtk-concatenate, all you need is one or more valid (as defined above) CSV or TSV files (of the same type) to concatenate together
+To run csvtk-concatenate, all you need is one or more valid (as defined above) CSV or TSV files (of the same type) to concatenate together.
 
 **Example Concatenate**
 
