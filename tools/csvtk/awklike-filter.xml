@@ -1,4 +1,4 @@
-<tool id="csvtk-awk-like-filter" name="csvtk-advanced-filter" version="@VERSION@">
+<tool id="csvtk-awklike-filter" name="csvtk-advanced-filter" version="@VERSION@+@GALAXY_VERSION@">
     <description> rows by awk-like artithmetic/string expressions</description>
     <macros>
         <import>macros.xml</import>

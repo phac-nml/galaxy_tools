@@ -1,4 +1,4 @@
-<tool id="csvtk-histogram" name="csvtk-plot-histogram" version="@VERSION@">
+<tool id="csvtk-histogram" name="csvtk-plot-histogram" version="@VERSION@+@GALAXY_VERSION@">
     <description> based on column</description>
     <macros>
         <import>macros.xml</import>
@@ -92,7 +92,7 @@ csvtk plot hist --num-cpus "\${GALAXY_SLOTS:-1}"
                 <param name="select" value="string" />
                 <param name="in_text" value="2" />
             </conditional>
-            <output name="out_plot" value="plot.png" ftype="png" />
+            <output name="out_plot" value="plot.png" ftype="png" compare="sim_size" delta="20000" />
         </test>
     </tests>
     <help><![CDATA[

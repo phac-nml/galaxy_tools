@@ -1,15 +1,10 @@
-<tool id="csvtk-join" name="csvtk-join" version="@VERSION@">
+<tool id="csvtk-join" name="csvtk-join" version="@VERSION@+@GALAXY_VERSION@">
     <description>tables by column(s)</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-
-## Set the fields to join column(s) on ##
-#########################################
-#set $split_on = str($column_text.in_text)
-
 
 ###################
 ## Start Command ##
@@ -38,13 +33,17 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
 
     ## Specify fields to join ##
     ############################
-    -F -f '$split_on'
+    -F -f '$column_text.in_text'
     
     ## Fill columns if wanted ##
     ############################
     #if $unmatched.wanted == 'yes':
-        -k
-        --fill '$unmatched.fill_value'
+        #if $unmatched.join_type == 'outer'
+            -O
+        #else
+            -L
+        #end if
+        --na '$unmatched.fill_value'
     #end if
     
     ## To output ##
@@ -65,8 +64,14 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
             </param>
             <when value="no" />
             <when value="yes">
+                <param type="select" name="join_type"
+                    label="Type of Join"
+                    >
+                    <option value="left">Left (Standard)</option>
+                    <option value="outer">Outer</option>
+                </param>
                 <param type="text" name="fill_value"
-                    argument="--fill"
+                    argument="--na"
                     label="What to fill unmatched columns with"
                     help="Specify value to fill into all of the columns with no data"
                     />
@@ -89,6 +94,20 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
                 <param name="wanted" value="no" />
             </conditional>
             <output name="joined" file="joined.csv" ftype="csv" />
+        </test>
+        <test>
+            <param name="in_1" value="csv.csv,data.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="Person" />
+            </conditional>
+            <conditional name="unmatched" >
+                <param name="wanted" value="yes" />
+                <param name="join_type" value="outer" />
+                <param name="fill_value" value="a" />
+            </conditional>
+            <param name="ignore_case" value="false" />
+            <output name="joined" file="joined_filled.csv" ftype="csv" />
         </test>
     </tests>
     <help><![CDATA[

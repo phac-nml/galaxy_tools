@@ -1,4 +1,4 @@
-<tool id="csvtk-uniq" name="csvtk-unique" version="@VERSION@">
+<tool id="csvtk-uniq" name="csvtk-unique" version="@VERSION@+@GALAXY_VERSION@">
     <description> first values in column(s)</description>
     <macros>
         <import>macros.xml</import>
@@ -30,8 +30,8 @@ csvtk uniq --num-cpus "\${GALAXY_SLOTS:-1}"
     ###############
     '$in_1'
 
-    ## Specify fields for freq ##
-    #############################
+    ## Specify fields for unique ##
+    ###############################
     -F -f '$column_text.in_text'
 
     ## If Only Wanted input columns ##

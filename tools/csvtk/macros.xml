@@ -1,5 +1,6 @@
 <macros>
-    <token name="@VERSION@">0.19.1</token>
+    <token name="@VERSION@">0.20.0</token>
+    <token name="@GALAXY_VERSION@">galaxy0</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@VERSION@">csvtk</requirement>
@@ -9,7 +10,7 @@
         <param type="data" name="in_1" format="csv,tabular"
             multiple="true" optional="false"
             label="Specify TSV or CSV file inputs"
-            help="Input tsv or csv files to analyze. HOWEVER, they must all be the **same file type** or the tool will fail/not give results!"
+            help="Input tsv or csv files to analyze. HOWEVER, they must all be the **same file type** or the tool will fail/not give correct results!"
             />
     </xml>
     <xml name="singular_input">
@@ -22,7 +23,7 @@
     <xml name="ignore_case">
         <param type="boolean" name="ignore_case"
             falsevalue="" truevalue="-i"
-            checked="true"
+            checked="false"
             argument="-i"
             label="Ignore cell case?"
             help="ABC == abc"
@@ -229,6 +230,8 @@ Although be aware that some features may not be available and some small changes
 - Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match)
 
 - Column Names are Case Sensitive
+
+- No single quotes / apostrophes allowed in text inputs
     </token>
     <xml name="citations">
         <citations>

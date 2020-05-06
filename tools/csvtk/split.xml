@@ -1,4 +1,4 @@
-<tool id="csvtk-split" name="csvtk-split" version="@VERSION@">
+<tool id="csvtk-split" name="csvtk-split" version="@VERSION@+@GALAXY_VERSION@">
     <description>table into multiple files</description>
     <macros>
         <import>macros.xml</import>
@@ -10,9 +10,8 @@
 #########################################
 mkdir -p ./output &&
 
-#set input_name = $in_1.name
+#set input_name = str($in_1.name)
 ln -s '$in_1' $input_name &&
-
 
 ###################
 ## Start Command ##
@@ -40,7 +39,7 @@ csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
 
     ## Specify fields for splitting ##
     ##################################
-    -f '$column_text.in_text'
+    -F -f '$column_text.in_text'
 
     ]]></command>
     <inputs>
@@ -61,6 +60,7 @@ csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
                 <param name="select" value="string" />
                 <param name="in_text" value="1" />
             </conditional>
+            <param name="ignore_case" value="true" />
             <output_collection name="list_split" type="list">
                 <element name="csv-bob" file="csv-bob.csv" ftype="csv" />
                 <element name="csv-darian" file="csv-darian.csv" ftype="csv" />

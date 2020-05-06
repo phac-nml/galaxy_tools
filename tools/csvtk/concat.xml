@@ -1,0 +1,159 @@
+<tool id="csvtk-concat" name="csvtk-concatenate" version="@VERSION@+@GALAXY_VERSION@">
+    <description> one field with selected fields as keys</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk concat --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1[0].is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    #for $file in $in_1:
+        '$file'
+    #end for
+    
+    ## Fill unmatched ##
+    ####################
+    #if $fill.select == 'yes' 
+    -u '$fill.fill_value'
+    #end if
+    
+    ## To output ##
+    ###############
+    > concat
+
+    ]]></command>
+    <inputs>
+        <expand macro="multi_input" />
+        <conditional name="fill">
+            <param name="select" type="select" label="Fill unmatched columns?">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </param>
+            <when value="yes">
+                <param name="fill_value" type="text" value="-" argument="-u"
+                    optional="false"
+                    label="Fill string"
+                    help="Input character string that will fill unmatched columns. The ' character is not allowed">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                            <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+            <when value="no" />
+        </conditional>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="concat" from_work_dir="concat" label="${in_1[0].name} concatenated" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="test.csv,other.csv,another.csv" />
+            <conditional name="fill">
+                <param name="select" value="no" />
+            </conditional>
+            <output name="concat" file="concat_2.csv" />
+        </test>
+        <test>
+            <param name="in_1" value="test.csv,other.csv,another.csv" />
+            <output name="concat" file="concat_1.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Collapse Help
+---------------------
+
+Info
+####
+
+Csvtk collapse combines one field with selected fields as keys for what to combine
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-collapse, all you need is a valid (as defined above) CSV or TSV file with a column you want to use
+to collapse on based on any number of key column(s)
+
+**Example collapse with one key column**
+
+Input table:
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+| Emily  | Blue   | Apples   |
++--------+--------+----------+
+
+Now if you wanted to find out who has the same favourite colour, you would specify the key column as "Colour" (-F -f)
+and the value column as "Name" (-v) to generate the following table:
+
++--------+---------------------+
+| Colour | Name                |
++========+=====================+
+| Red    | Daniel              |
++--------+---------------------+
+| Blue   | Eric; Darian; Emily |
++--------+---------------------+
+
+--------
+
+**Example collapse with two key columns**
+
+Same input table, now our key columns are "Colour" and "Food" which could be input as "2,3" (-F -f)
+and the same value column which would generate the following table:
+
++--------+----------+-------------+
+| Colour | Food     | Name        |
++========+==========+=============+
+| Blue   | Pancakes | Darian      |
++--------+----------+-------------+
+| Red    | Apples   | Daniel      |
++--------+----------+-------------+
+| Blue   | Apples   | Eric; Emily |
++--------+----------+-------------+
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

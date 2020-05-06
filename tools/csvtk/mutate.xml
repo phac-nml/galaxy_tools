@@ -1,4 +1,4 @@
-<tool id="csvtk-mutate" name="csvtk-mutate" version="@VERSION@">
+<tool id="csvtk-mutate" name="csvtk-mutate" version="@VERSION@+@GALAXY_VERSION@">
     <description>new column by regular expression</description>
     <macros>
         <import>macros.xml</import>
@@ -37,6 +37,7 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
     ############################
     -n '$column_name_input'
     -p '($pattern_input)'
+    $remove
     $fill_na
     
     ## To output ##
@@ -48,8 +49,8 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
         <expand macro="singular_input"/>
         <conditional name="column_text" >
             <param type="select" name="select" label="Select column based on" argument="-f">
-                <option value="column">Column Number</option>
                 <option value="string">Column Name</option>
+                <option value="column">Column Number</option>
             </param>
             <when value="column">
                 <param type="data_column" name="in_text"
@@ -73,7 +74,7 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
             label="Set regex search pattern"
             optional="false"
             help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
-            Regex help can be found below. The ' character is also invalid"
+            Regex help can be found below. The ' character is invalid"
             >
             <sanitizer>
                 <valid initial="string.printable">
@@ -91,16 +92,21 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
         <param type="boolean" name="fill_na"
             falsevalue="--na" truevalue=""
             checked="true"
-            argument="--na"
             label="Fill Non-matches"
-            help="If NO, mutate will create a blank cell where no regex matches. If YES the full cell value will be copied of non-matched columns"
+            help="If NO, mutate will create a blank cell where no regex matches (--na). If YES the full cell value will be copied of non-matched columns"
+            />
+        <param name="remove" type="boolean" checked="false"
+            falsevalue=""
+            truevalue="-R"
+            argument="-R"
+            label="Remove input column"
             />
         <expand macro="ignore_case" />
         <expand macro="global_parameters" />
     </inputs>
     <outputs>
         <data format_source="in_1" name="mutated" from_work_dir="mutated" 
-        label='${in_1.name} mutated by column ${column_text.in_text} with pattern "${pattern_input}"' />
+        label='${in_1.name} mutated by column ${column_text.in_text} with pattern ${pattern_input}' />
     </outputs>
     <tests>
         <test>
@@ -112,6 +118,18 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
             <param name="column_name_input" value="new_column" />
             <param name="pattern_input" value=".*" />
             <output name="mutated" file="mutated.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="in_1" value="blood_type.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <param name="column_name_input" value="new_column" />
+            <param name="pattern_input" value="Darian" />
+            <param name="remove" value="true" />
+            <param name="fill_na" value="false" />
+            <output name="mutated" file="mutate_removed.tsv" ftype="tabular" />
         </test>
     </tests>
     <help><![CDATA[

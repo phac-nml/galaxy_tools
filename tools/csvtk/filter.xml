@@ -1,4 +1,4 @@
-<tool id="csvtk-filter" name="csvtk-filter" version="@VERSION@">
+<tool id="csvtk-filter" name="csvtk-filter" version="@VERSION@+@GALAXY_VERSION@">
     <description> rows through arithmetic expression(s)</description>
     <macros>
         <import>macros.xml</import>

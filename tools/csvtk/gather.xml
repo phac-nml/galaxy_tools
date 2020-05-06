@@ -1,4 +1,4 @@
-<tool id="csvtk-gather" name="csvtk-gather" version="@VERSION@">
+<tool id="csvtk-gather" name="csvtk-gather" version="@VERSION@+@GALAXY_VERSION@">
     <description> column(s) into key-value pairs</description>
     <macros>
         <import>macros.xml</import>
