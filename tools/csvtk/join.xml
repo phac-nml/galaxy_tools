@@ -107,7 +107,7 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
                 <param name="fill_value" value="a" />
             </conditional>
             <param name="ignore_case" value="false" />
-            <output name="joined" file="joined_filled.csv" ftype="csv" />
+            <output name="joined" file="joined_filled.csv" ftype="csv" compare="sim_size" delta="10"/>
         </test>
     </tests>
     <help><![CDATA[
