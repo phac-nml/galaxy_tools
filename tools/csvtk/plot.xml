@@ -1,0 +1,301 @@
+<tool id="csvtk-plot" name="csvtk-plot" version="@VERSION@+@GALAXY_VERSION@">
+    <description> histogram, line/scatter plot, or boxplot based on column</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk plot 
+
+#if $plot_type.plot == "histogram"
+    hist
+#elif $plot_type.plot == "boxplot"
+    box
+#elif $plot_type.plot == "line"
+    line
+#end if
+
+    --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specific Plot Parameters ##
+    ##############################
+    #if $plot_type.plot == "histogram"
+        -f '$plot_type.column_text.in_text'
+        --color-index $plot_type.colour
+
+    #elif $plot_type.plot == "boxplot"
+        -f '$plot_type.column_text.in_text'
+        $plot_type.horizontal
+
+        #if $plot_type.group_field.select_group != "none"
+            -g '$plot_type.group_field.in_text'
+        #end if
+
+        #if $plot_type.box_width
+            --box-width '$plot_type.box_width'
+        #end if
+
+    #elif $plot_type.plot == "line"
+        $plot_type.scatter
+        -x '$plot_type.column_text.in_text_x'
+        -y '$plot_type.column_text.in_text_y'
+
+        #if $plot_type.group_field.select_group != "none"
+            -g '$plot_type.group_field.in_text'
+        #end if
+
+        $plot_type.label_location
+
+    #end if
+
+    ## General Plot Parameters ##
+    #############################
+
+    #if $plot_parameters.figure_height
+    --height '$plot_parameters.figure_height'
+    #end if
+
+    #if $plot_parameters.figure_width
+    --width '$plot_parameters.figure_width'
+    #end if
+
+    #if $plot_parameters.tick_width
+    --tick-width '$plot_parameters.tick_width'
+    #end if
+
+    #if $plot_parameters.title
+    --title '$plot_parameters.title'
+    #end if
+
+    #if $plot_parameters.x_label
+    --xlab '$plot_parameters.x_label'
+    #end if
+
+    #if $plot_parameters.min_x
+    --x-min '$plot_parameters.min_x'
+    #end if
+
+    #if $plot_parameters.max_x
+    --x-max '$plot_parameters.max_x'
+    #end if
+
+    #if $plot_parameters.y_label
+    --ylab '$plot_parameters.y_label'
+    #end if
+
+    #if $plot_parameters.min_y
+    --y-min '$plot_parameters.min_y'
+    #end if
+
+    #if $plot_parameters.max_y
+    --y-max '$plot_parameters.max_y'
+    #end if
+    
+    ## To output ##
+    ###############
+    > plot.png
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <conditional name="plot_type">
+            <param name="plot" type="select" label="Select plot type">
+                <option value="histogram">Histogram</option>
+                <option value="boxplot">Boxplot</option>
+                <option value="line">Line/Scatter</option>
+            </param>
+            <when value="histogram">
+                <expand macro="plot_field" />
+                <param name="colour" type="integer"
+                    min="1" max="7"
+                    value="1"
+                    argument="--color-index"
+                    label="Select colour scheme"
+                    help="Choose a number from 1-7"
+                />
+            </when>
+            <when value="boxplot" >
+                <expand macro="plot_field" />
+                <expand macro="plot_groups" />
+                <param type="boolean" name="horizontal" label="Horizontal Box Plot" argument="--horiz"
+                    checked="false"
+                    falsevalue=""
+                    truevalue="--horiz"
+                />
+                <param name="box_width" type="float"
+                    label="Box Width (Optional)"
+                    argument="--box-width"
+                    optional="true"
+                />
+            </when>
+            <when value="line">
+                <param name="scatter" type="boolean" label="Scatter Plot" argument="--scatter"
+                    checked="false"
+                    falsevalue=""
+                    truevalue="--scatter"
+                    help="Plot only points, no lines"
+                />
+                <conditional name="column_text" >
+                    <param type="select" name="select" label="Select input data columns for the X and Y axis based on:" >
+                        <option value="string">Column Name</option>
+                        <option value="column">Column Number</option>
+                    </param>
+                    <when value="column">
+                        <param type="data_column" name="in_text_x"
+                            data_ref="in_1"
+                            multiple="false"
+                            label="X-axis data column"
+                        />
+                        <param type="data_column" name="in_text_y"
+                            data_ref="in_1"
+                            multiple="false"
+                            label="Y-axis data column"
+                        />
+                    </when>
+                    <when value="string">
+                        <param type="text" name="in_text_x"
+                            optional="false"
+                            label="X-axis data column"
+                            help="Can use column name or column number"
+                        />
+                        <param type="text" name="in_text_y"
+                            optional="false"
+                            label="Y-axis data column"
+                            help="Can use column name or column number"
+                        />
+                    </when>
+                </conditional>
+                <expand macro="plot_groups" />
+                <param name="label_location" type="select" label="Label Location"
+                    help="Only displays legend if a groups column is set">
+                    <option value="--legend-left">Left edge of plot</option>
+                    <option value="--legend-top">Top edge of plot</option>
+                </param>
+            </when>
+        </conditional>
+        <expand macro="global_plot_parameters" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format="png" from_work_dir="plot.png" name="out_plot" label="${in_1.name} ${plot_type.plot}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="plot_type">
+                <param name="plot" value="histogram" />
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="colour" value="2" />
+            </conditional>
+            <output name="out_plot" value="plot.png" ftype="png" compare="sim_size" delta="20000" />
+        </test>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="plot_type">
+                <param name="plot" value="boxplot" />
+                <conditional name="column_text">
+                    <param name="select" value="column" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <conditional name="group_field">
+                    <param name="select_group" value="string" />
+                    <param name="in_text" value="1" />
+                </conditional>
+                <param name="horizontal" value="true" />
+                <param name="box_width" value="50.5" />
+            </conditional>
+            <output name="out_plot" value="plot_box.png" compare="sim_size" delta="20000" />
+        </test>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="plot_type">
+                <param name="plot" value="line" />
+                <param name="scatter" value="true" />
+                <conditional name="column_text">
+                    <param name="select" value="column" />
+                    <param name="in_text_x" value="2" />
+                    <param name="in_text_y" value="3" />
+                </conditional>
+                <conditional name="group_field">
+                    <param name="select_group" value="string" />
+                    <param name="in_text" value="1" />
+                </conditional>
+            </conditional>
+            <output name="out_plot" value="plot_scatter.png" compare="sim_size" delta="20000" />
+        </test>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="plot_type">
+                <param name="plot" value="line" />
+                <param name="scatter" value="false" />
+                <conditional name="column_text">
+                    <param name="select" value="column" />
+                    <param name="in_text_x" value="2" />
+                    <param name="in_text_y" value="3" />
+                </conditional>
+                <conditional name="group_field">
+                    <param name="select_group" value="string" />
+                    <param name="in_text" value="1" />
+                </conditional>
+                <param name="label_location" value="--legend-top" />
+            </conditional>
+            <section name="plot_parameters">
+                <param name="figure_height" value="10.1" />
+                <param name="figure_width" value="6.6" />
+                <param name="tick_width" value="2.1" />
+                <param name="title" value="Test" />
+                <param name="x_label" value="Potentially Broken" />
+                <param name="min_x" value="1.1" />
+                <param name="max_x" value="109.1" />
+                <param name="y_label" value="How High Can We Go?" />
+                <param name="min_y" value="-10.4" />
+                <param name="max_y" value="141.9" />
+            </section>
+            <output name="out_plot" value="line_all_param.png" compare="sim_size" delta="20000" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Plot Help
+-----------------
+
+Info
+####
+
+Use Csvtk-Plot to plot histograms, line plots / scatter plots, or boxplots. 
+
+Specify a column or a couple of columns from an input CSV/TSV dataset to generate wanted plots fast.
+
+@HELP_INPUT_DATA@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

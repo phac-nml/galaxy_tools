@@ -109,22 +109,26 @@
     </xml>
     <xml name="plot_groups">
         <conditional name="group_field" >
-            <param type="select" name="select_group" label="Select column to group data" argument="-g">
+            <param type="select" name="select_group" label="Select column to group data" argument="-g"
+                optional="false"
+                help="Specify a single column that is used to create data groups. An example is shown in the help section"
+                >
                 <option value="none">None</option>
                 <option value="string">Column Name</option>
                 <option value="column">Column Number</option>
             </param>
+            <when value="none" />
             <when value="column">
                 <param type="data_column" name="in_text"
                         data_ref="in_1"
                         multiple="false"
-                        label="Group column number"
+                        label="Group by column number"
                         />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
                     optional="false"
-                    label="Input column name"
+                    label="Group by column name"
                     help="Can use column name or number"
                     />
             </when>
@@ -132,6 +136,21 @@
     </xml>
     <xml name="global_plot_parameters">
         <section name="plot_parameters" title="Advanced Optional Plot Parameters" expanded="false">
+            <param type="float" name="figure_height"
+                argument="--height"
+                optional="true"
+                label="Figure Height (Default 4.5)"
+                />
+            <param type="float" name="figure_width"
+                argument="--width"
+                optional="true"
+                label="Figure Width (Default 1.5)"
+                />
+            <param type="float" name="tick_width"
+                argument="--tick-width"
+                optional="true"
+                label="Axis Tick Width (Default 1.5)"
+                />
             <param type="text" name="title"
                 argument="--title"
                 optional="true"
@@ -142,30 +161,30 @@
                 optional="true"
                 label="Specify X-axis label"
                 />
-            <param type="integer" name="min_x"
+            <param type="float" name="min_x"
                 argument="--x-min"
                 optional="true"
-                label="Minimum value of X-axis (integer)"
+                label="Minimum value of X-axis (float)"
                 />
-            <param type="integer" name="max_x"
+            <param type="float" name="max_x"
                 argument="--x-max"
                 optional="true"
-                label="Maximum value of X-axis (integer)"
+                label="Maximum value of X-axis (float)"
                 />
             <param type="text" name="y_label"
                 argument="--ylab"
                 optional="true"
                 label="Specify Y-axis label"
                 />
-            <param type="integer" name="min_y"
+            <param type="float" name="min_y"
                 argument="--y-min"
                 optional="true"
-                label="Minimum value of Y-axis (integer)"
+                label="Minimum value of Y-axis (float)"
                 />
-            <param type="integer" name="max_y"
+            <param type="float" name="max_y"
                 argument="--y-max"
                 optional="true"
-                label="Maximum value of Y-axis (integer)"
+                label="Maximum value of Y-axis (float)"
                 />
         </section>
     </xml>

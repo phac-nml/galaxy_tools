@@ -95,7 +95,7 @@ Csvtk advanced filter (also called filter2) outputs rows that satisfy the input 
 
 .. class:: note
 
-    If your wanted column header has a space in it, use the column number. Ex. $1 if column 1 is called "Colony Counts"
+    If your wanted column header has a space in it, use the column number. Example: Use $1 if column #1 is called "Colony Counts"
 
 Supported operators and types:
 
