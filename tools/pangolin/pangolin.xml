@@ -47,7 +47,6 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
                     <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
                     <has_text text="This_seq_is_too_short" />
                     <has_text text="lineage" />
-                    <has_n_lines n="7" />
                 </assert_contents>
             </output>
         </test>
@@ -62,7 +61,6 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
                     <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
                     <has_text text="This_seq_is_too_short" />
                     <has_text text="lineage" />
-                    <has_n_lines n="7" />
                 </assert_contents>
             </output>
             <output_collection name="pangolin_trees" type="list">
