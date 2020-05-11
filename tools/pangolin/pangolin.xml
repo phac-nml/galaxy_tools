@@ -41,14 +41,28 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
     <tests>
         <test>
             <param name="input1" value="test_seqs.fasta" />
-            <output name="lineage_report" value="lineage_report.tsv" />
+            <output name="lineage_report" >
+                <assert_contents>
+                    <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    <has_text text="This_seq_is_too_short" />
+                    <has_text text="lineage" />
+                </assert_contents>
+            </output>
         </test>
         <test>
             <param name="input1" value="test_seqs.fasta" />
             <section name="additional">
                 <param name="write_tree" value="true" />
             </section>
-            <output name="lineage_report" value="lineage_report.tsv" />
+            <output name="lineage_report" >
+                <assert_contents>
+                    <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    <has_text text="This_seq_is_too_short" />
+                    <has_text text="lineage" />
+                </assert_contents>
+            </output>
             <output_collection name="pangolin_trees" type="list">
                 <element name="USA_NY-NYUMC7_2020_EPI_ISL_418192__USA_New_York_Manhattan_2020-03-16" ftype="iqtree">
                     <assert_contents>
