@@ -118,7 +118,7 @@ Usage
 #####
 
 To run csvtk-collapse, all you need is a valid (as defined above) CSV or TSV file with a column you want to use
-to collapse on based on any number of key column(s)
+to collapse on based on any number of key column(s).
 
 **Example collapse with one key column**
 
