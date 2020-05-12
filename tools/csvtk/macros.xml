@@ -6,19 +6,29 @@
             <requirement type="package" version="@VERSION@">csvtk</requirement>
         </requirements>
     </xml>
+    <xml name="version_cmd">
+        <version_command>csvtk version</version_command>
+    </xml>
+    <xml name="text_sanitizer">
+        <sanitizer>
+            <valid initial="string.printable">
+                    <remove value="&apos;"/>
+            </valid>
+        </sanitizer>
+    </xml>
     <xml name="multi_input">
         <param type="data" name="in_1" format="csv,tabular"
             multiple="true" optional="false"
             label="Specify TSV or CSV file inputs"
             help="Input tsv or csv files to analyze. HOWEVER, they must all be the **same file type** or the tool will fail/not give correct results!"
-            />
+        />
     </xml>
     <xml name="singular_input">
         <param type="data" name="in_1" format="csv,tabular"
             multiple="false" optional="false"
             label="Specify an input TSV or CSV file"
             help="Input a TSV or CSV file to work on"
-            />
+        />
     </xml>
     <xml name="ignore_case">
         <param type="boolean" name="ignore_case"
@@ -27,7 +37,7 @@
             argument="-i"
             label="Ignore cell case?"
             help="ABC == abc"
-            />
+        />
     </xml>
     <xml name="global_parameters">
         <section name="global_param" title="csvtk Global Parameters" expanded="false">
@@ -36,28 +46,28 @@
                 checked="true"
                 argument="-H"
                 label="Input file has a header line"
-                />
+            />
             <param type="boolean" name="illegal_rows"
                 falsevalue="" truevalue="-I"
                 checked="false"
                 argument="-I"
                 label="Ignore illegal rows"
                 help="Use if file has illegal rows as defined in the help section"
-                />
+            />
             <param type="boolean" name="empty_rows"
                 falsevalue="" truevalue="-E"
                 checked="false"
                 argument="-E"
                 label="Ignore empty rows"
                 help="Ignore rows with no data (only needed if input has empty rows)"
-                />
+            />
             <param type="boolean" name="lazy_quotes"
                 falsevalue="" truevalue="-l"
                 checked="false"
                 argument="-l"
                 label="File has Lazy quotes"
                 help="(TSV files only) If Yes, a quote may appear in an unquoted field and a non-doubled quote may appear in a quoted field"
-                />
+            />
         </section>
     </xml>
     <xml name="fields_input">
@@ -68,11 +78,11 @@
             </param>
             <when value="column">
                 <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="true"
-                        label="Input column number(s)"
-                        help="Select column(s) to use for analysis"
-                        />
+                    data_ref="in_1"
+                    multiple="true"
+                    label="Input column number(s)"
+                    help="Select column(s) to use for analysis"
+                />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
@@ -80,8 +90,13 @@
                     label="Input column name(s)"
                     help="Multiple columns can be given if separated by a ' , '. 
                     Column numbers can be given too - ex. '1,2' will target columns 1 and 2. 
-                    Please see the help section below for more detailed info"
-                    />
+                    Please see the help section below for more detailed info">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
             </when>
         </conditional>
     </xml>
@@ -93,26 +108,28 @@
             </param>
             <when value="column">
                 <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="false"
-                        label="Input data column number"
-                        />
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Input data column number"
+                />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
                     optional="false"
                     label="Input data column name"
-                    help="Can use column name or column number"
-                    />
+                    help="Can use column name or column number">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
             </when>
         </conditional>
     </xml>
     <xml name="plot_groups">
         <conditional name="group_field" >
-            <param type="select" name="select_group" label="Select column to group data" argument="-g"
-                optional="false"
-                help="Specify a single column that is used to create data groups. An example is shown in the help section"
-                >
+            <param type="select" name="select_group" label="Select column to group data" argument="-g" optional="false" help="Specify a single column that is used to create data groups. An example is shown in the help section">
                 <option value="none">None</option>
                 <option value="string">Column Name</option>
                 <option value="column">Column Number</option>
@@ -120,17 +137,22 @@
             <when value="none" />
             <when value="column">
                 <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="false"
-                        label="Group by column number"
-                        />
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Group by column number"
+                />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
                     optional="false"
                     label="Group by column name"
-                    help="Can use column name or number"
-                    />
+                    help="Can use column name or number">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
             </when>
         </conditional>
     </xml>
@@ -140,52 +162,67 @@
                 argument="--height"
                 optional="true"
                 label="Figure Height (Default 4.5)"
-                />
+            />
             <param type="float" name="figure_width"
                 argument="--width"
                 optional="true"
                 label="Figure Width (Default 1.5)"
-                />
+            />
             <param type="float" name="tick_width"
                 argument="--tick-width"
                 optional="true"
                 label="Axis Tick Width (Default 1.5)"
-                />
+            />
             <param type="text" name="title"
                 argument="--title"
                 optional="true"
-                label="Specify Figure Title"
-                />
+                label="Specify Figure Title">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
             <param type="text" name="x_label"
                 argument="--xlab"
                 optional="true"
-                label="Specify X-axis label"
-                />
+                label="Specify X-axis label">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
             <param type="float" name="min_x"
                 argument="--x-min"
                 optional="true"
                 label="Minimum value of X-axis (float)"
-                />
+            />
             <param type="float" name="max_x"
                 argument="--x-max"
                 optional="true"
                 label="Maximum value of X-axis (float)"
-                />
+            />
             <param type="text" name="y_label"
                 argument="--ylab"
                 optional="true"
-                label="Specify Y-axis label"
-                />
+                label="Specify Y-axis label">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
             <param type="float" name="min_y"
                 argument="--y-min"
                 optional="true"
                 label="Minimum value of Y-axis (float)"
-                />
+            />
             <param type="float" name="max_y"
                 argument="--y-max"
                 optional="true"
                 label="Maximum value of Y-axis (float)"
-                />
+            />
         </section>
     </xml>
     <token name="@HELP_COLUMNS@">

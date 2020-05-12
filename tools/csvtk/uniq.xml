@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -58,7 +59,7 @@ csvtk uniq --num-cpus "\${GALAXY_SLOTS:-1}"
             falsevalue="No"
             label="Keep only input column(s)"
             help="All columns not specified as part of the input will be removed"
-            />
+        />
         <expand macro="global_parameters" />
     </inputs>
     <outputs>
@@ -83,6 +84,10 @@ Info
 ####
 
 Csvtk unique pulls the first unique values from the column(s) specified to create
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -78,6 +79,10 @@ Csvtk Cut cuts specified columns to create an output
 
 Csvtk Cut can be used to keep columns with normal inputs such as the column name or number. It
 can also be used to specify columns to remove with a "-" at the start. An example can be seen below.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

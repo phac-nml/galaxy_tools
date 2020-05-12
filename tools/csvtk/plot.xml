@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -177,13 +178,14 @@ csvtk plot
                         <param type="text" name="in_text_x"
                             optional="false"
                             label="X-axis data column"
-                            help="Can use column name or column number"
-                        />
+                            help="Can use column name or column number">
+                            <expand macro="text_sanitizer" />
+                        </param>
                         <param type="text" name="in_text_y"
                             optional="false"
                             label="Y-axis data column"
-                            help="Can use column name or column number"
-                        />
+                            help="Can use column name or column number">
+                        </param>
                     </when>
                 </conditional>
                 <expand macro="plot_groups" />
@@ -289,6 +291,10 @@ Info
 Use Csvtk-Plot to plot histograms, line plots / scatter plots, or boxplots. 
 
 Specify a column or a couple of columns from an input CSV/TSV dataset to generate wanted plots fast.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -46,30 +47,7 @@ csvtk collapse --num-cpus "\${GALAXY_SLOTS:-1}"
     ]]></command>
     <inputs>
         <expand macro="singular_input" />
-        <conditional name="column_text" >
-            <param type="select" name="select" label="Select key column(s) based on" argument="-F -f">
-                <option value="string">Column Name(s)</option>
-                <option value="column">Column Number(s)</option>
-            </param>
-            <when value="column">
-                <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="true"
-                        label="Input column number(s)"
-                        help="Select column(s) to use as keys for collapse"
-                        />
-            </when>
-            <when value="string">
-                <param type="text" name="in_text"
-                    optional="false"
-                    label="Input column name(s)"
-                    help="Specify columns to be used as keys for collapse. 
-                    Multiple columns can be given if separated by a ' , '. 
-                    Column numbers can be given too - ex. '1,2' will target columns 1 and 2. 
-                    Please see the help section below for more detailed info"
-                    />
-            </when>
-        </conditional> 
+        <expand macro="fields_input" />
         <conditional name="value_column" >
             <param type="select" name="select" label="Select value column to collapse based on" argument="-v">
                 <option value="string">Column Name</option>
@@ -77,29 +55,26 @@ csvtk collapse --num-cpus "\${GALAXY_SLOTS:-1}"
             </param>
             <when value="column">
                 <param type="data_column" name="in_text"
-                        data_ref="in_1"
-                        multiple="false"
-                        label="Input column number"
-                        help="Select column to collapse on"
-                        />
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Input column number"
+                    help="Select column to collapse on"
+                />
             </when>
             <when value="string">
                 <param type="text" name="in_text"
                     optional="false"
                     label="Input column name"
-                    help="Specify column name or number (ex. 1 for first column) to collapse on"
-                    />
+                    help="Specify column name or number (ex. 1 for first column) to collapse on">
+                    <expand macro="text_sanitizer" />
+                </param>
             </when>
         </conditional>
         <param name="separator" type="text" value="; " argument="-s"
             optional="false"
             label="Separator string"
-            help="Input string that will separate collapsed columns. The ' character is not allowed">
-            <sanitizer>
-                <valid initial="string.printable">
-                    <remove value="&apos;"/>
-                </valid>
-            </sanitizer>
+            help="Input string of characters that will separate collapsed columns. The ' character is not allowed">
+            <expand macro="text_sanitizer" />
         </param>
         <expand macro="ignore_case" />
         <expand macro="global_parameters" />
@@ -131,6 +106,10 @@ Info
 ####
 
 Csvtk collapse combines one field with selected fields as keys for what to combine
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

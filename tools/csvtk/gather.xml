@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -59,19 +60,21 @@ csvtk gather --num-cpus "\${GALAXY_SLOTS:-1}"
             optional="false"
             argument="-k"
             label="Name of Key Column"
-            help="Set name of key column that gathered field will output to"
-            />
+            help="Set name of key column that gathered field will output to">
+            <expand macro="text_sanitizer" />
+        </param>
         <param name="value_string" type="text"
             optional="false"
             argument="-v"
-            label="Name of Value Column"
-            />
+            label="Name of Value Column">
+            <expand macro="text_sanitizer" />
+        </param>
         <param name="only_input_columns" type="boolean"
             truevalue="Yes"
             falsevalue="No"
             label="Keep only Key and Value column(s) generated"
             help="Removes all columns but the input labeled key and value columns"
-            />
+        />
         <expand macro="global_parameters" />
     </inputs>
     <outputs>

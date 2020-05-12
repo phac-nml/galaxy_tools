@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -73,8 +74,9 @@ csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
                 <param type="text" name="fill_value"
                     argument="--na"
                     label="What to fill unmatched columns with"
-                    help="Specify value to fill into all of the columns with no data"
-                    />
+                    help="Specify value to fill into all of the columns with no data">
+                    <expand macro="text_sanitizer" />
+                </param>
             </when>
         </conditional>
         <expand macro="ignore_case" />

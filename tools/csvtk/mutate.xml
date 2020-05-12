@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -76,31 +77,28 @@ csvtk mutate --num-cpus "\${GALAXY_SLOTS:-1}"
             help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
             Regex help can be found below. The ' character is invalid"
             >
-            <sanitizer>
-                <valid initial="string.printable">
-                    <remove value="&apos;"/>
-                </valid>
-            </sanitizer>
+            <expand macro="text_sanitizer" />
         </param>
         <param type="text" name="column_name_input"
             value="new_column"
             argument="-n"
             label="Set new column name"
             optional="false"
-            help="Specify output column name for the matched data"
-            />
+            help="Specify output column name for the matched data">
+            <expand macro="text_sanitizer" />
+        </param>
         <param type="boolean" name="fill_na"
             falsevalue="--na" truevalue=""
             checked="true"
             label="Fill Non-matches"
             help="If NO, mutate will create a blank cell where no regex matches (--na). If YES the full cell value will be copied of non-matched columns"
-            />
+        />
         <param name="remove" type="boolean" checked="false"
             falsevalue=""
             truevalue="-R"
             argument="-R"
             label="Remove input column"
-            />
+        />
         <expand macro="ignore_case" />
         <expand macro="global_parameters" />
     </inputs>
@@ -147,7 +145,7 @@ start your expression with a `^` or just go straight into it
 
 .. class:: warningmark
 
-    Single quotes are not allowed!
+    Single quotes are not allowed in text inputs!
 
 For example:
 

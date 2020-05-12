@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -107,6 +108,10 @@ Find the frequency of the data based on the selected column(s).
 If one column is selected, the frequency will be the number of times each value is found in the column. These can further be sorted if so desired.
 
 Examples can be found in the usage section below!
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

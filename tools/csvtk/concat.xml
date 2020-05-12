@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -55,11 +56,7 @@ csvtk concat --num-cpus "\${GALAXY_SLOTS:-1}"
                     optional="false"
                     label="Fill string"
                     help="Input character string that will fill unmatched columns. The ' character is not allowed">
-                    <sanitizer>
-                        <valid initial="string.printable">
-                            <remove value="&apos;"/>
-                        </valid>
-                    </sanitizer>
+                    <expand macro="text_sanitizer" />
                 </param>
             </when>
             <when value="no" />
@@ -94,6 +91,10 @@ Info
 Csvtk concatenate CSV/TSV files by rows
 
 **Order is important to input and the first file input will determine the header names!**
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

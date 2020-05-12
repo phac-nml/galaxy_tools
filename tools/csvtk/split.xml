@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ## Create directory and set input name ##
@@ -79,7 +80,11 @@ Split input csv/tsv files into multiple csv/tsv files based on a column number(s
 
 This tool will generate as many output files as there are unique data points in the selected column(s).
 
-Examples below after the input data warning.
+Examples below.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

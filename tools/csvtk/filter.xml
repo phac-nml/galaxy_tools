@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements" />
+    <expand macro="version_cmd" />
     <command detect_errors="exit_code"><![CDATA[
 
 ###################
@@ -48,13 +49,8 @@ csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
             optional="false"
             argument="-F -f"
             label="Specify column(s) and numeric expression to filter for"
-            help="Give column name/number and the numeric expression that you want to evaluate. Example: 'frequency>4'. See help below for more examples"
-            >
-            <sanitizer>
-                <valid initial="string.printable">
-                    <remove value="&apos;"/>
-                </valid>
-            </sanitizer>
+            help="Give column name/number and the numeric expression that you want to evaluate. Example: 'frequency>4'. See help below for more examples">
+            <expand macro="text_sanitizer" />
         </param>
         <param name="line_number" type="boolean"
             checked="false"
@@ -62,7 +58,7 @@ csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
             falsevalue=""
             argument="-n"
             label="Print initial line number as the first column"
-            />
+        />
         <param name="any" type="boolean"
             checked="false"
             truevalue="--any"
@@ -70,7 +66,7 @@ csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
             argument="--any"
             label="Return row if any row value satisfies the condition"
             help="For multiple column filters only"
-            />
+        />
         <expand macro="global_parameters" />
     </inputs>
     <outputs>
@@ -92,6 +88,10 @@ Info
 ####
 
 Csvtk filter outputs rows that satisfy an input numerical expression on the specified column(s).
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 
