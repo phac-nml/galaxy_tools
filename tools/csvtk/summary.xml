@@ -1,0 +1,396 @@
+<tool id="csvtk_summary" name="csvtk-summary" version="@VERSION@+@GALAXY_VERSION@">
+    <description> statistics of selected fields</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+## Set Up Input ##
+##################
+
+#set input_list = list()
+#for $repeat in $field
+    #silent $input_list.append(str($repeat.column_text.in_text) + ":" + str($repeat.analysis_type))
+#end for
+
+#set input_total = ",".join($input_list)
+
+###################
+## Start Command ##
+###################
+
+csvtk summary --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## Specify fields ##
+    ####################
+    -f '$input_total'
+
+    ## other ##
+    ###########
+
+    #if $group_field.select_group != "none"
+        -g '$group_field.in_text'
+    #end if
+
+    -s '$extra.separator'
+    -S '$extra.rand_int'
+    -n '$decimal_width'
+    $ignore_non_digits
+    
+
+    ## To output ##
+    ###############
+    > summary
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <repeat name="field" title="Select Field and Operator" min="1">
+            <expand macro="singular_fields_input" />
+            <param name="analysis_type" type="select" label="Analysis Type" help="Select analysis type to do on the chosen field">
+                <option value="collapse">Collapse</option>
+                <option value="count">Count</option>
+                <option value="countn">Count of Digits (countn)</option>
+                <option value="countunique">Count Unique</option>
+                <option value="first">First Value</option>
+                <option value="last">Last Value</option>
+                <option value="max">Maximum</option>
+                <option value="mean">Mean</option>
+                <option value="median">Median</option>
+                <option value="min">Minimum</option>
+                <option value="prod">Product of the Elements</option>
+                <option value="q1">q1</option>
+                <option value="q2">q2</option>
+                <option value="q3">q3</option>
+                <option value="rand">Random Value</option>
+                <option value="entropy">Shannon Entropy</option>
+                <option value="stdev">Standard Deviation</option>
+                <option value="sum">Sum</option>
+                <option value="uniq">Unique</option>
+                <option value="variance">Variance</option>
+            </param>
+        </repeat>
+        <expand macro="groups_input" />
+        <param name="decimal_width" type="integer" value="2" argument="-n"
+            label="Number of Decimals"
+            help="Limit float to N decimal places"
+        />
+        <param name="ignore_non_digits" type="boolean" checked="false" argument="-i"
+            truevalue="-i"
+            falsevalue=""
+            label="Ignore non-digits"
+            help="Ignore non-digit values in columns. Ex. NA or N/A"
+        />
+        <section name="extra" title="Specific Optional Analysis Modifiers" expanded="false">
+            <param name="separator" type="text" value="; " argument="-s"
+                label="Collapse Separator String"
+                help="Input string of characters that will separate collapsed columns. The ' character is not allowed">
+                <expand macro="text_sanitizer" />
+            </param>
+            <param name="rand_int" type="integer" value="11" argument="-S"
+                label="Random Value Seed"
+                help="specify an integer"
+            />
+        </section>
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="summary" from_work_dir="summary" label="${in_1.name} summary of analyses" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="collapse" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="count" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="countn" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="countunique" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="entropy" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="first" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="last" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="max" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="mean" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="median" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="min" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="prod" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="q1" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="q2" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="q3" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="rand" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="stdev" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="sum" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <param name="analysis_type" value="uniq" />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <param name="analysis_type" value="variance" />
+            </repeat>
+            <conditional name="group_field">
+                <param name="select_group" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <output name="summary" >
+                <assert_contents>
+                    <has_text text="collapse" />
+                    <has_text text="count" />
+                    <has_text text="countn" />
+                    <has_text text="countunique" />
+                    <has_text text="entropy" />
+                    <has_text text="first" />
+                    <has_text text="last" />
+                    <has_text text="max" />
+                    <has_text text="mean" />
+                    <has_text text="median" />
+                    <has_text text="min" />
+                    <has_text text="prod" />
+                    <has_text text="q1" />
+                    <has_text text="q2" />
+                    <has_text text="q3" />
+                    <has_text text="rand" />
+                    <has_text text="stdev" />
+                    <has_text text="sum" />
+                    <has_text text="uniq" />
+                    <has_text text="variance" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Summary Help
+--------------------
+
+Info
+####
+
+Csvtk Summary works to allow the use of a variety of analysis tools on the selected columns(s) and display one output at the end 
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-summary, all you need is a valid (as defined above) CSV or TSV file with any column(s) that you want to
+run one of the analyses on.
+
+Analyses include:
+
+- Collapse
+
+- Count
+
+- Count Numbers (countn)
+
+- Count Unique
+
+- First Value Selection
+
+- Last Value Selection
+
+- Maximum
+
+- Mean
+
+- Median
+
+- Minimum
+
+- q1
+
+- q2
+
+- q3
+
+- Random Value Selection
+
+- Shannon Entropy
+
+- Sum
+
+- Unique Values
+
+- Variance
+
+More information on these can be found on the `csvtk website. <https://bioinf.shenwei.me/csvtk/usage/#summary>`_
+
+**Example Summary Input**
+
+Input table:
+
++-------+--------+
+| Group | Length |
++=======+========+
+| A     | 1500   |
++-------+--------+
+| B     | 1000   |
++-------+--------+
+| B     | 1500   |
++-------+--------+
+| B     | 2000   |
++-------+--------+
+
+Suppose you wanted to group the values based on column 1 of the input table and then find out the mean lenght and maximum length for each group.
+You would input this into csvtk-summary by creating 2 input repeats where the first one selects "column 2" and an analysis of "mean" and the
+second one selects "column 2" with an analysis of "maximum".
+
+Running this would generate the following output:
+
++-------+-------------+------------+
+| Group | Length:mean | Length:max |
++=======+=============+============+
+| A     | 1500        | 1500       |
++-------+-------------+------------+
+| B     | 1500        | 2000       |
++-------+-------------+------------+
+
+--------
+
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

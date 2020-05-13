@@ -138,7 +138,7 @@ csvtk plot
             </when>
             <when value="boxplot" >
                 <expand macro="plot_field" />
-                <expand macro="plot_groups" />
+                <expand macro="groups_input" />
                 <param type="boolean" name="horizontal" label="Horizontal Box Plot" argument="--horiz"
                     checked="false"
                     falsevalue=""
@@ -188,7 +188,7 @@ csvtk plot
                         </param>
                     </when>
                 </conditional>
-                <expand macro="plot_groups" />
+                <expand macro="groups_input" />
                 <param name="label_location" type="select" label="Label Location"
                     help="Only displays legend if a groups column is set">
                     <option value="--legend-left">Left edge of plot</option>

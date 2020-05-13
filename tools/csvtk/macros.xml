@@ -72,7 +72,7 @@
     </xml>
     <xml name="fields_input">
         <conditional name="column_text" >
-            <param type="select" name="select" label="Select input columns based on" argument="-F -f">
+            <param type="select" name="select" label="Select input column(s) based on" argument="-F -f">
                 <option value="string">Column Name(s)</option>
                 <option value="column">Column Number(s)</option>
             </param>
@@ -90,6 +90,35 @@
                     label="Input column name(s)"
                     help="Multiple columns can be given if separated by a ' , '. 
                     Column numbers can be given too - ex. '1,2' will target columns 1 and 2. 
+                    Please see the help section below for more detailed info">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <xml name="singular_fields_input">
+        <conditional name="column_text" >
+            <param type="select" name="select" label="Select input column based on" argument="-f">
+                <option value="string">Column Name</option>
+                <option value="column">Column Number</option>
+            </param>
+            <when value="column">
+                <param type="data_column" name="in_text"
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Input column number"
+                    help="Select column to use for analysis"
+                />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                    optional="false"
+                    label="Input column name"
+                    help="Input column name or number ex. 'Length' or '1'.  
                     Please see the help section below for more detailed info">
                     <sanitizer>
                         <valid initial="string.printable">
@@ -127,7 +156,7 @@
             </when>
         </conditional>
     </xml>
-    <xml name="plot_groups">
+    <xml name="groups_input">
         <conditional name="group_field" >
             <param type="select" name="select_group" label="Select column to group data" argument="-g" optional="false" help="Specify a single column that is used to create data groups. An example is shown in the help section">
                 <option value="none">None</option>
@@ -233,6 +262,8 @@ Column Name Input Help
 
     - ex. 'ID,Organism' would target the columns named ID and Organism for the function 
 
+- Column names are case SeNsitive
+
 - Column numbers can also be given:
 
     -ex. '1,2,3' or '1-3' for inputting columns 1-3.
@@ -259,7 +290,7 @@ Input Data
     2. By default, csvtk thinks files have header rows. If your file does not, set global parameter
         "Has Header Row" to "No"
 
-    3. Column names should be unique!
+    3. Column names should be unique and are case sensitive!
 
     4. Lines starting with "#" or "$" will be ignored, if in the header row
 
@@ -290,8 +321,6 @@ Although be aware that some features may not be available and some small changes
 **Notable changes from their documentation:**
 
 - Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match)
-
-- Column Names are Case Sensitive
 
 - No single quotes / apostrophes allowed in text inputs
     </token>
