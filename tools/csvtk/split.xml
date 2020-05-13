@@ -1,4 +1,4 @@
-<tool id="csvtk-split" name="csvtk-split" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_split" name="csvtk-split" version="@VERSION@+@GALAXY_VERSION@">
     <description>table into multiple files</description>
     <macros>
         <import>macros.xml</import>

@@ -1,4 +1,4 @@
-<tool id="csvtk-concat" name="csvtk-concatenate" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_concat" name="csvtk-concatenate" version="@VERSION@+@GALAXY_VERSION@">
     <description> concatenate CSV/TSV files by rows</description>
     <macros>
         <import>macros.xml</import>

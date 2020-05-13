@@ -1,4 +1,4 @@
-<tool id="csvtk-uniq" name="csvtk-unique" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_uniq" name="csvtk-unique" version="@VERSION@+@GALAXY_VERSION@">
     <description> first values in column(s)</description>
     <macros>
         <import>macros.xml</import>

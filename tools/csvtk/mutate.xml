@@ -1,4 +1,4 @@
-<tool id="csvtk-mutate" name="csvtk-mutate" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_mutate" name="csvtk-mutate" version="@VERSION@+@GALAXY_VERSION@">
     <description>new column by regular expression</description>
     <macros>
         <import>macros.xml</import>

@@ -1,4 +1,4 @@
-<tool id="csvtk-join" name="csvtk-join" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_join" name="csvtk-join" version="@VERSION@+@GALAXY_VERSION@">
     <description>tables by column(s)</description>
     <macros>
         <import>macros.xml</import>
@@ -123,6 +123,10 @@ Csvtk-Join is used to join two or more csv/tsv files together by either a column
 It will join together the columns that have a matching value and create an output csv/tsv file (depending upon input file type).
 
 Columns that are not matching will be discarded unless 'Keep Unmatched Columns' is set to 'Yes'
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 

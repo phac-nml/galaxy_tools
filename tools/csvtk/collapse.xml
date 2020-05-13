@@ -1,4 +1,4 @@
-<tool id="csvtk-collapse" name="csvtk-collapse" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_collapse" name="csvtk-collapse" version="@VERSION@+@GALAXY_VERSION@">
     <description> one field with selected fields as keys</description>
     <macros>
         <import>macros.xml</import>
@@ -95,6 +95,22 @@ csvtk collapse --num-cpus "\${GALAXY_SLOTS:-1}"
             </conditional>
             <param name="separator" value="; " />
             <output name="collapse" file="collapsed.tsv" ftype="tabular" />
+        </test>
+        <test>
+        <param name="in_1" value="illegal.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="4" />
+            </conditional>
+            <conditional name="value_column">
+                <param name="select" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <param name="separator" value="; " />
+            <section name="global_param">
+                <param name="illegal_rows" value="true" />
+            </section>
+            <output name="collapse" file="illegal_collapse.csv" />
         </test>
     </tests>
     <help><![CDATA[

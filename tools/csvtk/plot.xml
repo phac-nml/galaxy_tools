@@ -1,4 +1,4 @@
-<tool id="csvtk-plot" name="csvtk-plot" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_plot" name="csvtk-plot" version="@VERSION@+@GALAXY_VERSION@">
     <description> histogram, line/scatter plot, or boxplot based on column</description>
     <macros>
         <import>macros.xml</import>

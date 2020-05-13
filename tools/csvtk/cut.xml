@@ -1,4 +1,4 @@
-<tool id="csvtk-cut" name="csvtk-cut" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_cut" name="csvtk-cut" version="@VERSION@+@GALAXY_VERSION@">
     <description> and keep selected columns</description>
     <macros>
         <import>macros.xml</import>

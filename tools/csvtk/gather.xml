@@ -1,4 +1,4 @@
-<tool id="csvtk-gather" name="csvtk-gather" version="@VERSION@+@GALAXY_VERSION@">
+<tool id="csvtk_gather" name="csvtk-gather" version="@VERSION@+@GALAXY_VERSION@">
     <description> column(s) into key-value pairs</description>
     <macros>
         <import>macros.xml</import>
@@ -101,6 +101,10 @@ Info
 ####
 
 Csvtk gather gathers columns into key-value pairs
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 @HELP_INPUT_DATA@
 
