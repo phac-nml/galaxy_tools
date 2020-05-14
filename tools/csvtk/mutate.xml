@@ -143,10 +143,6 @@ new column is created using that matched data.
 The regex input for this tool is structured such that your regular expression **does not** need to start with with quotes or brackets. You can
 start your expression with a `^` or just go straight into it
 
-.. class:: warningmark
-
-    Single quotes are not allowed in text inputs!
-
 For example:
 
 ::
@@ -154,6 +150,10 @@ For example:
     Using `.+` as an input would be used in the code as "(.+)"
 
     Using ^(.+)$ as an input would yield an input in the code as "(^(.+)$)"
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
 
 -----
 

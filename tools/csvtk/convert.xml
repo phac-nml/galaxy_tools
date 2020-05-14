@@ -76,7 +76,7 @@ Csvtk convert converts csv files to tsv files and vice versa.
 
 .. class:: note
 
-    CSV data may not be autodetected properly to CSV format and you may have to manually change the format after.
+    Output CSV data may not be autodetected properly to CSV format and you may have to manually change the format after.
 
 
 @HELP_INPUT_DATA@
