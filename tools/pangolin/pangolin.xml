@@ -88,9 +88,11 @@ and `snakemake <https://snakemake.readthedocs.io/en/stable/index.html>`_.
 
 More information can be obtained from the authors github site: https://github.com/hCoV-2019/pangolin
 
+You may also wish to visit the authors website at https://pangolin.cog-uk.io/
+
 --------------
 
-**Input** - Multi sequence fasta file
+**Input** - Multi sequence fasta file or individual fasta files
 
 
 **Output** - lineage report:
