@@ -1,0 +1,168 @@
+<tool id="csvtk_filter" name="csvtk-filter" version="@VERSION@+@GALAXY_VERSION@">
+    <description> rows through arithmetic expression(s)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk filter --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specify fields to filter ##
+    ##############################
+    -F -f '$in_text'
+
+    ## Specific inputs ##
+    #####################
+    $any
+    $line_number
+    
+    ## To output ##
+    ###############
+    > filtered
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <param name="in_text" type="text"
+            optional="false"
+            argument="-F -f"
+            label="Specify column(s) and numeric expression to filter for"
+            help="Give column name/number and the numeric expression that you want to evaluate. Example: 'frequency>4'. See help below for more examples">
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="line_number" type="boolean"
+            checked="false"
+            truevalue="-n"
+            falsevalue=""
+            argument="-n"
+            label="Print initial line number as the first column"
+        />
+        <param name="any" type="boolean"
+            checked="false"
+            truevalue="--any"
+            falsevalue=""
+            argument="--any"
+            label="Return row if any row value satisfies the condition"
+            help="For multiple column filters only"
+        />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" from_work_dir="filtered" name="filtered" label="${in_1.name} filtered with ${in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="frequency.tsv" />
+            <param name="in_text" value="frequency>1" />
+            <output name="filtered" file="filtered.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Filter Help
+-------------------
+
+Info
+####
+
+Csvtk filter outputs rows that satisfy an input numerical expression on the specified column(s).
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. Filter on one column:**
+
+Suppose we had the following table:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+| LPn-2         | 4          | 1000     |
++---------------+------------+----------+
+
+If we used the filter expression "Cell Count>100", we would get the following output column:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+
+----
+
+**Ex2. Filter on two columns:**
+
+Same input table
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+| LPn-2         | 4          | 1000     |
++---------------+------------+----------+
+
+Now if we use the expression "2-3>50" to filter on, we would pull out:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+
+Row 3 is not returned back as its column 2 is not greater than 50. 
+
+However, if **Any** is set to Yes, then Row 3 would be returned as its column 3 is greater than 50
+making it satisfy one part of the expression.
+
+
+**Note:** - Multiple columns can only be specified with a "-"
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
