@@ -147,9 +147,9 @@ For example:
 
 ::
 
-    Using `.+` as an input would be used in the code as "(.+)"
+    Using `.+` as an input would be used in the code as '(.+)'
 
-    Using ^(.+)$ as an input would yield an input in the code as "(^(.+)$)"
+    Using ^(.+)$ as an input would yield an input in the code as '(^(.+)$)'
 
 .. class:: warningmark
 
