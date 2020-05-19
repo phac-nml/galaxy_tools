@@ -64,7 +64,7 @@ csvtk summary --num-cpus "\${GALAXY_SLOTS:-1}"
     ]]></command>
     <inputs>
         <expand macro="singular_input" />
-        <repeat name="field" title="Select Field and Operator" min="1">
+        <repeat name="field" title="Select Column and Operator" min="1">
             <expand macro="singular_fields_input" />
             <param name="analysis_type" type="select" label="Analysis Type" help="Select analysis type to do on the chosen field">
                 <option value="collapse">Collapse</option>
