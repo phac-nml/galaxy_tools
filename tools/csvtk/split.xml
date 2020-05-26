@@ -1,0 +1,173 @@
+<tool id="csvtk_split" name="csvtk-split" version="@VERSION@+@GALAXY_VERSION@">
+    <description>table into multiple files</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+## Create directory and set input name ##
+#########################################
+mkdir -p ./output &&
+
+#set input_name = str($in_1.name)
+ln -s '$in_1' $input_name &&
+
+###################
+## Start Command ##
+###################
+
+csvtk split -o ./output --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$input_name'
+
+    ## Specify fields for splitting ##
+    ##################################
+    -F -f '$column_text.in_text'
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <collection name="list_split" type="list" label="${in_1.name} split on column ${column_text.in_text}">
+            <discover_datasets pattern="__designation_and_ext__" directory="output" visible="false" format="csv,tabular"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="csv.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="1" />
+            </conditional>
+            <param name="ignore_case" value="true" />
+            <output_collection name="list_split" type="list">
+                <element name="csv-bob" file="csv-bob.csv" ftype="csv" />
+                <element name="csv-darian" file="csv-darian.csv" ftype="csv" />
+                <element name="csv-jack" file="csv-jack.csv" ftype="csv" />
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Split Help
+------------------
+
+Info
+####
+Split input csv/tsv files into multiple csv/tsv files based on a column number(s) or name(s).
+
+This tool will generate as many output files as there are unique data points in the selected column(s).
+
+Examples below.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+Here we will demonstrate what the tool does when 1 column is selected or when 2+ columns are selected.
+
+**Ex. Split input based on column 1:**
+
+::
+
+    Suppose we have the following input table that we want to split on column 2, the 'Colour' column:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+
+    | Eric   | Blue   | Apples   |
+    +--------+--------+----------+
+    | Darian | Blue   | Pancakes |
+    +--------+--------+----------+
+    | Daniel | Red    | Apples   |
+    +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    --------------------------------------------------------------------------------
+
+    Splitting would yield the following 2 tables:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+           +--------+--------+----------+
+    | Eric   | Blue   | Apples   |           | Name   | Colour | Food     |
+    +--------+--------+----------+     +     +========+========+==========+ 
+    | Darian | Blue   | Pancakes |           | Daniel | Red    | Apples   |
+    +--------+--------+----------+           +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    ---------------------------------------------------------------------------------
+
+----
+
+**Ex. Split on 2 columns:**
+
+::
+
+    Suppose keep the same input but instead split on both the 'Colour' and 'Food' columns:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |
+    +========+========+==========+
+    | Eric   | Blue   | Apples   |
+    +--------+--------+----------+
+    | Darian | Blue   | Pancakes |
+    +--------+--------+----------+
+    | Daniel | Red    | Apples   |
+    +--------+--------+----------+
+    | Frank  | Blue   | Apples   |
+    +--------+--------+----------+
+
+    --------------------------------------------------------------------------------------------------------
+
+    This split would yield the following three output files:
+
+    +--------+--------+----------+
+    | Name   | Colour | Food     |       +--------+--------+----------+       +--------+--------+----------+
+    +========+========+==========+       | Name   | Colour | Food     |       | Name   | Colour | Food     |
+    | Eric   | Blue   | Apples   |   +   +========+========+==========+   +   +========+========+==========+
+    +--------+--------+----------+       | Darian | Blue   | Pancakes |       | Daniel | Red    | Apples   |
+    | Frank  | Blue   | Apples   |       +--------+--------+----------+       +--------+--------+----------+
+    +--------+--------+----------+
+
+    Here, the value in the cell has to match for both columns for them to be output together. Frank and Eric
+    like apples and the colour blue so they get put together. And even though Darian likes the colour blue, he
+    prefers pancakes and thus gets his own output file.
+
+----
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

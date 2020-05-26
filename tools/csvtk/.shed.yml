@@ -1,0 +1,15 @@
+categories: [Text Manipulation]
+description: Rapid data investigation and manipulation of csv/tsv files
+name: csvtk
+owner: nml
+long_description: Suite of CSV/TSV manipulation tools that are easy to use and can be easily integrated into bioinformatic pipelines 
+remote_repository_url: https://github.com/shenwei356/csvtk
+homepage_url: https://bioinf.shenwei.me/csvtk/
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for csvtk application {{ tool_name }}."
+suite:
+  name: "suite_csvtk"
+  description: "A suite of Galaxy tools designed to work with the csvtk toolkit."
+  type: repository_suite_definition

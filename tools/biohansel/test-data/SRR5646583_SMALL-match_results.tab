@@ -1,4 +1,4 @@
-tilename	seq	freq	refposition	subtype	is_pos_tile	is_kmer_freq_okay	sample	scheme	scheme_version	qc_status	qc_message
+kmername	seq	freq	refposition	subtype	is_pos_kmer	is_kmer_freq_okay	sample	scheme	scheme_version	qc_status	qc_message
 negative4642573-1.2	TACCAGGAAGTGCTGGAAGAGTTTAACGAACAT	62	4642573	1.2	False	True	SRR5646583_SMALL	heidelberg	0.5.0	PASS	
 21097-2.2.1.1.1	GCAAATCGCGCCAGTCAAGTCCTCTTTTACCGT	42	21097	2.2.1.1.1	True	True	SRR5646583_SMALL	heidelberg	0.5.0	PASS	
 negative3647258-2.2.2.2.2.1	TACGGGTAACTGTTATCGGTAACATTGTCCAAC	64	3647258	2.2.2.2.2.1	False	True	SRR5646583_SMALL	heidelberg	0.5.0	PASS	

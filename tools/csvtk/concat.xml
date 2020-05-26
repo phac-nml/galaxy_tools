@@ -1,0 +1,145 @@
+<tool id="csvtk_concat" name="csvtk-concatenate" version="@VERSION@+@GALAXY_VERSION@">
+    <description> concatenate CSV/TSV files by rows</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk concat --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1[0].is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    #for $file in $in_1:
+        '$file'
+    #end for
+    
+    ## Fill unmatched ##
+    ####################
+    #if $fill.select == 'yes' 
+    -u '$fill.fill_value'
+    #end if
+    
+    ## To output ##
+    ###############
+    > concat
+
+    ]]></command>
+    <inputs>
+        <expand macro="multi_input" />
+        <conditional name="fill">
+            <param name="select" type="select" label="Fill unmatched columns?">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </param>
+            <when value="yes">
+                <param name="fill_value" type="text" value="-" argument="-u"
+                    optional="false"
+                    label="Fill string"
+                    help="Input character string that will fill unmatched columns. The ' character is not allowed">
+                    <expand macro="text_sanitizer" />
+                </param>
+            </when>
+            <when value="no" />
+        </conditional>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="concat" from_work_dir="concat" label="${in_1[0].name} concatenated" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="test.csv,other.csv,another.csv" />
+            <conditional name="fill">
+                <param name="select" value="no" />
+            </conditional>
+            <output name="concat" file="concat_2.csv" />
+        </test>
+        <test>
+            <param name="in_1" value="test.csv,other.csv,another.csv" />
+            <output name="concat" file="concat_1.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Collapse Help
+---------------------
+
+Info
+####
+
+Csvtk concatenate CSV/TSV files by rows
+
+**Order is important to input and the first file input will determine the header names!**
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-concatenate, all you need is one or more valid (as defined above) CSV or TSV files (of the same type) to concatenate together.
+
+**Example Concatenate**
+
+::
+
+    If you have the following two files:
+
+    +-------+--------+           +-------+------+
+    | Name  | Colour |           | Name  | Food |
+    +=======+========+     +     +=======+======+
+    | Steve | Blue   |           | Fred  | Eggs |
+    +-------+--------+           +-------+------+
+                                 | Steve | Ham  |
+                                 +-------+------+
+
+    -----------------------------------------------
+
+    They would concatenate to:
+
+    +-------+--------+
+    | Name  | Colour |
+    +=======+========+
+    | Steve | Blue   |
+    +-------+--------+
+    | Steve |        |
+    +-------+--------+
+
+    If you want, you can fill the empty cell with any set of characters so long as it doesn't contain an apostraphe (')
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

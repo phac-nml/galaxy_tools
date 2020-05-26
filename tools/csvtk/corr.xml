@@ -1,0 +1,154 @@
+<tool id="csvtk_correlation" name="csvtk-correlation" version="@VERSION@+@GALAXY_VERSION@">
+    <description> calculate pearson correlation</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk corr --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Specify fields ##
+    ####################
+    -f '$in_text'
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## other ##
+    ###########
+    $ignore_nan
+    $log_values
+    $passthrough
+
+    ## To output ##
+    ###############
+    &> corr
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <param name="in_text" type="text" argument="-f"
+            label="Specify *two* column names"
+            help="Input the exact spelling of the two input column names wanted with a comma (,) separating them. Ex. 'Length,GC Content'">
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="ignore_nan" type="boolean" checked="false" argument="-i"
+            truevalue="-i"
+            falsevalue=""
+            label="Ignore non-numeric values in columns"
+            help="Needed to be set to yes to avoid returning NaN if there is a non-numeric value"
+        />
+        <param name="log_values" type="boolean" checked="false" argument="-L"
+            truevalue="-L"
+            falsevalue=""
+            label="Log10 transformed Data"
+            help="Calcute correlations on Log10 transformed data"
+        />
+        <param name="passthrough" type="boolean" checked="false" argument="-x"
+            truevalue="-x"
+            falsevalue=""
+            label="passthrough mode (forward input to output)"
+        />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="corr" from_work_dir="corr" label="${in_1.name} correlation of ${in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="XY_converted.csv" />
+            <param name="in_text" value="X,Y" />
+            <output name="corr" value="corr_1.csv" />
+        </test>
+        <test>
+            <param name="in_1" value="XY_converted.tsv" />
+            <param name="in_text" value="X,Y" />
+            <param name="ignore_nan" value="true" />
+            <param name="log_values" value="true" />
+            <param name="passthrough" value="true" />
+            <output name="corr" value="corr_2.tsv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Correlation Help
+------------------------
+
+Info
+####
+
+Csvtk Correlation calculates the pearson correlation between two columns specified by the column header 
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-correlation, all you need is a valid (as defined above) CSV or TSV file with two numeric columns that you want to
+find the pearson correlation between. If the input data is Log10 transformed, remember to set the "Log10 transformed Data" 
+slider to "Yes"
+
+Output will be a singular line with the input column names, and the pearson correlation (integer between -1 to 1).
+
+
+**Example Correlation Input**
+
+Input table:
+
++-------+--------+
+| Group | Length | 
++=======+========+
+| 1     | 1500   |
++-------+--------+
+| 2     | 1000   |
++-------+--------+
+| 1     | 1500   |
++-------+--------+
+| 3     | 2000   |
++-------+--------+
+
+Our input for this would require us to specify our column input (-f) as "Group,Length" to allow the program to run
+
+Our output would then look as such:
+
++-------+--------+--------+
+| Group | Length | 0.9999 |
++-------+--------+--------+
+
+--------
+
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

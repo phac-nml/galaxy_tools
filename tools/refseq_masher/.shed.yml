@@ -1,5 +1,7 @@
 categories: ["Sequence Analysis"]
-description: Find what NCBI RefSeq genomes match or are contained within your sequence data using Mash_ with a Mash sketch database of 54,925 NCBI RefSeq Genomes.
+description: Find what genomes match or are contained within your sequence data using Mash_ and a Mash sketch database.
 name: refseq_masher
 owner: nml
+long_description: Find the closest NCBI RefSeq genomes that either match or are contained within your sequence data using Mash_ with a Mash sketch database of 54,925 NCBI RefSeq Genomes.
+remote_repository_url: https://github.com/phac-nml/refseq_masher
 homepage_url: https://github.com/phac-nml/refseq_masher

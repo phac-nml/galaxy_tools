@@ -1,0 +1,8 @@
+categories: [Sequence Analysis]
+description: Phylogenetic Assignment of Named Global Outbreak LINeages
+name: pangolin
+owner: nml
+long_description: Assign SARS-CoV-2 genome sequences to global lineages using phylogenetic assignment
+remote_repository_url: https://github.com/hCoV-2019/pangolin
+homepage_url: https://github.com/hCoV-2019/pangolin
+type: unrestricted

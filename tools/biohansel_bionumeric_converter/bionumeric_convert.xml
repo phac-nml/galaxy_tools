@@ -1,0 +1,43 @@
+<tool id="bionumeric_convert" name="biohansel2bionumerics" version="0.2.0">
+    <description>compliant results</description>
+    <requirements>
+        <requirement type="package" version="0.24.1">pandas</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        $__tool_directory__/bionumeric_converter.py -f '$Input' -o '$Output'
+    ]]></command>
+    <inputs>
+        <param type="data" name="Input" format="tabular"/>
+    </inputs>
+    <outputs>
+        <data name="Output" format="csv" from_work_dir="output" label="Biohansel_Bionumerics"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="Input" value="results.tab"/>
+            <output name="Output" value="Biohansel_Bionumerics.csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        **What it does**
+
+        This tool is a supplementary script that takes Biohansel output data and converts it into a format compatible with Bionumerics.
+
+        **Inputs:**
+
+        - *Individual* output or *Collection* of outputs for any of the three Biohansel results files (tech_results.tab, match_results.tab, or results.tab)
+
+        **Outputs:**
+
+        - A .CSV file or a collection of .CSV files called "*Output*" that can be renamed and downloaded as required.
+
+        **Specific modifications done to the data**
+
+        1. Converts all commas in the output to "/"
+        2. Splits Biohansel qc_message column into multiple columns if the message is longer than 150 characters
+        3. Converts the .tab or .tsv file to a .csv file
+
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
