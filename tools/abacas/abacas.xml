@@ -1,0 +1,96 @@
+<tool id="abacas" name="abacas contig ordering" version="1.1">
+	<description>Order and Orientate Contigs </description>
+	<requirements>
+		<requirement type="package" version="3.23">mummer</requirement>
+		<requirement type="package" version="5.26.2">perl</requirement>
+	</requirements>
+<command detect_errors="exit_code">
+	bash '$__tool_directory__/abacas.sh'
+	'$input_ref'
+	'$input_query'
+	'$ordered_contigs'
+	'$use_bin'
+	'$non'
+	'$append_bin'
+	'$out_bin'
+	'$out_crunch'
+	'$out_gaps'
+	'$out_fasta'
+	'$out_tab'
+	'$out_unused'
+	'$out_multi'
+	'$out_binmulti'
+	'$out_nonpseudo'
+</command>
+		<inputs>
+			<param name="input_ref" type="data" format="fasta" label="Reference sequence" />
+			<param name="input_query" type="data" format="fasta" label="Sequence query file"/>
+			<param name="ordered_contigs" type="select" format="text" value="yes" label="Generate a multifasta file of the ordered contigs." help="The multifasta file of ordered contigs will be supplemental to the default pseudomolecule fasta file generated.">
+				<option value="yes">Yes</option>
+			 	<option value="no">No</option>
+			</param>
+			<param name="use_bin" type="select" format="text" value="yes" label="Generate a multifasta file of the unused contigs." help="The unsed contigs refer to contigs that were not used in the alignment.">
+			 	<option value="yes">Yes</option>
+			 	<option value="no">No</option>
+			</param>
+			<param name="non" type="select" format="text" value="yes" label="Generate a pseudomolecule by concatenating the aligned contigs without any nnn linkers." help="The no N's fasta file will be supplemental to the default pseudomolecule fasta file generated with n linkers.">
+				<option value="yes">Yes</option>
+				<option value="no">No</option>
+			</param>
+			<param name="append_bin" type="select" format="text" value="yes" label="Append the unused contigs from the bin onto the pseudomolecule." help="The pseudomolecule will be ordered and oriented and then any left over contigs from the bin will be concatenated to the end.">
+				<option value="yes">Yes</option>
+				<option value="no">No</option>
+			</param>
+		</inputs>
+		<outputs>
+			<data name="out_crunch" format="tabular" label="ACT crunch file"/>
+			<data name="out_tab" format="tabular" label="tab files"/>
+			<data name="out_gaps" format="tabular" label="gaps file"/>
+			<data name="out_fasta" format="tabular" label="pseudmolecule fasta file"/>
+			<data name="out_unused" format="tabular" label="unused contig information file"/>
+			<data name="out_bin" format="tabular" label="List of unused contigs"/>
+			<data name="out_multi" format="fasta" label="Multifasta file of contigs">
+				<filter>ordered_contigs=="yes"</filter>
+			</data>
+			<data name="out_binmulti" format="fasta" label="Multifasta file of bin contigs">
+				<filter>use_bin=="yes"</filter>
+			</data>
+			<data name="out_nonpseudo" format="fasta" label="Pseudomolecule with no N's">
+				<filter>non=="yes"</filter>
+			</data>
+		</outputs>
+<tests>
+   <test>
+      <param name="input_ref" value="reference_sequence.fasta"/>
+      <param name="input_query" value="sequence_query.fasta"/>
+      <param name="ordered_contigs" value="no" />
+      <param name="use_bin" value="no" />
+      <param name="non" value="no" />
+      <param name="append_bin" value="no" />
+      <output name="out_crunch" value="out_crunch"/>
+      <output name="out_tab" value="out_tab"/>
+      <output name="out_gaps" value="out_gaps"/>
+      <output name="out_fasta" value="out_fasta"/>
+      <output name="out_unused" value="out_unused"/>
+      <output name="out_bin">
+	      <assert_contents>
+		      <has_text text ="NODE_1_length_1"/>
+		      <has_text text ="NODE_2_length_10"/>
+	      </assert_contents>
+      </output>
+   </test>
+</tests>
+<help>
+	<![CDATA[ABACAS is intended to rapidly contiguate (align, order, orientate), visualize and design primers to close gaps on shotgun assembled contigs based on a reference sequence]]>
+</help>
+<citations>
+	<citation type="bibtex">
+		@misc{sourceforgeABACAS,
+                title = {ABACAS: Algorithm Based Automatic Contiguation of Assembled Sequences},
+                publisher = {BioMalPar Consortium and Wellcome Trust Sanger Institute},
+                journal = {SourceForge},
+                url = {http://abacas.sourceforge.net/index.html},
+                }
+	</citation>
+</citations>
+</tool>

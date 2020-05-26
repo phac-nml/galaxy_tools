@@ -24,9 +24,11 @@
     ln -s "${mash_input}" mash_sketch.msh &&
   #end if
 
+
   #if $db_input
     ln -s "${db_input}" custom_db.json &&
   #end if
+
 
   ectyper  --cores \${GALAXY_SLOTS:-4} 
   --input "${genomes}" 
@@ -39,7 +41,7 @@
   #end if
   #if $mash_input
     --refseq mash_sketch.msh
-  #end if
+
   #if $db_input
     --dbpath custom_db.json
   #end if
@@ -87,10 +89,12 @@
   <help>
 **Syntax**
 
+
 This tool identifies the serotype of both assembled or assembly-free Escherichia coli genome samples based on a set of the key O and H antigen determinant genes including *wzm/wzt* or *wzx/wzy* and *fliC/flkA/flmA*.
 Unique to the tool, species identification module allows for non-E.coli genomes identification including other Escherichia genus species.
 This version improves antigen call rates on "difficult samples" by use of an adaptive threshold. This is especially useful when antigen genes are truncated or poorly covered by raw reads.
 If no antigen call is being predicted by the tool, try to lower %coverage parameter first. For more information on the new Quality Control module and running parameter details please visit https://github.com/phac-nml/ecoli_serotyping.
+
 
 -----
 
@@ -98,7 +102,9 @@ If no antigen call is being predicted by the tool, try to lower %coverage parame
 
 Accepts a variety of inputs including both single and/or multiple FASTQ and/or FASTA file(s). Inputs might contain pure raw reads, but for more accurate results, draft assemblies are recommended.
 
+
 The default MASH RefSeq genome sketch (https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh) containing approximately 91K genomes is included and automatically updated every 6 months.
+
 
 
 **Output:**

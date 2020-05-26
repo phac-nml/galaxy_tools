@@ -1,0 +1,154 @@
+<tool id="csvtk_sort" name="csvtk-sort" version="@VERSION@+@GALAXY_VERSION@">
+    <description> column(s) </description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk sort --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Set up Sort Repeats ##
+    ##########################
+    #for $repeat in $field
+        -k '$repeat.column_text.in_text':${repeat.sort.sort_type}${repeat.reverse_order}
+    
+        #if $repeat.sort.sort_type == 'u'
+            -L '$repeat.column_text.in_text':'$repeat.sort.levels_file'
+        #end if
+    #end for
+    
+    ## To output ##
+    ###############
+    > sorted
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <repeat name="field" title="Select Column and Sorting method" min="1" >
+            <expand macro="singular_fields_input" />
+            <conditional name="sort">
+                <param name="sort_type" type="select" label="Sort Type" help="Select how to sort data">
+                    <option value="N">Natural</option>
+                    <option value="n">Numerical</option>
+                    <option value="u">User-Defined (Specify File)</option>
+                </param>
+                <when value="N" />
+                <when value="n" />
+                <when value="u" >
+                    <param name="levels_file" type="data" format="txt" argument="-L"
+                        optional="false"
+                        label="User defined levels file"
+                        help="If using user defined sorting, specift input text file with one level per line. Example can be found in the help section below."
+                    />
+                </when>
+            </conditional>
+            <param name="reverse_order" type="boolean" argument="r" checked="false"
+                truevalue="r"
+                falsevalue=""
+                label="Reverse Sort"
+            />
+        </repeat>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" from_work_dir="sorted" name="sorted" label="${in_1.name} sorted" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="Animals_More.csv" />
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="2" />
+                </conditional>
+                <conditional name="sort">
+                    <param name="sort_type" value="u" />
+                    <param name="levels_file" value="sort_order.txt" />
+                </conditional>
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="3" />
+                </conditional>
+                <conditional name="sort">
+                    <param name="sort_type" value="n" />
+                </conditional>
+                <param name="reverse_order" value="true"  />
+            </repeat>
+            <repeat name="field">
+                <conditional name="column_text">
+                    <param name="select" value="string" />
+                    <param name="in_text" value="1" />
+                </conditional>
+                <conditional name="sort">
+                    <param name="sort_type" value="N" />
+                </conditional>
+            </repeat>
+            <output name="sorted" value="sorted_1.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Sort Help
+-----------------
+
+Info
+####
+
+Csvtk-sort sorts columns 
+
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+----
+
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. Separate with Dropping Data**
+
+
+
+----
+
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

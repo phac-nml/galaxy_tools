@@ -1,0 +1,337 @@
+<macros>
+    <token name="@VERSION@">0.20.0</token>
+    <token name="@GALAXY_VERSION@">galaxy0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@VERSION@">csvtk</requirement>
+        </requirements>
+    </xml>
+    <xml name="version_cmd">
+        <version_command>csvtk version</version_command>
+    </xml>
+    <xml name="text_sanitizer">
+        <sanitizer>
+            <valid initial="string.printable">
+                    <remove value="&apos;"/>
+            </valid>
+        </sanitizer>
+    </xml>
+    <xml name="multi_input">
+        <param type="data" name="in_1" format="csv,tabular"
+            multiple="true" optional="false"
+            label="Specify TSV or CSV file inputs"
+            help="Input tsv or csv files to analyze. HOWEVER, they must all be the **same file type** or the tool will fail/not give correct results!"
+        />
+    </xml>
+    <xml name="singular_input">
+        <param type="data" name="in_1" format="csv,tabular"
+            multiple="false" optional="false"
+            label="Specify an input TSV or CSV file"
+            help="Input a TSV or CSV file to work on"
+        />
+    </xml>
+    <xml name="ignore_case">
+        <param type="boolean" name="ignore_case"
+            falsevalue="" truevalue="-i"
+            checked="false"
+            argument="-i"
+            label="Ignore cell case?"
+            help="ABC == abc"
+        />
+    </xml>
+    <xml name="global_parameters">
+        <section name="global_param" title="csvtk Global Parameters" expanded="false">
+            <param type="boolean" name="header"
+                falsevalue="-H" truevalue=""
+                checked="true"
+                argument="-H"
+                label="Input file has a header line"
+            />
+            <param type="boolean" name="illegal_rows"
+                falsevalue="" truevalue="-I"
+                checked="false"
+                argument="-I"
+                label="Ignore illegal rows"
+                help="Use if file has illegal rows as defined in the help section"
+            />
+            <param type="boolean" name="empty_rows"
+                falsevalue="" truevalue="-E"
+                checked="false"
+                argument="-E"
+                label="Ignore empty rows"
+                help="Ignore rows with no data (only needed if input has empty rows)"
+            />
+            <param type="boolean" name="lazy_quotes"
+                falsevalue="" truevalue="-l"
+                checked="false"
+                argument="-l"
+                label="File has Lazy quotes"
+                help="(TSV files only) If Yes, a quote may appear in an unquoted field and a non-doubled quote may appear in a quoted field"
+            />
+        </section>
+    </xml>
+    <xml name="fields_input">
+        <conditional name="column_text" >
+            <param type="select" name="select" label="Select input column(s) based on" argument="-F -f">
+                <option value="string">Column Name(s)</option>
+                <option value="column">Column Number(s)</option>
+            </param>
+            <when value="column">
+                <param type="data_column" name="in_text"
+                    data_ref="in_1"
+                    multiple="true"
+                    label="Input column number(s)"
+                    help="Select column(s) to use for analysis"
+                />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                    optional="false"
+                    label="Input column name(s)"
+                    help="Multiple columns can be given if separated by a ' , '. 
+                    Column numbers can be given too - ex. '1,2' will target columns 1 and 2. 
+                    Please see the help section below for more detailed info">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <xml name="singular_fields_input">
+        <conditional name="column_text" >
+            <param type="select" name="select" label="Select input column based on" argument="-f">
+                <option value="string">Column Name</option>
+                <option value="column">Column Number</option>
+            </param>
+            <when value="column">
+                <param type="data_column" name="in_text"
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Input column number"
+                    help="Select column to use for analysis"
+                />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                    optional="false"
+                    label="Input column name"
+                    help="Input column name or number ex. 'Length' or '1'.  
+                    Please see the help section below for more detailed info">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <xml name="plot_field">
+        <conditional name="column_text" >
+            <param type="select" name="select" label="Select input data column based on" argument="-f">
+                <option value="string">Column Name</option>
+                <option value="column">Column Number</option>
+            </param>
+            <when value="column">
+                <param type="data_column" name="in_text"
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Input data column number"
+                />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                    optional="false"
+                    label="Input data column name"
+                    help="Can use column name or column number">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <xml name="groups_input">
+        <conditional name="group_field" >
+            <param type="select" name="select_group" label="Select column to group data" argument="-g" optional="false" help="Specify a single column that is used to create data groups. An example is shown in the help section">
+                <option value="none">None</option>
+                <option value="string">Column Name</option>
+                <option value="column">Column Number</option>
+            </param>
+            <when value="none" />
+            <when value="column">
+                <param type="data_column" name="in_text"
+                    data_ref="in_1"
+                    multiple="false"
+                    label="Group by column number"
+                />
+            </when>
+            <when value="string">
+                <param type="text" name="in_text"
+                    optional="false"
+                    label="Group by column name"
+                    help="Can use column name or number">
+                    <sanitizer>
+                        <valid initial="string.printable">
+                                <remove value="&apos;"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <xml name="global_plot_parameters">
+        <section name="plot_parameters" title="Advanced Optional Plot Parameters" expanded="false">
+            <param type="float" name="figure_height"
+                argument="--height"
+                optional="true"
+                label="Figure Height (Default 4.5)"
+            />
+            <param type="float" name="figure_width"
+                argument="--width"
+                optional="true"
+                label="Figure Width (Default 1.5)"
+            />
+            <param type="float" name="tick_width"
+                argument="--tick-width"
+                optional="true"
+                label="Axis Tick Width (Default 1.5)"
+            />
+            <param type="text" name="title"
+                argument="--title"
+                optional="true"
+                label="Specify Figure Title">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
+            <param type="text" name="x_label"
+                argument="--xlab"
+                optional="true"
+                label="Specify X-axis label">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
+            <param type="float" name="min_x"
+                argument="--x-min"
+                optional="true"
+                label="Minimum value of X-axis (float)"
+            />
+            <param type="float" name="max_x"
+                argument="--x-max"
+                optional="true"
+                label="Maximum value of X-axis (float)"
+            />
+            <param type="text" name="y_label"
+                argument="--ylab"
+                optional="true"
+                label="Specify Y-axis label">
+                <sanitizer>
+                    <valid initial="string.printable">
+                        <remove value="&apos;"/>
+                    </valid>
+                </sanitizer>
+            </param>
+            <param type="float" name="min_y"
+                argument="--y-min"
+                optional="true"
+                label="Minimum value of Y-axis (float)"
+            />
+            <param type="float" name="max_y"
+                argument="--y-max"
+                optional="true"
+                label="Maximum value of Y-axis (float)"
+            />
+        </section>
+    </xml>
+    <token name="@HELP_COLUMNS@">
+Column Name Input Help
+######################
+
+- Multiple names can be given if separated by a ' , '.
+
+    - ex. 'ID,Organism' would target the columns named ID and Organism for the function 
+
+- Column names are case SeNsitive
+
+- Column numbers can also be given:
+
+    -ex. '1,2,3' or '1-3' for inputting columns 1-3.
+
+- You can also specify all but unwanted column(s) with a ' - '.
+
+    - ex. '-ID' would target all columns but the ID column
+
+----
+    </token>
+    <token name="@HELP_INPUT_DATA@">
+Input Data
+##########
+
+::
+
+    **Limitations of Input Data**
+
+    1. The CSV parser requires all the lines have same number of fields/columns.
+        If your file has illegal rows, set the "Illegal Rows" parameter to "Yes" to pass your data through
+        Even lines with spaces will cause error.
+        Example bad table below.
+
+    2. By default, csvtk thinks files have header rows. If your file does not, set global parameter
+        "Has Header Row" to "No"
+
+    3. Column names should be unique and are case sensitive!
+
+    4. Lines starting with "#" or "$" will be ignored, if in the header row
+
+    5. If " exists in tab-delimited files, set Lazy quotes global parameter to "Yes"
+
+Example bad table:
+
++--------+--------+--------+--------+
+| Head 1 | Head 2 | Head 3 | Head 3 |
++========+========+========+========+
+| 1      | 2      | 3      |        |
++--------+--------+--------+--------+
+| this   | will   |        | break  |
++--------+--------+--------+--------+
+
+Bad tables may work if both the "Ignore Illegal Rows" and "Ignore Empty Rows" global parameters are set to "Yes",
+But there is no guarentee of that!
+
+----
+    </token>
+    <token name="@HELP_END_STATEMENT@">
+More Information
+################
+For information from the creators of csvtk, please visit their site at: https://bioinf.shenwei.me/csvtk/
+
+Although be aware that some features may not be available and some small changes were made to work with Galaxy.
+
+**Notable changes from their documentation:**
+
+- Cannot specify multiple file header names (IE cannot use "name;username" as a valid column match)
+
+- No single quotes / apostrophes allowed in text inputs
+    </token>
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">@ARTICLE{a1,
+                title = {csvtk - CSV/TSV Toolkit},
+                author = {Wei Shen},
+                url = {https://github.com/shenwei356/csvtk}
+                }
+            }</citation>
+        </citations>
+    </xml>
+</macros>

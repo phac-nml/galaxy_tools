@@ -1,0 +1,72 @@
+<tool id="tree_relabel" name="Tree Relabeler" version="1.1.0">
+    <description>Relabels the tips of a newick formatted tree.</description>
+
+    <requirements>
+        <requirement type="package" version="1.7.2">perl-bioperl</requirement>
+        <requirement type="package" version="2.49">perl-getopt-long</requirement>
+    </requirements>
+  <command detect_errors="exit_code">
+    <![CDATA[
+             $__tool_directory__/nml_tree_relabeler.pl -i '$treefile' -t '$tabfile' -o '$output' -d '$delim' $replace
+    ]]>
+  </command>
+    <inputs>
+        <param name="treefile" type="data" format="nhx" label="The newick formated tree file to be relabeled:" optional="false"/>
+        <param name="tabfile" type="data" format="txt" label="The tab separated file containing the current labels and the info to be added to the labels" optional="false"/>
+        <param name="delim" type="text" label="Delimiter for new tip labels (space, _, etc)" optional="true" help="If left blank, labels of updated tips will be separated by spaces."/>
+        <param name="replace" truevalue='--replace' falsevalue='' type="boolean" label="Find and Replace current tip"  help="If false, will append to current tip. If true, will replace current tip"/>
+    </inputs>
+
+    <outputs>
+        <data format="txt" name="output"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="treefile" value="phylogeneticTree.newick.nhx"/>
+	    <param name="tabfile" value="tabs.txt"/>
+	    <output name="output" file="results"/> 
+        </test>
+        <test>
+            <param name="treefile" value="phylogeneticTree.newick.nhx"/>
+	    <param name="tabfile" value="replacedtabs.txt"/>
+            <param name="replace" value="true"/>
+	    <output name="output" file="replacedresults"/>
+        </test>
+    </tests>
+    <help>
+
+What it does
+============
+
+This tool provides a means for relabeling the tips of a newick formatted tree.
+
+It takes a newick format tree file to modify tip labels and a tab-delimited file containing current tip labels and additional information to add to the tips in 2 or more columns. 
+
+Usage
+=====
+
+Header row of the tab delimited file must start with a '#'. An example is below:
+
+- #label outbreak    year    location
+- orgs1  outbreak1   year1   location1
+- orgs2  outbreak2   year2   location2
+
+and so on.
+
+The information in the tab file is inserted into the tree file so the new information will appear on the tip labels.
+
+
+Input
+=====
+
+Newick format tree
+
+Tab delimted file
+
+Desired delimiter for updated tip labels
+
+    </help>
+    <citations>
+    </citations>
+</tool>

@@ -1,0 +1,152 @@
+<tool id="csvtk_sample" name="csvtk-sample" version="@VERSION@+@GALAXY_VERSION@">
+    <description> random proportion of dataset</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk sample --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## other ##
+    ###########
+    -p '$proportion'
+    -s '$seed'
+    $line_number
+
+    ## To output ##
+    ###############
+    &> sampled
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <param name="proportion" type="float" argument="-p" value="0.5"
+            min="0"
+            max="1"
+            label="Proportion of Data to Sample"
+        />
+        <param name="seed" type="integer" argument="-s" value="1900"
+            label="Random Seed"
+            help="Specify a seed number to sample data with"
+        />
+        <param name="line_number" type="boolean" checked="false" argument="-n"
+            truevalue="-n"
+            falsevalue=""
+            label="Create column with original line numbers of sampled data"
+        />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="sampled" from_work_dir="sampled" label="${proportion} of ${in_1.name} sampled" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <param name="proportion" value="0.5" />
+            <param name="seed" value="11" />
+            <output name="sampled" value="sampled_1.csv" />
+        </test>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <param name="proportion" value="0.7" />
+            <param name="seed" value="11" />
+            <param name="line_number" value="true" />
+            <output name="sampled" value="sampled_2.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Sample Help
+-------------------
+
+Info
+####
+
+Csvtk-sample samples a random (as defined by the seed) proportion of a dataset that can be used further.  
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-sample, all you need is a valid (as defined above) CSV or TSV file.
+
+**Example**
+
+Input table:
+
++-------+--------+
+| Group | Length | 
++=======+========+
+| 1     | 1500   |
++-------+--------+
+| 2     | 1000   |
++-------+--------+
+| 1     | 1500   |
++-------+--------+
+| 3     | 2000   |
++-------+--------+
+
+To get a 0.5 proportion (50% sample) of the population, our input would be 0.5 for the proportion (-p) and then some random seed.
+
+Our output could then look as such:
+
++-------+--------+
+| Group | Length |
++=======+========+
+| 1     | 1500   |
++-------+--------+
+| 3     | 2000   |
++-------+--------+
+
+If we used the same seed, input, and proportion with the "Create column with original line numbers of sampled data"
+set to yes, we would get the following table:
+
++---+-------+--------+
+| n | Group | Length |
++===+=======+========+
+| 1 | 1     | 1500   |
++---+-------+--------+
+| 4 | 3     | 2000   |
++---+-------+--------+
+
+--------
+
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

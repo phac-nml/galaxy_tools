@@ -1,4 +1,4 @@
-<tool id="collapse_dataset" name="Collapse Collection" version="4.0">
+<tool id="collapse_dataset" name="Collapse Collection" version="4.2">
   <description>into single dataset in order of the collection</description>
   <command>
     <![CDATA[
@@ -18,13 +18,13 @@
          #if $one_header:
            printf "$f.element_identifier\t"; tail -q -n +2 "$f";
          #else:
-           printf "$f.element_identifier\t"; cat "$f";
+           printf "$f.element_identifier\t"; awk '{ print $0 } END { if (NR == 0 && NF == 0) { print "" } }' "$f";
          #end if
        #elif str($filename.place_name) ==  "same_multiple":
          #if $one_header:
            awk '{if (NR!=1) {print "$f.element_identifier\t"$0}}' "$f";
          #else:
-           awk '{print "$f.element_identifier\t"$0}' "$f";
+           awk '{print "$f.element_identifier\t"$0} END { if (NR == 0 && NF == 0) { print "$f.element_identifier\t" } }' "$f";
          #end if
        #elif str($filename.place_name) ==  "above":
          #if $one_header:
@@ -51,9 +51,8 @@
   <inputs>
     <param name="input_list" type="data" format="data" label="Collection of files to collapse into single dataset" help="" optional="false" multiple="true" />
     <param name="one_header" type="boolean" display="checkboxes" label="Keep one header line" help="Combine first line of each file as the header for the final dataset. Useful when same header line is found in all files."/>
-     <conditional name="filename">
-
-     <param name="add_name" type="boolean" display="checkboxes" label="Append File name"/>
+    <conditional name="filename">
+     <param name="add_name" type="boolean" display="checkboxes" label="Prepend File name"/>
      <when value="true">
        <param name="place_name" type="select" label="Where to add dataset name">
          <option value="same_once">Same line and only once per dataset</option>

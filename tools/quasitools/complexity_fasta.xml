@@ -1,32 +1,31 @@
-<tool id="complexity" name="Complexity" version="0.5.1">
-    <description>measures the complexity of the quasispecies reads</description>
+<tool id="complexity_fasta" name="Complexity FASTA" version="0.7.0">    
     <requirements>
-          <requirement type="package" version="0.5.1">quasitools</requirement>
+        <requirement type="package" version="0.7.0">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
-        quasitools complexity $input_fasta > complexity.txt
+        quasitools complexity fasta '$input_fasta' -o output.csv
 
     ]]></command>
     <inputs>
-        <param name="input_fasta" type="data" format="fasta" optional="false" label="Aligned FASTA Input" />
+        <param name="input_fasta" type="data" format="fasta" optional="false" label="input file" />  
     </inputs>
     <outputs>
-        <data format="txt" label="Complexity" name="output_complexity" from_work_dir="complexity.txt" />
+        <data format="csv" name="output" from_work_dir="output.csv" />
     </outputs>
-
     <tests>
         <test>
             <param name="input_fasta" value="msa.fasta" />
-            <output name="output_complexity">
+            <output name="output">
                 <assert_contents>
-                    <has_text text="Number of haplotypes (H) : 8" />
-                    <has_text text="Mutation Frequency (Mfe) : 0.75" />
+                    <has_text text="Number of Haplotypes" />
+		    <has_text text="8" />
+                    <has_text text="0.75" />
                 </assert_contents>
             </output>
         </test>
     </tests>
-
+   
     <help><![CDATA[
 Quasispecies Complexity
 =======================

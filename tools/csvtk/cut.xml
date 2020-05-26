@@ -1,0 +1,169 @@
+<tool id="csvtk_cut" name="csvtk-cut" version="@VERSION@+@GALAXY_VERSION@">
+    <description> and keep selected columns</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk cut --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## Specify fields for collapse ##
+    #################################
+    -F -f '$column_text.in_text'
+
+    ## To output ##
+    ###############
+    > cut
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="cut" from_work_dir="cut" label="${in_1.name} cut out column(s) ${column_text.in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="column_text">
+                <param name="select" value="column" />
+                <param name="in_text" value="2,3" />
+            </conditional>
+            <output name="cut" file="cut_1.csv" ftype="csv" />
+        </test>
+        <test>
+            <param name="in_1" value="plot.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="-2" />
+            </conditional>
+            <output name="cut" file="cut_2.csv" ftype="csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Cut Help
+----------------
+
+Info
+####
+
+Csvtk Cut cuts specified columns to create an output
+
+Csvtk Cut can be used to keep columns with normal inputs such as the column name or number. It
+can also be used to specify columns to remove with a "-" at the start. An example can be seen below.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-cut, all you need is a valid (as defined above) CSV or TSV file
+
+**Example cut to keep columns**
+
+Input table:
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+| Emily  | Blue   | Apples   |
++--------+--------+----------+
+
+Now if we wanted to cut out and keep columns 1 and 2, our column input string (-F -f) would be "1,2"
+and would result in the following table:
+
++--------+--------+
+| Name   | Colour |
++========+========+
+| Eric   | Blue   |
++--------+--------+
+| Darian | Blue   |
++--------+--------+
+| Daniel | Red    |
++--------+--------+
+| Emily  | Blue   |
++--------+--------+
+
+--------
+
+**Example cut to remove column**
+
+Similar input table as above:
+
++--------+--------+----------+-----------------+
+| Name   | Colour | Food     | Unneeded Column |
++========+========+==========+=================+
+| Eric   | Blue   | Apples   | fadah           |
++--------+--------+----------+-----------------+
+| Darian | Blue   | Pancakes | ewq3rfa         |
++--------+--------+----------+-----------------+
+| Daniel | Red    | Apples   | feda356t        |
++--------+--------+----------+-----------------+
+| Emily  | Blue   | Apples   | a342qadef       |
++--------+--------+----------+-----------------+
+
+Now, we have a garbage last column and we want to keep everything else. We could input "1,2,3" to keep the first 3 columns, 
+OR if we set the input column name to "-4" or "-Unneeded Column" csvtk cut will remove the final column giving the following:
+
++--------+--------+----------+
+| Name   | Colour | Food     |
++========+========+==========+
+| Eric   | Blue   | Apples   |
++--------+--------+----------+
+| Darian | Blue   | Pancakes |
++--------+--------+----------+
+| Daniel | Red    | Apples   |
++--------+--------+----------+
+| Emily  | Blue   | Apples   |
++--------+--------+----------+
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
