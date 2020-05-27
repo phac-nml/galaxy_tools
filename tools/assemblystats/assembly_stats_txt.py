@@ -6,8 +6,8 @@
 # Rewritten by Matthew Gopez May 25th, 2020
 
 import os
-import subprocess
 import argparse
+import subprocess
 import shutil
 from pathlib import Path
 
@@ -93,8 +93,9 @@ def exec_fasta_summary(input_data, file_type, bucket, working_dir):
     else:
         bucket_arg = ''
 
-    cli_command = '{}/fasta_summary.pl -i {} -t {} {} -o {} > /dev/null'.format(
-        script_dir, input_data, file_type, bucket_arg, working_dir)
+    cli_command = \
+        '{}/fasta_summary.pl -i {} -t {} {} -o {} > /dev/null'.format(
+            script_dir, input_data, file_type, bucket_arg, working_dir)
 
     try:
         subprocess.check_output(
@@ -103,8 +104,9 @@ def exec_fasta_summary(input_data, file_type, bucket, working_dir):
             shell=True,
             universal_newlines=True)
     except subprocess.CalledProcessError as exc:
-        raise RuntimeError('Error running assembly_stats.py!\nReturn Code: {}\nOutput: {}'.format(
-            exc.returncode, exc.output))
+        raise RuntimeError('Error running assembly_stats.py!\n'
+                           'Return Code: {}\nOutput: {}'.format(
+                            exc.returncode, exc.output))
 
 
 def main():
@@ -114,7 +116,8 @@ def main():
     2. Grabs the user's desired parameters for running the perl script.
     3. Ensures the directories are in place.
     4. Executes fasta_summary.pl
-    5. Move the out files from the perl script to the desired location the user specified.
+    5. Move the out files from the perl script to the desired
+    location the user specified.
 
     """
     parser = init_parser()
@@ -123,7 +126,8 @@ def main():
     working_dir = args.working_dir
 
     out_file_names = [args.stats, args.sorted_contigs, args.histogram_png,
-                      args.summed_contigs_png, args.histogram_data, args.summed_contig_data]
+                      args.summed_contigs_png, args.histogram_data,
+                      args.summed_contig_data]
 
     # Ensure working directory is created.
     Path(working_dir).mkdir(parents=True, exist_ok=True)
