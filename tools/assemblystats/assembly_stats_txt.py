@@ -5,10 +5,10 @@
 # Modified by Matthew Gopez October 13th, 2017
 # Rewritten by Matthew Gopez May 25th, 2020
 
-import os
 import argparse
-import subprocess
+import os
 import shutil
+import subprocess
 from pathlib import Path
 
 
