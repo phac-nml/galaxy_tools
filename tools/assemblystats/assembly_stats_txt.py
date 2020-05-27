@@ -3,106 +3,128 @@
 
 # Version 1.01 - bugs kindly corrected by Jan van Haarst
 # Modified by Matthew Gopez October 13th, 2017
+# Rewritten by Matthew Gopez May 25th, 2020
 
-import logging
 import os
 import subprocess
 import sys
+import argparse
+import shutil
+from pathlib import Path
 
 
-log = logging.getLogger(__name__)
-
-assert sys.version_info[:2] >= (2, 4)
-
-
-def stop_err(msg):
-    sys.stderr.write('%s\n' % msg)
-    sys.exit()
+PERL_OUT_FILES = ['stats.txt', 'sorted_contigs.fa', 'histogram_bins.dat.png',
+                  'summed_contig_lengths.dat.png', 'histogram_bins.dat', 'summed_contig_lengths.dat']
 
 
-def __main__():
+def init_parser():
+    parser = argparse.ArgumentParser(description="usage: %prog [options]")
 
-    # Parse Command Line
+    parser.add_argument(
+        "-d",
+        "--working-dir",
+        dest="working_dir",
+        required=True)
 
-    working_dir = sys.argv[2]
-    type = sys.argv[3]
-    bucket = sys.argv[4]
-    input = sys.argv[5]
-    stats = sys.argv[6]
-    sortedcontigs = sys.argv[7]
-    histogrampng = sys.argv[8]
-    summedcontigspng = sys.argv[9]
-    histogramdata = sys.argv[10]
-    summedcontigdata = sys.argv[11]
-    try:  # for test - needs this done
-        os.makedirs(working_dir)
-    except Exception, e:
-        stop_err('Error running assembly_stats_txt.py ' + str(e))
+    parser.add_argument(
+        "-t",
+        "--type",
+        dest="file_type",
+        required=True)
 
-    cmdline = '%s/fasta_summary.pl -i %s -t %s %s -o %s > /dev/null' \
-        % (os.path.dirname(sys.argv[0]), input, type, bucket,
-           working_dir)
+    parser.add_argument(
+        "-b",
+        "--bucket",
+        dest="bucket",
+        action='store_true')
+
+    parser.add_argument(
+        "-i",
+        "--input",
+        dest="input",
+        required=True)
+
+    parser.add_argument(
+        "-s",
+        "--stats",
+        dest="stats",
+        required=True)
+
+    parser.add_argument(
+        "-sc",
+        "--sorted-contigs",
+        dest="sorted_contigs",
+        required=True)
+
+    parser.add_argument(
+        "-hpng",
+        "--histogram-png",
+        dest="histogram_png",
+        required=True)
+
+    parser.add_argument(
+        "-spng",
+        "--summed-contigs-png",
+        dest="summed_contigs_png",
+        required=True)
+
+    parser.add_argument(
+        "-hd",
+        "--histogram-data",
+        dest="histogram_data",
+        required=True)
+
+    parser.add_argument(
+        "-scd",
+        "--summed-config-data",
+        dest="summed_contig_data",
+        required=True)
+
+    return parser
+
+
+def exec_fasta_summary(input, file_type, bucket, working_dir):
+    script_dir = Path(__file__).parent.absolute()
+
+    if bucket:
+        bucket_arg = '-b'
+    else:
+        bucket_arg = ''
+
+    cli_command = '{}/fasta_summary.pl -i {} -t {} {} -o {} > /dev/null'.format(
+        script_dir, input, file_type, bucket_arg, working_dir)
+
     try:
-        proc = subprocess.Popen(args=cmdline, shell=True,
-                                stderr=subprocess.PIPE)
-        returncode = proc.wait()
-
-        # get stderr, allowing for case where it's very large
-
-        stderr = ''
-        buffsize = 1048576
-        try:
-            while True:
-                stderr += proc.stderr.read(buffsize)
-                if not stderr or len(stderr) % buffsize != 0:
-                    break
-        except OverflowError:
-            pass
-        if returncode != 0:
-            raise Exception
-    except Exception, e:
-        stop_err('Error running assembly_stats.py ' + str(e))
-
-    stats_path = os.path.join(working_dir, 'stats.txt')
-    sorted_contigs_path = os.path.join(working_dir, 'sorted_contigs.fa')
-    histogram_png_path = os.path.join(working_dir,
-                                      'histogram_bins.dat.png')
-    summed_contigs_path = os.path.join(working_dir,
-                                       'summed_contig_lengths.dat.png')
-    histogram_data_path = os.path.join(working_dir, 'histogram_bins.dat')
-    summed_contigs_data_path = os.path.join(working_dir,
-                                            'summed_contig_lengths.dat')
-
-    out = open(stats, 'w')
-    for line in open(stats_path):
-        out.write('%s' % line)
-    out.close()
-
-    out = open(sortedcontigs, 'w')
-    for line in open(sorted_contigs_path):
-        out.write('%s' % line)
-    out.close()
-
-    out = open(histogrampng, 'w')
-    for line in open(histogram_png_path):
-        out.write('%s' % line)
-    out.close()
-
-    out = open(summedcontigspng, 'w')
-    for line in open(summed_contigs_path):
-        out.write('%s' % line)
-    out.close()
-
-    out = open(histogramdata, 'w')
-    for line in open(histogram_data_path):
-        out.write('%s' % line)
-    out.close()
-
-    out = open(summedcontigdata, 'w')
-    for line in open(summed_contigs_data_path):
-        out.write('%s' % line)
-    out.close()
+        output = subprocess.check_output(
+            cli_command,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            universal_newlines=True)
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError('Error running assembly_stats.py!\nReturn Code: {}\nOutput: {}'.format(
+            exc.returncode, exc.output))
 
 
-if __name__ == '__main__':
-    __main__()
+def main():
+    parser = init_parser()
+    args = parser.parse_args()
+
+    working_dir = args.working_dir
+
+    OUT_FILES = [args.stats, args.sorted_contigs, args.histogram_png,
+                 args.summed_contigs_png, args.histogram_data, args.summed_contig_data]
+
+    # Ensure working directory is created.
+    Path(working_dir).mkdir(parents=True, exist_ok=True)
+
+    # Execute Perl Script
+    exec_fasta_summary(args.input, args.file_type, args.bucket, working_dir)
+
+    # Rename out files to desired file names
+    for perl_out_file, dest_file in zip(PERL_OUT_FILES, OUT_FILES):
+        shutil.move(os.path.join(working_dir, perl_out_file),
+                    dest_file)
+
+
+if __name__ == "__main__":
+    main()
