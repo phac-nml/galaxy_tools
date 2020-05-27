@@ -1,0 +1,256 @@
+<tool id="csvtk_replace" name="csvtk-replace" version="@VERSION@+@GALAXY_VERSION@">
+    <description> data of selected columns by regular expression</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk replace --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    '$in_1'
+
+    ## Specify fields to use ##
+    ###########################
+    -F -f '${column_text.in_text}'
+    
+    ## Specific Commands ##
+    #######################
+    -p '($pattern_string)'
+    -r '$replacement_string'
+
+    #if $input_kv
+        -k '$input_kv'
+    #end if
+
+    #if $fill.how_fill == "key"
+        -K
+    #elif $fill.how_fill == "string"
+        --key-miss-repl '$fill.fill_string'
+    #end if
+    
+    ## To output ##
+    ###############
+    > replaced
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <expand macro="fields_input" />
+        <param name="pattern_string" type="text" argument="-p"
+            label="Pattern Regex"
+            help="Regex to search column for. Input is structured as '(YOUR_INPUT_HERE)' so if your regex was just a period it would look like '(.)' as an input.">
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="replacement_string" type="text" argument="-r"
+            label="Replacement String">
+            <help>
+                <![CDATA[
+        String to replace found data. Supports capture variables and special replacement symbols.
+
+        - Capture Variables: $1 represents the text of the first submatch
+        - {nr} inserts a record number starting from 1
+        - {kv} uses corresponding value of the key (captured variable $n) of a key-value file
+
+        If using the special replacement symbols, the capture variable must be specified as ${1}!
+            ]]>
+            </help>
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="input_kv" type="data" format="tsv,tabular" argument="-k"
+            optional="true"
+            label="Key/Value file for replacement string"
+            help="Only specify a file if using {kv} in replacement string. The file must be tab delimited with one key/value pair per line.
+            An example can be found in the help section below"
+        />
+        <conditional name="fill">
+            <param name="how_fill" type="select" label="Fill columns that don't get any regex matches">
+                <option value="no">No</option>
+                <option value="key">Yes - Fill with Original Value</option>
+                <option value="string">Yes - Fill with String</option>
+            </param>
+            <when value="no" />
+            <when value="key" />
+            <when value="string" >
+                <param name="fill_string" type="text" value="NA" argument="--key-miss-repl" label="Fill string">
+                    <expand macro="text_sanitizer" />
+                </param>
+            </when>
+        </conditional>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="replaced" from_work_dir="replaced" label='${in_1.name} with column ${column_text.in_text} replaced' />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="replace_input.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2" />
+            </conditional>
+            <param name="pattern_string" value=".+" />
+            <param name="replacement_string" value="{nr}-$1" />
+            <output name="replaced" value="replace_1.csv" />
+        </test>
+        <test>
+            <param name="in_1" value="replace_input.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2" />
+            </conditional>
+            <param name="pattern_string" value=".+" />
+            <param name="replacement_string" value="{kv}" />
+            <param name="input_kv" value="kv.txt" />
+            <conditional name="fill">
+                <param name="how_fill" value="key" />
+            </conditional>
+            <output name="replaced" value="replace_2.csv" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Replace Help
+--------------------
+
+Info
+####
+Csvtk-replace is a tool that uses Regular Expressions (Regex) to match data in the specified column and replace it with the replacement string.
+Non-matched columns can be kept or filled with the Regex key or an input string
+
+The regex input for this tool is structured such that your regular expression **does not** need to start with with quotes or brackets. You can
+start your expression with a `^` or just go straight into it
+
+For example:
+
+::
+
+    Using `.+` as an input would be used in the code as '(.+)'
+
+    Using ^(.+)$ as an input would yield an input in the code as '(^(.+)$)'
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+-----
+
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+You can use csvtk replace to any matched regex expressions with your input replacement string.
+
+The replacement string has some unique properties that you can use too to better replace your data:
+
+- Replacement supports capture variables, like $1 which represents the text of the first submatch of the Regex
+
+- \{nr} can be used to assign ascending numbers starting from 1 to each column
+
+- \{kv} can be used to get the value of the key (captured variable $n) or a key-value file
+
+A good Regular expressions cheat sheet that you can use to help yourself build regular expressions can be found at:
+https://regexr.com/
+
+**Replace Examples**
+
+1. Replacement with {nr} and $1
+
+Input file:
+
++---------+--------+
+| Name    | Animal |
++=========+========+
+| Bud     | Dog    |
++---------+--------+
+| Mittens | Cat    |
++---------+--------+
+
+Now if our regex was set to '.*' on column 2 and our replacement string was set to '{nr}-$1', the following output would be observed:
+
++---------+--------+
+| Name    | Animal |
++=========+========+
+| Bud     | 1-Dog  |
++---------+--------+
+| Mittens | 2-Cat  |
++---------+--------+
+
+---------------
+
+2. Replacement with {kv} file
+
+Suppose you set up a key-value TAB separated file that looked as such:
+
+::
+
+    Key     Value
+    Dog     Big
+    Cat     Small
+
+And had a similar input file:
+
++---------+--------+
+| Name    | Animal |
++=========+========+
+| Bud     | Dog    |
++---------+--------+
+| Mittens | Cat    |
++---------+--------+
+| Fuzzy   | Gerbil |
++---------+--------+
+
+Now if the regex was '.*' on column 2 with the replacement string as '{kv}'. Your output would look as such with 'No' fill specified:
+
++---------+--------+
+| Name    | Animal |
++=========+========+
+| Bud     | Big    |
++---------+--------+
+| Mittens | Small  |
++---------+--------+
+| Fuzzy   |        |
++---------+--------+
+
+If you wanted to fill the blank cell you could set it to either:
+
+- String - the string you input (ex. 'NA') would fill up the blank cell.
+
+- Original value - would change the blank cell to 'Gerbil'
+
+----
+
+If your having trouble with the regular expressions, please play around with a builder, there are many others online 
+and they are great resources to improve your regex statements or test them before use!
+
+----
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

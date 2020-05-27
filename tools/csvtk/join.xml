@@ -1,0 +1,239 @@
+<tool id="csvtk_join" name="csvtk-join" version="@VERSION@+@GALAXY_VERSION@">
+    <description>tables by column(s)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk join --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1[0].is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    #for $file in $in_1:
+        '$file'
+    #end for
+
+    ## Specify fields to join ##
+    ############################
+    -F -f '$column_text.in_text'
+    
+    ## Fill columns if wanted ##
+    ############################
+    #if $unmatched.wanted == 'yes':
+        #if $unmatched.join_type == 'outer'
+            -O
+        #else
+            -L
+        #end if
+        --na '$unmatched.fill_value'
+    #end if
+    
+    ## To output ##
+    ###############
+    > joined
+
+    ]]></command>
+    <inputs>
+        <expand macro="multi_input"/>
+        <expand macro="fields_input"/>
+        <conditional name="unmatched" >
+            <param type="select" name="wanted"
+                label="Keep Unmatched Columns?"
+                help="Include unmatched columns in output results?"
+                >
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </param>
+            <when value="no" />
+            <when value="yes">
+                <param type="select" name="join_type"
+                    label="Type of Join"
+                    >
+                    <option value="left">Left (Standard)</option>
+                    <option value="outer">Outer</option>
+                </param>
+                <param type="text" name="fill_value"
+                    argument="--na"
+                    label="What to fill unmatched columns with"
+                    help="Specify value to fill into all of the columns with no data">
+                    <expand macro="text_sanitizer" />
+                </param>
+            </when>
+        </conditional>
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="joined" from_work_dir="joined" label="${in_1[0].name} joined by column ${column_text.in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="csv.csv,data.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="Person" />
+            </conditional>
+            <conditional name="unmatched" >
+                <param name="wanted" value="no" />
+            </conditional>
+            <output name="joined" file="joined.csv" ftype="csv" />
+        </test>
+        <test>
+            <param name="in_1" value="csv.csv,data.csv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="Person" />
+            </conditional>
+            <conditional name="unmatched" >
+                <param name="wanted" value="yes" />
+                <param name="join_type" value="outer" />
+                <param name="fill_value" value="a" />
+            </conditional>
+            <param name="ignore_case" value="false" />
+            <output name="joined" file="joined_filled.csv" ftype="csv" compare="sim_size" delta="10"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Join Help
+-----------------
+
+Info
+####
+Csvtk-Join is used to join two or more csv/tsv files together by either a column number or a column key/name.
+It will join together the columns that have a matching value and create an output csv/tsv file (depending upon input file type).
+
+Columns that are not matching will be discarded unless 'Keep Unmatched Columns' is set to 'Yes'
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. Joining based on column 1:**
+
+::
+
+    +------+--------+----------+           +----------+----------+----------+
+    | Name | Colour | Food     |           | Username | Sport    | Column 3 |
+    +======+========+==========+           +==========+==========+==========+
+    | Joe  | Red    | Pancakes |     +     | Joe      | Swimming | Yes      |
+    +------+--------+----------+           +----------+----------+----------+
+    | John | Green  | Potatos  |           | Gary     | Biking   | Yes      |
+    +------+--------+----------+           +----------+----------+----------+
+
+    -------------------------------------------------------------------------
+
+    We would get the following table:
+
+    +------+--------+----------+----------+----------+
+    | Name | Colour | Food     | Sport    | Column 3 |
+    +======+========+==========+==========+==========+
+    | Joe  | Red    | Pancakes | Swimming | Yes      |
+    +------+--------+----------+----------+----------+
+
+    If we kept unmatched columns and filled them with 'NA', the following would be the output:
+
+    +------+--------+----------+----------+----------+----------+
+    | Name | Colour | Food     | Username | Sport    | Column 3 |
+    +======+========+==========+==========+==========+==========+
+    | Joe  | Red    | Pancakes | Joe      | Swimming | Yes      |
+    +------+--------+----------+----------+----------+----------+
+    | John | Green  | Potatos  | NA       | NA       | NA       |
+    +------+--------+----------+----------+----------+----------+
+    | NA   | NA     | NA       | Gary     | Biking   | Yes      |
+    +------+--------+----------+----------+----------+----------+
+
+----
+
+**Ex. Joining based on the column named "Name":**
+
+::
+
+    Here, we use the column header name as a way to match up the columns. This is especially useful if the wanted
+    column has the same name but is not located in the same location as seen below.
+
+    Matching on the "Name" column would look as such:
+
+    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+----------+
+    | Name | Colour | Food     |       | Name | Sport    | Column 3 |       | Column 4 | Name | Column 5 | Column 6 |
+    +======+========+==========+   +   +======+==========+==========+   +   +==========+======+==========+==========+
+    | Joe  | Red    | Pancakes |       | Joe  | Swimming | Yes      |       | Yes      | Joe  | Yes      | Yes      |
+    +------+--------+----------+       +------+----------+----------+       +----------+------+----------+----------+
+    | John | Green  | Potatos  |
+    +------+--------+----------+       
+
+    -----------------------------------------------------------------------------------------------------------------
+
+    Would give the following table:
+
+    +------+--------+----------+----------+----------+----------+----------+----------+
+    | Name | Colour | Food     | Sport    | Column 3 | Column 4 | Column 5 | Column 6 |
+    +======+========+==========+==========+==========+==========+==========+==========+
+    | Joe  | Red    | Pancakes | Swimming | Yes      | Yes      | Yes      | Yes      |
+    +------+--------+----------+----------+----------+----------+----------+----------+
+
+----
+
+**Ex. Matching data in multiple columns:**
+
+::
+
+    If using multiple columns, the values that are found to be the same in both columns will be put in the output.
+    If only one matches, or neither matches, then that row is not included in the output
+
+    The following would occur using column names as "Name,Column 3"
+
+    +------+----------+----------+           +----------+------+----------+           
+    | Name | Sport    | Column 3 |           | Column 4 | Name | Column 3 |
+    +======+==========+==========+           +==========+======+==========+
+    | Joe  | Swimming | Yes      |     +     | Yes      | Joe  | Yes      |
+    +------+----------+----------+           +----------+------+----------+
+    | Jake | Track    | No       |           | Yes      | Jake | Yes      |
+    +------+----------+----------+           +----------+------+----------+
+
+    -----------------------------------------------------------------------
+
+    Would Yield:
+
+    +------+----------+----------+----------+
+    | Name | Sport    | Column 3 | Column 4 |
+    +======+==========+==========+==========+
+    | Joe  | Swimming | Yes      | Yes      |
+    +------+----------+----------+----------+
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

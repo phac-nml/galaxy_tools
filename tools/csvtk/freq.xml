@@ -1,0 +1,168 @@
+<tool id="csvtk_freq" name="csvtk-freq" version="@VERSION@+@GALAXY_VERSION@">
+    <description>of value in column(s)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+
+csvtk freq --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if input is tabular ##
+    #######################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set Input ##
+    ###############
+    '$in_1'
+
+    ## Specify fields for freq ##
+    #############################
+    -F -f '$column_text.in_text'
+
+    ## Sorting? ##
+    ##############
+    #if $sorting.want_sort == 'yes_sort'
+
+        #if $sorting.how_sort == 'frequency'
+            -n
+        #elif $sorting.how_sort == 'alphabetical'
+            -k
+        #end if
+
+        #if $sorting.reverse_sort == 'yes_reverse'
+            -r
+        #end if
+    #end if
+
+    ## To output ##
+    ###############
+    > freq
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input" />
+        <expand macro="fields_input" />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+        <conditional name="sorting" >
+            <param type="select" name="want_sort"
+                label="Sort Output Columns?"
+                help="Change the order of output column(s)">
+                <option value="no_sort">No</option>
+                <option value="yes_sort">Yes</option>
+            </param>
+            <when value="no_sort" />
+            <when value="yes_sort">
+                <param type="select" name="how_sort" label="How to Sort Output">
+                    <option value="frequency">Frequency (Low -> High)</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </param>
+                <param type="select" name="reverse_sort" label="Reverse Sort" help="Sort in reverse order. IE. highest to lowest or reverse alphabetical" >
+                    <option value="no_reverse">No</option>
+                    <option value="yes_reverse">Yes</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data format_source="in_1" name="freq" from_work_dir="freq" label="${in_1.name} frequency of column(s) ${column_text.in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="blood_type.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2,3" />
+            </conditional>
+            <conditional name="sorting" >
+                <param name="want_sort" value="no_sort" />
+            </conditional>
+            <output name="freq" file="frequency.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Freq Help
+-----------------
+
+Info
+####
+Find the frequency of the data based on the selected column(s).
+
+If one column is selected, the frequency will be the number of times each value is found in the column. These can further be sorted if so desired.
+
+Examples can be found in the usage section below!
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+To run csvtk-freq, all you need is a valid (as defined above) CSV or TSV and the column(s) that you want the frequency of.
+
+**Ex. of frequency with one column:**
+
++------------+-----------+
+| Blood Type | Frequency |
++============+===========+
+| A          | 31        |
++------------+-----------+
+| B          | 103       |
++------------+-----------+
+| etc.       | etc.      |
++------------+-----------+
+
+----
+
+**Ex. of frequency with more than one column for frequency:**
+
++---------+------------+-----------+
+| Name    | Blood Type | Frequency |
++=========+============+===========+
+| Bob     | A          | 4         |
++---------+------------+-----------+
+| Jacob   | B          | 5         |
++---------+------------+-----------+
+| Matthew | O          | 12        |
++---------+------------+-----------+
+| Darian  | AB         | 1         |
++---------+------------+-----------+
+
+With multiple columns, you end up getting the frequency of how many times the values from each column
+are found together. In this example from an input dataset of names and bloodtypes, we can find the frequency that
+each name in our database is a certain bloodtype. 
+
+Here, we can note that there are 4 people named bob with blood type A.
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>
