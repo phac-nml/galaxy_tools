@@ -7,17 +7,18 @@
 
 import os
 import subprocess
-import sys
 import argparse
 import shutil
 from pathlib import Path
 
 
 PERL_OUT_FILES = ['stats.txt', 'sorted_contigs.fa', 'histogram_bins.dat.png',
-                  'summed_contig_lengths.dat.png', 'histogram_bins.dat', 'summed_contig_lengths.dat']
+                  'summed_contig_lengths.dat.png', 'histogram_bins.dat',
+                  'summed_contig_lengths.dat']
 
 
 def init_parser():
+    """Create argument parser and return parser obj."""
     parser = argparse.ArgumentParser(description="usage: %prog [options]")
 
     parser.add_argument(
@@ -83,7 +84,8 @@ def init_parser():
     return parser
 
 
-def exec_fasta_summary(input, file_type, bucket, working_dir):
+def exec_fasta_summary(input_data, file_type, bucket, working_dir):
+    """Execute fasta_summary.pl script with user arguments."""
     script_dir = Path(__file__).parent.absolute()
 
     if bucket:
@@ -92,10 +94,10 @@ def exec_fasta_summary(input, file_type, bucket, working_dir):
         bucket_arg = ''
 
     cli_command = '{}/fasta_summary.pl -i {} -t {} {} -o {} > /dev/null'.format(
-        script_dir, input, file_type, bucket_arg, working_dir)
+        script_dir, input_data, file_type, bucket_arg, working_dir)
 
     try:
-        output = subprocess.check_output(
+        subprocess.check_output(
             cli_command,
             stderr=subprocess.STDOUT,
             shell=True,
@@ -106,13 +108,22 @@ def exec_fasta_summary(input, file_type, bucket, working_dir):
 
 
 def main():
+    """This is where the magic happens. (not really)
+
+    1. Gets command line arguments.
+    2. Grabs the user's desired parameters for running the perl script.
+    3. Ensures the directories are in place.
+    4. Executes fasta_summary.pl
+    5. Move the out files from the perl script to the desired location the user specified.
+
+    """
     parser = init_parser()
     args = parser.parse_args()
 
     working_dir = args.working_dir
 
-    OUT_FILES = [args.stats, args.sorted_contigs, args.histogram_png,
-                 args.summed_contigs_png, args.histogram_data, args.summed_contig_data]
+    out_file_names = [args.stats, args.sorted_contigs, args.histogram_png,
+                      args.summed_contigs_png, args.histogram_data, args.summed_contig_data]
 
     # Ensure working directory is created.
     Path(working_dir).mkdir(parents=True, exist_ok=True)
@@ -121,7 +132,7 @@ def main():
     exec_fasta_summary(args.input, args.file_type, args.bucket, working_dir)
 
     # Rename out files to desired file names
-    for perl_out_file, dest_file in zip(PERL_OUT_FILES, OUT_FILES):
+    for perl_out_file, dest_file in zip(PERL_OUT_FILES, out_file_names):
         shutil.move(os.path.join(working_dir, perl_out_file),
                     dest_file)
 
