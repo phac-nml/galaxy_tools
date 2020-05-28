@@ -28,16 +28,21 @@
   --input "${genomes}" 
   --percentIdentity '$adv_param.min_percentIdentity'
   --percentLength '$adv_param.percentLength'
+
   #if $adv_param.verifyEcoli
     --verify
   #end if
+
   #if $mash_input
     --refseq mash_sketch.msh
-  #end if   
+  #end if
+
   #if $adv_param.alleleSequence
     --sequence
   #end if
+
   --output '.'
+  
   ]]>
   </command>
   <inputs>
