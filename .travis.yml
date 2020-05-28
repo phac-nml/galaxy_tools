@@ -83,6 +83,7 @@ install:
   - conda install -y -c conda-forge conda=4.8.3
   - planemo --version
   - conda --version
+  - conda config --set channel_priority strict # Reduce the amount of time spent solving the environment.
   - git diff --quiet "$TRAVIS_COMMIT_RANGE" -- ; GIT_DIFF_EXIT_CODE=$?
   - |
     if [ "$GIT_DIFF_EXIT_CODE" -gt 1 ] ; then
