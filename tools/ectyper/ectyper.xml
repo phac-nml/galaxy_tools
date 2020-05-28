@@ -36,15 +36,19 @@
   -opcov '$adv_param.opcov'
   -hpid '$adv_param.hpid'
   -hpcov '$adv_param.hpcov'
+
   #if $adv_param.verifyEcoli
     --verify
   #end if
+
   #if $mash_input
     --refseq mash_sketch.msh
+  #end if
 
   #if $db_input
     --dbpath custom_db.json
   #end if
+
   --output '.'
   ]]>
   </command>
