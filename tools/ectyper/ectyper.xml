@@ -20,13 +20,13 @@
     #set $genomes = $input.element_identifier
   #end if
 
-  #if $mash_input
-    ln -s "${mash_input}" mash_sketch.msh &&
+  #if $adv_param.mash_input
+    ln -s "${adv_param.mash_input}" mash_sketch.msh &&
   #end if
 
 
-  #if $db_input
-    ln -s "${db_input}" custom_db.json &&
+  #if $adv_param.db_input
+    ln -s "${adv_param.db_input}" custom_db.json &&
   #end if
 
 
@@ -41,11 +41,11 @@
     --verify
   #end if
 
-  #if $mash_input
+  #if $adv_param.mash_input
     --refseq mash_sketch.msh
   #end if
 
-  #if $db_input
+  #if $adv_param.db_input
     --dbpath custom_db.json
   #end if
 
