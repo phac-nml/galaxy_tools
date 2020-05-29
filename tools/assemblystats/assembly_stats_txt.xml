@@ -1,7 +1,7 @@
 <tool id="assemblystats" name="assemblystats" version="1.1.0">
 	<description>Summarise an assembly (e.g. N50 metrics)</description>
 	<requirements>
-		<requirement type="package" version="1.6.924">perl-bioperl</requirement>
+		<requirement type="package" version="1.7.2">perl-bioperl</requirement>
 		<requirement type="package" version="5.2.7">gnuplot</requirement>
 	</requirements>
 	<command detect_errors="exit_code"><![CDATA[
