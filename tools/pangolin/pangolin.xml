@@ -6,7 +6,7 @@
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
 
-pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' $additional.write_tree &&
+pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' $additional.write_tree $additional.include_putative &&
 
 sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
     ]]></command>
@@ -23,6 +23,13 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
                 label="Minimum query length to attempt assignment"
                 argument="--min-length"
                 />
+            <param name="include_putative" type="boolean" checked="false" argument="-p"
+                truevalue="-p"
+                falsevalue=""
+                label="Include putative lineages"
+                help="Putative lineages fit the criteria required for lineage designation but have not got recall values suitable for lineage assignment.
+                If left as 'No', only lineages with >95% recall rate will be used."
+            />
             <param name="write_tree" type="boolean" checked="false"
                 truevalue="--write-tree"
                 falsevalue=""
@@ -54,6 +61,7 @@ sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
             <param name="input1" value="test_seqs.fasta" />
             <section name="additional">
                 <param name="write_tree" value="true" />
+                <param name="include_putative" value="true" />
             </section>
             <output name="lineage_report" >
                 <assert_contents>
