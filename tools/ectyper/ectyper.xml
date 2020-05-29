@@ -1,7 +1,7 @@
-<tool id="ectyper" name="ectyper" version="0.9.1">
+<tool id="ectyper" name="ectyper" version="1.0.0">
   <description>ectyper is a standalone serotyping module for Escherichia coli. It supports fasta and fastq file formats.</description>
   <requirements>
-     <requirement type="package" version="0.9.1">ectyper</requirement>
+     <requirement type="package" version="1.0.0">ectyper</requirement>
   </requirements>
   <command detect_errors="exit_code">
   <![CDATA[
@@ -20,42 +20,60 @@
     #set $genomes = $input.element_identifier
   #end if
 
-  #if $mash_input
-    ln -s "${mash_input}" mash_sketch.msh &&
+  #if $adv_param.mash_input
+    ln -s "${adv_param.mash_input}" mash_sketch.msh &&
   #end if
+
+
+  #if $adv_param.db_input
+    ln -s "${adv_param.db_input}" custom_db.json &&
+  #end if
+
 
   ectyper  --cores \${GALAXY_SLOTS:-4} 
   --input "${genomes}" 
-  --percentIdentity '$adv_param.min_percentIdentity'
-  --percentLength '$adv_param.percentLength'
+  -opid '$adv_param.opid'
+  -opcov '$adv_param.opcov'
+  -hpid '$adv_param.hpid'
+  -hpcov '$adv_param.hpcov'
+
   #if $adv_param.verifyEcoli
     --verify
   #end if
-  #if $mash_input
+
+  #if $adv_param.mash_input
     --refseq mash_sketch.msh
-  #end if   
-  #if $adv_param.alleleSequence
-    --sequence
   #end if
+
+  #if $adv_param.db_input
+    --dbpath custom_db.json
+  #end if
+
   --output '.'
   ]]>
   </command>
   <inputs>
     <param name="input" type="data"  format="fastq,fasta" label="Genome(s) input(s)" help="FASTA or FASTQ file(s)"/>
-    <param name="mash_input" type="data" optional="true" format="binary" label="Mash genome sketches (Optional)" help="Optionally provide custom MASH genome sketch to help with species identification (otherwise default RefSeq sketch is used)"/>
     <section name="adv_param" title="Advanced parameters" expanded="False">
-      <param name="min_percentIdentity" type="integer" value="90" min="1" max="100"/>
-      <param name="percentLength" type="integer" value="10" min="1" max="100"/>
+      <param name="opid" label="O antigen minimum %identity" type="integer" value="90" min="1" max="100"/>
+      <param name="opcov" label="O antigen minimum %coverage" type="integer" value="90" min="1" max="100"/>
+      <param name="hpid" label="H antigen minimum %identity" type="integer" value="95" min="1" max="100"/>
+      <param name="hpcov" label="H antigen minimum %coverage" type="integer" value="50" min="1" max="100"/>
       <param name="verifyEcoli" type="boolean" checked="true" label="Enable E. coli species verification"/>
-      <param name="alleleSequence" type="boolean" checked="false" label="Print the allele sequences as the final columns of the output?"/> 
+      <param name="blastresults" type="boolean" checked="false"  label="Include BLAST allele alignment results tab-delim file in the outputs?" />
       <param name="logging" type="boolean" checked="false"  label="Include log file in the run outputs?" />
-    </section>  
+      <param name="mash_input" type="data" optional="true" format="binary" label="Mash genome sketches (Optional)" help="Optionally provide custom MASH genome sketch to help with species identification (otherwise default RefSeq sketch is used)"/>
+      <param name="db_input" type="data" optional="true" format="json" label="Custom database of alleles (Optional)" help="Optionally provide custom database of alleles in JSON format"/>
+    </section>
   </inputs>
   <outputs>
     <data name="output_result" format="tabular" from_work_dir="output.tsv" label="${tool.name} serotype report on ${input.element_identifier}"> </data>
     <data name="output_log" format="txt" from_work_dir="ectyper.log" label="${tool.name} log file on ${input.element_identifier}">
         <filter>adv_param['logging']==True</filter>
-    </data>   
+    </data>
+    <data name="output_blast" format="tabular" from_work_dir="blast_output_alleles.txt"  label="${tool.name} BLAST results file on ${input.element_identifier}">
+         <filter>adv_param['blastresults']==True</filter>
+    </data>
   </outputs>
   <tests>
     <test>
@@ -76,12 +94,11 @@
 **Syntax**
 
 
-This tool identifies the serotype of assembled or assembly-free Escherichia coli genome sample based on a set of either *wzm/wzt* or *wzx/wzy* and *fliC/flkA/flmA* alleles corresponding to O and H antigens, respectively.
-The non-E.coli genomes and other Escherichia genus species are successfully identified and well handled. The 0.9.0 version improves tool sensitivy when target alleles are truncated or
-poorly covered by raw reads.
+This tool identifies the serotype of both assembled or assembly-free Escherichia coli genome samples based on a set of the key O and H antigen determinant genes including *wzm/wzt* or *wzx/wzy* and *fliC/flkA/flmA*.
+Unique to the tool, species identification module allows for non-E.coli genomes identification including other Escherichia genus species.
+This version improves antigen call rates on "difficult samples" by use of an adaptive threshold. This is especially useful when antigen genes are truncated or poorly covered by raw reads.
+If no antigen call is being predicted by the tool, try to lower %coverage parameter first. For more information on the new Quality Control module and running parameter details please visit https://github.com/phac-nml/ecoli_serotyping.
 
-
-For more information please visit https://github.com/phac-nml/ecoli_serotyping. 
 
 -----
 
@@ -89,22 +106,22 @@ For more information please visit https://github.com/phac-nml/ecoli_serotyping.
 
 Accepts a variety of inputs including both single and/or multiple FASTQ and/or FASTA file(s). Inputs might contain pure raw reads, but for more accurate results, draft assemblies are recommended.
 
-The default MASH RefSeq genome sketch is included and updated every 6 months, but one can supply custom sketch file for species identification.
 
-One can download RefSeq genome sketch containing approximately 91,283 genomes from https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh.
+The default MASH RefSeq genome sketch (https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh) containing approximately 91K genomes is included and automatically updated every 6 months.
+
 
 
 **Output:**
 
-Tab-delimited report listing identified O and H antigens together with corresponding highest scoring alleles and normalized BLAST score defined as (%identity x query coverage length) / 10000
+Tab-delimited report listing identified O and H antigens together with corresponding the highest-scoring alleles and normalized BLAST score defined as (%identity x %coverage) / 1e4.
+If *verifyEcoli* parameter is enabled, final report will contain allele quality control information on results for reporting purposes. PASS (REPORTABLE) QC flag means that O and H antigen calls are of sufficient to unambiguously resolve them from all other antigens.
 
 -----
 
 **Parameters (Optional):**
-
-  - **Print the allele sequences as the final columns of the output?** Turn ON/OFF addition of the actual O and H antigen allelic sequences in the report
-  - **Enable E. coli species verification:** Turn ON/OFF for more rigorous species verification (recommended)
-  - **Include log file in the run outputs?:** Turn ON/OFF optional output of the ectyper log file for a more detailed results assessment
+  - **Enable E. coli species verification:** for species verification in case samples are of non-E.coli origin
+  - **Include BLAST allele alignment results tab-delim file in the outputs?** Get reference allele sequences and detailed BLAST output
+  - **Include log file in the run outputs?:** Get optional logs of the ectyper run for a more detailed results assessment and troubleshooting
 
   </help>
 <citations>
