@@ -1,0 +1,127 @@
+<tool id="pangolin" name="Pangolin" version="@VERSION@+galaxy0">
+    <description> CoV-2019 Phylogenetic Assignment of Named Global Outbreak LINeages</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+
+pangolin '$input1' -t "\${GALAXY_SLOTS:-1}" --max-ambig '$additional.max_ambig' --min-length '$additional.min_length' $additional.write_tree $additional.include_putative &&
+
+sed 's/,/\t/g' lineage_report.csv > lineage_report.tsv
+    ]]></command>
+    <inputs>
+        <param name="input1" type="data" format="fasta"
+            label="Input multi-sequence fasta file"
+            />
+        <section name="additional" title="Additional Parameters" expanded="false">
+            <param name="max_ambig" type="float" value="0.5" min="0" max="1.0"
+                label="Maximum proportion of Ns allowed to attempt assignment"
+                argument="--max-ambig"
+                />
+            <param name="min_length" type="integer" value="10000" min="0"
+                label="Minimum query length to attempt assignment"
+                argument="--min-length"
+                />
+            <param name="include_putative" type="boolean" checked="false" argument="-p"
+                truevalue="-p"
+                falsevalue=""
+                label="Include putative lineages"
+                help="Putative lineages fit the criteria required for lineage designation but have not got recall values suitable for lineage assignment.
+                If left as 'No', only lineages with >95% recall rate will be used."
+            />
+            <param name="write_tree" type="boolean" checked="false"
+                truevalue="--write-tree"
+                falsevalue=""
+                label="Write guide trees"
+                help="Output a collection of trees with each query sequence placed in the guide tree"
+                />
+        </section>
+    </inputs>
+    <outputs>
+        <data format="tabular" from_work_dir="lineage_report.tsv" name="lineage_report" label="${input1.name}_lineage_report" />
+        <collection name="pangolin_trees" type="list" label="${tool.name} Trees">
+            <filter>additional['write_tree']</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.tree" directory="pangolin_trees/" format="iqtree" />
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="test_seqs.fasta" />
+            <output name="lineage_report" >
+                <assert_contents>
+                    <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    <has_text text="This_seq_is_too_short" />
+                    <has_text text="lineage" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input1" value="test_seqs.fasta" />
+            <section name="additional">
+                <param name="write_tree" value="true" />
+                <param name="include_putative" value="true" />
+            </section>
+            <output name="lineage_report" >
+                <assert_contents>
+                    <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    <has_text text="This_seq_is_too_short" />
+                    <has_text text="lineage" />
+                </assert_contents>
+            </output>
+            <output_collection name="pangolin_trees" type="list">
+                <element name="USA_NY-NYUMC7_2020_EPI_ISL_418192__USA_New_York_Manhattan_2020-03-16" ftype="iqtree">
+                    <assert_contents>
+                        <has_text text="USA/NY-NYUMC7/2020|EPI_ISL_418192||USA|New_York|Manhattan|2020-03-16" />
+                    </assert_contents>
+                </element>
+                <element name="Japan_DP0779_2020_EPI_ISL_416626__Japan_unknown__2020-02-17" ftype="iqtree">
+                    <assert_contents>
+                        <has_text text="Japan/DP0779/2020|EPI_ISL_416626||Japan|unknown||2020-02-17" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Pangolin
+--------
+
+Pangolin assigns SARS-CoV-2 genome sequences in fasta format to global lineages from `Rambaut et al. <https://doi.org/10.1101/2020.04.17.046086>`_.
+To do this, Pangolin employs the use of external programs including: `iqtree <http://www.iqtree.org/#download>`_, `mafft <https://mafft.cbrc.jp/alignment/software/>`_,
+and `snakemake <https://snakemake.readthedocs.io/en/stable/index.html>`_.
+
+More information can be obtained from the authors github site: https://github.com/hCoV-2019/pangolin
+
+You may also wish to visit the authors website at https://pangolin.cog-uk.io/
+
+--------------
+
+**Input** - Multi sequence fasta file or individual fasta files
+
+
+**Output** - lineage report:
+
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Taxon   | Lineage | aLRT | UFbootstrap | lineages_version | status    | note      |
++=========+=========+======+=============+==================+===========+===========+
+| Sample1 | A.1     | 100  | 60          | 2020-04-27       | passed_qc |           |
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Sample2 | B.1     | 80   | 80          | 2020-04-27       | passed_qc |           |
++---------+---------+------+-------------+------------------+-----------+-----------+
+| Sample3 | B.1.4   | 60   | 100         | 2020-04-27       | fail      | seq_len:0 |
++---------+---------+------+-------------+------------------+-----------+-----------+
+
+
+Resources for interpreting aLRT and UFbootstrap values:
+
+- `IQ_TREE: Assessing branch supports with single branch tests <http://www.iqtree.org/doc/Tutorial#assessing-branch-supports-with-single-branch-tests>`_
+
+- `IQ_TREE: Command Reference <http://www.iqtree.org/doc/Command-Reference>`_
+
+    ]]></help>
+    <expand macro="citations" />
+</tool> 

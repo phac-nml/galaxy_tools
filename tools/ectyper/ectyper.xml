@@ -1,0 +1,137 @@
+<tool id="ectyper" name="ectyper" version="1.0.0">
+  <description>ectyper is a standalone serotyping module for Escherichia coli. It supports fasta and fastq file formats.</description>
+  <requirements>
+     <requirement type="package" version="1.0.0">ectyper</requirement>
+  </requirements>
+  <command detect_errors="exit_code">
+  <![CDATA[
+  #set $genomes = ''
+  #if hasattr($input, '__iter__')
+    #for $i in $input
+        ln -s "${i}" "${i.element_identifier}" &&
+        #if len($genomes) > 0
+          #set $genomes = $genomes + ',' + str($i.element_identifier)
+        #else
+          #set $genomes = str($i.element_identifier)
+        #end if      
+    #end for
+  #else
+    ln -s "${input}" "${input.element_identifier}" &&
+    #set $genomes = $input.element_identifier
+  #end if
+
+  #if $adv_param.mash_input
+    ln -s "${adv_param.mash_input}" mash_sketch.msh &&
+  #end if
+
+
+  #if $adv_param.db_input
+    ln -s "${adv_param.db_input}" custom_db.json &&
+  #end if
+
+
+  ectyper  --cores \${GALAXY_SLOTS:-4} 
+  --input "${genomes}" 
+  -opid '$adv_param.opid'
+  -opcov '$adv_param.opcov'
+  -hpid '$adv_param.hpid'
+  -hpcov '$adv_param.hpcov'
+
+  #if $adv_param.verifyEcoli
+    --verify
+  #end if
+
+  #if $adv_param.mash_input
+    --refseq mash_sketch.msh
+  #end if
+
+  #if $adv_param.db_input
+    --dbpath custom_db.json
+  #end if
+
+  --output '.'
+  ]]>
+  </command>
+  <inputs>
+    <param name="input" type="data"  format="fastq,fasta" label="Genome(s) input(s)" help="FASTA or FASTQ file(s)"/>
+    <section name="adv_param" title="Advanced parameters" expanded="False">
+      <param name="opid" label="O antigen minimum %identity" type="integer" value="90" min="1" max="100"/>
+      <param name="opcov" label="O antigen minimum %coverage" type="integer" value="90" min="1" max="100"/>
+      <param name="hpid" label="H antigen minimum %identity" type="integer" value="95" min="1" max="100"/>
+      <param name="hpcov" label="H antigen minimum %coverage" type="integer" value="50" min="1" max="100"/>
+      <param name="verifyEcoli" type="boolean" checked="true" label="Enable E. coli species verification"/>
+      <param name="blastresults" type="boolean" checked="false"  label="Include BLAST allele alignment results tab-delim file in the outputs?" />
+      <param name="logging" type="boolean" checked="false"  label="Include log file in the run outputs?" />
+      <param name="mash_input" type="data" optional="true" format="binary" label="Mash genome sketches (Optional)" help="Optionally provide custom MASH genome sketch to help with species identification (otherwise default RefSeq sketch is used)"/>
+      <param name="db_input" type="data" optional="true" format="json" label="Custom database of alleles (Optional)" help="Optionally provide custom database of alleles in JSON format"/>
+    </section>
+  </inputs>
+  <outputs>
+    <data name="output_result" format="tabular" from_work_dir="output.tsv" label="${tool.name} serotype report on ${input.element_identifier}"> </data>
+    <data name="output_log" format="txt" from_work_dir="ectyper.log" label="${tool.name} log file on ${input.element_identifier}">
+        <filter>adv_param['logging']==True</filter>
+    </data>
+    <data name="output_blast" format="tabular" from_work_dir="blast_output_alleles.txt"  label="${tool.name} BLAST results file on ${input.element_identifier}">
+         <filter>adv_param['blastresults']==True</filter>
+    </data>
+  </outputs>
+  <tests>
+    <test>
+      <param name="input" value="Escherichia2.fastq"/>
+      <assert_stderr>
+            <has_text text="O22"/> 
+            <has_text text="H8"/> 
+      </assert_stderr>
+      <output name="output_result" ftype="tabular" >
+          <assert_contents>
+              <has_text_matching expression="O22"/>
+         </assert_contents>
+      </output>
+    </test>
+  </tests>
+
+  <help>
+**Syntax**
+
+
+This tool identifies the serotype of both assembled or assembly-free Escherichia coli genome samples based on a set of the key O and H antigen determinant genes including *wzm/wzt* or *wzx/wzy* and *fliC/flkA/flmA*.
+Unique to the tool, species identification module allows for non-E.coli genomes identification including other Escherichia genus species.
+This version improves antigen call rates on "difficult samples" by use of an adaptive threshold. This is especially useful when antigen genes are truncated or poorly covered by raw reads.
+If no antigen call is being predicted by the tool, try to lower %coverage parameter first. For more information on the new Quality Control module and running parameter details please visit https://github.com/phac-nml/ecoli_serotyping.
+
+
+-----
+
+**Input:**
+
+Accepts a variety of inputs including both single and/or multiple FASTQ and/or FASTA file(s). Inputs might contain pure raw reads, but for more accurate results, draft assemblies are recommended.
+
+
+The default MASH RefSeq genome sketch (https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh) containing approximately 91K genomes is included and automatically updated every 6 months.
+
+
+
+**Output:**
+
+Tab-delimited report listing identified O and H antigens together with corresponding the highest-scoring alleles and normalized BLAST score defined as (%identity x %coverage) / 1e4.
+If *verifyEcoli* parameter is enabled, final report will contain allele quality control information on results for reporting purposes. PASS (REPORTABLE) QC flag means that O and H antigen calls are of sufficient to unambiguously resolve them from all other antigens.
+
+-----
+
+**Parameters (Optional):**
+  - **Enable E. coli species verification:** for species verification in case samples are of non-E.coli origin
+  - **Include BLAST allele alignment results tab-delim file in the outputs?** Get reference allele sequences and detailed BLAST output
+  - **Include log file in the run outputs?:** Get optional logs of the ectyper run for a more detailed results assessment and troubleshooting
+
+  </help>
+<citations>
+    <citation type="bibtex">
+  @misc{githubectyper,
+  author = {Laing Chad},
+  title = {ECtyper - serotyping module for Escherichia coli},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/phac-nml/ecoli_serotyping}
+    }</citation>
+</citations>
+</tool>

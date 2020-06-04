@@ -1,7 +1,7 @@
-<tool id="hydra" name="Hydra pipeline" version="0.4.2">
+<tool id="hydra" name="Hydra pipeline" version="0.5.1">
     <description>Identifies drug resistance within an NGS dataset</description>
     <requirements>
-          <requirement type="package" version="0.4.2">quasitools</requirement>
+          <requirement type="package" version="0.5.1">quasitools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
 
@@ -226,6 +226,7 @@
                     <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
                 </assert_contents>
             </output>
+           
             <output name="output_stats">
                 <assert_contents>
                     <has_text text="Input Size: 25000"/>
@@ -318,5 +319,13 @@ Example: __mutation_report.hmcf__
 
     ]]></help>
     <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolshydra,
+			title = {quasitools hydra},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
     </citations>
 </tool>

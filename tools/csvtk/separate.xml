@@ -1,0 +1,228 @@
+<tool id="csvtk_separate" name="csvtk-separate" version="@VERSION@+@GALAXY_VERSION@">
+    <description> column into multiple columns</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+#set column_number = $column_names.count(',') + 1
+
+###################
+## Start Command ##
+###################
+csvtk separate --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $ignore_case
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specify field to use ##
+    ##########################
+    -f '$column_text.in_text'
+
+    ## Specific inputs ##
+    #####################
+    -n '$column_names'
+    -N '$column_number'
+
+    #if $how_separate.how == 'sep'
+        -s '$how_separate.separator'
+    #else
+        -r '($how_separate.separator)'
+    #end if
+
+    --na '$fill_na'
+    $extra_data
+    $remove
+    
+    ## To output ##
+    ###############
+    > separated
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <expand macro="singular_fields_input"/>
+        <conditional name="how_separate">
+            <param name="how" type="select" label="Separate input column by:"> 
+                <option value="sep">Separator String</option>
+                <option value="regex">Regexp</option>
+            </param>
+            <when value="sep">
+                <param name="separator" type="text" value="; " argument="-s"
+                    label="Separator string"
+                    help="Specify what string separates the data in the column">
+                    <expand macro="text_sanitizer" />
+                </param>
+            </when>
+            <when value="regex">
+                <param name="separator" type="text" value=".+" argument="-r"
+                    label="Set regex search pattern"
+                    help="Use regex to match input column information. Example: ^(.+)$ will match all characters.
+                    Regex help can be found below. The ' character is invalid">
+                    <expand macro="text_sanitizer" />
+                </param>
+            </when>
+        </conditional>
+        <param name="column_names" type="text" value="new1,new2" argument="-n"
+            label="Specify new column name(s)"
+            help="More than one column can be made by separating the names by a comma (,). Ex. 'Genus,Species' would create two columns.">
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="extra_data" type="select" label="Handle extra data by:"
+            help="Extra data is data that does not fit into the new columns made. An example can be found below">
+            <option value="--drop">Dropping it</option>
+            <option value="--merge">Merging it</option>
+        </param>
+        <param name="fill_na" type="text" value="NA" argument="--na"
+            label="Character string to fill empty columns">
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="remove" type="boolean" checked="true" argument="-R"
+            truevalue="-R"
+            falsevalue=""
+            label="Remove input column"
+        />
+        <expand macro="ignore_case" />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" from_work_dir="separated" name="separated" label="${in_1.name} column ${column_text.in_text} separated by ${how_separate.separator}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="collapsed.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2" />
+            </conditional>
+            <conditional name="how_separate">
+                <param name="how" value="sep" />
+                <param name="separator" value="; " />
+            </conditional>
+            <param name="column_names" value="1,2" />
+            <param name="fill_na" value="NA" />
+            <param name="extra_data" value="--drop" />
+            <param name="remove" value="true" />
+            <output name="separated" file="separated_1.tsv" ftype="tabular" />
+        </test>
+        <test>
+            <param name="in_1" value="collapsed.tsv" />
+            <conditional name="column_text">
+                <param name="select" value="string" />
+                <param name="in_text" value="2" />
+            </conditional>
+            <conditional name="how_separate">
+                <param name="how" value="sep" />
+                <param name="separator" value="; " />
+            </conditional>
+            <param name="column_names" value="1,2" />
+            <param name="fill_na" value="N/A" />
+            <param name="extra_data" value="--merge" />
+            <param name="remove" value="false" />
+            <output name="separated" file="separated_2.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Separate Help
+---------------------
+
+Info
+####
+
+Csvtk-separate separates columns into new columns based on either an input string or a regex expression.
+
+The regex input for this tool is structured such that your regular expression **does not** need to start with with quotes or brackets. You can
+start your expression with a `^` or just go straight into it
+
+For example:
+
+::
+
+    Using `.+` as an input would be used in the code as '(.+)'
+
+    Using ^(.+)$ as an input would yield an input in the code as '(^(.+)$)'
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+----
+
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. Separate with Dropping Data**
+
+Suppose we had the following table and wanted to separate the scientific name column to create two new columns called genus and species:
+
++------------+------------------------------+
+| Name       | Scientific Name              |
++============+==============================+
+| Red Fox    | Vulpes vulpes                |
++------------+------------------------------+
+| Salmonella | Salmonella enterica enterica |
++------------+------------------------------+
+
+First, we set our separator to string and use just a space (' ') as the separator as the names are separated by spaces.
+
+Then, we have to set the new column names which can be done by setting the column names to 'Genus,Species' (make sure that the names are
+separated by a comma).
+
+Finally, we have to decide if we want to drop the input column and if we want to merge the additional data or drop it.
+
+First table will show dropping of additional data (the second enterica is additional as it cannot fit in its own column)
+
++------------+------------+----------+
+| Name       | Genus      | Species  |
++============+============+==========+
+| Red Fox    | Vulpes     | vulpes   |
++------------+------------+----------+
+| Salmonella | Salmonella | enterica |
++------------+------------+----------+
+
+|
+
+Here is what it would look like if we merged data instead:
+
++------------+------------+-------------------+
+| Name       | Genus      | Species           |
++============+============+===================+
+| Red Fox    | Vulpes     | vulpes            |
++------------+------------+-------------------+
+| Salmonella | Salmonella | enterica enterica |
++------------+------------+-------------------+
+
+----
+
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

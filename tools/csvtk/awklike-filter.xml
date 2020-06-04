@@ -1,0 +1,185 @@
+<tool id="csvtk_awklike_filter" name="csvtk-advanced-filter" version="@VERSION@+@GALAXY_VERSION@">
+    <description> rows by awk-like artithmetic/string expressions</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements" />
+    <expand macro="version_cmd" />
+    <command detect_errors="exit_code"><![CDATA[
+
+###################
+## Start Command ##
+###################
+csvtk filter2 --num-cpus "\${GALAXY_SLOTS:-1}"
+
+    ## Add additional flags as specified ##
+    #######################################
+    $global_param.illegal_rows
+    $global_param.empty_rows
+    $global_param.header
+    $global_param.lazy_quotes
+
+    ## Set Tabular input/output flag if first input is tabular ##
+    #############################################################
+    #if $in_1.is_of_type("tabular"):
+        -t -T
+    #end if
+
+    ## Set input files ##
+    #####################
+    $in_1
+
+    ## Specify fields to filter ##
+    ##############################
+    -f '$in_text'
+
+    ## Specific inputs ##
+    #####################
+    $line_number
+    
+    ## To output ##
+    ###############
+    > filtered
+
+    ]]></command>
+    <inputs>
+        <expand macro="singular_input"/>
+        <param name="in_text" type="text"
+            optional="false"
+            argument="-f"
+            label="Awk-like artithmetic/string expression">
+            <help>
+                <![CDATA[
+        Examples:
+        - '$age>12'
+        - '$1 > $3'
+        - '$name=="abc"'
+        - '$1 % 2 == 0'
+        More info is available in the help section below. The ' character is invalid and will be replaced, thus you must
+        surround strings with double quotes ("string") instead.
+            ]]>
+            </help>
+            <expand macro="text_sanitizer" />
+        </param>
+        <param name="line_number" type="boolean"
+            checked="false"
+            truevalue="-n"
+            falsevalue=""
+            argument="-n"
+            label="Print initial line number as the first column"
+        />
+        <expand macro="global_parameters" />
+    </inputs>
+    <outputs>
+        <data format_source="in_1" from_work_dir="filtered" name="filtered" label="${in_1.name} filtered by ${in_text}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="in_1" value="frequency.tsv" />
+            <param name="in_text" value="$3>1" />
+            <output name="filtered" file="filtered.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+Csvtk - Filter2 Help
+--------------------
+
+Info
+####
+
+Csvtk advanced filter (also called filter2) outputs rows that satisfy the input awk-like artithmetic/string expressions. Please see the
+`documentation <https://github.com/Knetic/govaluate/blob/master/MANUAL.md>`_ for further details and examples on how to write expressions.
+
+.. class:: warningmark
+
+    Single quotes are not allowed in text inputs!
+
+.. class:: note
+
+    If your wanted column header has a space in it, use the column number. Example: Use $1 if column #1 is called "Colony Counts"
+
+Supported operators and types:
+
+    - Modifiers: + - / * & | ^ ** % >> <<
+    - Comparators: > >= < <= == != =~ !~
+    - Logical ops: || &&
+    - Numeric constants, as 64-bit floating point (12345.678)
+    - String constants (double quotes: "foobar")
+    - Date constants (double quotes)
+    - Boolean constants: true false
+    - Parenthesis to control order of evaluation ( )
+    - Arrays (anything separated by , within parenthesis: (1, 2, "foo"))
+    - Prefixes: ! - ~
+    - Ternary conditional: ? :
+    - Null coalescence: ??
+
+----
+
+@HELP_INPUT_DATA@
+
+
+Usage
+#####
+
+**Ex. Filter2 on one column:**
+
+Suppose we had the following table:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+| LPn-2         | 4          | 1000     |
++---------------+------------+----------+
+
+If we wanted to find all samples with the label LPn, we could use the filter expression '$1 =~ "LPn*"' to get the following output:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+| LPn-2         | 4          | 1000     |
++---------------+------------+----------+
+
+Note how $1 was used to get column 1 due to it containing a space
+
+----
+
+**Ex2. Filter2 with multiple inputs:**
+
+Same input table
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| ECo-1         | 2523       | 1000     |
++---------------+------------+----------+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+| LPn-2         | 4          | 1000     |
++---------------+------------+----------+
+
+Now if we use the expression '$1 =~ "LPn*" && $Dilution > 1000' to filter on, we would pull out the only row that satisfies both conditions:
+
++---------------+------------+----------+
+| Culture Label | Cell Count | Dilution |
++===============+============+==========+
+| LPn-1         | 100        | 1000000  |
++---------------+------------+----------+
+
+----
+
+@HELP_COLUMNS@
+
+
+@HELP_END_STATEMENT@
+
+
+    ]]></help>
+    <expand macro="citations" />
+</tool>

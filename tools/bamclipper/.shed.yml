@@ -1,0 +1,8 @@
+categories: [Sequence Analysis]
+description: Soft-clip gene-specific primers from BAM alignment file based on genomic coordinates of primer pairs in BEDPE format.
+name: bamclipper
+owner: nml
+long_description: Soft-clip gene-specific primers from BAM alignment file based solely on genomic coordinates of primer pairs in BEDPE format. Reference sequence names and coordinates of BAM and BEDPE are assumed to be derived from identical reference sequences
+remote_repository_url: https://github.com/tommyau/bamclipper
+homepage_url: https://github.com/tommyau/bamclipper
+type: unrestricted

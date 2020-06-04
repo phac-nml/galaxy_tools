@@ -1,0 +1,57 @@
+<tool id="complexity_bam" name="Complexity BAM" version="0.7.0">
+    <requirements>
+        <requirement type="package" version="0.7.0">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+
+        quasitools complexity bam '$ref_file' '$input_bam'  $k -f '$filter_size' -o output.csv
+
+    ]]></command>
+    <inputs>
+        <param name="ref_file" type="data" format="fasta" optional="false" label="Reference file" />
+        <param name="input_bam" type="data" format="bam" optional="false" label="BAM file" />
+        <param name="k" type="integer" label="k-mer size" value="0" min="0" />
+        <param name="filter_size" type="integer" label="Filter size" value="0" min="0" />
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+   <tests>
+        <test>
+            <param name="ref_file" value="generated.fasta" />
+            <param name="input_bam" value="generated.bam" />
+	    <param name="k" value="200" />
+	    <param name="filter_size" value="0" />
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="Position" />
+                    <has_text text="0" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+   
+    <help><![CDATA[
+Quasispecies Complexity
+=======================
+
+Calculates various quasispecies complexity measures on next generation sequenced data from a BAM file and it's corresponding reference file.
+
+The measures of complexity are taken from the following work:
+Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2016): 227-237.
+
+
+]]></help>
+    <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolscomplexity,
+			title = {quasitools complexity},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
+	</citations>
+</tool>

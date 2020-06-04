@@ -1,0 +1,51 @@
+<tool id="complexity_fasta" name="Complexity FASTA" version="0.7.0">    
+    <requirements>
+        <requirement type="package" version="0.7.0">quasitools</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        quasitools complexity fasta '$input_fasta' -o output.csv
+
+    ]]></command>
+    <inputs>
+        <param name="input_fasta" type="data" format="fasta" optional="false" label="input file" />  
+    </inputs>
+    <outputs>
+        <data format="csv" name="output" from_work_dir="output.csv" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_fasta" value="msa.fasta" />
+            <output name="output">
+                <assert_contents>
+                    <has_text text="Number of Haplotypes" />
+		    <has_text text="8" />
+                    <has_text text="0.75" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+   
+    <help><![CDATA[
+Quasispecies Complexity
+=======================
+
+Measure the complexity of quasispecies reads using a variety of measures. The input must be an aligned FASTA file, representing a particular reqion of quasispcies from which to measure the complexity.
+
+The measures of complexity are taken from the following work:
+
+Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2016): 227-237.
+
+
+]]></help>
+    <citations>
+		<citation type="bibtex">
+			@misc{GitHubquasitoolscomplexity,
+			title = {quasitools complexity},
+			publisher = {phac-nml},
+			journal = {GitHub repository},
+			url = {https://github.com/phac-nml/quasitools},
+			}
+		</citation>
+	</citations>
+</tool>

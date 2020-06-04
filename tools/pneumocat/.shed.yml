@@ -1,0 +1,7 @@
+categories: [Variant Analysis]
+description: Pneumococcal Capsular Typing of illumina fastq reads
+name: pneumocat
+owner: nml
+long_description: Pneumococcal Capsular Typing using illumina fastq reads and a two step approach involving read mapping to capsular loci and the capsular type variant database to distinguish serotypes.
+remote_repository_url: https://github.com/phe-bioinformatics/PneumoCaT
+homepage_url: https://github.com/phe-bioinformatics/PneumoCaT

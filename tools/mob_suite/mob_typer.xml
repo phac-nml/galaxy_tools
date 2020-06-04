@@ -9,16 +9,17 @@
     ln -s '${input}' '${input.name}' &&
     mob_typer  --num_threads \${GALAXY_SLOTS:-4} --infile '${input.name}'
 
+
    #if $adv_param.multi
     --multi
    #end if 
-
    --min_rep_evalue '$adv_param.min_rep_evalue_value'
    --min_mob_evalue '$adv_param.min_mob_evalue_value'
    --min_con_evalue '$adv_param.min_con_evalue_value'
    --min_length '$adv_param.min_length'
    --min_rep_ident '$adv_param.min_rep_ident'
    --min_mob_ident '$adv_param.min_mob_ident'
+
    --min_con_ident '$adv_param.min_con_ident'
    --min_rep_cov '$adv_param.min_rep_cov'
    --min_mob_cov '$adv_param.min_mob_cov'
@@ -62,10 +63,12 @@
    #end if
 
    --out_file plasmid_report.txt;
+
   ]]>
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
+    <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue="" checked="true" label="Perform detailed host range analysis" />
     <section name="adv_param" title="Advanced parameters" expanded="False">
       <param name="multi" type="boolean" truevalue="true" falsevalue="" checked="false" label="Treat each input sequenc in each input file as an independant plasmid?" />
       <param name="min_rep_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for replicon blastn"/> 

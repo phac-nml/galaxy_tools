@@ -1,0 +1,14 @@
+<macros>
+    <token name="@VERSION@">1.0.0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@VERSION@">bamclipper</requirement>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1038/s41598-017-01703-6</citation>
+            <citation type="doi">10.5281/zenodo.1146014</citation>
+        </citations>
+    </xml>
+</macros>
