@@ -28,12 +28,9 @@
    --min_overlap '$adv_param.min_overlap'
    
    #if $adv_param.plasmid_db
-   --plasmid_db $adv_param.plasmid_db
+   --plasmid_db '$adv_param.plasmid_db'
    #end if
 
-   #if $adv_param.plasmid_db
-   --plasmid_db $adv_param.plasmid_db
-   #end if
 
    #if $adv_param.plasmid_mash_db
    --plasmid_mash_db '$adv_param.plasmid_mash_db'
@@ -48,7 +45,7 @@
    #end if
 
    #if $adv_param.plasmid_mob
-   --plasmid_mob $adv_param.plasmid_mob
+   --plasmid_mob '$adv_param.plasmid_mob'
    #end if
    
    #if $adv_param.plasmid_mpf
