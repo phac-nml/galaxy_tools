@@ -108,7 +108,7 @@
           <has_text text="AA474"/>
           <has_text text="AI614"/>
           <has_text_matching expression="family\tEnterobacteriaceae"/>
-          <has_text text="Enterobacteriales"/>
+          <has_text_matching expression="order\tEnterobacterales"/>
         </assert_contents>
       </output>
     </test>
