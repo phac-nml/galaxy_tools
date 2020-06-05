@@ -13,6 +13,7 @@
    #if $adv_param.multi
     --multi
    #end if 
+
    --min_rep_evalue '$adv_param.min_rep_evalue_value'
    --min_mob_evalue '$adv_param.min_mob_evalue_value'
    --min_con_evalue '$adv_param.min_con_evalue_value'
@@ -68,9 +69,8 @@
   </command>
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
-    <param name="host_range_detailed" type="boolean" truevalue="--host_range_detailed" falsevalue="" checked="true" label="Perform detailed host range analysis" />
     <section name="adv_param" title="Advanced parameters" expanded="False">
-      <param name="multi" type="boolean" truevalue="true" falsevalue="" checked="false" label="Treat each input sequenc in each input file as an independant plasmid?" />
+      <param name="multi" type="boolean" truevalue="true" falsevalue="" checked="false" label="Treat each input sequence as an independant plasmid?" />
       <param name="min_rep_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for replicon blastn"/> 
       <param name="min_mob_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for relaxase tblastn"/> 
       <param name="min_con_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for contig blastn"/> 
@@ -98,8 +98,8 @@
   </outputs>
   <tests>
     <test>
-      <param name="input" value="plasmid_476.fasta" ftype="fasta" />
-      <output name="plasmid_report">
+      <param name="input" value="plasmid_476.fasta" ftype="fasta"/>
+      <output name="plasmid_report" file="plasmid_report.txt" ftype="tabular">
         <assert_contents>
           <has_text text="KJ484639"/>
           <has_text text="MOBP"/>
@@ -108,7 +108,7 @@
           <has_text text="AA474"/>
           <has_text text="AI614"/>
           <has_text_matching expression="family\tEnterobacteriaceae"/>
-          <has_text_matching expression="order\tEnterobacteriales"/>
+          <has_text text="Enterobacteriales"/>
         </assert_contents>
       </output>
     </test>
