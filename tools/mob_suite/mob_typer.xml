@@ -101,7 +101,6 @@
       <param name="input" value="plasmid_476.fasta" ftype="fasta" />
       <output name="plasmid_report">
         <assert_contents>
-          <has_text text="IncI-gamma/K1"/>
           <has_text text="KJ484639"/>
           <has_text text="MOBP"/>
           <has_text text="NC_019097"/>
