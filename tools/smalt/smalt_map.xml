@@ -385,4 +385,15 @@ Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
      &#060;minid&#062; specifies the number of exactly matching nucleotides either as
      a positive integer or as a fraction of the read length (&#060;= 1.0).
     </help>
+    <citations>
+        <citation type="bibtex">
+            @misc{smaltcitation,
+              author = {Ponstigl, Hannes},
+              year = {2010},
+              title = {smalt},
+              publisher = {Wellcome Trust Sanger Institute, Cambridge, UK},
+              journal = {Online},
+              url = {https://www.sanger.ac.uk/tool/smalt-0/}
+       }</citation>
+    </citations>
 </tool>
