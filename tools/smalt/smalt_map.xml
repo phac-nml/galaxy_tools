@@ -265,7 +265,7 @@ SMALT is a pairwise sequence alignment program for the experimentingcient mappin
 
 There is no such thing (yet) as an automated gearshift in short read mapping. It is all like stick-shift driving in San Francisco. In other words = running this tool with default parameters will probably not give you meaningful results. A way to deal with this is to **understand** the parameters by carefully reading the `documentation`__ and experimenting. Fortunately, Galaxy makes experimenting easy.
 
- .. __: http://www.sanger.ac.uk/resources/software/smalt/
+ .. __: https://www.sanger.ac.uk/tool/smalt-0/
 
 ------
 
@@ -276,7 +276,7 @@ SMALT accepts files in Sanger FASTQ format (galaxy type *fastqsanger* or *fastqs
 ------
 
 
-Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
+Please cite the website "https://www.sanger.ac.uk/tool/smalt-0/".
 
 ------
 
