@@ -1,4 +1,4 @@
-<tool id="smalt" name="smalt" version="@VERSION@">
+<tool id="smalt" name="smalt" version="@VERSION@+galaxy0">
     <description>Map query reads (FASTA/FASTQ) format onto the reference sequences</description>
     <macros>
       <token name="@VERSION@">0.7.6</token>
