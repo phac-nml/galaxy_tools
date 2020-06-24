@@ -6,7 +6,7 @@
     </macros>
     <requirements>
       <requirement type="package" version="@VERSION@">smalt</requirement>
-      <requirement type="package" version="1.5">samtools</requirement>
+      <requirement type="package" version="1.10">samtools</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:"   level="fatal"   description="Unknown error" />
