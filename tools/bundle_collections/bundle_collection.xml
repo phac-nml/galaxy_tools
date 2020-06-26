@@ -54,15 +54,34 @@
   </outputs>
   <tests>
     <test>
+      <param name="singles_or_list.type" value="singles" />
+      <repeat name="single_files">
+        <param name="single_file" value="first.txt" />
+      </repeat>
+      <output name="html_file" file="out-1.html" />
+    </test>
+    <test>
+      <param name="singles_or_list.type" value="singles" />
+      <repeat name="single_files">
+        <param name="single_file" value="first.txt" />
+      </repeat>
+      <repeat name="single_files">
+        <param name="single_file" value="second.txt" />
+      </repeat>
+      <output name="html_file" file="out-2.html" />
+    </test>
+    <!--
+    <test>
       <param name="singles_or_list.type" value="list" />
-      <param name="singles_or_list.input">
+      <param name="input">
         <collection type="list">
           <element name="first" value="first.txt"/>
           <element name="second" value="second.txt"/>
         </collection>
       </param>
-      <output name="html_file" file="out-1.html" />
+      <output name="html_file" file="out-2.html" />
     </test>
+    -->
   </tests>
 
   <help><![CDATA[
