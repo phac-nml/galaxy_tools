@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
@@ -114,7 +114,7 @@ __END__
 
 =head1 SYNOPSIS
 
-	bundle_collection.pl -h html_file -p output_path -o "key=value"
+	bundle_collection.pl -h html_file -p output_path -i "key=value"
 
 =back
 =cut
