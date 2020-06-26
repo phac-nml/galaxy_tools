@@ -52,36 +52,41 @@
   <outputs>
     <data name="html_file" format="html" label="Bundled Collection" />
   </outputs>
+
   <tests>
     <test>
-      <param name="singles_or_list.type" value="singles" />
-      <repeat name="single_files">
-        <param name="single_file" value="first.txt" />
-      </repeat>
+      <conditional name="singles_or_list">
+        <param name="type" value="singles" />
+        <repeat name="single_files">
+          <param name="single_file" value="first.txt" />
+        </repeat>
+      </conditional>
       <output name="html_file" file="out-1.html" />
     </test>
     <test>
-      <param name="singles_or_list.type" value="singles" />
-      <repeat name="single_files">
-        <param name="single_file" value="first.txt" />
-      </repeat>
-      <repeat name="single_files">
-        <param name="single_file" value="second.txt" />
-      </repeat>
+      <conditional name="singles_or_list">
+        <param name="type" value="singles" />
+        <repeat name="single_files">
+          <param name="single_file" value="first.txt" />
+        </repeat>
+        <repeat name="single_files">
+          <param name="single_file" value="second.txt" />
+        </repeat>
+      </conditional>
       <output name="html_file" file="out-2.html" />
     </test>
-    <!--
     <test>
-      <param name="singles_or_list.type" value="list" />
-      <param name="input">
-        <collection type="list">
-          <element name="first" value="first.txt"/>
-          <element name="second" value="second.txt"/>
-        </collection>
-      </param>
+      <conditional name="singles_or_list">
+        <param name="type" value="list" />
+        <param name="input">
+          <collection type="list">
+            <element name="first.txt" value="first.txt"/>
+            <element name="second.txt" value="second.txt"/>
+          </collection>
+        </param>
+      </conditional>
       <output name="html_file" file="out-2.html" />
     </test>
-    -->
   </tests>
 
   <help><![CDATA[
