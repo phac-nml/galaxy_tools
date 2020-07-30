@@ -1,4 +1,4 @@
-<tool id="staramr_search" name="staramr" version="@VERSION@+galaxy1">
+<tool id="staramr_search" name="staramr" version="@VERSION@+galaxy2">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
 	    <token name="@VERSION@">0.7.1</token>
@@ -34,6 +34,10 @@
         --percent-length-overlap-resfinder $advanced.plength_resfinder
         --percent-length-overlap-plasmidfinder $advanced.plength_plasmidfinder
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
+
+        #if str($mlst_scheme) != 'auto':
+            --mlst-scheme '${mlst_scheme}'
+        #end if
 
         $advanced.report_all_blast
         $advanced.exclude_negatives
@@ -97,6 +101,141 @@
                    help="Report all BLAST results (includes overlapping hits, mainly for debugging)" />
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
             <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
+            <param name="mlst_scheme" type="select" label="MLST Scheme">
+                <option value="auto" selected="true">Automatic</option>
+                <option value="abaumannii">Acinetobacter baumannii</option>
+                <option value="abaumannii_2">Acinetobacter baumannii</option>
+                <option value="achromobacter">Achromobacter </option>
+                <option value="aeromonas">Aeromonas </option>
+                <option value="afumigatus">Aspergillus afumigatus</option>
+                <option value="aphagocytophilum">Anaplasma aphagocytophilum</option>
+                <option value="arcobacter">Arcobacter </option>
+                <option value="bburgdorferi">Borrelia burgdorferi</option>
+                <option value="bcc">Burkholderia cepacia</option>
+                <option value="bcereus">Bacillus cereus</option>
+                <option value="bhampsonii">Brachyspira hampsonii</option>
+                <option value="bhenselae">Bartonella henselae</option>
+                <option value="bhyodysenteriae">Brachyspira hyodysenteriae</option>
+                <option value="bifidobacterium">Bifidobacterium bifidobacterium</option>
+                <option value="bintermedia">Brachyspira intermedia</option>
+                <option value="blicheniformis">Bacillus licheniformis</option>
+                <option value="bordetella">Bordetella pertussis</option>
+                <option value="borrelia">Borrelia </option>
+                <option value="bpilosicoli">Brachyspira pilosicoli</option>
+                <option value="bpseudomallei">Burkholderia  pseudomallei</option>
+                <option value="brachyspira">Brachyspira </option>
+                <option value="bsubtilis">Bacillus subtilis</option>
+                <option value="calbicans">Candida albicans</option>
+                <option value="campylobacter">Campylobacter coli</option>
+                <option value="campylobacter">Campylobacter jejuni</option>
+                <option value="cbotulinum">Clostridium botulinum</option>
+                <option value="cconcisus">Campylobacter concisus</option>
+                <option value="cdifficile">Clostridium  difficile</option>
+                <option value="cdifficile">Peptoclostridium difficile</option>
+                <option value="cdifficile_2">Clostridium  difficile</option>
+                <option value="cdiphtheriae">Corynebacterium diphtheriae</option>
+                <option value="cfetus">Campylobacter fetus</option>
+                <option value="cfreundii">Citrobacter freundii</option>
+                <option value="cglabrata">Candida glabrata</option>
+                <option value="chelveticus">Campylobacter helveticus</option>
+                <option value="chlamydiales">Chlamydia </option>
+                <option value="chyointestinalis">Campylobacter hyointestinalis</option>
+                <option value="cinsulaenigrae">Campylobacter insulaenigrae</option>
+                <option value="ckrusei">Candida krusei</option>
+                <option value="clanienae">Campylobacter lanienae</option>
+                <option value="clari">Campylobacter lari</option>
+                <option value="cmaltaromaticum">Carnobacterium maltaromaticum</option>
+                <option value="cneoformans">Cryptococcus neoformans</option>
+                <option value="cronobacter">Cronobacter </option>
+                <option value="csepticum">Clostridium septicum</option>
+                <option value="csinensis">Clonorchis sinensis</option>
+                <option value="csputorum">Campylobacter sputorum</option>
+                <option value="ctropicalis">Candida tropicalis</option>
+                <option value="cupsaliensis">Campylobacter upsaliensis</option>
+                <option value="ecloacae">Enterobacter cloacae</option>
+                <option value="ecoli">Escherichia  </option>
+                <option value="ecoli">Shigella </option>
+                <option value="ecoli_2">Escherichia </option>
+                <option value="edwardsiella">Edwardsiella tarda</option>
+                <option value="efaecalis">Enterococcus  faecalis</option>
+                <option value="efaecium">Enterococcus  faecium</option>
+                <option value="fpsychrophilum">Flavobacterium psychrophilum</option>
+                <option value="haemophilus">Haemophilus </option>
+                <option value="hcinaedi">Helicobacter cinaedi</option>
+                <option value="hinfluenzae">Haemophilus influenzae</option>
+                <option value="hparasuis">Haemophilus parasuis</option>
+                <option value="hpylori">Helicobacter pylori</option>
+                <option value="hsuis">Haematopinus suis</option>
+                <option value="kkingae">Kingella kingae</option>
+                <option value="koxytoca">Klebsiella oxytoca</option>
+                <option value="kpneumoniae">Klebsiella pneumoniae</option>
+                <option value="kseptempunctata">Kudoa septempunctata</option>
+                <option value="lcasei">Lactobacillus casei</option>
+                <option value="legionella">Legionella </option>
+                <option value="leptospira">Leptospira </option>
+                <option value="leptospira_2">Leptospira </option>
+                <option value="leptospira_3">Leptospira </option>
+                <option value="lmonocytogenes">Listeria  monocytogenes</option>
+                <option value="lsalivarius">Lactobacillus salivarius</option>
+                <option value="mabscessus">Mycobacterium abscessus</option>
+                <option value="magalactiae">Mycoplasma agalactiae</option>
+                <option value="mbovis">Mycoplasma bovis</option>
+                <option value="mcatarrhalis">Moraxells catarrhalis</option>
+                <option value="mhaemolytica">Mannheimia haemolytica</option>
+                <option value="mhyorhinis">Mycoplasma hyorhinis</option>
+                <option value="mmassiliense">Mycobacterium massiliense</option>
+                <option value="mplutonius">Melissococcus plutonius</option>
+                <option value="neisseria">Neisseria </option>
+                <option value="orhinotracheale">Ornithobacterium rhinotracheale</option>
+                <option value="otsutsugamushi">Orientia tsutsugamushi</option>
+                <option value="pacnes">Propionibacterium acnes</option>
+                <option value="paeruginosa">Pseudomonas  aeruginosa</option>
+                <option value="pagglomerans">Pantoea agglomerans</option>
+                <option value="pfluorescens">Pseudomonas  fluorescens</option>
+                <option value="pfreudenreichii">Propionibacterium freudenreichii</option>
+                <option value="pgingivalis">Porphyromonas  gingivalis</option>
+                <option value="plarvae">Paenibacillus larvae</option>
+                <option value="pmultocida_multihost">Pasteurella multocida</option>
+                <option value="pmultocida_rirdc">Pasteurella multocida</option>
+                <option value="ppentosaceus">Pediococcus pentosaceus</option>
+                <option value="pshigelloides">Plesiomonas shigelloides</option>
+                <option value="ranatipestifer">Riemerella anatipestifer</option>
+                <option value="sagalactiae">Streptococcus agalactiae</option>
+                <option value="saureus">Staphylococcus aureus</option>
+                <option value="scanis">Streptococcus canis</option>
+                <option value="sdysgalactiae">Streptococcus dysgalactiae</option>
+                <option value="senterica">Salmonella enterica</option>
+                <option value="sepidermidis">Staphylococcus epidermidis</option>
+                <option value="sgallolyticus">Streptococcus gallolyticus</option>
+                <option value="shaemolyticus">Staphylococcus haemolyticus</option>
+                <option value="shominis">Stapylococcus hominis</option>
+                <option value="sinorhizobium">Sinorhizobium </option>
+                <option value="slugdunensis">Staphylococcus lugdunensis</option>
+                <option value="smaltophilia">Stenotrophomonas maltophilia</option>
+                <option value="soralis">Streptococcus oralis</option>
+                <option value="spneumoniae">Streptococcus pneumoniae</option>
+                <option value="spseudintermedius">Staphylococcus pseudintermedius</option>
+                <option value="spyogenes">Streptococcus pyogenes</option>
+                <option value="ssuis">Streptococcus suis</option>
+                <option value="sthermophilus">Streptococcus thermophilus</option>
+                <option value="sthermophilus_2">Streptococcus thermophilus</option>
+                <option value="streptomyces">Streptomyces </option>
+                <option value="suberis">Streptococcus uberis</option>
+                <option value="szooepidemicus">Streptococcus equi</option>
+                <option value="taylorella">Taylorella </option>
+                <option value="tenacibaculum">Tenacibaculum </option>
+                <option value="tvaginalis">Trichomonas vaginalis</option>
+                <option value="vcholerae">Vibrio cholerae</option>
+                <option value="vibrio">Vibrio </option>
+                <option value="vparahaemolyticus">Vibrio parahaemolyticus</option>
+                <option value="vtapetis">Vibrio tapetis</option>
+                <option value="vvulnificus">Vibrio vulnificus</option>
+                <option value="wolbachia">Wolbachia </option>
+                <option value="xfastidiosa">Xylella fastidiosa</option>
+                <option value="yersinia">Yersinia </option>
+                <option value="ypseudotuberculosis">Yersinia pseudotuberculosis</option>
+                <option value="yruckeri">Yersinia ruckeri</option>
+            </param>
             <conditional name="exclude_genes">
                 <param name="exclude_genes_condition" type="select" label="Exclude certain AMR genes from the results">
                     <option value="default" selected="true">Exclude default list of AMR genes</option>
@@ -134,7 +273,7 @@
     <tests>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
-            <param name="use_pointfinder" value="salmonella" /> 
+            <param name="use_pointfinder" value="salmonella" />
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
