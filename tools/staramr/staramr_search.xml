@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@+galaxy2">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-	    <token name="@VERSION@">0.7.1</token>
+        <token name="@VERSION@">0.7.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
@@ -256,7 +256,7 @@
         </section>
     </inputs>
     <outputs>
-	<data format="tabular" name="mlst" label="${tool.name} on ${on_string}: mlst.tsv" />
+    <data format="tabular" name="mlst" label="${tool.name} on ${on_string}: mlst.tsv" />
         <data format="tabular" name="summary" label="${tool.name} on ${on_string}: summary.tsv" />
         <data format="tabular" name="detailed_summary" label="${tool.name} on ${on_string}: detailed_summary.tsv" />
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
