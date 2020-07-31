@@ -62,6 +62,7 @@
         #end if
         --output-settings $settings
         --output-excel $excel_proper_extension
+        --output-mlst $mlst
 
         --output-hits-dir staramr_hits
 
