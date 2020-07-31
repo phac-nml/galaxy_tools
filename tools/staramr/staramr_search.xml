@@ -35,8 +35,8 @@
         --percent-length-overlap-plasmidfinder $advanced.plength_plasmidfinder
         --percent-length-overlap-pointfinder $advanced.plength_pointfinder
 
-        #if str($mlst_scheme) != 'auto':
-            --mlst-scheme '${mlst_scheme}'
+        #if str($advanced.mlst_scheme) != 'auto':
+            --mlst-scheme '${advanced.mlst_scheme}'
         #end if
 
         $advanced.report_all_blast
@@ -293,6 +293,13 @@
             <output_collection name="blast_hits" type="list">
                 <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test2-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
             </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <section name="advanced">
+                <param name="mlst_scheme" value="kpneumoniae" />
+            </section>
+            <output name="mlst" file="mlst.tsv" ftype="tabular" />
         </test>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
