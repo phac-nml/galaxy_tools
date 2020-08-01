@@ -1,9 +1,12 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="1.1.1">
+<tool id="sistr_cmd" name="sistr_cmd" version="@VERSION@">
   <description>
-    Salmonella In Silico Typing Resource commandline tool for serovar prediction
+    Salmonella In Silico Typing Resource commandline tool for serovar prediction 
   </description>
+  <macros>
+     <token name="@VERSION@">1.1.1</token>
+  </macros>
   <requirements>
-    <requirement type="package" version="1.1.1">sistr_cmd</requirement>
+    <requirement type="package" version="@VERSION@">sistr_cmd</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -167,21 +170,21 @@
         name="cgmlst_profiles" 
         value="cgmlst-profiles.csv"
         ftype="csv"
-        lines_diff="2">
-        <assert_contents>
+        compare="re_match">
+        <!--assert_contents>
           <has_text text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,3969539340,2545200385,225275747,2955003506,2353669245,2666669453,1672513023,3779563470,1301843222,2161147266,607954140,3680021500,2914087704,1062106200,3673111880,1314942441,1367997025,3293595301,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1528212814,2110459436,4160823845,1648892875,2084418558,1638162324,469721942,1317894045,1562195475,926214622,2197498164,398274060,,,,,,,,,,1154766063,278162969,490843778,3950769715,,,,,,4203409135,2061008354,,,,,,,1052128508,,,1510445340,,,4065472468,,,,,,1495737522,,,,,,,,3076491138,712233770,3105746335,2516828756,3016847250,1928860657,2229984332,1341416065,2978539204,1175502179,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1328452594,2372254687,2640609716,3051501604,3258707132,,,,,,,,,,,,1007978530,,3646345463,1109678443,,,,,,,,,"/>
-        </assert_contents>
+        </assert_contents-->
       </output>
-      <output 
-        name="output_prediction_tab" 
-        value="sistr-results.tabular"
+      <output name="output_prediction_tab" 
         ftype="tabular"
-        lines_diff="2">
+        value="sistr-results.tabular"
+        compare="sim_size">
         <assert_contents>
           <has_text text="AE014613-699860" />
           <has_text text="Typhi" />
           <has_text text="enterica" />
-          <has_text text="-:-:-" />
+          <has_text_matching expression="FAIL\t-\t-:-:-\t-:-:-"/>
+          <has_text text="2014-LET-0419"/>
           <has_n_columns n="22" />
         </assert_contents>
       </output>
@@ -189,7 +192,14 @@
         name="alleles_output" 
         value="alleles-output.json"
         ftype="json"
-        compare="sim_size"/>
+        compare="sim_size">
+        <assert_contents>
+          <has_text text="NZ_AOXE01000059.1"/>
+          <has_text text="Salmonella enterica subsp. enterica serovar Typhi Ty2"/>
+          <has_text text="NZ_AOXE01000033.1"/>
+          <has_text text="NZ_AOXE01000052.1"/>  
+        </assert_contents> 
+      </output>
     </test>
     <test>
       <param name="input_fastas" value="13-1101-Paratyphi_B.fasta" ftype="fasta"/>
@@ -203,27 +213,32 @@
         name="cgmlst_profiles" 
         value="cgmlst-profiles-13-1101.csv"
         ftype="csv"
-        lines_diff="2">
+        compare="re_match">
       </output>
       <output 
         name="output_prediction_tab" 
         value="sistr-results-13-1101.tabular"
         ftype="tabular"
-        lines_diff="2">
+        compare="sim_size">
         <assert_contents>
-          <has_text text="13-1101-Paratyphi_B" />
-          <has_text text="Paratyphi B var. Java" />
-          <has_text text="enterica" />
-          <has_text text="1,4,[5],12" />
-          <has_text text="PASS" />
-          <has_n_columns n="22" />
+          <has_text text="13-1101-Paratyphi_B"/>
+          <has_text text="Paratyphi B var. Java"/>
+          <has_text text="enterica"/>
+          <has_text text="1,4,[5],12"/>
+          <has_text text="PASS"/>
+          <has_n_columns n="22"/>
         </assert_contents>
       </output>
       <output 
         name="alleles_output" 
         value="alleles-output-13-1101.json"
         ftype="json"
-        compare="sim_size"/>
+        compare="sim_size">
+        <assert_contents>
+          <has_text text="13-1101-Paratyphi_B"/>
+          <has_text text="NZ_AOXE01000059.1"/>
+        </assert_contents>
+      </output> 
     </test>
   </tests>
   <help>
