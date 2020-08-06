@@ -2,4 +2,4 @@ categories: ["Sequence Analysis"]
 description: SISTR in silico serotyping tool
 name: sistr_cmd
 owner: nml
-homepage_url: https://github.com/peterk87/sistr_cmd
+homepage_url: https://github.com/phac-nml/sistr_cmd
