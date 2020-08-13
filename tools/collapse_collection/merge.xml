@@ -1,5 +1,8 @@
-<tool id="collapse_dataset" name="Collapse Collection" version="4.2">
+<tool id="collapse_dataset" name="Collapse Collection" version="5.1.0" profile="16.04">
   <description>into single dataset in order of the collection</description>
+  <requirements>
+    <requirement type="package" version="5.1.0">gawk</requirement>
+  </requirements>
   <command>
     <![CDATA[
     
