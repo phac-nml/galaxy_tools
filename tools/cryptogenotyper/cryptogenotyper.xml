@@ -1,14 +1,18 @@
-<tool id="CryptoGenotyper" name = "CryptoGenotyper" version = "1.0">
-  <description> CryptoGenotyper is a standalone tool to analyze <i>Cryptosporidium</i> Sanger sequencing data and classify the species and subtype based on SSU rRNA and <i>gp60</i> gene markers, respectively. </description>
+<tool id="CryptoGenotyper" name = "CryptoGenotyper" version="@VERSION@">
+  <description>
+    CryptoGenotyper is a standalone tool to analyze Cryptosporidium Sanger sequencing data and classify the species and subtype based on SSU rRNA and gp60 gene markers, respectively.
+  </description>
+  <macros>
+   <token name="@VERSION@">1.0</token>
+  </macros>
   <requirements>
     <requirement type="package" version ="1.0">cryptogenotyper</requirement>
   </requirements>
+  <version_command>cryptogenotyper --version</version_command>
   <command detect_errors="exit_code">
      <![CDATA[
 
      #set $ref_file=''
-     #set $ref_name=''
-
 
      #if $reference.ref == "no"
         ln -s "${reference.db}" "${reference.db.name}" &&
@@ -45,6 +49,8 @@
             <option value="yes">Yes</option>
             <option value="no">No</option>
         </param>
+        <when value="yes">
+        </when>
         <when value="no">
             <param name="db" type="data" format="fasta" label="Reference Database File:" help=".fa fasta file type"/>
         </when>
@@ -81,7 +87,7 @@
     <test>
       <param name="marker" value="18S"/>
       <param name="seqtype" value="forward"/>
-      <param name="abi_input" type="data" format="ab1" value="P17705_Crypto16-2F-20170927_SSUF_G12_084.ab1"/>
+      <param name="abi_input" value="P17705_Crypto16-2F-20170927_SSUF_G12_084.ab1"/>
       <output name="outfile_report" ftype="tabular">
           <assert_contents>
               <has_text_matching expression="C.parvum"/>
@@ -91,7 +97,7 @@
     <test>
       <param name="marker" value="gp60"/>
       <param name="seqtype" value="forward"/>
-      <param name="abi_input" type="data" foramt="ab1" value="P17705_gp60-Crypt14-1F-20170927_gp60F_G07_051.ab1"/>
+      <param name="abi_input"  value="P17705_gp60-Crypt14-1F-20170927_gp60F_G07_051.ab1"/>
       <output name="outfile_report" ftype="tabular" >
           <assert_contents>
               <has_text_matching expression="C.parvum"/>
@@ -113,7 +119,7 @@ For more information please visit https://github.com/phac-nml/CryptoGenotyper.
 
 **Input:**
 
-AB1 file(s) representing *Cryptosporidium's* SSU rRNA or gp60 locus (forward, reverse, or paired-end reads).
+AB1 file(s) representing *Cryptosporidium's* SSU rRNA or gp60 locus (forward, reverse, or contig (forward and reverse paired-end reads)).
 Optional: A custom reference database in .fa file format, to be used during the homology search for *Cryptosporidium* classification.
 
 
