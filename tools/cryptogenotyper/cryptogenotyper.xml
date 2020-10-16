@@ -1,4 +1,4 @@
-<tool id="CryptoGenotyper" name = "CryptoGenotyper" version="@VERSION@">
+<tool id="CryptoGenotyper" name = "CryptoGenotyper" version="@VERSION@+galaxy0">
   <description>
     classifies Cryptosporidium species subtypes based on SSU rRNA and gp60 gene markers from Sanger sequencing data.
   </description>
@@ -52,7 +52,7 @@
         <when value="yes">
         </when>
         <when value="no">
-            <param name="db" type="data" format="fasta" label="Reference Database File:" help=".fa fasta file type"/>
+            <param name="db" type="data" optional="false" format="fasta" label="Reference Database File:" help=".fa fasta file type"/>
         </when>
       </conditional>
       <conditional name="primers">
