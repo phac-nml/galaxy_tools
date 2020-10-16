@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: CryptoGenotyper is a standalone tool to *in-silico*  determine species and subtype based on SSU rRNA and gp60 markers.
+name: cryptogenotyper
+owner: nml
+long_description: The CryptoGenotyper is a fast and reproducible tool that can be used to classify the genotype of Cryptosporidium samples by directly analyzing the DNA electropherogram files (.ab1) that correspond to two of its characteristic gene markers (SSU rRNA and gp60)
+remote_repository_url: https://github.com/phac-nml/CryptoGenotyper
+homepage_url: https://github.com/phac-nml/CryptoGenotyper
