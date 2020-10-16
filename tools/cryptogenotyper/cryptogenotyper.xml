@@ -14,22 +14,22 @@
 
      #set $ref_file=''
 
-     #if $reference.ref == 'no'
-        ln -s '${reference.db}' '${reference.db.name}' &&
-        #set $ref_file = $reference.db.name
+     #if $db
+        ln -s '${db}' '${db.name}' &&
+        #set $ref_file = $db.name
      #end if
 
      #if $primers['seqtype'] == 'contig'
         ln -s '${$primers.abi_input['forward']}' '${primers.abi_input.name}_forward.ab1' &&
         ln -s '${$primers.abi_input['reverse']}' '${primers.abi_input.name}_reverse.ab1' &&
         cryptogenotyper -i '.' -m '$marker' -t '$primers.seqtype' -f 'forward' -r 'reverse'
-        #if $reference.ref == 'no'
+        #if $db
           --databasefile $ref_file
         #end if
      #else
         ln -s '${primers.abi_input}' '${primers.abi_input.element_identifier}' &&
         cryptogenotyper -i './${primers.abi_input.element_identifier}' -m '$marker' -t '$primers.seqtype'
-        #if $reference.ref == 'no'
+        #if $db
           --databasefile $ref_file
         #end if
      #end if
@@ -44,17 +44,7 @@
           <option value="18S">SSU rRNA</option>
           <option value="gp60">gp60</option>
       </param>
-      <conditional name="reference">
-        <param name="ref" type="select" label="Use default reference database file?">
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-        </param>
-        <when value="yes">
-        </when>
-        <when value="no">
-            <param name="db" type="data" optional="false" format="fasta" label="Reference Database File:" help=".fa fasta file type"/>
-        </when>
-      </conditional>
+      <param name="db" type="data" optional="true" format="fasta" label="Reference Database File (optional):"/>
       <conditional name="primers">
         <param name="seqtype" type="select" label="Type of Sequences">
             <option value="forward">Forward Only</option>
