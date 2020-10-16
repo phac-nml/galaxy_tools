@@ -6,7 +6,7 @@
    <token name="@VERSION@">1.0</token>
   </macros>
   <requirements>
-    <requirement type="package" version ="1.0">cryptogenotyper</requirement>
+    <requirement type="package" version ="@VERSION@">cryptogenotyper</requirement>
   </requirements>
   <version_command>cryptogenotyper --version</version_command>
   <command detect_errors="exit_code">
