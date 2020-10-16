@@ -60,8 +60,6 @@
         </when>
      </conditional>
      <param name="outputheader" type="boolean" truevalue="" falsevalue="--noheaderline" checked="true" label="Output header line in the report?">
-        <option value="true">Yes</option>
-        <option value="false">No</option>
      </param>
 
 
