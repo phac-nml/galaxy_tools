@@ -33,7 +33,7 @@
           --databasefile $ref_file
         #end if
      #end if
-     #if $outputheader == 'no'
+     #if $outputheader
            --noheaderline
      #end if
      -o 'result'
@@ -61,9 +61,9 @@
           <param name="abi_input" type="data" format="ab1" label="Reverse Sequencing File(s)"/>
         </when>
      </conditional>
-     <param name="outputheader" type="select" value="yes" label="Output header line in the report?">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+     <param name="outputheader" type="boolean" checked="true" label="Output header line in the report?">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
      </param>
 
 
