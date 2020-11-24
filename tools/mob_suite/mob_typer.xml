@@ -4,7 +4,7 @@
    <token name="@VERSION@">3.0.1</token>
   </macros>
   <requirements>
-     <requirement type="package" version ="@VERSION@">mob_suite</requirement>
+     <requirement type="package" version = "@VERSION@">mob_suite</requirement>
   </requirements>
   <version_command>mob_typer --version</version_command>
   <command detect_errors="exit_code">
