@@ -1,11 +1,8 @@
 <tool id="mob_recon" name="MOB-Recon" version="@VERSION@+galaxy0">
   <description>Type contigs and extract plasmid sequences</description>
   <macros>
-   <token name="@VERSION@">3.0.1</token>
-  </macros>
-  <requirements>
-     <requirement type="package" version ="@VERSION@">mob_suite</requirement>
-  </requirements>
+    <import>macros.xml</import>
+  </macros>  
   <version_command>mob_recon --version</version_command>
   <command detect_errors="exit_code">
   <![CDATA[  
