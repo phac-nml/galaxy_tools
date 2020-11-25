@@ -1,11 +1,9 @@
 <tool id="mob_typer" name="MOB-Typer" version="@VERSION@+galaxy0">
   <description>Get the plasmid type and mobility given its sequence</description>
   <macros>
-   <token name="@VERSION@">3.0.1</token>
+    <import>macros.xml</import>
   </macros>
-  <requirements>
-     <requirement type="package" version = "@VERSION@">mob_suite</requirement>
-  </requirements>
+  <expand macro="requirements"/>
   <version_command>mob_typer --version</version_command>
   <command detect_errors="exit_code">
   <![CDATA[

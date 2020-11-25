@@ -1,9 +1,8 @@
 <macros>
   <token name="@VERSION@">3.0.1</token>
-  
-  <xml name="requirements"> 
-  	<requirements>
-     		<requirement type="package" version ="@VERSION@">mob_suite</requirement>
-  	</requirements>
+  <xml name="requirements">
+  <requirements>
+  <requirement type="package" version ="@VERSION@">mob_suite</requirement>
+  </requirements>
   </xml>
 </macros>
