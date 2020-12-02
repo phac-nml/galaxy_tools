@@ -4,23 +4,62 @@
         <requirement type="package" version="1.0.0">gnali</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        gnali -i '$test_genes' -o output
+        gnali -i '$test_genes' -o output -d '$database_info.database'
+        #if $database_info.predefined_filters != "None":
+            --predefined_filters '$database_info.predefined_filters'
+        #end if
+        #if $additional_filters != "":
+            --additional_filters '$additional_filters'
+        #end if
+        #if $vcf_output == "True":
+            --vcf
+        #end if
+        #if $pop_freqs == "True":
+            --pop_freqs
+        #end if
     ]]></command>
     <inputs>
         <param type="data" name="test_genes" label="Test genes" format="txt" help="Specify a list of genes as HGNC symbols, separated by newline characters" />
-        <param type="select" name="database" label="Database" format="txt" help="Database to query" >
-            <option value="gnomadv2.1.1" selected="true">gnomADv2.1.1 (GRCh37/hg19)</option>
-            <option value="gnomadv3" selected="true">gnomADv3 (GRCh38/hg38)</option>
+        <param name="vcf_output" type="select" label="VCF output" help="Generate vcf file for filtered variants" >
+            <option value="True">Yes</option>
+            <option value="False" selected="true">No</option>
         </param>
-          <param name="vcf_output" type="boolean" optional="false" checked="false" truevalue="-tr" falsevalue="" label="VCF output" help="Generate vcf file for filtered variants" />
+        <param name="pop_freqs" type="boolean" truevalue="True" falsevalue="False" optional="false" checked="false" label="Population frequencies" help="Generate population frequency data for variants that passed filtering" />
+        <conditional name="database_info">
+            <param type="select" name="database" label="Database" format="txt" help="Database to query" >
+                <option value="gnomadv2.1.1" selected="true">gnomADv2.1.1 (GRCh37/hg19)</option>
+                <option value="gnomadv3">gnomADv3 (GRCh38/hg38)</option>
+            </param>
+            <when value="gnomadv2.1.1">
+                <param name="predefined_filters" type="select" display="checkboxes" multiple="True" label="Predefined filters" help="Filter variants by selected filters">
+                    <option value="homozygous-controls">homozygous controls (controls_nhomalt>0)</option>
+                    <option value="heterozygous-controls">heterozygous controls (controls_nhomalt=0)</option>
+                    <option value="nhomalt>0">homozygous (nhomalt>0)</option>
+                </param>
+            </when>
+            <when value="gnomadv3">
+                <param name="predefined_filters" type="select" display="checkboxes" multiple="True" label="Predefined filters" help="Filter variants by selected filters">
+                    <option value="homozygous">homozygous (nhomalt>0)</option>
+                    <option value="heterozygous">heterozygous (nhomalt=0)</option>
+                </param>
+            </when>
+        </conditional>
+        <param type="text" name="additional_filters" label="Additional filters" help="Additional filters (as expressions, ex. AC>10) to apply. Separate with spaces" >
+            <sanitizer sanitize="False" />
+        </param>
     </inputs>
     <outputs>
         <data name="basic_output" label="gNALI basic output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
         <data name="detailed_output" label="gNALI detailed output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
+        <data name="variants_vcf_output" label="gNALI variants vcf" format="vcf" from_work_dir="output/Nonessential_Gene_Variants.vcf" >
+            <filter>vcf_output == "True"</filter>
+        </data>
     </outputs>
     <tests>
         <test>
             <param name="test_genes" value="test_genes.txt"/>
+            <param name="predefined_filters" value="homozygous-controls"/>
+            <param name="vcf_output" value="True"/>
             <output name="basic_output">
                 <assert_contents>
                     <has_text text="HGNC_Symbol" />
@@ -39,6 +78,7 @@
         </test>
         <test>
             <param name="test_genes" value="patch.txt"/>
+            <param name="predefined_filters" value="homozygous-controls"/>
                 <output name="basic_output">
                     <assert_contents>
                         <has_text text="HGNC_Symbol" />
@@ -82,82 +122,34 @@
     </tests>
     <help><![CDATA[
 
-## Introduction ##
+Introduction
 ------------------
 
 gNALI (gene nonessentiality and loss-of-function identifier) is a tool to find (high confidence) 
-potential loss of function variants of genes. gNALI has built-in support for [gnomADv2.1.1 and gnomadv3](https://gnomad.broadinstitute.org/) 
-and can be configured to be used with other VCF databases.
+potential loss of function variants of genes.
 
 NOTE: loss-of-function is influenced by the genome build. Not all variants available in gnomADv2.1.1 are
 available in gnomADv3 and vice versa.
 
-## Usage ##
+Usage
 -----------
 
-Your input file must be of format `.csv`, `.txt`, or `tsv` and should contain a list of genes
+Your input file must be of format .csv, .txt, or tsv and should contain a list of genes
 (as HGNC symbols) to test, separated by newline characters.
 It should not contain any blank lines until the end of the list.
-
-Example input:
-
-    CCR5
-    ALCAM
-
-
-If an output folder name is not specified, it will use a default name and gNALI
-will tell you where it is and what it's called after it finishes executing.
-
-Example commands:
-
-`gnali -i my_genes.csv`
-
-* An input file called `my_genes.csv` is tested for PLoF variants
-* The output folder will be called `results-ID` with a randomly generated unique ID,
-    and will contain both detailed results and basic results
-
-`gnali -i my_genes.csv -o my_results --vcf`
-
-* Like above, an input file called `my_genes.csv` is tested for PLoF variants
-* The output folder will be called `my_results`
-* There will be an additional output file containing all variants that passed filtering in a `vcf` file
 
 
 **Population Frequencies**
 
-When using the population frequencies feature (`-P/--pop_freqs`):
+When using the population frequencies feature:
 
 Per population group:
+
 * AC denotes allele count
+
 * AN denotes allele number
+
 * AF denotes allele frequency
-
-
-## Legal ##
------------
-
-Copyright Government of Canada 2020
-
-Written by: National Microbiology Laboratory, Public Health Agency of Canada
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this work except in compliance with the License. You may obtain a copy of the
-License at:
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-
-## Contact ##
--------------
-
-**Gary Van Domselaar**: gary.vandomselaar@canada.ca
-
-**Xia Liu**: xia.liu@canada.ca
-
 
     ]]></help>
     <citations>
