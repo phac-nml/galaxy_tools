@@ -75,7 +75,7 @@
                 </assert_contents>
             </output>
             <output name="detailed_output"
-                value="results/Nonessential_Host_Genes_\(Detailed\).txt"
+                value="results/Nonessential_Host_Genes_Detailed.txt"
                 ftype="txt"
                 compare="diff">
             </output>
@@ -101,7 +101,7 @@
                     </assert_contents>
                 </output>
                 <output name="detailed_output"
-                    value="patch-results/Nonessential_Host_Genes_\(Detailed\).txt"
+                    value="patch-results/Nonessential_Host_Genes_Detailed.txt"
                     ftype="txt"
                     compare="diff">
                 </output>
