@@ -1,8 +1,9 @@
 <tool id="gnali" name="gNALI" version="1.0.0" python_template_version="3.6">
     <description>Get nonessential, LoF variants</description>
-    <requirements>
-        <requirement type="package" version="1.0.0">gnali</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>  
+    <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
         gnali -i '$test_genes' -o output -d '$database_info.database'
         #if $database_info.predefined_filters != "None":
@@ -56,9 +57,9 @@
         </repeat>
     </inputs>
     <outputs>
-        <data name="basic_output" label="gNALI basic output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
-        <data name="detailed_output" label="gNALI detailed output" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
-        <data name="variants_vcf_output" label="gNALI variants vcf" format="vcf" from_work_dir="output/Nonessential_Gene_Variants.vcf" >
+        <data name="basic_output" label="gNALI basic output on ${test_genes.element_identifier}" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
+        <data name="detailed_output" label="gNALI detailed output on ${test_genes.element_identifier}" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
+        <data name="variants_vcf_output" label="gNALI variants vcf on ${test_genes.element_identifier}" format="vcf" from_work_dir="output/Nonessential_Gene_Variants.vcf" >
             <filter>vcf_output == "--vcf"</filter>
         </data>
     </outputs>
@@ -74,7 +75,12 @@
                 </assert_contents>
             </output>
             <output name="detailed_output"
-                value="results/Nonessential_Host_Genes_(Detailed).txt"
+                value="results/Nonessential_Host_Genes_\(Detailed\).txt"
+                ftype="txt"
+                compare="diff">
+            </output>
+            <output name="variants_vcf_output"
+                value="results/Nonessential_Gene_Variants.vcf"
                 ftype="txt"
                 compare="diff">
             </output>
@@ -95,7 +101,7 @@
                     </assert_contents>
                 </output>
                 <output name="detailed_output"
-                    value="patch-results/Nonessential_Host_Genes_(Detailed).txt"
+                    value="patch-results/Nonessential_Host_Genes_\(Detailed\).txt"
                     ftype="txt"
                     compare="diff">
                 </output>
