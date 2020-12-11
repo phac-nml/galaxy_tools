@@ -1,0 +1,8 @@
+<macros>
+  <token name="@VERSION@">1.0.0</token>
+  <xml name="requirements">
+  <requirements>
+  <requirement type="package" version ="@VERSION@">gnali</requirement>
+  </requirements>
+  </xml>
+</macros>
