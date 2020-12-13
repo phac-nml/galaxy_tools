@@ -9,7 +9,7 @@
         #if $database_info.predefined_filters != "None":
             --predefined_filters '$database_info.predefined_filters'
         #end if
-        #if $additional_filters != "":
+        #if $additional_filters != "None":
             --additional_filters 
             #for $filt in $additional_filters
                 '$filt.filter' 
