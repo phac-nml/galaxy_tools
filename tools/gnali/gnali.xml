@@ -68,11 +68,11 @@
             <param name="test_genes" value="test_genes.txt"/>
             <param name="predefined_filters" value="homozygous-controls"/>
             <param name="pop_freqs" value="--pop_freqs"/>
-            <output name="basic_output">
-                <assert_contents>
-                    <has_text text="HGNC_Symbol" />
-                    <has_text text="CCR5" />
-                </assert_contents>
+            <param name="vcf_output" value="--vcf"/>
+            <output name="basic_output"
+                value="results/Nonessential_Host_Genes_Basic.txt"
+                ftype="txt"
+                compare="diff">
             </output>
             <output name="detailed_output"
                 value="results/Nonessential_Host_Genes_Detailed.txt"
@@ -88,17 +88,10 @@
         <test>
             <param name="test_genes" value="patch.txt"/>
             <param name="predefined_filters" value="homozygous-controls"/>
-                <output name="basic_output">
-                    <assert_contents>
-                        <has_text text="HGNC_Symbol" />
-                        <has_text text="CCR5" />
-                        <has_text text="RPEL1" />
-                        <has_text text="OTOGL" />
-                        <has_text text="PKD1L2" />
-                        <has_text text="COL6A5" />
-                        <has_text text="DCP1A" />
-                        <has_text text="KRT10" />
-                    </assert_contents>
+                <output name="basic_output"
+                    value="patch-results/Nonessential_Host_Genes_Basic.txt"
+                    ftype="txt"
+                    compare="diff">
                 </output>
                 <output name="detailed_output"
                     value="patch-results/Nonessential_Host_Genes_Detailed.txt"
