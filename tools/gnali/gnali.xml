@@ -9,21 +9,22 @@
         #if $database_info.predefined_filters != "None":
             --predefined_filters '$database_info.predefined_filters'
         #end if
-        #if $additional_filters != "None":
+        #if len($additional_filters) > 0:
             --additional_filters 
             #for $filt in $additional_filters
                 '$filt.filter' 
             #end for
         #end if
-        $vcf_output
-        $pop_freqs
+        #if $vcf_output:
+            '$vcf_output'
+        #end if
+        #if $pop_freqs:
+            '$pop_freqs'
+        #end if
     ]]></command>
     <inputs>
         <param type="data" name="test_genes" label="Test genes" format="txt" help="Specify a list of genes as HGNC symbols, separated by newline characters" />
-        <param name="vcf_output" type="select" label="VCF output" help="Generate vcf file for filtered variants" >
-            <option value="--vcf">Yes</option>
-            <option value="" selected="true">No</option>
-        </param>
+        <param name="vcf_output" type="boolean" truevalue="--vcf" falsevalue="" optional="false" checked="false" label="VCF output" help="Generate vcf file for filtered variants" />
         <param name="pop_freqs" type="boolean" truevalue="--pop_freqs" falsevalue="" optional="false" checked="false" label="Population frequencies" help="Generate population frequency data for variants that passed filtering" />
         <conditional name="database_info">
             <param type="select" name="database" label="Database" format="txt" help="Database to query" >
@@ -60,7 +61,7 @@
         <data name="basic_output" label="gNALI basic output on ${test_genes.element_identifier}" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Basic\).txt" />
         <data name="detailed_output" label="gNALI detailed output on ${test_genes.element_identifier}" format="txt" from_work_dir="output/Nonessential_Host_Genes_\(Detailed\).txt" />
         <data name="variants_vcf_output" label="gNALI variants vcf on ${test_genes.element_identifier}" format="vcf" from_work_dir="output/Nonessential_Gene_Variants.vcf" >
-            <filter>vcf_output == "--vcf"</filter>
+            <filter>vcf_output</filter>
         </data>
     </outputs>
     <tests>
@@ -81,7 +82,7 @@
             </output>
             <output name="variants_vcf_output"
                 value="results/Nonessential_Gene_Variants.vcf"
-                ftype="txt"
+                ftype="vcf"
                 compare="diff">
             </output>
         </test>
