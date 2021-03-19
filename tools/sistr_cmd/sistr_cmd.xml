@@ -1,4 +1,4 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="@VERSION@">
+<tool id="sistr_cmd" name="sistr_cmd" version="@VERSION@+galaxy1">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction 
   </description>
@@ -14,7 +14,7 @@
   <command><![CDATA[
   sistr 
     #for $fasta in $input_fastas
-      -i '$fasta' '${$fasta.name.replace("." + $fasta.ext, "")}'
+      -i '$fasta' '${$fasta.element_identifier.replace("." + $fasta.ext, "")}'
     #end for
     -f $output_format
     -o sistr-report.$output_format
@@ -39,7 +39,7 @@
       optional="false" 
       multiple="true"
       format="fasta"
-      />
+    />
     <param 
       name="output_format" 
       type="select" 
