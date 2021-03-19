@@ -1,4 +1,4 @@
-<tool id="sistr_cmd" name="sistr_cmd" version="@VERSION@+galaxy0">
+<tool id="sistr_cmd" name="sistr_cmd" version="@VERSION@+galaxy1">
   <description>
     Salmonella In Silico Typing Resource commandline tool for serovar prediction 
   </description>
