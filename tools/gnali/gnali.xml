@@ -1,4 +1,4 @@
-<tool id="gnali" name="gNALI" version="1.0.4" python_template_version="3.7">
+<tool id="gnali" name="gNALI" version="@VERSION@" python_template_version="3.7">
     <description>Get nonessential, LoF variants</description>
     <macros>
         <import>macros.xml</import>
