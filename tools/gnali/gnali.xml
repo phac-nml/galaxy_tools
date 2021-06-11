@@ -29,7 +29,7 @@
         <conditional name="database_info">
             <param type="select" name="database" label="Database" format="txt" help="Database to query" >
                 <option value="gnomadv2.1.1" selected="true">gnomADv2.1.1 (GRCh37/hg19)</option>
-                <option value="gnomadv3">gnomADv3 (GRCh38/hg38)</option>
+                <option value="gnomadv3.1.1">gnomADv3.1.1 (GRCh38/hg38)</option>
             </param>
             <when value="gnomadv2.1.1">
                 <param name="predefined_filters" type="select" display="checkboxes" multiple="True" label="Predefined filters" help="Filter variants by selected filters">
