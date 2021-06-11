@@ -35,7 +35,7 @@
                 <param name="predefined_filters" type="select" display="checkboxes" multiple="True" label="Predefined filters" help="Filter variants by selected filters">
                     <option value="homozygous-controls">homozygous controls (controls_nhomalt>0)</option>
                     <option value="heterozygous-controls">heterozygous controls (controls_nhomalt=0)</option>
-                    <option value="nhomalt>0">homozygous (nhomalt>0)</option>
+                    <option value="homozygous">homozygous (nhomalt>0)</option>
                 </param>
             </when>
             <when value="gnomadv3">
