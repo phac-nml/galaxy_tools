@@ -1,5 +1,5 @@
-<tool id="gnali" name="gNALI" version="@VERSION@" python_template_version="3.7">
-    <description>Get nonessential, LoF variants</description>
+<tool id="gnali" name="gNALI" version="@VERSION@" python_template_version="3.7" profile="@PROFILE_VERSION@">
+    <description>Get and filter nonessential, loss-of-function variants</description>
     <macros>
         <import>macros.xml</import>
     </macros>  
@@ -38,7 +38,7 @@
                     <option value="homozygous">homozygous (nhomalt>0)</option>
                 </param>
             </when>
-            <when value="gnomadv3">
+            <when value="gnomadv3.1.1">
                 <param name="predefined_filters" type="select" display="checkboxes" multiple="True" label="Predefined filters" help="Filter variants by selected filters">
                     <option value="homozygous">homozygous (nhomalt>0)</option>
                     <option value="heterozygous">heterozygous (nhomalt=0)</option>
@@ -96,7 +96,7 @@ gNALI (gene nonessentiality and loss-of-function identifier) is a tool to find (
 potential loss of function variants of genes.
 
 NOTE: loss-of-function is influenced by the genome build. Not all variants available in gnomADv2.1.1 are
-available in gnomADv3 and vice versa.
+available in gnomADv3.1.1 and vice versa.
 
 Usage
 -----------
