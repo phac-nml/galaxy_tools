@@ -1,5 +1,3 @@
 HGNC_Symbol	Status
-CCR5	HC LoF found, failed filtering
-ALCAM	HC LoF found, failed filtering
 COL6A5	HC LoF found
 	Unknown gene
