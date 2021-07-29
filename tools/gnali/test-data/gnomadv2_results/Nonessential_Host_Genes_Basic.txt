@@ -1,3 +1,2 @@
 HGNC_Symbol	Status
 CCR5	HC LoF found
-	Unknown gene
