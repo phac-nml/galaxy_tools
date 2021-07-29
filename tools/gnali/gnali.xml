@@ -66,22 +66,46 @@
     </outputs>
     <tests>
         <test>
-            <param name="test_genes" value="test_genes.txt"/>
+            <param name="test_genes" value="gnomadv2_input.txt"/>
             <param name="predefined_filters" value="homozygous-controls"/>
             <param name="pop_freqs" value="--pop_freqs"/>
             <param name="vcf_output" value="--vcf"/>
             <output name="basic_output"
-                value="results/Nonessential_Host_Genes_Basic.txt"
+                value="gnomadv2_results/Nonessential_Host_Genes_Basic.txt"
                 ftype="txt"
                 compare="diff">
             </output>
             <output name="detailed_output"
-                value="results/Nonessential_Host_Genes_Detailed.txt"
+                value="gnomadv2_results/Nonessential_Host_Genes_Detailed.txt"
                 ftype="txt"
                 compare="diff">
             </output>
             <output name="variants_vcf_output"
-                value="results/Nonessential_Gene_Variants.vcf"
+                value="gnomadv2_results/Nonessential_Gene_Variants.vcf"
+                ftype="vcf"
+                compare="diff">
+            </output>
+        </test>
+        <test>
+            <param name="test_genes" value="gnomadv3_input.txt"/>
+            <conditional name="database_info">
+                <param name="database" value="gnomadv3.1.1"/>
+            </conditional>
+            <param name="predefined_filters" value="homozygous"/>
+            <param name="pop_freqs" value="--pop_freqs"/>
+            <param name="vcf_output" value="--vcf"/>
+            <output name="basic_output"
+                value="gnomadv3_results/Nonessential_Host_Genes_Basic.txt"
+                ftype="txt"
+                compare="diff">
+            </output>
+            <output name="detailed_output"
+                value="gnomadv3_results/Nonessential_Host_Genes_Detailed.txt"
+                ftype="txt"
+                compare="diff">
+            </output>
+            <output name="variants_vcf_output"
+                value="gnomadv3_results/Nonessential_Gene_Variants.vcf"
                 ftype="vcf"
                 compare="diff">
             </output>
