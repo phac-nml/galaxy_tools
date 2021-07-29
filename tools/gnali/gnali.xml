@@ -88,7 +88,9 @@
         </test>
         <test>
             <param name="test_genes" value="test_genes.txt"/>
-            <param name="database" value="gnomadv3.1.1"/>
+            <conditional name="database_info">
+                <param name="database" value="gnomadv3.1.1"/>
+            </conditional>
             <param name="predefined_filters" value="homozygous"/>
             <param name="pop_freqs" value="--pop_freqs"/>
             <param name="vcf_output" value="--vcf"/>
