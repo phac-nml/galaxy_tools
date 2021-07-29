@@ -66,7 +66,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="test_genes" value="test_genes.txt"/>
+            <param name="test_genes" value="gnomadv2_input.txt"/>
             <param name="predefined_filters" value="homozygous-controls"/>
             <param name="pop_freqs" value="--pop_freqs"/>
             <param name="vcf_output" value="--vcf"/>
@@ -87,7 +87,7 @@
             </output>
         </test>
         <test>
-            <param name="test_genes" value="test_genes.txt"/>
+            <param name="test_genes" value="gnomadv3_input.txt"/>
             <conditional name="database_info">
                 <param name="database" value="gnomadv3.1.1"/>
             </conditional>
