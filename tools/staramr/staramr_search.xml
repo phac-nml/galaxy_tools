@@ -84,7 +84,7 @@
                 <option value="custom">Custom</option>
             </param>
             <when value="custom">
-                <param name="pointfinder_custom" type="text" area="false" label="PointFinder organism (manual)" help="Enter the PointFinder organism to use for scanning for point mutations" />
+                <param name="pointfinder_custom" type="text" area="false" label="PointFinder organism (manual)" help="Enter the PointFinder organism to use for scanning for point mutations. Not all organisms have been fully validated as compatible with staramr. Should be one of: {campylobacter, enterococcus_faecalis, enterococcus_faecium, escherichia_coli, helicobacter_pylori, klebsiella, mycobacterium_tuberculosis, neisseria_gonorrhoeae, plasmodium_falciparum, salmonella, staphylococcus_aureus}" />
             </when>
         </conditional>
         <section name="advanced" title="Advanced options" expanded="false">
