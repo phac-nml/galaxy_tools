@@ -308,6 +308,21 @@
         </test>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
+            <param name="use_pointfinder" value="custom" />
+            <param name="pointfinder_custom" value="salmonella" />
+
+            <output name="summary" file="test1-summary.tsv" ftype="tabular" />
+            <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
+            <output name="resfinder" file="test1-resfinder.tsv" ftype="tabular" />
+            <output name="plasmidfinder" file="test1-plasmidfinder.tsv" ftype="tabular" />
+            <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
+            <output_collection name="blast_hits" type="list">
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+                <element name="pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" />
 
             <output name="summary" file="test2-summary.tsv" ftype="tabular" />
             <output name="resfinder" file="test2-resfinder.tsv" ftype="tabular" />
