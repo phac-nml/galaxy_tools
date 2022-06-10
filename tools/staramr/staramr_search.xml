@@ -81,10 +81,20 @@
                 <option value="disabled" selected="true">Disable PointFinder</option>
                 <option value="salmonella">Salmonella</option>
                 <option value="campylobacter">Campylobacter</option>
-                <option value="custom">Custom</option>
+                <option value="custom">Unvalidated</option>
             </param>
             <when value="custom">
-                <param name="pointfinder_custom" type="text" area="false" label="PointFinder organism (manual)" help="Enter the PointFinder organism to use for scanning for point mutations. Not all organisms have been fully validated as compatible with staramr. Should be one of: {campylobacter, enterococcus_faecalis, enterococcus_faecium, escherichia_coli, helicobacter_pylori, klebsiella, mycobacterium_tuberculosis, neisseria_gonorrhoeae, plasmodium_falciparum, salmonella, staphylococcus_aureus}" />
+                <param name="pointfinder_custom" type="select" label="PointFinder organism (unvalidated)" help="Select one of the unvalidated PointFinder organisms to use for scanning for point mutations. These have not been fully validated as compatible with staramr so caution is recommended when interpreting results.">
+                    <option value="enterococcus_faecalis">enterococcus_faecalis</option>
+                    <option value="enterococcus_faecium">enterococcus_faecium</option>
+                    <option value="escherichia_coli" selected="true">escherichia_coli</option>
+                    <option value="helicobacter_pylori">helicobacter_pylori</option>
+                    <option value="klebsiella">klebsiella</option>
+                    <option value="mycobacterium_tuberculosis">mycobacterium_tuberculosis</option>
+                    <option value="neisseria_gonorrhoeae">neisseria_gonorrhoeae</option>
+                    <option value="plasmodium_falciparum">plasmodium_falciparum</option>
+                    <option value="staphylococcus_aureus">staphylococcus_aureus</option>
+                </param>
             </when>
         </conditional>
         <section name="advanced" title="Advanced options" expanded="false">
