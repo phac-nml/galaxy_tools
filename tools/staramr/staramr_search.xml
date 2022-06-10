@@ -283,7 +283,7 @@
         <data format="tabular" name="resfinder" label="${tool.name} on ${on_string}: resfinder.tsv" />
         <data format="tabular" name="plasmidfinder" label="${tool.name} on ${on_string}: plasmidfinder.tsv" />
         <data format="tabular" name="pointfinder" label="${tool.name} on ${on_string}: pointfinder.tsv">
-            <filter>pointfinder_db.use_pointfinder != "disabled"</filter>
+            <filter>pointfinder_db['use_pointfinder'] != "disabled"</filter>
         </data>
         <data format="txt" name="settings" label="${tool.name} on ${on_string}: settings.txt" />
         <data format="xlsx" name="excel" label="${tool.name} on ${on_string}: results.xlsx" />
