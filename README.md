@@ -1,6 +1,6 @@
 # Galaxy Tools maintained by the NML
 
-This repository contains Galaxy tools maintained by Canada's [National Microbiology Laboratory](https://www.nml-lnm.gc.ca/).
+This repository contains [Galaxy](https://galaxyproject.org/) tools maintained by Canada's [National Microbiology Laboratory](https://www.nml-lnm.gc.ca/).
 
 # Legal
 
