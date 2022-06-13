@@ -83,6 +83,12 @@
                 <option value="campylobacter">Campylobacter</option>
                 <option value="custom">Unvalidated</option>
             </param>
+	    <!-- These three values don't have any additional parameters as they are used as-is to control the PointFinder organism -->
+	    <when value="disabled"/>
+	    <when value="salmonella"/>
+	    <when value="campylobacter"/>
+
+	    <!-- This option provides the ability to select among a number of custom/unvalidated PointFinder organisms -->
             <when value="custom">
                 <param name="pointfinder_custom" type="select" label="PointFinder organism (unvalidated)" help="Select one of the unvalidated PointFinder organisms to use for scanning for point mutations. These have not been fully validated as compatible with staramr so caution is recommended when interpreting results.">
                     <option value="enterococcus_faecalis">enterococcus_faecalis</option>
@@ -598,7 +604,7 @@ Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, 
 .. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
 .. _PlasmidFinder: https://bitbucket.org/genomicepidemiology/plasmidfinder_db
 .. _PointFinder: https://bitbucket.org/genomicepidemiology/pointfinder_db
-.. _webservice: https://cge.cbs.dtu.dk/services/ResFinder/
+.. _webservice: https://cge.food.dtu.dk/services/ResFinder/
     ]]></help>
     <citations>
         <citation type="bibtex">
