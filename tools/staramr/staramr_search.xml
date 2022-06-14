@@ -8,7 +8,7 @@
 	<!-- The staramr conda package includes the mlst software, but the list of schemes 
 	     changes depending on the version. I specify the exact version here to make sure
              the list of schemes provided is consistent -->
-	<requirement type="package" version"2.22.0">mlst</requirement>
+	<requirement type="package" version="2.22.0">mlst</requirement>
     </requirements>
     <version_command>staramr --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
