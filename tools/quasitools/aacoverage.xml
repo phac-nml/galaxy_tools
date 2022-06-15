@@ -6,7 +6,7 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        cp -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        ln -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
 
         quasitools aacoverage $input_bam $ref_file $input_genes -o output.csv
 
