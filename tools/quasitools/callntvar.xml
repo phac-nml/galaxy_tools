@@ -6,7 +6,9 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -s ${input_bam.metadata.bam_index} ${input_bam.name}.bai &&
+        ln -s $input_bam '${input_bam.name}' &&
+        ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
+
         quasitools call ntvar ${input_bam.name} $ref_file
 
         #if $error_rate:
