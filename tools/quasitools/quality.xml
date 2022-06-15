@@ -1,8 +1,9 @@
 <tool id="quality" name="Quality control" version="0.7.0">
     <description>Performs quality control on FASTQ reads.</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         quasitools quality

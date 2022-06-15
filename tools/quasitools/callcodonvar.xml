@@ -1,8 +1,9 @@
 <tool id="callcodonvar" name="Codon Variants" version="0.7.0">
     <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         cat $input_genes &&

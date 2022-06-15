@@ -1,8 +1,9 @@
 <tool id="aacoverage" name="Amino Acid Coverage" version="0.7.0">
     <description>Builds an aa census and returns its coverage</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
