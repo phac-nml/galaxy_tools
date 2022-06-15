@@ -8,7 +8,7 @@
 
         cat $input_genes &&
 
-        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
+        cp -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
         quasitools call codonvar $input_bam $ref_file $offset $input_genes
 
 		#if $var_file:
