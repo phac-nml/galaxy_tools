@@ -5,9 +5,9 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+        ln -s '${input_bam.metadata.bam_index}' '${input_bam.name}.bai' &&
 
-        quasitools complexity bam '$ref_file' '$input_bam'  $k -f '$filter_size' -o output.csv
+        quasitools complexity bam '$ref_file' '${input_bam.name}'  $k -f '$filter_size' -o output.csv
 
     ]]></command>
     <inputs>
