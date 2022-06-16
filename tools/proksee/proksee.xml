@@ -6,6 +6,8 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
+        proksee updatedb &&
+
         ln -s $forward_reads '${forward_reads.name}' &&
 
         proksee assemble --force -o output '${forward_reads.name}'
@@ -18,11 +20,13 @@
             --species '${species}'
         #end if
 
+        --memory 8 --threads 4
+
     ]]></command>
     <inputs>
         <param name="forward_reads" type="data" format="fastq" optional="false" label="Forward or Single-End Reads" />
         <param name="reverse_reads" type="data" format="fastq" optional="true" label="Reverse Reads (Optional)" />
-        <param name="species" type="select" label="Species">
+        <param name="species" type="select" label="Species" help="It is best to manually select the species if it is known.">
             <option value="auto" selected="true">Automatic</option>
             <option value="Acinetobacter baumannii">Acinetobacter baumannii</option>
             <option value="Acinetobacter pittii">Acinetobacter pittii</option>
@@ -52,8 +56,6 @@
             <option value="Campylobacter fetus">Campylobacter fetus</option>
             <option value="Campylobacter jejuni">Campylobacter jejuni</option>
             <option value="Campylobacter lari">Campylobacter lari</option>
-            <option value="Candidatus Bathyarchaeota archaeon">Candidatus Bathyarchaeota archaeon</option>
-            <option value="Candidatus Marinimicrobia bacterium">Candidatus Marinimicrobia bacterium</option>
             <option value="Citrobacter freundii">Citrobacter freundii</option>
             <option value="Clostridiaceae bacterium">Clostridiaceae bacterium</option>
             <option value="Clostridiales bacterium">Clostridiales bacterium</option>
