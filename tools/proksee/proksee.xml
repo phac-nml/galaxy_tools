@@ -20,12 +20,22 @@
             --species '${species}'
         #end if
 
+        #if str($platform) != 'auto'
+            --platform '${platform}'
+        #end if
+
         --memory 8 --threads 4
 
     ]]></command>
     <inputs>
         <param name="forward_reads" type="data" format="fastq" optional="false" label="Forward or Single-End Reads" />
         <param name="reverse_reads" type="data" format="fastq" optional="true" label="Reverse Reads (Optional)" />
+        <param name="platform" type="select" label="Sequencing Platform" help="It is best to manually select the sequencing platform if it is known.">
+            <option value="auto" selected="true">Automatic</option>
+            <option value="Illumina" selected="true">Illumina</option>
+            <option value="Ion Torrent" selected="true">Ion Torrent</option>
+            <option value="Pac Bio" selected="true">Pac Bio</option>
+        </param>
         <param name="species" type="select" label="Species" help="It is best to manually select the species if it is known.">
             <option value="auto" selected="true">Automatic</option>
             <option value="Acinetobacter baumannii">Acinetobacter baumannii</option>
@@ -146,7 +156,8 @@
         </param>
     </inputs>
     <outputs>
-        <data format="json" name="assembly_info" from_work_dir="output/assembly_info.json" />
+        <data format="json" name="assembly_info" from_work_dir="output/assembly_info.json" label="Proksee assembly information" />
+        <data format="fasta" name="contigs" from_work_dir="output/contigs.fasta" label="Proksee assembly contigs" />
     </outputs>
     <help><![CDATA[
 
