@@ -6,4 +6,16 @@
         </requirements>
     </xml>
     <token name="@TOOL_VERSION@">0.7.0</token>
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">
+                @misc{GitHubquasitools,
+                title = {quasitools},
+                publisher = {phac-nml},
+                journal = {GitHub repository},
+                url = {https://github.com/phac-nml/quasitools},
+                }
+            </citation>
+        </citations>
+    </xml>
 </macros>

@@ -1,4 +1,4 @@
-<tool id="aacoverage" name="Amino Acid Coverage" version="0.7.0">
+<tool id="aacoverage" name="Amino Acid Coverage" version="@TOOL_VERSION@">
     <description>Builds an aa census and returns its coverage</description>
     <macros>
         <import>macros.xml</import>
@@ -46,14 +46,5 @@ Builds an amino acid census and returns its coverage.
 A file with one entry per line with the AA position and the coverage at the position.
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsaacoverage,
-			title = {quasitools aacoverage},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

@@ -1,4 +1,4 @@
-<tool id="callntvar" name="Nucleotide Variants" version="0.7.0">
+<tool id="callntvar" name="Nucleotide Variants" version="@TOOL_VERSION@">
     <description>Identifies nucleotide variants</description>
     <macros>
         <import>macros.xml</import>
@@ -48,14 +48,5 @@ Nucleotide Variants
 Call nucleotide variants for a given BAM file and a supplied reference file.
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscallntvar,
-			title = {quasitools callntvar},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

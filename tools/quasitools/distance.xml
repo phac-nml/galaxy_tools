@@ -1,4 +1,4 @@
-<tool id="distance" name="Quasispecies Distance" version="0.7.0">
+<tool id="distance" name="Quasispecies Distance" version="@TOOL_VERSION@">
     <description>Calculate the evolutionary distance between viral quasispecies.</description>
     <macros>
         <import>macros.xml</import>
@@ -115,14 +115,5 @@ Outputs
 A CSV file containing a matrix of similarities or distances, as requested by the user.
 
     ]]></help>
-    <citations>
-        <citation type="bibtex">
-            @misc{GitHubquasitoolsdistance,
-            title = {quasitools distance},
-            publisher = {phac-nml},
-            journal = {GitHub repository},
-            url = {https://github.com/phac-nml/quasitools},
-            }
-        </citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

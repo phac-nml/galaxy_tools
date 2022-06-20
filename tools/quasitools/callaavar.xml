@@ -1,4 +1,4 @@
-<tool id="aavariants" name="Amino Acid Variants" version="0.7.0">
+<tool id="aavariants" name="Amino Acid Variants" version="@TOOL_VERSION@">
     <description>Identifies amino acid mutations</description>
     <macros>
         <import>macros.xml</import>
@@ -72,14 +72,5 @@ Identifies amino acid mutations for a BAM file.
 
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscallaavar,
-			title = {quasitools callaavar},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

@@ -1,4 +1,4 @@
-<tool id="consensus" name="Consensus Sequence" version="0.7.0">
+<tool id="consensus" name="Consensus Sequence" version="@TOOL_VERSION@">
     <description>Generate a consensus sequence from a BAM file</description>
     <macros>
         <import>macros.xml</import>
@@ -91,14 +91,5 @@ When percentage is less than 100, the base that has frequency greater than equal
 When there is zero coverage or no bases meet the percentage threshold (only when percentage is < 100) a n will be incorporated.
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsconsensus,
-			title = {quasitools consensus},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

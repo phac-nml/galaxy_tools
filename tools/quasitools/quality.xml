@@ -1,4 +1,4 @@
-<tool id="quality" name="Quality control" version="0.7.0">
+<tool id="quality" name="Quality control" version="@TOOL_VERSION@">
     <description>Performs quality control on FASTQ reads.</description>
     <macros>
         <import>macros.xml</import>
@@ -168,14 +168,5 @@ Quality Control
 ===============
 
 Perform quality control on FASTQ reads.]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsquality,
-			title = {quasitools quality},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

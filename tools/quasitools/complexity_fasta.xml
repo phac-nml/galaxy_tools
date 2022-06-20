@@ -1,4 +1,4 @@
-<tool id="complexity_fasta" name="Complexity FASTA" version="0.7.0">    
+<tool id="complexity_fasta" name="Complexity FASTA" version="@TOOL_VERSION@">    
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -39,14 +39,5 @@ Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2
 
 
 ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscomplexity,
-			title = {quasitools complexity},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-	</citations>
+    <expand macro="citations" />
 </tool>
