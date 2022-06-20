@@ -1,4 +1,4 @@
-<tool id="callcodonvar" name="Codon Variants" version="@TOOL_VERSION@">
+<tool id="callcodonvar" name="Codon Variants" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
     <macros>
         <import>macros.xml</import>

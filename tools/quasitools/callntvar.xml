@@ -1,4 +1,4 @@
-<tool id="callntvar" name="Nucleotide Variants" version="@TOOL_VERSION@">
+<tool id="callntvar" name="Nucleotide Variants" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies nucleotide variants</description>
     <macros>
         <import>macros.xml</import>

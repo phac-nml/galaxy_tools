@@ -1,4 +1,4 @@
-<tool id="distance" name="Quasispecies Distance" version="@TOOL_VERSION@">
+<tool id="distance" name="Quasispecies Distance" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Calculate the evolutionary distance between viral quasispecies.</description>
     <macros>
         <import>macros.xml</import>

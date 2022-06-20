@@ -1,4 +1,4 @@
-<tool id="complexity_fasta" name="Complexity FASTA" version="@TOOL_VERSION@">    
+<tool id="complexity_fasta" name="Complexity FASTA" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">    
     <macros>
         <import>macros.xml</import>
     </macros>

@@ -1,4 +1,4 @@
-<tool id="dnds" name="dNdS Report" version="@TOOL_VERSION@">
+<tool id="dnds" name="dNdS Report" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Calculate the dN/dS value for each region in a bed file</description>
     <macros>
         <import>macros.xml</import>

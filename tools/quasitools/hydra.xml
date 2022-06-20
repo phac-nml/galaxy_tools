@@ -1,4 +1,4 @@
-<tool id="hydra" name="Hydra pipeline" version="@TOOL_VERSION@">
+<tool id="hydra" name="Hydra pipeline" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies drug resistance within an NGS dataset</description>
     <macros>
         <import>macros.xml</import>

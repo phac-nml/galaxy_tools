@@ -1,4 +1,4 @@
-<tool id="aacoverage" name="Amino Acid Coverage" version="@TOOL_VERSION@">
+<tool id="aacoverage" name="Amino Acid Coverage" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Builds an aa census and returns its coverage</description>
     <macros>
         <import>macros.xml</import>

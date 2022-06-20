@@ -1,4 +1,4 @@
-<tool id="consensus" name="Consensus Sequence" version="@TOOL_VERSION@">
+<tool id="consensus" name="Consensus Sequence" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Generate a consensus sequence from a BAM file</description>
     <macros>
         <import>macros.xml</import>

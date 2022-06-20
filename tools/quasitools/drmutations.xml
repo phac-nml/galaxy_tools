@@ -1,4 +1,4 @@
-<tool id="drmutations" name="Drug Resistance Mutations" version="@TOOL_VERSION@">
+<tool id="drmutations" name="Drug Resistance Mutations" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description></description>
     <macros>
         <import>macros.xml</import>

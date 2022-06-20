@@ -1,4 +1,4 @@
-<tool id="aavariants" name="Amino Acid Variants" version="@TOOL_VERSION@">
+<tool id="aavariants" name="Amino Acid Variants" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies amino acid mutations</description>
     <macros>
         <import>macros.xml</import>
