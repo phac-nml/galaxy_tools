@@ -1,12 +1,15 @@
-<tool id="aavariants" name="Amino Acid Variants" version="0.7.0">
+<tool id="aavariants" name="Amino Acid Variants" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies amino acid mutations</description>
-    <requirements>
-        <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-		quasitools call aavar $input_bam $ref_file $input_genes 
+        ln -s $input_bam '${input_bam.name}' &&
+        ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
+
+		quasitools call aavar '${input_bam.name}' $ref_file $input_genes 
 		
 		#if $var_file:
 			$var_file 
@@ -69,14 +72,5 @@ Identifies amino acid mutations for a BAM file.
 
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscallaavar,
-			title = {quasitools callaavar},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>
