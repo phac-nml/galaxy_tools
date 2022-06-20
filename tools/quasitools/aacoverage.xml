@@ -9,7 +9,7 @@
         ln -s $input_bam '${input_bam.name}' &&
         ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
 
-        quasitools aacoverage ${input_bam.name} $ref_file $input_genes -o output.csv
+        quasitools aacoverage '${input_bam.name}' $ref_file $input_genes -o output.csv
 
     ]]></command>
     <inputs>

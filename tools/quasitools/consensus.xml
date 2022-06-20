@@ -9,7 +9,7 @@
         ln -s $input_bam '${input_bam.name}' &&
         ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
 
-        quasitools consensus ${input_bam.name} $ref_file
+        quasitools consensus '${input_bam.name}' $ref_file
 
         #if $fasta_id.type == 'default':
             -i '${input_bam.element_identifier}'

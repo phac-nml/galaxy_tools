@@ -9,7 +9,7 @@
         ln -s $input_bam '${input_bam.name}' &&
         ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
 
-        quasitools drmutations ${input_bam.name} $ref_file $var_file $input_genes
+        quasitools drmutations '${input_bam.name}' $ref_file $var_file $input_genes
 
         #if $mutation_db:
           $mutation_db
