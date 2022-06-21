@@ -1,12 +1,15 @@
-<tool id="drmutations" name="Drug Resistance Mutations" version="0.7.0">
+<tool id="drmutations" name="Drug Resistance Mutations" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description></description>
-    <requirements>
-        <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools drmutations $input_bam $ref_file $var_file $input_genes
+        ln -s $input_bam '${input_bam.name}' &&
+        ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
+
+        quasitools drmutations '${input_bam.name}' $ref_file $var_file $input_genes
 
         #if $mutation_db:
           $mutation_db
@@ -81,14 +84,5 @@ Outputs
 A CSV file containing the drug resistant mutations found.
 
     ]]></help>
-	<citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsdrmutations,
-			title = {quasitools drmutations},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-			</citation>   
-	</citations>
+	<expand macro="citations" />
 </tool>

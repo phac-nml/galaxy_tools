@@ -1,8 +1,9 @@
-<tool id="dnds" name="dNdS Report" version="0.7.0">
+<tool id="dnds" name="dNdS Report" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Calculate the dN/dS value for each region in a bed file</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         quasitools dnds $csv_file $ref_file $offset -o output.csv
@@ -36,14 +37,5 @@ dNdS Report
 Determines the dNdS ratio for each codon variant in a supplied csv file (codon variants).
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsdnds,
-			title = {quasitools dnds},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>
