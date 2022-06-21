@@ -22,7 +22,7 @@
         #end for
 
         #set $excel_proper_extension = 'results.xlsx'
-        ln -s "$excel" $excel_proper_extension &&
+        ln -s '$excel' $excel_proper_extension &&
 
         staramr search
 
