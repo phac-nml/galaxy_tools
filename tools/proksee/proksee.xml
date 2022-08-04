@@ -166,6 +166,20 @@
         <data format="json" name="assembly_info" from_work_dir="output/assembly_info.json" label="Proksee assembly information" />
         <data format="fasta" name="contigs" from_work_dir="output/contigs.fasta" label="Proksee assembly contigs" />
     </outputs>
+    <tests>
+        <test>
+            <param name="forward_reads" value="R1.fastq"/>
+            <param name="reverse_reads" value="R2.fastq"/>
+            <param name="species" value="Staphylococcus aureus"/>
+            <param name="platform" value="Illumina"/>
+            <output name="assembly_info">
+                <assert_contents>
+                    <has_text_matching expression="FAIL: The assembly length is smaller than expected: 96337."/>
+                    <has_text_matching expression="The probability of the assembly being a good assembly is: 0.03."/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
 
 Proksee Assemble
