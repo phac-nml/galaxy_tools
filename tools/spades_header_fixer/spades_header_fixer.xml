@@ -3,7 +3,7 @@
   <requirements>
       <requirement type="package" version="4.7.0">sed</requirement>
   </requirements>
-	<command >sed -r "s/>NODE(_[0-9]+)_(.*)/>${input.element_identifier}\1 \2/g" $input >$output</command>
+  <command >sed -r "s/>NODE(_[0-9]+)_(.*)|>contig/>${input.element_identifier}\1 \2/g" $input >$output</command>
 	<inputs>
 		<param name="input" type="data" format="fasta" label="Fix these fasta headers"/>
 		</inputs>
