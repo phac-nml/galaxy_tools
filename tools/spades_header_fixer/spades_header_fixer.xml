@@ -1,4 +1,4 @@
-<tool id="spades_header_fixer" name="SPAdes fasta header fixer" version="1.1.1">
+<tool id="spades_header_fixer" name="SPAdes fasta header fixer" version="1.1.2">
 	<description>Fixes Spades Fasta ids</description>
   <requirements>
       <requirement type="package" version="4.7.0">sed</requirement>
@@ -12,8 +12,12 @@
 	</outputs>
   <tests>
     <test>
-         <param name="input" value="spades_before.fasta" />
-         <output name="output" file="spades_header_fixed.fasta" ftype="fasta"/>
+         <param name="input" value="spades_before_1.fasta" />
+         <output name="output" file="spades_header_fixed_1.fasta" ftype="fasta"/>
+    </test>
+    <test>
+         <param name="input" value="spades_before_2.fasta" />
+         <output name="output" file="spades_header_fixed_2.fasta" ftype="fasta"/>
     </test>
   </tests>
 
