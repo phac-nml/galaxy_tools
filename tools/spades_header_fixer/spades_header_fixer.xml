@@ -1,9 +1,11 @@
-<tool id="spades_header_fixer" name="SPAdes fasta header fixer" version="1.1.2">
+<tool id="spades_header_fixer" name="SPAdes fasta header fixer" version="1.1.2+galaxy0">
 	<description>Fixes Spades Fasta ids</description>
   <requirements>
       <requirement type="package" version="4.7.0">sed</requirement>
   </requirements>
-  <command >sed -r "s/>NODE(_[0-9]+)_(.*)|>contig/>${input.element_identifier}\1 \2/g" $input >$output</command>
+  <command>
+    $__tool_directory__/spades_header_fixer.sh $input $output
+  </command>
 	<inputs>
 		<param name="input" type="data" format="fasta" label="Fix these fasta headers"/>
 		</inputs>
