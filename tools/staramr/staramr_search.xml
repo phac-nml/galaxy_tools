@@ -612,7 +612,7 @@ Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, 
 .. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
 .. _PlasmidFinder: https://bitbucket.org/genomicepidemiology/plasmidfinder_db
 .. _PointFinder: https://bitbucket.org/genomicepidemiology/pointfinder_db
-.. _webservice: https://cge.food.dtu.dk/services/ResFinder/
+.. _webservices: http://www.genomicepidemiology.org/services/
     ]]></help>
     <citations>
         <citation type="bibtex">
