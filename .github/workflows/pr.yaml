@@ -7,7 +7,7 @@ on:
       - master
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_22.01
+  GALAXY_BRANCH: release_22.05
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
 concurrency:
@@ -48,7 +48,7 @@ jobs:
         echo 'event.after: ${{ github.event.after }}'
     - name: Determine latest commit in the Galaxy repo
       id: get-galaxy-sha
-      run: echo "::set-output name=galaxy-head-sha::$(git ls-remote https://github.com/${{ env.GALAXY_FORK }}/galaxy refs/heads/${{ env.GALAXY_BRANCH }} | cut -f1)"
+      run: echo "galaxy-head-sha=$(git ls-remote https://github.com/${{ env.GALAXY_FORK }}/galaxy refs/heads/${{ env.GALAXY_BRANCH }} | cut -f1)" >> $GITHUB_OUTPUT
     - uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
@@ -169,7 +169,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04]
-        r-version: ['4.0.1']
+        r-version: ['release']
     steps:
     - uses: actions/checkout@v2
       with:
@@ -194,7 +194,7 @@ jobs:
     - name: lintr
       run: |
         library(lintr)
-        linters <- with_defaults(line_length_linter = NULL, cyclocomp_linter = NULL, object_usage_linter = NULL)
+        linters <- linters_with_defaults(line_length_linter = NULL, cyclocomp_linter = NULL, object_usage_linter = NULL)
         con <- file("repository_list.txt", "r")
         status <- 0
         while (TRUE) {
@@ -207,8 +207,8 @@ jobs:
             status <- 1
             for (l in lnt) {
               rel_path <- paste(repo, l$filename, sep="/")
-              write(paste(paste(rel_path, l$line_number, l$column_number, sep=":"), l$message), stderr())
-              write(paste(paste(rel_path, l$line_number, l$column_number, sep=":"), l$message), "rlint_report.txt", append=TRUE)
+              write(paste(paste(rel_path, l$line_number, l$column_number, sep=":"), l$message, paste("(", l$line, ")")), stderr())
+              write(paste(paste(rel_path, l$line_number, l$column_number, sep=":"), l$message, paste("(", l$line, ")")), "rlint_report.txt", append=TRUE)
             }
           }
         }
@@ -301,6 +301,8 @@ jobs:
         chunk: ${{ matrix.chunk }}
         chunk-count: ${{ needs.setup.outputs.chunk-count }}
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
+        # Limit each test to 15 minutes
+        test_timeout: 900
     - uses: actions/upload-artifact@v2
       with:
         name: 'Tool test output ${{ matrix.chunk }}'
@@ -407,3 +409,4 @@ jobs:
     - name: Check tool test status
       if: ${{ needs.combine_outputs.result != 'success' && needs.combine_outputs.result != 'skipped' }}
       run: exit 1
+
