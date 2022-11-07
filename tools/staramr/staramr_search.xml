@@ -332,8 +332,7 @@
         </test>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
-            <param name="use_pointfinder" value="custom" />
-            <param name="pointfinder_custom" value="escherichia_coli" />
+            <param name="use_pointfinder" value="escherichia_coli" />
 
             <output name="summary" file="test1-summary-ecoli.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary-ecoli.tsv" ftype="tabular" />
