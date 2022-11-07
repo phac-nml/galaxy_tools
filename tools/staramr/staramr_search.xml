@@ -1,14 +1,14 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@+galaxy0" profile="16.04">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-        <token name="@VERSION@">0.8.0</token>
+        <token name="@VERSION@">0.9.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
 	<!-- The staramr conda package includes the mlst software, but the list of schemes 
 	     changes depending on the version. I specify the exact version here to make sure
              the list of schemes provided is consistent -->
-	<requirement type="package" version="2.22.0">mlst</requirement>
+	<requirement type="package" version="2.23.0">mlst</requirement>
     </requirements>
     <version_command>staramr --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
@@ -82,23 +82,27 @@
         <param type="data" name="genomes" format="fasta" multiple="true"/>
         <conditional name="pointfinder_db">
             <param name="use_pointfinder" type="select" label="Enable scanning for point mutations using the PointFinder database">
-                <option value="disabled" selected="true">Disable PointFinder</option>
-                <option value="salmonella">Salmonella</option>
+                <option value="disabled" selected="true">Disable PointFinder</option>                
                 <option value="campylobacter">Campylobacter</option>
+                <option value="enterococcus_faecalis">enterococcus_faecalis</option>
+                <option value="enterococcus_faecium">enterococcus_faecium</option>
+                <option value="escherichia_coli">escherichia_coli</option>      
+                <option value="helicobacter_pylori">helicobacter_pylori</option>          
+                <option value="salmonella">Salmonella</option>
                 <option value="custom">Unvalidated</option>
             </param>
 	    <!-- These three values don't have any additional parameters as they are used as-is to control the PointFinder organism -->
 	    <when value="disabled"/>
+        <when value="campylobacter"/>
+        <when value="enterococcus_faecalis"/>
+        <when value="enterococcus_faecium"/>
+        <when value="escherichia_coli"/>
+        <when value="helicobacter_pylori"/>
 	    <when value="salmonella"/>
-	    <when value="campylobacter"/>
 
 	    <!-- This option provides the ability to select among a number of custom/unvalidated PointFinder organisms -->
             <when value="custom">
-                <param name="pointfinder_custom" type="select" label="PointFinder organism (unvalidated)" help="Select one of the unvalidated PointFinder organisms to use for scanning for point mutations. These have not been fully validated as compatible with staramr so caution is recommended when interpreting results.">
-                    <option value="enterococcus_faecalis">enterococcus_faecalis</option>
-                    <option value="enterococcus_faecium">enterococcus_faecium</option>
-                    <option value="escherichia_coli" selected="true">escherichia_coli</option>
-                    <option value="helicobacter_pylori">helicobacter_pylori</option>
+                <param name="pointfinder_custom" type="select" label="PointFinder organism (unvalidated)" help="Select one of the unvalidated PointFinder organisms to use for scanning for point mutations. These have not been fully validated as compatible with staramr so caution is recommended when interpreting results.">                   
                     <option value="klebsiella">klebsiella</option>
                     <option value="mycobacterium_tuberculosis">mycobacterium_tuberculosis</option>
                     <option value="neisseria_gonorrhoeae">neisseria_gonorrhoeae</option>
@@ -328,8 +332,7 @@
         </test>
         <test>
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
-            <param name="use_pointfinder" value="custom" />
-            <param name="pointfinder_custom" value="escherichia_coli" />
+            <param name="use_pointfinder" value="escherichia_coli" />
 
             <output name="summary" file="test1-summary-ecoli.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary-ecoli.tsv" ftype="tabular" />
@@ -395,7 +398,7 @@
 staramr
 =======
 
-staramr_ scans bacterial genome contigs against both the ResFinder_, PlasmidFinder_ and PointFinder_ databases (used by the ResFinder webservice_) and compiles a summary report of detected antimicrobial resistance genes.
+staramr_ scans bacterial genome contigs against both the ResFinder_, PlasmidFinder_ and PointFinder_ databases (used by their respective webservices_) and compiles a summary report of detected antimicrobial resistance genes.
 
 Usage
 -----
@@ -608,7 +611,7 @@ Galaxy wrapper written by Aaron Petkau at the National Microbiology Laboratory, 
 .. _ResFinder: https://bitbucket.org/genomicepidemiology/resfinder_db
 .. _PlasmidFinder: https://bitbucket.org/genomicepidemiology/plasmidfinder_db
 .. _PointFinder: https://bitbucket.org/genomicepidemiology/pointfinder_db
-.. _webservice: https://cge.food.dtu.dk/services/ResFinder/
+.. _webservices: http://www.genomicepidemiology.org/services/
     ]]></help>
     <citations>
         <citation type="bibtex">
