@@ -1,4 +1,4 @@
-name: Galaxy Tool Linting and Tests for push and PR
+name: Galaxy Tool Linting and Tests for Push and PR
 on:
   pull_request: # Run on all PRs
   push:
