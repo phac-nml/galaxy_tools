@@ -399,7 +399,7 @@
 staramr
 =======
 
-staramr_ scans bacterial genome contigs against both the ResFinder_, PlasmidFinder_ and PointFinder_ databases (used by the ResFinder webservice_) and compiles a summary report of detected antimicrobial resistance genes.
+staramr_ scans bacterial genome contigs against both the ResFinder_, PlasmidFinder_ and PointFinder_ databases (used by their respective webservices_) and compiles a summary report of detected antimicrobial resistance genes.
 
 Usage
 -----
