@@ -171,7 +171,7 @@ jobs:
         os: [ubuntu-20.04]
         r-version: ['release']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
     - uses: r-lib/actions/setup-r@v2
