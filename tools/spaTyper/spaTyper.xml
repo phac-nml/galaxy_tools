@@ -14,7 +14,11 @@
         <test>
             <param name="input1" value="input.fasta" />
             <param name="input2" value="sparepeats.fasta" />
-            <output name="output1" file="output.txt" ftype="txt"/>
+            <output name="output1">
+                <assert_contents>
+                    <has_text text = "t11215" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[

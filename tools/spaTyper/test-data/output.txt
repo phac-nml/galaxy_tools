@@ -1,7 +1,7 @@
 Start the identification of repeats in Spa protein:
-+ Repeats fasta file provided:  /home/connor/galaxy_tools/tools/spaTyper/sparepeats.fasta
++ Repeats fasta file provided:  /home/connor/galaxy_tools/tools/spaTyper/test-data/sparepeats.fasta
 + Check or download repeats types file in folder:  /home/connor/planemo/bin
-	A previous download created spatypes.txt on: 2023-03-10 13:15:14
+	A previous download created spatypes.txt on: 2023-03-15 17:43:58
 
 -----------------
 Results:
