@@ -1,0 +1,10 @@
+Start the identification of repeats in Spa protein:
++ Repeats fasta file provided:  /home/connor/galaxy_tools/tools/spaTyper/test-data/sparepeats.fasta
++ Check or download repeats types file in folder:  /home/connor/planemo/bin
+	A previous download created spatypes.txt on: 2023-03-15 17:43:58
+
+-----------------
+Results:
+Sequence name	Repeats	Type
+AJ829762.1 Staphylococcus aureus subsp. aureus partial spa gene for protein A	99-20-69-31-70-13-17-16-16-16-16	t11215
+-----------------
