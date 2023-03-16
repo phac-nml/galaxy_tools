@@ -1,9 +1,10 @@
 <tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy0" profile="21.05">
     <macros>
-        <token name="@VERSION@">0.2.1</token>
+        <token name="@VERSION@">0.3.3</token>
     </macros>
     <requirements>
         <requirement type="package" version="@VERSION@">spatyper</requirement>
+        <requirement type="package" version="3.4.3">python</requirement>
     </requirements>
     <command> spaTyper -f $input1 -r $input2 > $output1 </command>
     <inputs>
@@ -26,14 +27,12 @@
     </tests>
     <help><![CDATA[
 
-sage: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
+USAGE: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
 
 spaTyper.py: Get spa types
 
 Version: 0.3.3
 License: GPLv3
-
-USAGE: python spaTyper.py -f fasta_file.fasta
 Prints spa type to stdout
 
 It will download sparepeats.fasta and spatypes.txt to repository directory 
