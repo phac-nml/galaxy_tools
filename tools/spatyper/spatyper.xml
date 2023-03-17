@@ -5,9 +5,9 @@
     <requirements>
         <requirement type="package" version="@VERSION@">spatyper</requirement>
     </requirements>
-    <command detect_errors="aggressive"> ![CDATA[
+    <command detect_errors="aggressive"> <![CDATA[
         spaTyper -f '${input1}' -r '${input2}' > '${output1}' 
-    ]]</command>
+    ]]> </command>
     <inputs>
         <param type="data" name="input1" format="fasta" />
         <param type="data" name="input2" format="fasta" />
