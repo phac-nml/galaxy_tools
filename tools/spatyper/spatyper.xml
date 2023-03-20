@@ -1,4 +1,4 @@
-<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy0" profile="21.05">
+<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy0" profile="21.01">
     <macros>
         <token name="@VERSION@">0.3.3</token>
     </macros>
@@ -10,7 +10,7 @@
     ]]> </command>
     <inputs>
         <param type="data" name="input1" format="fasta" label="SPA Fasta file" help="Staphylococcus aureus - staphylococcal protein A fasta file. This will be assigned a type based on its repeat region."/>
-        <param type="data" name="input2" format="fasta" label="Repeats Library Multifasta" help="A multifasta representing a set of known repeat regions found in staphylococcal protein A. This can be downloaded at (http://spa.ridom.de/dynamic/sparepeats.fastas)"/>
+        <param type="data" name="input2" format="fasta" label="Repeats Library Multifasta" help="A multifasta representing a set of known repeat regions found in staphylococcal protein A. This can be downloaded at (http://spa.ridom.de/dynamic/sparepeats.fasta)"/>
     </inputs>
     <outputs>
         <data name="output1" format="txt" />
