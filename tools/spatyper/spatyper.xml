@@ -28,6 +28,7 @@
     </tests>
     <help><![CDATA[
 ::
+
     USAGE: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
 
     spaTyper.py: Get spa types
