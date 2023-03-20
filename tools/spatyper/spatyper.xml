@@ -27,26 +27,39 @@
         </test>
     </tests>
     <help><![CDATA[
+::
+    USAGE: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
 
-USAGE: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
+    spaTyper.py: Get spa types
 
-spaTyper.py: Get spa types
+    Version: 0.3.3
+    License: GPLv3
+    Prints spa type to stdout
 
-Version: 0.3.3
-License: GPLv3
-Prints spa type to stdout
+    It will download sparepeats.fasta and spatypes.txt to repository directory 
+    if files not provided or already in directory. It can be loaded as a python
+    module. Python 3 version only.
 
-It will download sparepeats.fasta and spatypes.txt to repository directory 
-if files not provided or already in directory. It can be loaded as a python
-module. Python 3 version only.
+    Options: -h     show this help message and exit
+             -r     REPEAT_FILE (http://spa.ridom.de/dynamic/sparepeats.fasta)
+             -o     REPEAT_ORDER_FILE (http://spa.ridom.de/dynamic/spatypes.txt)
+             -d     Folder to save downloaded files from Ridom/Spa server
+             -f     List of one or more fasta files.
+             -g     Uses unix style pathname expansion to run spa typing on all files. If your shell autoexpands wildcards use -f.
+             -e     Do PCR product enrichment. [Default: False]
 
-Options: -h     show this help message and exit
-         -r     REPEAT_FILE (http://spa.ridom.de/dynamic/sparepeats.fasta)
-         -o     REPEAT_ORDER_FILE (http://spa.ridom.de/dynamic/spatypes.txt)
-         -d     Folder to save downloaded files from Ridom/Spa server
-         -f     List of one or more fasta files.
-         -g     Uses unix style pathname expansion to run spa typing on all files. If your shell autoexpands wildcards use -f.
-         -e     Do PCR product enrichment. [Default: False]
+    Example Output:
+
+    Start the identification of repeats in Spa protein:
+    + Repeats fasta file provided:  ~/tools/spaTyper/test-data/sparepeats.fasta
+    + Check or download repeats types file in folder:  ~/planemo/bin
+        A previous download created spatypes.txt on: 2023-03-15 17:43:58
+
+    -----------------
+    Results:
+    Sequence name	Repeats	Type
+    AJ829762.1 Staphylococcus aureus subsp. aureus partial spa gene for protein A	99-20-69-31-70-13-17-16-16-16-16	t11215
+    -----------------
 
     ]]></help>
     <citations>
