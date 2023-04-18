@@ -1,4 +1,4 @@
-<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy0" profile="20.01">
+<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy1" profile="20.01">
     <macros>
         <token name="@VERSION@">0.3.3</token>
     </macros>
@@ -6,7 +6,7 @@
         <requirement type="package" version="@VERSION@">spatyper</requirement>
     </requirements>
     <command detect_errors="aggressive"> <![CDATA[
-        spaTyper -f '${input}' --output '${output}' 
+        spaTyper -f '${input}' -r '' -o '' --output '${output}' 
     ]]> </command>
     <inputs>
         <param type="data" name="input" format="fasta" label="SPA Fasta file" help="Staphylococcus aureus - staphylococcal protein A fasta file. This will be assigned a type based on its repeat region."/>
