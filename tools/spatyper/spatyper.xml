@@ -1,4 +1,4 @@
-<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy0" profile="20.01">
+<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy1" profile="20.01">
     <macros>
         <token name="@VERSION@">0.3.3</token>
     </macros>
