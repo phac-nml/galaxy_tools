@@ -6,7 +6,7 @@
         <requirement type="package" version="@VERSION@">spatyper</requirement>
     </requirements>
     <command detect_errors="aggressive"> <![CDATA[
-        spaTyper -f '${input}' -r '' -o '' --output '${output}' 
+        spaTyper -f '${input}' --output '${output}' 
     ]]> </command>
     <inputs>
         <param type="data" name="input" format="fasta" label="SPA Fasta file" help="Staphylococcus aureus - staphylococcal protein A fasta file. This will be assigned a type based on its repeat region."/>
