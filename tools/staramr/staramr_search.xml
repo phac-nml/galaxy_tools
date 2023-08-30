@@ -331,7 +331,7 @@
         </collection>
     </outputs>
     <tests>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="9">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             <param name="use_pointfinder" value="salmonella" />
 
@@ -345,7 +345,7 @@
                 <element name="pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             </output_collection>
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="9">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             <param name="use_pointfinder" value="escherichia_coli" />
 
@@ -355,7 +355,7 @@
             <output name="plasmidfinder" file="test1-plasmidfinder.tsv" ftype="tabular" />
             <output name="pointfinder" file="test1-pointfinder-ecoli.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
 
             <output name="summary" file="test2-summary.tsv" ftype="tabular" />
@@ -364,44 +364,44 @@
                 <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test2-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             </output_collection>
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             <section name="advanced">
                 <param name="mlst_scheme" value="listeria_2" />
             </section>
             <output name="mlst" file="mlst.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             <param name="pid_threshold" value="99.8" />
 
             <output name="summary" file="test3-summary.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="16S rc_gyrA rc_beta-lactam spaces (extra:characters).fsa" ftype="fasta" />
             <param name="pid_threshold" value="99.8" />
 
             <output name="summary" file="test4-summary.tsv" ftype="tabular" />
         </test>
-	<test expect_num_outputs="1">
+	<test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
 
             <output name="summary" file="test5-summary.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
             <param name="exclude_genes_condition" value="none" />
 
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
             <param name="exclude_genes_condition" value="custom" />
             <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
 
             <output name="summary" file="test5-summary.tsv" ftype="tabular" />
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
             <param name="genome_size_lower_bound" value="1" />
             <param name="genome_size_upper_bound" value="10" />
