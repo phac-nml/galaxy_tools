@@ -53,6 +53,11 @@
             --no-exclude-genes
         #end if
 
+
+        #if str($advanced.complex_mutations.complex_mutations_condition) == 'custom'
+	    --complex-mutations-file '${advanced.complex_mutations.complex_mutations_file}'
+	#end if
+
         #if str($advanced.plasmidfinder_type) != 'include_all'
             --plasmidfinder-database-type '${advanced.plasmidfinder_type}'
         #end if
@@ -290,6 +295,17 @@
                 <when value="default" />
                 <when value="custom">
                     <param type="data" name="exclude_genes_file" format="txt,tabular" label="Exclude genes file" help="Pass a file containing a list of genes to exclude from the ResFinder/PointFinder results" />
+                </when>
+                <when value="none" />
+       	    </conditional>
+            <conditional name="complex_mutations">
+                <param name="complex_mutations_condition" type="select" label="Provide a custom list of complex mutations">
+                    <option value="default" selected="true">Use default list of complex mutations</option>
+                    <option value="custom">Provide a custom list of complex mutations</option>
+                </param>
+                <when value="default" />
+                <when value="custom">
+                    <param type="data" name="complex_mutations_file" format="txt,tabular" label="Complex mutations file" help="Pass a file containing a list of complex mutations to group (if present) in the PointFinder results" />
                 </when>
                 <when value="none" />
             </conditional>
