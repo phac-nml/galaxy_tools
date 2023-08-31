@@ -8,6 +8,7 @@ on:
       - '*'
   push:
     branches:
+      - development
       - main
       - master
     paths-ignore:
