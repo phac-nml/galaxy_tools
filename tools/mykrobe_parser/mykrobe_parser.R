@@ -18,6 +18,7 @@
 # Take the JSON output from Mykrobe, rearrange, output for LIMS
 # Adrian Zetner
 # August 2018
+# Updated August 2023
 
 # Libraries ####
 
@@ -35,17 +36,23 @@ suppressPackageStartupMessages({
 
 # Define custom functions, variables, and paths. Collect and use CL arguments ####
 
-# Here's a function to recreate that output table from the input JSON files
+# Here's a function to recreate that output table from the input JSON files for 2019
 
-getResults <- function(listelement){
+getResults2019 <- function(listelement){
   # Define list levels for various elements of the json
-  species <- names(listelement[[1]][["phylogenetics"]][["species"]]) 
-  lineage <- names(listelement[[1]][["phylogenetics"]][["lineage"]])
   phylo_group <- names(listelement[[1]][["phylogenetics"]][["phylo_group"]])
   if("Non_tuberculosis_mycobacterium_complex" %in% phylo_group){
     warning(paste("Non-tuberculosis mycobacteria detected in file ", names(listelement), ". Skipping.", sep = ""))
     return()}
-    
+  
+  species <- names(listelement[[1]][["phylogenetics"]][["species"]]) 
+  lineage <-
+    if(length(listelement[[1]][["phylogenetics"]][["lineage"]]) == 1 ){
+      names(listelement[[1]][["phylogenetics"]][["lineage"]])
+    }else{
+      listelement[[1]][["phylogenetics"]][["lineage"]][["lineage"]]
+    }
+  
   # Start building a list of all your various elements
   temp <- list(mykrobe_version = listelement[[1]][["version"]][["mykrobe-predictor"]],
                file = names(listelement), # One element
@@ -82,12 +89,77 @@ getResults <- function(listelement){
   }
   
   mapped.variants <- map(listelement[[1]][["susceptibility"]], # Dig into the lists, pull out variants and collapse into chr vector
-                       ~ imap(.x[["called_by"]],  # imap is shorthand for map2(x, names(x), ...), calling .y gets you the name / index of the current element
-                              ~ paste(.y, 
-                                      .x[["info"]][["coverage"]][["alternate"]][["median_depth"]],
-                                      .x[["info"]][["coverage"]][["reference"]][["median_depth"]],
-                                      .x[["info"]][["conf"]],
-                                      sep = ":"))) %>% 
+                         ~ imap(.x[["called_by"]],  # imap is shorthand for map2(x, names(x), ...), calling .y gets you the name / index of the current element
+                                ~ paste(.y, 
+                                        .x[["info"]][["coverage"]][["alternate"]][["median_depth"]],
+                                        .x[["info"]][["coverage"]][["reference"]][["median_depth"]],
+                                        .x[["info"]][["conf"]],
+                                        sep = ":"))) %>% 
+    map_chr(~ paste(.x, collapse = "__"))
+  
+  if(length(mapped.variants) != 0){
+    temp$`variants (gene:alt_depth:wt_depth:conf)` <- mapped.variants
+  }else{
+    temp$`variants (gene:alt_depth:wt_depth:conf)` <- NA
+  }
+  
+  temp$`genes (prot_mut-ref_mut:percent_covg:depth)` <- NA 
+  
+  # Take that list and mash all the elements together as columns in a tibble, recycling as needed to fill in space
+  # eg. phylo_group is repeated/recycled as many times as there are drugs tested
+  as_tibble(temp)
+}
+
+# Here's a function to recreate that output table from the input JSON files for panel 2020
+
+getResults2020 <- function(listelement){
+  # Define list levels for various elements of the json
+  phylo_group <- names(listelement[[1]][["phylogenetics"]][["phylo_group"]])
+  if("Non_tuberculosis_mycobacterium_complex" %in% phylo_group){
+    warning(paste("Non-tuberculosis mycobacteria detected in file ", names(listelement), ". Skipping.", sep = ""))
+    return()}
+  
+  species <- names(listelement[[1]][["phylogenetics"]][["species"]]) 
+
+  # Start building a list of all your various elements
+  temp <- list(mykrobe_version = listelement[[1]][["version"]][["mykrobe-predictor"]],
+               file = names(listelement), # One element
+               plate_name = "test", # This probably needs changing
+               sample = "sequence_calls", # Likewise change this
+               phylo_group = phylo_group, # As above
+               species = species, # As above
+               # The following expressions drill down into the list elements and pull out what is needed. 
+               # It's inelegant and vulnerable to changes in the input formats but if they're consistent it'll work
+               phylo_group_per_covg = listelement[[1]][["phylogenetics"]][["phylo_group"]][[phylo_group]][["percent_coverage"]],
+               species_per_covg = listelement[[1]][["phylogenetics"]][["species"]][[species]][["percent_coverage"]],
+               phylo_group_depth = listelement[[1]][["phylogenetics"]][["phylo_group"]][[phylo_group]][["median_depth"]],
+               species_depth = listelement[[1]][["phylogenetics"]][["species"]][[species]][["median_depth"]],
+               Mykrobe_Resistance_probe_set = basename(listelement[[1]][["probe_sets"]][2]) # Is it always the second?
+  )
+  
+  # Super cool nested and vectorized (for SPEED!) functions to grab the predictions for drug sensitivity and gene variants
+  # Both produce character vectors of the same length as the number of drugs tested in the same order
+  # All of these also check if there are missing values in drug/susceptibility/variant elements and adds the column anyhow
+  
+  if(length(map_chr(listelement[[1]][["susceptibility"]],  "predict")) != 0){
+    temp$susceptibility <- map_chr(listelement[[1]][["susceptibility"]],  "predict")  
+  }else{
+    temp$susceptibility <- NA
+  }
+  
+  if(length(names(listelement[[1]][["susceptibility"]])) != 0){
+    temp$drug <- names(listelement[[1]][["susceptibility"]])  
+  }else{
+    temp$drug <- NA
+  }
+  
+  mapped.variants <- map(listelement[[1]][["susceptibility"]], # Dig into the lists, pull out variants and collapse into chr vector
+                         ~ imap(.x[["called_by"]],  # imap is shorthand for map2(x, names(x), ...), calling .y gets you the name / index of the current element
+                                ~ paste(.y, 
+                                        .x[["info"]][["coverage"]][["alternate"]][["median_depth"]],
+                                        .x[["info"]][["coverage"]][["reference"]][["median_depth"]],
+                                        .x[["info"]][["conf"]],
+                                        sep = ":"))) %>% 
     map_chr(~ paste(.x, collapse = "__"))
   
   if(length(mapped.variants) != 0){
@@ -120,6 +192,11 @@ option_list = list(
               default="", 
               help="Mykrobe Workflow Version", 
               metavar="character"),
+  make_option(c("-p", "--panel"), 
+              type="character", 
+              default="2019", 
+              help="Mykrobe Panel Version: 2019 or 2020. [default= %default]", 
+              metavar="character"),
   make_option(c("-D", "--depth"), 
               type="integer", 
               default=5, 
@@ -134,6 +211,16 @@ option_list = list(
               type="character", 
               default="", 
               help="Name of the run", 
+              metavar="character"),
+  make_option(c("-r", "--reportfile"), 
+              type="character", 
+              default="report", 
+              help="File name for susceptibility report data", 
+              metavar="character"),			  
+  make_option(c("-s", "--speciationfile"), 
+              type="character", 
+              default="jsondata", 
+              help="File name for speciation data", 
               metavar="character")
 )
 
@@ -145,10 +232,16 @@ if (is.null(opt$file) & is.null(opt$dir)){
   stop("At least one argument must be supplied to input file or directory", call.=FALSE)
 }
 
+if (opt$panel != "2019" & opt$panel != "2020"){
+  print_help(opt_parser)
+  stop("Panel must be one of 2019 or 2020", call.=FALSE)
+}
+
 # Parameters to take from Galaxy/CL as args or however works best
 params <- c("",  # Lims_Comment 
             "",  # Lims_INTComment 
             opt$version,  # Mykrobe_Workflow_Version
+            opt$panel, # Mykrobe Panel Version
             opt$depth,  # Mykrobe_min_depth_default_5
             opt$conf,  # Mykrobe_min_conf_default_10
             "",                             # LIMS_file - empty as it's an upload field in LIMS
@@ -157,6 +250,7 @@ params <- c("",  # Lims_Comment
 names(params) <- c("Lims_Comment", 
                    "Lims_INTComment",
                    "Mykrobe_Workflow_Version",
+                   "Mykrobe_Panel_Version",
                    "Mykrobe_min_depth_default_5",
                    "Mykrobe_min_conf_default_10", 
                    "LIMS_file", 
@@ -191,6 +285,9 @@ columns <- c("file",
              "Mykrobe_Moxifloxacin_gyrA",
              "Moxifloxacin_R_mutations",
              "Moxifloxacin_Prediction",
+             "Mykrobe_Ciprofloxacin_gyrA",
+             "Ciprofloxacin_R_mutations",
+             "Ciprofloxacin_Prediction",
              "Mykrobe_rpsL",
              "Mykrobe_Streptomycin_rrs",
              "Mykrobe_Streptomycin_gid",
@@ -219,6 +316,18 @@ columns <- c("file",
 
 report <- setNames(data.frame(matrix("", ncol = length(columns), nrow = 1), stringsAsFactors = F), columns)
 
+report_cols <- c(
+  "file",
+  "phylo_group",
+  "species",
+  "lineage",
+  "phylo_group_per_covg",
+  "species_per_covg",
+  "lineage_per_covg",
+  "phylo_group_depth",
+  "species_depth",
+  "lineage_depth"
+)
 
 # List of drugs that are tested
 all_drugs <- c("Isoniazid", 
@@ -252,13 +361,34 @@ list.of.json.files <- map(files,
 )
 
 
-# Apply that getResults function to each element in your list then bash it together into a final report
+# Apply the correct getResults function to each element in your list then bash it together into a final report
 
-temp <- map(list.of.json.files, getResults) %>% 
-  bind_rows()
+if(opt$panel == "2019"){
+  temp <- map(list.of.json.files, getResults2019) %>% 
+    bind_rows()
+} else if(opt$panel == "2020") {
+  temp <- map(list.of.json.files, getResults2020) %>% 
+    bind_rows()
+  columns <-
+    setdiff(
+      columns,
+      c(
+        "Mykrobe_Ciprofloxacin_gyrA",
+        "Ciprofloxacin_R_mutations",
+        "Ciprofloxacin_Prediction"
+      )
+    )
+  report_cols <- setdiff(report_cols,
+                         c("lineage",
+                           "lineage_per_covg",
+                           "lineage_depth"))
+} else{
+  stop("Panel must be one of 2019 or 2020", call. = FALSE)
+}
 
 
 # Predictions of resistance or susceptibility
+
 predictions.table <- 
   temp %>%
   select(file, drug, susceptibility) %>% 
@@ -291,7 +421,7 @@ if (0 < predictions.table %>%
         mutate(variants = strsplit(variants, "__")) %>% # Split the mutations across rows (list first then split across rows)
         unnest(variants) %>% 
         separate(variants, c("gene", "mutation"), "_") %>% 
-        mutate(columnname = ifelse(gene %in% c("gyrA", "tlyA", "rrs", "eis", "gid"), # Check for columns that include the drug name or not and paste accordingly
+        mutate(columnname = ifelse(gene %in% c("gyrA", "rrs", "eis", "gid"), # Check for columns that include the drug name or not and paste accordingly
                                    paste("Mykrobe", drug, gene, sep = "_"),
                                    paste("Mykrobe", gene, sep = "_"))) %>% 
         # Extract out the mutation information with a regex that covers all potential genes
@@ -336,8 +466,8 @@ report <-
   filter_at(vars(ends_with("_Prediction")), any_vars(. != "failed")) %>% 
   mutate_at(vars(starts_with("Mykrobe_")), funs(replace(., is.na(.), "No Mutation"))) %>% 
   full_join(anti_join(report, ., by = "file")) %>% 
-  select(columns) 
-  
+  select(columns)
+
 
 # Add in the parameters fed from Galaxy using named character vector
 report <- 
@@ -351,7 +481,7 @@ report <-
     LIMS_file = params["LIMS_file"],
     Mutation_set_version = params["Mutation_set_version"]
   )
-  
+
 
 #View(report)
 
@@ -361,20 +491,15 @@ write.csv(report, "output-report.csv", row.names = F)
 print("Writing Susceptibility report to CSV as output-report.csv")
 
 # Select specific columns from temp and output them
-temp %>% 
-  select(file, 
-         phylo_group, 
-         species, 
-         lineage, 
-         phylo_group_per_covg, 
-         species_per_covg, 
-         lineage_per_covg, 
-         phylo_group_depth, 
-         species_depth, 
-         lineage_depth) %>%
+# Addition of any_of accounts for both 2019 and 2020 panels
+
+temp %>%
+  select_at( # This is a dplyr 0.8.3 function, superceded in newer versions but this tool is built around a number of specific deps
+    report_cols
+  ) %>%
   distinct() %>%
-  write.csv("output-jsondata.csv", row.names = F)
-print("Writing JSON data to CSV as output-jsondata.csv")
+  write.csv(file=paste("output-jsondata.csv", row.names = F)
+print(("Writing JSON data to CSV as output-jsondata.csv")
 sink(NULL, type="message") # close the sink
 
 quit()

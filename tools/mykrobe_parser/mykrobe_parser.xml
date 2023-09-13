@@ -42,9 +42,13 @@
         multiple="true"
         label="JSON File(s) (.JSON or .TXT)"/>
     <param name="version" type="text"
-        argument="-v"
+        argument="-v"        
         optional="true"
         label="Mykrobe Workflow Version"/>
+    <param name="panel" type="text"
+        argument="-p"
+        optional="true"
+        label="Mykrobe Panel Version"/>
     <param name="depth" type="integer"
         argument="-D"
         optional="true"
@@ -66,10 +70,35 @@
     </outputs>
     <tests>
         <test>
-		<param name="input" value="test-data.json"/>
-		<output name="output-jsondata" ftype="csv" value="output-jsondata.csv" compare="sim_size"/>
-        	<output name="output-report" ftype="csv" value="output-report.csv" compare="sim_size"/>
+    		<param name="input" value="test-data.json"/>
+	    	<output name="output-jsondata" ftype="csv" value="output-jsondata.csv" compare="sim_size"/>
+            <output name="output-report" ftype="csv" value="output-report.csv" compare="sim_size"/>
         </test>
+<!--
+        <test>
+            <param name="input" value="single2019.json"/>
+            <output name="output-jsondata" ftype="csv" value="output-jsondata.csv"/>
+            <output name="output-report" ftype="csv" value="output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="single2020.json"/>
+            <param name="panel" value="2020"/>
+            <output name="output-jsondata" ftype="csv" value="output-jsondata.csv"/>
+            <output name="output-report" ftype="csv" value="output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="2020data/"/>
+            <param name="panel" value="2020"/>
+            <output name="output-jsondata" ftype="csv" value="output-jsondata.csv"/>
+            <output name="output-report" ftype="csv" value="output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="2019data/"/>
+            <param name="panel" value="2019"/>
+            <output name="output-jsondata" ftype="csv" value="output-jsondata.csv"/>
+            <output name="output-report" ftype="csv" value="output-report.csv"/>
+        </test>
+-->
     </tests>
     <help><![CDATA[
 ==============
