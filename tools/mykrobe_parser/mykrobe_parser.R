@@ -498,8 +498,8 @@ temp %>%
     report_cols
   ) %>%
   distinct() %>%
-  write.csv(file=paste("output-jsondata.csv", row.names = F)
-print(("Writing JSON data to CSV as output-jsondata.csv")
+  write.csv(file="output-jsondata.csv", row.names = F)
+print("Writing JSON data to CSV as output-jsondata.csv")
 sink(NULL, type="message") # close the sink
 
 quit()
