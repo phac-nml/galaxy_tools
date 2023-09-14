@@ -48,10 +48,10 @@
         argument="-v"        
         optional="true"
         label="Mykrobe Workflow Version"/>
-    <param name="panel" type="text"
-        argument="-p"
-        optional="true"
-        label="Mykrobe Panel Version"/>
+    <param name="panel" type="select" label="Mykrobe Panel Version" multiple="false">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+    </param>
     <param name="depth" type="integer"
         argument="-D"
         optional="true"
