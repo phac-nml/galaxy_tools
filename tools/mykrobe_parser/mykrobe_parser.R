@@ -294,14 +294,14 @@ option_list <- list(
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-if (is.null(opt$file) & is.null(opt$dir)) {
+if (is.null(opt$file) && is.null(opt$dir)) {
   print_help(opt_parser)
   stop("At least one argument must be supplied to input file or directory",
     call. = FALSE
   )
 }
 
-if (opt$panel != "2019" & opt$panel != "2020") {
+if (opt$panel != "2019" && opt$panel != "2020") {
   print_help(opt_parser)
   stop("Panel must be one of 2019 or 2020", call. = FALSE)
 }
@@ -393,7 +393,7 @@ report <-
   setNames(data.frame(matrix(
     "",
     ncol = length(columns), nrow = 1
-  ), stringsAsFactors = F), columns)
+  ), stringsAsFactors = FALSE), columns)
 
 report_cols <- c(
   "file",
@@ -431,7 +431,7 @@ if (is.null(opt$file)) {
   files <- list.files(
     path = opt$dir,
     pattern = "*.json",
-    full.names = T
+    full.names = TRUE
   )
 } else {
   files <- unlist(strsplit(opt$file, ","))
@@ -441,7 +441,7 @@ files <- files[!duplicated(basename(files))]
 
 list.of.json.files <- map(
   files,
-  ~ fromJSON(.x, simplifyDataFrame = F)
+  ~ fromJSON(.x, simplifyDataFrame = FALSE)
 )
 
 
@@ -492,9 +492,8 @@ if (length(predictions.table) == 1) {
 }
 
 # Variants, if present
-if (0 < predictions.table %>%
-  select(ends_with("_Prediction")) %>%
-  unlist(use.names = F) %>%
+if (0 < predictions.table %>%  select(ends_with("_Prediction")) %>%
+  unlist(use.names = FALSE) %>%
   str_count("[R,r]") %>%
   sum()) {
   # Multiple resistance mutations and confidence per drug in the X_R_mutations column
@@ -539,7 +538,7 @@ if (0 < predictions.table %>%
     full_join(variants.1, variants.2, by = "file")
 } else {
   variants.table <-
-    data.frame(file = predictions.table$file, stringsAsFactors = F)
+    data.frame(file = predictions.table$file, stringsAsFactors = FALSE)
 }
 
 
@@ -576,12 +575,9 @@ report <-
     Mutation_set_version = params["Mutation_set_version"]
   )
 
-
-# View(report)
-
 # Write some output
 # Report as is
-write.csv(report, "output-report.csv", row.names = F)
+write.csv(report, "output-report.csv", row.names = FALSE)
 print("Writing Susceptibility report to CSV as output-report.csv")
 
 # Select specific columns from temp and output them
@@ -592,7 +588,7 @@ temp %>%
     report_cols
   ) %>%
   distinct() %>%
-  write.csv(file = "output-jsondata.csv", row.names = F)
+  write.csv(file = "output-jsondata.csv", row.names = FALSE)
 print("Writing JSON data to CSV as output-jsondata.csv")
 sink(NULL, type = "message") # close the sink
 
