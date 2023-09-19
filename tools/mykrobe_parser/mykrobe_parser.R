@@ -492,10 +492,14 @@ if (length(predictions.table) == 1) {
 }
 
 # Variants, if present
-if (0 < predictions.table %>%  select(ends_with("_Prediction")) %>%
+num.variants <-
+  predictions.table %>%
+  select(ends_with("_Prediction")) %>%
   unlist(use.names = FALSE) %>%
   str_count("[R,r]") %>%
-  sum()) {
+  sum()
+
+if (num.variants > 0) {
   # Multiple resistance mutations and confidence per drug in the X_R_mutations column
   # Actual protein changes in Mykrobe_X columns
 
