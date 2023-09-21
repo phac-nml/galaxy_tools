@@ -63,12 +63,12 @@
         },
         "kmer": 21,
         "probe_sets": [
-            "/Drives/P/Galaxies/pl-asap/deps/_conda/envs/__mykrobe@0.10.0/lib/python3.9/site-packages/mykrobe/data/tb/tb-species-170421.fasta.gz",
-            "/Drives/P/Galaxies/pl-asap/deps/_conda/envs/__mykrobe@0.10.0/lib/python3.9/site-packages/mykrobe/data/tb/tb-hunt-probe-set-jan-03-2019.fasta.gz"
+            "tb-species-170421.fasta.gz",
+            "tb-hunt-probe-set-jan-03-2019.fasta.gz"
         ],
         "files": [
-            "/Drives/P/IRIDA/ngs-archive/sequence-files/509816/1/SRR17089001_1.fastq",
-            "/Drives/P/IRIDA/ngs-archive/sequence-files/509817/1/SRR17089001_2.fastq"
+            "SRR17089001_1.fastq",
+            "SRR17089001_2.fastq"
         ],
         "version": {
             "mykrobe-predictor": "v0.10.0",
