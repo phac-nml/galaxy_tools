@@ -1,4 +1,4 @@
-<tool id="mykrobe_parseR" name="mykrobe_parseR" version="@VERSION@+galaxy1" profile="16.04">
+<tool id="mykrobe_parseR" name="mykrobe_parseR" version="@VERSION@+galaxy2" profile="16.04">
     <macros>
         <token name="@VERSION@">0.1.4.1</token>
     </macros>
@@ -71,8 +71,8 @@
         label="Name of Run"/>
     </inputs>
     <outputs>
-        <data name="output_jsondata" from_work_dir="output-jsondata.csv" format="csv" label="jsondata"/>
-        <data name="output_report" from_work_dir="output-report.csv" format="csv" label="report"/>
+        <data name="output_jsondata" from_work_dir="output-jsondata.csv" format="csv" label="Mykrobe jsondata"/>
+        <data name="output_report" from_work_dir="output-report.csv" format="csv" label="Mykrobe report"/>
     </outputs>
     <tests>
         <test>
