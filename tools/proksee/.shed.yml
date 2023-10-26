@@ -1,0 +1,9 @@
+name: proksee assemble
+owner: nml
+description: assembles genomes from NGS reads
+long_description: a tool for assembling bacterial genomes from NGS reads and evaluating the assemblies using both heuristic and machine learning-based methods
+categories:
+    - Assembly
+remote_repository_url: https://github.com/proksee-project/proksee-cmd
+homepage_url: https://github.com/proksee-project/proksee-cmd
+type: unrestricted

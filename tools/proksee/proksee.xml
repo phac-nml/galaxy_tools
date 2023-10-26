@@ -1,0 +1,194 @@
+<tool id="proksee_assemble" name="Proksee Assemble" version="1.0.0">
+    <description>Assembles bacterial genomes from NGS reads and provides an analysis of the assembly.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        #import re
+
+        proksee updatedb &&
+
+        #set forward_safe=re.sub('[^\s\w\-.]', '_', str($forward_reads.element_identifier))
+        ln -s '$forward_reads' '$forward_safe' &&
+
+        #if $reverse_reads
+            #set reverse_safe=re.sub('[^\s\w\-.]', '_', str($reverse_reads.element_identifier))
+            ln -s '$reverse_reads' '$reverse_safe' &&
+        #end if
+
+        proksee assemble --force -o output '$forward_safe'
+
+        #if $reverse_reads
+            '$reverse_safe'
+        #end if
+
+        #if str($species) != 'auto'
+            --species '${species}'
+        #end if
+
+        #if str($platform) != 'auto'
+            --platform '${platform}'
+        #end if
+
+        --memory 8 --threads 4
+
+    ]]></command>
+    <inputs>
+        <param name="forward_reads" type="data" format="fastqsanger,fastqsanger.gz,fastq,fastq.gz" optional="false" label="Forward or Single-End Reads" />
+        <param name="reverse_reads" type="data" format="fastqsanger,fastqsanger.gz,fastq,fastq.gz" optional="true" label="Reverse Reads (Optional)" />
+        <param name="platform" type="select" label="Sequencing Platform" help="It is best to manually select the sequencing platform if it is known.">
+            <option value="auto" selected="true">Automatic</option>
+            <option value="Illumina" selected="true">Illumina</option>
+            <option value="Ion Torrent" selected="true">Ion Torrent</option>
+            <option value="Pac Bio" selected="true">Pac Bio</option>
+        </param>
+        <param name="species" type="select" label="Species" help="It is best to manually select the species if it is known.">
+            <option value="auto" selected="true">Automatic</option>
+            <option value="Acinetobacter baumannii">Acinetobacter baumannii</option>
+            <option value="Acinetobacter pittii">Acinetobacter pittii</option>
+            <option value="Bacilli bacterium">Bacilli bacterium</option>
+            <option value="Bacillus anthracis">Bacillus anthracis</option>
+            <option value="Bacillus cereus">Bacillus cereus</option>
+            <option value="Bacillus subtilis">Bacillus subtilis</option>
+            <option value="Bacillus thuringiensis">Bacillus thuringiensis</option>
+            <option value="Bacillus velezensis">Bacillus velezensis</option>
+            <option value="Bacteroidales bacterium">Bacteroidales bacterium</option>
+            <option value="Bacteroides fragilis">Bacteroides fragilis</option>
+            <option value="Bacteroides thetaiotaomicron">Bacteroides thetaiotaomicron</option>
+            <option value="Bifidobacterium adolescentis">Bifidobacterium adolescentis</option>
+            <option value="Bifidobacterium longum">Bifidobacterium longum</option>
+            <option value="Bifidobacterium pseudocatenulatum">Bifidobacterium pseudocatenulatum</option>
+            <option value="Borreliella burgdorferi">Borreliella burgdorferi</option>
+            <option value="Brucella abortus">Brucella abortus</option>
+            <option value="Brucella melitensis">Brucella melitensis</option>
+            <option value="Burkholderia cenocepacia">Burkholderia cenocepacia</option>
+            <option value="Burkholderia cepacia">Burkholderia cepacia</option>
+            <option value="Burkholderia gladioli">Burkholderia gladioli</option>
+            <option value="Burkholderia pseudomallei">Burkholderia pseudomallei</option>
+            <option value="Burkholderia stagnalis">Burkholderia stagnalis</option>
+            <option value="Burkholderia ubonensis">Burkholderia ubonensis</option>
+            <option value="Campylobacter coli">Campylobacter coli</option>
+            <option value="Campylobacter concisus">Campylobacter concisus</option>
+            <option value="Campylobacter fetus">Campylobacter fetus</option>
+            <option value="Campylobacter jejuni">Campylobacter jejuni</option>
+            <option value="Campylobacter lari">Campylobacter lari</option>
+            <option value="Citrobacter freundii">Citrobacter freundii</option>
+            <option value="Clostridiaceae bacterium">Clostridiaceae bacterium</option>
+            <option value="Clostridiales bacterium">Clostridiales bacterium</option>
+            <option value="Clostridioides difficile">Clostridioides difficile</option>
+            <option value="Clostridium beijerinckii">Clostridium beijerinckii</option>
+            <option value="Clostridium botulinum">Clostridium botulinum</option>
+            <option value="Clostridium perfringens">Clostridium perfringens</option>
+            <option value="Clostridium sporogenes">Clostridium sporogenes</option>
+            <option value="Corynebacterium diphtheriae">Corynebacterium diphtheriae</option>
+            <option value="Cronobacter sakazakii">Cronobacter sakazakii</option>
+            <option value="Cutibacterium acnes">Cutibacterium acnes</option>
+            <option value="Enterobacter asburiae">Enterobacter asburiae</option>
+            <option value="Enterobacter cloacae">Enterobacter cloacae</option>
+            <option value="Enterobacter hormaechei">Enterobacter hormaechei</option>
+            <option value="Enterococcus faecalis">Enterococcus faecalis</option>
+            <option value="Enterococcus faecium">Enterococcus faecium</option>
+            <option value="Enterococcus hirae">Enterococcus hirae</option>
+            <option value="Escherichia albertii">Escherichia albertii</option>
+            <option value="Escherichia coli">Escherichia coli</option>
+            <option value="Flavobacteriaceae bacterium">Flavobacteriaceae bacterium</option>
+            <option value="Flavobacterium psychrophilum">Flavobacterium psychrophilum</option>
+            <option value="Francisella tularensis">Francisella tularensis</option>
+            <option value="Haemophilus influenzae">Haemophilus influenzae</option>
+            <option value="Helicobacter pylori">Helicobacter pylori</option>
+            <option value="Klebsiella aerogenes">Klebsiella aerogenes</option>
+            <option value="Klebsiella pneumoniae">Klebsiella pneumoniae</option>
+            <option value="Klebsiella quasipneumoniae">Klebsiella quasipneumoniae</option>
+            <option value="Klebsiella variicola">Klebsiella variicola</option>
+            <option value="Lachnospiraceae bacterium">Lachnospiraceae bacterium</option>
+            <option value="Lacticaseibacillus paracasei">Lacticaseibacillus paracasei</option>
+            <option value="Lactiplantibacillus plantarum">Lactiplantibacillus plantarum</option>
+            <option value="Lactobacillus rhamnosus">Lactobacillus rhamnosus</option>
+            <option value="Lactococcus lactis">Lactococcus lactis</option>
+            <option value="Legionella pneumophila">Legionella pneumophila</option>
+            <option value="Leptospira interrogans">Leptospira interrogans</option>
+            <option value="Listeria innocua">Listeria innocua</option>
+            <option value="Listeria monocytogenes">Listeria monocytogenes</option>
+            <option value="Listeria seeligeri">Listeria seeligeri</option>
+            <option value="Listeria welshimeri">Listeria welshimeri</option>
+            <option value="Moraxella catarrhalis">Moraxella catarrhalis</option>
+            <option value="Mycobacterium avium">Mycobacterium avium</option>
+            <option value="Mycobacterium tuberculosis">Mycobacterium tuberculosis</option>
+            <option value="Mycobacteroides abscessus">Mycobacteroides abscessus</option>
+            <option value="Mycoplasma bovis">Mycoplasma bovis</option>
+            <option value="Neisseria gonorrhoeae">Neisseria gonorrhoeae</option>
+            <option value="Neisseria meningitidis">Neisseria meningitidis</option>
+            <option value="Oenococcus oeni">Oenococcus oeni</option>
+            <option value="Pasteurella multocida">Pasteurella multocida</option>
+            <option value="Pediococcus acidilactici">Pediococcus acidilactici</option>
+            <option value="Proteus mirabilis">Proteus mirabilis</option>
+            <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa</option>
+            <option value="Pseudomonas syringae">Pseudomonas syringae</option>
+            <option value="Pseudomonas viridiflava">Pseudomonas viridiflava</option>
+            <option value="Rhizobium leguminosarum">Rhizobium leguminosarum</option>
+            <option value="Rhodobacteraceae bacterium">Rhodobacteraceae bacterium</option>
+            <option value="Rhodococcus hoagii">Rhodococcus hoagii</option>
+            <option value="Ruegeria conchae">Ruegeria conchae</option>
+            <option value="Salmonella enterica">Salmonella enterica</option>
+            <option value="Serratia marcescens">Serratia marcescens</option>
+            <option value="Shigella boydii">Shigella boydii</option>
+            <option value="Shigella dysenteriae">Shigella dysenteriae</option>
+            <option value="Shigella flexneri">Shigella flexneri</option>
+            <option value="Shigella sonnei">Shigella sonnei</option>
+            <option value="Sinorhizobium meliloti">Sinorhizobium meliloti</option>
+            <option value="Staphylococcus aureus">Staphylococcus aureus</option>
+            <option value="Staphylococcus epidermidis">Staphylococcus epidermidis</option>
+            <option value="Staphylococcus haemolyticus">Staphylococcus haemolyticus</option>
+            <option value="Staphylococcus pseudintermedius">Staphylococcus pseudintermedius</option>
+            <option value="Stenotrophomonas maltophilia">Stenotrophomonas maltophilia</option>
+            <option value="Streptococcus agalactiae">Streptococcus agalactiae</option>
+            <option value="Streptococcus equi">Streptococcus equi</option>
+            <option value="Streptococcus mitis">Streptococcus mitis</option>
+            <option value="Streptococcus mutans">Streptococcus mutans</option>
+            <option value="Streptococcus pneumoniae">Streptococcus pneumoniae</option>
+            <option value="Streptococcus pyogenes">Streptococcus pyogenes</option>
+            <option value="Streptococcus suis">Streptococcus suis</option>
+            <option value="Turicibacter sanguinis">Turicibacter sanguinis</option>
+            <option value="Vibrio cholerae">Vibrio cholerae</option>
+            <option value="Vibrio parahaemolyticus">Vibrio parahaemolyticus</option>
+            <option value="Vibrio vulnificus">Vibrio vulnificus</option>
+            <option value="Xanthomonas campestris">Xanthomonas campestris</option>
+            <option value="Xanthomonas citri">Xanthomonas citri</option>
+            <option value="Xanthomonas oryzae">Xanthomonas oryzae</option>
+            <option value="Xanthomonas phaseoli">Xanthomonas phaseoli</option>
+            <option value="Yersinia enterocolitica">Yersinia enterocolitica</option>
+            <option value="Yersinia pestis">Yersinia pestis</option>
+            <option value="Yersinia pseudotuberculosis">Yersinia pseudotuberculosis</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data format="json" name="assembly_info" from_work_dir="output/assembly_info.json" label="Proksee assembly information" />
+        <data format="fasta" name="contigs" from_work_dir="output/contigs.fasta" label="Proksee assembly contigs" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="forward_reads" value="R1.fastq"/>
+            <param name="reverse_reads" value="R2.fastq"/>
+            <param name="species" value="Staphylococcus aureus"/>
+            <param name="platform" value="Illumina"/>
+            <output name="assembly_info">
+                <assert_contents>
+                    <has_text_matching expression="FAIL: The assembly length is smaller than expected: 96337."/>
+                    <has_text_matching expression="The probability of the assembly being a good assembly is: 0.03."/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Proksee Assemble
+================
+
+Proksee is a suite of command line tools for performing genome assembly, evaluation, annotation, and visualization of microbial genomes. Proksee is developed as a collaboration between the Public Health Agency of Canada, the University of Manitoba, and the University of Alberta.
+
+Proksee Assemble is a tool for assembling bacterial genomes from NGS reads and provides an analysis of the assembly. The analysis includes a heuristic-based evaluation, which checks to see if a variety of assembly metrics (N50, L50, length, etc.) individually fall within a range of values derived from publically-available reference assemblies of the same species. Similarly, the Proksee Assemble evaluation includes a machine learning-based, which considers a variety of assembly metrics in unison reports a probability that the Proksee-produced assembly is similar to publically-available reference assemblies of the same species.
+
+    ]]></help>
+</tool>
+
