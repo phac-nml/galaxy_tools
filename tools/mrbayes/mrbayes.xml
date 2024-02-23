@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <tool id="mrbayes" name="MrBayes" version="1.0.2">
     <description>with options and commands</description>
+    <xrefs>
+        <xref type="bio.tools">mrbayes</xref>
+    </xrefs>
     <requirements>
         <requirement type="package" version="3.2.6">mrbayes</requirement>
     </requirements>
