@@ -5,6 +5,9 @@
   <macros>
    <token name="@VERSION@">1.0</token>
   </macros>
+  <xrefs>
+    <xref type="bio.tools">cryptogenotyper</xref>
+  </xrefs>
   <requirements>
     <requirement type="package" version ="@VERSION@">cryptogenotyper</requirement>
   </requirements>
