@@ -2,7 +2,8 @@
   <description>Type contigs and extract plasmid sequences</description>
   <macros>
     <import>macros.xml</import>
-  </macros>  
+  </macros>
+  <expand macro="bio_tools"/>
   <expand macro="requirements" />
   <version_command>mob_recon --version</version_command>
   <command detect_errors="exit_code">
