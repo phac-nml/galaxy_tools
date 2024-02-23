@@ -2,3 +2,5 @@ categories: [Sequence Analysis]
 description: A program for the Bayesian estimation of phylogeny.
 name: mrbayes
 owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/tools/mrbayes
+homepage_url: http://nbisweden.github.io/MrBayes/
