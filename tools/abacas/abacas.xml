@@ -1,5 +1,8 @@
 <tool id="abacas" name="abacas contig ordering" version="1.1">
 	<description>Order and Orientate Contigs </description>
+	<xrefs>
+    		<xref type="bio.tools">abacas</xref>
+	</xrefs>
 	<requirements>
 		<requirement type="package" version="3.23">mummer</requirement>
 		<requirement type="package" version="5.26.2">perl</requirement>
