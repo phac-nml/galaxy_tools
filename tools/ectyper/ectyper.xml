@@ -1,5 +1,8 @@
 <tool id="ectyper" name="ectyper" version="1.0.0">
   <description>ectyper is a standalone serotyping module for Escherichia coli. It supports fasta and fastq file formats.</description>
+  <xrefs>
+    <xref type="bio.tools">ectyper</xref>
+  </xrefs>
   <requirements>
      <requirement type="package" version="1.0.0">ectyper</requirement>
   </requirements>
