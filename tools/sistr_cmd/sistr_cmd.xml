@@ -5,9 +5,9 @@
   <macros>
      <token name="@VERSION@">1.1.1</token>
   </macros>
-      <xrefs>
-        <xref type="bio.tools">SISTR</xref>
-      </xrefs>
+  <xrefs>
+      <xref type="bio.tools">SISTR</xref>
+  </xrefs>
   <requirements>
     <requirement type="package" version="@VERSION@">sistr_cmd</requirement>
   </requirements>
