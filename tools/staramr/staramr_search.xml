@@ -3,6 +3,9 @@
     <macros>
         <token name="@VERSION@">0.10.0</token>
     </macros>
+    <xrefs>
+        <xref type="bio.tools">staramr</xref>
+    </xrefs>
     <requirements>
         <requirement type="package" version="@VERSION@">staramr</requirement>
 	<!-- The staramr conda package includes the mlst software, but the list of schemes 
