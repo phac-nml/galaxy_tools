@@ -196,7 +196,7 @@
       <output name="output_prediction_tab" 
         ftype="tabular"
         value="sistr-results-AE014613-699860.tabular"
-        compare="sim_size">
+        compare="sim_size"> 
         <assert_contents>
           <has_text text="AE014613-699860" />
           <has_text text="Typhi" />
