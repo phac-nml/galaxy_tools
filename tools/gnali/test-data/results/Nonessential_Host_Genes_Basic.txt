@@ -1,2 +1,0 @@
-HGNC_Symbol
-CCR5
