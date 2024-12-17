@@ -99,7 +99,8 @@
           <option selected="true" value="default">Use the default list</option>
           <option value="custom">Use a custom list</option>
         </param>
-        <when value="defaults" />
+        <when value="none"/>
+        <when value="default"/>
         <when value="custom">
           <param name="custom_list_of_serovars_file" type="data" format="text" optional="true" label="Custom list of serovars (optional)" 
         help="if no file selected, the default one is used available at https://raw.githubusercontent.com/phac-nml/sistr_cmd/177a6dac8148dcb043ab7b344d8c8412aa45c881/sistr/data/serovar-list.txt"
