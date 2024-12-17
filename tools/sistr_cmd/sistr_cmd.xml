@@ -150,28 +150,28 @@
     <data 
       name="output_prediction_csv" 
       format="csv" 
-      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report"
+      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report (csv)"
       from_work_dir="sistr-report.csv">
       <filter>output_format == "csv"</filter>
     </data>
     <data 
       name="output_prediction_json" 
       format="json" 
-      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report"
+      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report (json)"
       from_work_dir="sistr-report.json">
       <filter>output_format == "json"</filter>
     </data>
     <data 
       name="output_prediction_tab" 
       format="tabular" 
-      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report"
+      label="${tool.name} on ${input_fastas[0].element_identifier}: Main Report (tab)"
       from_work_dir="sistr-report.tab">
       <filter>output_format == "tab"</filter>
     </data>
     <data 
       name="cgmlst_profiles" 
       format="csv" 
-      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (CSV)" />
+      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (csv)" />
     <data
       name="novel_alleles"
       format="fasta" 
@@ -179,10 +179,10 @@
     <data 
       name="alleles_output"
       format="json"
-      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (JSON)" />
+      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (csv)" />
   </outputs>
   <tests>
-    <test>
+    <test expect_num_outputs="4">
       <param name="input_fastas" value="AE014613-699860.fasta" ftype="fasta"/>
       <param name="output_format" value="tab"/>
       <param name="check_against_list_of_serovars" value="false"/>
@@ -218,7 +218,7 @@
         </assert_contents> 
       </output>
     </test>
-    <test>
+    <test expect_num_outputs="4">
       <param name="input_fastas" value="13-1101-Paratyphi_B_varJava.fasta" ftype="fasta"/>
       <param name="output_format" value="tab"/>
       <output 
