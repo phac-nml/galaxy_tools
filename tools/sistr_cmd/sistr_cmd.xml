@@ -26,11 +26,10 @@
     $no_cgmlst
     $run_mash
     $qc
-    #if $serovar_list.check_against_list_of_serovars == "true"
+    #if $serovar_list.selection_mode == "default"
       --list-of-serovars
-      #if $serovar_list.custom_list_of_serovars_file
-        $serovar_list.custom_list_of_serovars_file
-      #end if
+    #elif  $serovar_list.selection_mode == "custom"
+      --list-of-serovars  $serovar_list.custom_list_of_serovars_file
     #end if
     --threads "\${GALAXY_SLOTS:-1}"
     -T "\${TMPDIR:-/tmp}"
@@ -95,16 +94,17 @@
       label="Basic QC of results"
     />
     <conditional name="serovar_list">
-      <param name="check_against_list_of_serovars" type="boolean" checked="true" 
-        truevalue="true" falsevalue="false" label="Check predicted SISTR serovar against the list of serovars"
-         />
-      <when value="true">
-        <param name="custom_list_of_serovars_file" type="data" format="text" optional="true" label="Custom list of serovars (optional)" 
+        <param label="Check predicted SISTR serovar against the list of serovars?" name="selection_mode" type="select">
+          <option value="none">Not selected</option>
+          <option selected="true" value="default">Use the default list</option>
+          <option value="custom">Use a custom list</option>
+        </param>
+        <when value="defaults" />
+        <when value="custom">
+          <param name="custom_list_of_serovars_file" type="data" format="text" optional="true" label="Custom list of serovars (optional)" 
         help="if no file selected, the default one is used available at https://raw.githubusercontent.com/phac-nml/sistr_cmd/177a6dac8148dcb043ab7b344d8c8412aa45c881/sistr/data/serovar-list.txt"
         />
-      </when>
-      <when value="false">
-      </when>  
+        </when>
     </conditional>
     <param 
       name="more_output"
@@ -175,7 +175,7 @@
     <data
       name="novel_alleles"
       format="fasta" 
-      label="${tool.name} on ${input_fastas[0].element_identifier}: Novel cgMLST alleles" />
+      label="${tool.name} on ${input_fastas[0].element_identifier}: Novel cgMLST alleles (fasta)" />
     <data 
       name="alleles_output"
       format="json"
@@ -185,7 +185,7 @@
     <test expect_num_outputs="4">
       <param name="input_fastas" value="AE014613-699860.fasta" ftype="fasta"/>
       <param name="output_format" value="tab"/>
-      <param name="check_against_list_of_serovars" value="false"/>
+      <param name="selection_mode" value="none"/>
       <output 
         name="cgmlst_profiles" 
         value="cgmlst-profiles-AE014613.csv"
@@ -243,7 +243,7 @@
           <has_text text="enterica"/>
           <has_text text="1,4,[5],12"/>
           <has_text text="1,4,[5],12:b:1,2"/>
-          <has_text text="PASS"/>
+          <has_text text="FAIL"/>
           <has_text text="Y"/>
           <has_n_columns n="24"/>
         </assert_contents>
