@@ -179,7 +179,7 @@
     <data 
       name="alleles_output"
       format="json"
-      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (csv)" />
+      label="${tool.name} on ${input_fastas[0].element_identifier}: cgMLST allele match results (json)" />
   </outputs>
   <tests>
     <test expect_num_outputs="4">
