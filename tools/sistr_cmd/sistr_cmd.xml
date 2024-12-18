@@ -166,7 +166,7 @@
       label="cgMLST allele match results" />
   </outputs>
   <tests>
-    <test>
+    <test expect_num_outputs="4">
       <param name="input_fastas" value="AE014613-699860.fasta" ftype="fasta"/>
       <param name="output_format" value="tab"/>
       <output 
@@ -201,7 +201,7 @@
         </assert_contents> 
       </output>
     </test>
-    <test>
+    <test expect_num_outputs="4">
       <param name="input_fastas" value="13-1101-Paratyphi_B.fasta" ftype="fasta"/>
       <param name="output_format" value="tab"/>
       <output 
