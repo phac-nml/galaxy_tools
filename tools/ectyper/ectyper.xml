@@ -1,5 +1,8 @@
 <tool id="ectyper" name="ectyper" version="@VERSION@+galaxy0">
   <description>ectyper is a standalone serotyping module for Escherichia coli. It supports fasta and fastq file formats.</description>
+  <xrefs>
+    <xref type="bio.tools">ectyper</xref>
+  </xrefs>
   <macros>
         <token name="@VERSION@">2.0.0</token>
   </macros>
@@ -104,7 +107,7 @@
       <param name="input" value="Escherichia2.fastq"/>
       <output name="output_result" ftype="tabular" >
           <assert_contents>
-              <has_text_matching expression="O22"/>
+              <has_text text="O22"/>
          </assert_contents>
       </output>
     </test>
@@ -112,10 +115,10 @@
       <param name="input" value="Escherichia1.fasta"/>
       <output name="output_result" ftype="tabular" >
           <assert_contents>
-              <has_text_matching expression="O103:H2"/>
-              <has_text_matching expression="EHEC-STEC"/>
-              <has_text_matching expression="stx1a;stx2a"/>
-              <has_text_matching expression="eae,ehxA,hlyE,stx1,stx2"/>  
+              <has_text text="O103:H2"/>
+              <has_text text="EHEC-STEC"/>
+              <has_text text="stx1a;stx2a"/>
+              <has_text text="eae,ehxA,hlyE,stx1,stx2"/>  
          </assert_contents>
       </output>
     </test>
