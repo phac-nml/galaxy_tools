@@ -1,8 +1,12 @@
-<tool id="smalt" name="smalt" version="1.0.0" >
+<tool id="smalt" name="smalt" version="@VERSION@+galaxy1">
     <description>Map query reads (FASTA/FASTQ) format onto the reference sequences</description>
+    <macros>
+      <token name="@VERSION@">0.7.6</token>
+      <token name="@INPUT_TYPES@">fastq,fastq.gz,fastqsanger,fastqsanger.gz</token>
+    </macros>
     <requirements>
-      <requirement type="package" version="0.7.6">smalt</requirement>
-      <requirement type="package" version="1.5">samtools</requirement>
+      <requirement type="package" version="@VERSION@">smalt</requirement>
+      <requirement type="package" version="1.10">samtools</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:"   level="fatal"   description="Unknown error" />
@@ -132,11 +136,11 @@
                 <option value="collections">Paired-end Collections</option>
             </param>
             <when value="single">
-                <param name="sInput1" type="data" format="fastq" label="Single end illumina fastq file" optional="false"/>
+                <param name="sInput1" type="data" format="@INPUT_TYPES@" label="Single end illumina fastq file" optional="false"/>
             </when>
             <when value="paired">
-                <param name="pInput1" type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa" label="Forward FASTQ file" help="Must have ASCII encoded quality scores"/>
-                <param name="pInput2" type="data" format="fastq,fastqsanger,fastqillumina,fastqsolexa" label="Reverse FASTQ file" help="File format must match the Forward FASTQ file"/>
+                <param name="pInput1" type="data" format="@INPUT_TYPES@" label="Forward FASTQ file" help="Must have ASCII encoded quality scores"/>
+                <param name="pInput2" type="data" format="@INPUT_TYPES@" label="Reverse FASTQ file" help="File format must match the Forward FASTQ file"/>
                 <param name="pairtype" type="select" label="Pair Type" help="Type of read pair library">
                   <option value="pe">Illumina paired-end (short inserts)</option>
                   <option value="mp">Illumina mate-pair library (long inserts)</option>
@@ -144,7 +148,7 @@
                 </param>
             </when>
             <when value="collections">
-                <param name="fastq_collection" type="data_collection" label="Paired-end Fastq collection" help="" optional="false" format="txt" collection_type="paired" />
+                <param name="fastq_collection" type="data_collection" label="Paired-end Fastq collection" help="" optional="false" format="@INPUT_TYPES@" collection_type="paired" />
                 <param name="pairtype" type="select" label="Pair Type" help="Type of read pair library">
                   <option value="pe">Illumina paired-end (short inserts)</option>
                   <option value="mp">Illumina mate-pair library (long inserts)</option>
@@ -230,6 +234,20 @@
           </assert_contents>
         </output>        
       </test>
+      <test>
+        <param name="sPaired" value="paired"/>
+        <param name="pInput1" value="ecoli_1K_1.fq.gz"/>
+        <param name="pInput2" value="ecoli_1K_2.fq.gz"/>
+        <param name="pairtype" value="pe"/>
+        <param name="source" value="history"/>
+        <param name="reference" value="contigs.fasta"/>
+        <param name="outformat" value="sam"/>
+        <output name="output">
+          <assert_contents>
+            <has_text text="SN:NODE_1_length_1000_cov_140.620106" />
+          </assert_contents>
+        </output>        
+      </test>
     </tests>
     <help>
 
@@ -247,18 +265,18 @@ SMALT is a pairwise sequence alignment program for the experimentingcient mappin
 
 There is no such thing (yet) as an automated gearshift in short read mapping. It is all like stick-shift driving in San Francisco. In other words = running this tool with default parameters will probably not give you meaningful results. A way to deal with this is to **understand** the parameters by carefully reading the `documentation`__ and experimenting. Fortunately, Galaxy makes experimenting easy.
 
- .. __: http://www.sanger.ac.uk/resources/software/smalt/
+ .. __: https://www.sanger.ac.uk/tool/smalt-0/
 
 ------
 
 **Input formats**
 
-SMALT accepts files in Sanger FASTQ format (galaxy type *fastqsanger*). Use the FASTQ Groomer to prepare your files.
+SMALT accepts files in Sanger FASTQ format (galaxy type *fastqsanger* or *fastqsanger.gz*). Use the FASTQ Groomer to prepare your files.
 
 ------
 
 
-Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
+Please cite the website "https://www.sanger.ac.uk/tool/smalt-0/".
 
 ------
 
@@ -367,4 +385,15 @@ Please cite the website "http://www.sanger.ac.uk/resources/software/smalt/".
      &#060;minid&#062; specifies the number of exactly matching nucleotides either as
      a positive integer or as a fraction of the read length (&#060;= 1.0).
     </help>
+    <citations>
+        <citation type="bibtex">
+            @misc{smaltcitation,
+              author = {Ponstigl, Hannes},
+              year = {2010},
+              title = {smalt},
+              publisher = {Wellcome Trust Sanger Institute, Cambridge, UK},
+              journal = {Online},
+              url = {https://www.sanger.ac.uk/tool/smalt-0/}
+       }</citation>
+    </citations>
 </tool>

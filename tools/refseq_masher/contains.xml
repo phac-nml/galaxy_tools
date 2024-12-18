@@ -3,7 +3,7 @@
     Find NCBI RefSeq Genomes contained in your sequences
   </description>
   <requirements>
-    <requirement type="package" version="0.1.1">refseq_masher</requirement>
+    <requirement type="package" version="0.1.2">refseq_masher</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -157,10 +157,11 @@ refseq_masher
         <param name="min_identity" value="0.9"/>
         <param name="max_pvalue" value="0.01"/>
       </section>
-      <output name="output_path_tab"
-        value="SRR1203042_1-head4000-contains.tab"
-        ftype="tabular"
-        lines_diff="0">
+      <output name="output_path_tab" ftype="tabular">
+        <assert_contents>
+          <has_n_columns n="24" />
+          <has_n_lines n="6" />
+        </assert_contents>
       </output>
     </test>
   </tests>
