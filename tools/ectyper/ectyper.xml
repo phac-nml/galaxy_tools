@@ -79,7 +79,7 @@
     </data>
   </outputs>
   <tests>
-    <test>
+    <test expect_num_outputs="1">
       <param name="input" value="Escherichia2.fastq"/>
       <assert_stderr>
             <has_text text="O22"/> 
