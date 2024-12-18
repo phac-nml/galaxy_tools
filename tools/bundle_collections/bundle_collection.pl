@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
@@ -52,57 +52,60 @@ my $num_vals = scalar(@args);
 
 printf $out "<!DOCTYPE html>
 <html>
-<style type=\"text/css\">
+<head>
+  <style type=\"text/css\">
+  
+  body {
+          font-family: sans-serif;
+          color: #000;
+          }
+  
+  table {
+          margin-left: 3em;
+          text-align: center;
+          }
+  th {
+          text-align:center;
+          background-color: #000080;
+          color: #FFF;
+          padding: 0.4em;
+          }
+  td {
+          font-family: monospace;
+          text-align: left;
+          background-color: #EEE;
+          color: #000;
+          padding: 0.4em;
+          }
+  h2 {
+          color: #800000;
+          padding-bottom: 0;
+          margin-bottom: 0;
+          clear: left;
+          }
+  </style>
+</head>
 
-body {
-        font-family: sans-serif;
-        color: #000;
-        }
+<body>
 
-table {
-        margin-left: 3em;
-        text-align: center;
-        }
-th {
-        text-align:center;
-        background-color: #000080;
-        color: #FFF;
-        padding: 0.4em;
-        }
-td {
-        font-family: monospace;
-        text-align: left;
-        background-color: #EEE;
-        color: #000;
-        padding: 0.4em;
-        }
-h2 {
-        color: #800000;
-        padding-bottom: 0;
-        margin-bottom: 0;
-        clear: left;
-        }
-</style></head>
+  <h2 id=\"M0\">Bundle Collection Summary</h2><br><br>
 
-  <body>
+  Number of keys: $num_keys<br>
+  Number of values: $num_vals<br><br> 
 
-<h2 id=\"M0\">Bundle Collection Summary</h2><br><br>
-
-Number of keys: $num_keys<br>
-Number of values: $num_vals<br><br> 
-
-<table border=\"1\"><tr><th>File name</th><th>File type</th></tr>";
+  <table border=\"1\">
+    <tr><th>File name</th><th>File type</th></tr>\n";
 
 foreach my $key (sort(keys %information))
 {
 
 	foreach my $val (keys %{$information{$key}} )
 	{
-		printf $out "<tr><td>$key</td><td>$val</td></tr>";
+		printf $out "    <tr><td>$key</td><td>$val</td></tr>\n";
 	}
 }
 
-printf $out "</table></body></html>";
+printf $out "  </table>\n</body>\n</html>";
 
 close $out;
 
@@ -114,7 +117,7 @@ __END__
 
 =head1 SYNOPSIS
 
-	bundle_collection.pl -h html_file -p output_path -o "key=value"
+	bundle_collection.pl -h html_file -p output_path -i "key=value"
 
 =back
 =cut

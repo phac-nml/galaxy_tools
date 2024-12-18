@@ -1,8 +1,9 @@
-<tool id="quality" name="Quality control" version="0.7.0">
+<tool id="quality" name="Quality control" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Performs quality control on FASTQ reads.</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         quasitools quality
@@ -167,14 +168,5 @@ Quality Control
 ===============
 
 Perform quality control on FASTQ reads.]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolsquality,
-			title = {quasitools quality},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

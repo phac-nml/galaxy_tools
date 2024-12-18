@@ -3,7 +3,7 @@
     Find closest matching NCBI RefSeq Genomes to your sequences
   </description>
   <requirements>
-    <requirement type="package" version="0.1.1">refseq_masher</requirement>
+    <requirement type="package" version="0.1.2">refseq_masher</requirement>
   </requirements>
   <command detect_errors="exit_code">
 <![CDATA[
@@ -168,10 +168,11 @@ refseq_masher
         <param name="output_type" value="tab"/>
         <param name="min_kmer_threshold" value="2"/>
       </section>
-      <output name="output_path_tab"
-        value="SRR1203042_1-head4000-refseq_masher-matches-m2.tab"
-        ftype="tabular"
-        lines_diff="0">
+      <output name="output_path_tab" ftype="tabular">
+        <assert_contents>
+          <has_n_columns n="22" />
+          <has_n_lines n="2" />
+        </assert_contents>
       </output>
     </test>
   </tests>
