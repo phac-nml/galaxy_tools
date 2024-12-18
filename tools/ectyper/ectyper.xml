@@ -50,8 +50,8 @@
 
   #if $adv_param.pathotype
     --pathotype
-    -pathpid $adv_param.pathpid
-    -pathpcov $adv_param.pathpcov 
+    -pathpid $adv_param.pathotype_adv_param.pathpid
+    -pathpcov $adv_param.pathotype_adv_param.pathpcov 
   #end if
 
   #if $adv_param.db_input
@@ -81,9 +81,11 @@
       <param name="logging" type="boolean" checked="false"  label="Include log file in the run outputs?" />
       <param name="mash_input" type="data" optional="true" format="binary" label="Mash genome sketches (Optional)" help="Optionally provide custom MASH genome sketch to help with species identification (otherwise default RefSeq sketch is used)"/>
       <param name="pathotype" type="boolean" checked="true" label="Enable E.coli pathotyping and Shiga toxin (stx) subtyping (Recommended)"/>
-      <param name="pathpid" label="Minimum %identity required for a pathotype/toxin database reference allele match" type="integer" value="90" min="1" max="100"/>
-      <param name="pathpcov" label="Minimum %coverage required for a pathotype/toxin database reference allele match" type="integer" value="50" min="1" max="100"/>
-      <param name="longreadsmode" type="boolean" checked="false" label="Enable long read mapping mode. (Optional)" help="Enable this mode if no typing results are obtained"/>
+      <section name="pathotype_adv_param" title="Advanced parameters (pathoyping and shiga toxin subtyping)" expanded="False"> 
+        <param name="pathpid" label="Minimum %identity required for a pathotype/toxin database reference allele match" type="integer" value="90" min="1" max="100"/>
+        <param name="pathpcov" label="Minimum %coverage required for a pathotype/toxin database reference allele match" type="integer" value="50" min="1" max="100"/>
+      </section>
+      <param name="longreadsmode" type="boolean" checked="false" label="Enable long read mapping mode (Optional)" help="Enable this mode if no typing results are obtained"/>
       <param name="db_input" type="data" optional="true" format="json" label="Custom database of O and H antigen alleles (Optional)" help="Optionally provide custom database of alleles in JSON format"/>
       <param name="debugmode" type="boolean" checked="false" label="Enable debug mode with high log messages verbosity"/>
     </section>
@@ -100,13 +102,20 @@
   <tests>
     <test expect_num_outputs="1">
       <param name="input" value="Escherichia2.fastq"/>
-      <assert_stderr>
-            <has_text text="O22"/> 
-            <has_text text="H8"/> 
-      </assert_stderr>
       <output name="output_result" ftype="tabular" >
           <assert_contents>
               <has_text_matching expression="O22"/>
+         </assert_contents>
+      </output>
+    </test>
+    <test expect_num_outputs="1">
+      <param name="input" value="Escherichia1.fasta"/>
+      <output name="output_result" ftype="tabular" >
+          <assert_contents>
+              <has_text_matching expression="O103:H2"/>
+              <has_text_matching expression="EHEC-STEC"/>
+              <has_text_matching expression="stx1a;stx2a"/>
+              <has_text_matching expression="eae,ehxA,hlyE,stx1,stx2"/>  
          </assert_contents>
       </output>
     </test>
