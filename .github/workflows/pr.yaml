@@ -108,7 +108,7 @@ jobs:
     name: Lint tool-list
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' || needs.setup.outputs.tool-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -274,7 +274,7 @@ jobs:
     name: Test tools
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -340,7 +340,7 @@ jobs:
     name: Combine chunked test results
     needs: [setup, test]
     if: ${{ always() && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ['3.7']
@@ -384,7 +384,7 @@ jobs:
     name: Deploy
     needs: [setup, lint, combine_outputs]
     if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'phac-nml' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ['3.7']
