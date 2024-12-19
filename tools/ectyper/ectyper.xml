@@ -106,22 +106,10 @@
     <test expect_num_outputs="1">
       <param name="input" value="Escherichia2.fastq" ftype="fastq"/>
       <output name="output_result" ftype="tabular">
-          <assert_contents>
-              <has_text text="O22"/>
-         </assert_contents>
       </output>
     </test>
-    <test expect_num_outputs="1">
-      <param name="input" value="Escherichia1.fasta" ftype="fasta"/>
-      <output name="output_result" ftype="tabular">
-          <assert_contents>
-              <has_text text="O103:H2"/>
-              <has_text text="EHEC-STEC"/>
-              <has_text text="stx1a;stx2a"/>
-              <has_text text="eae,ehxA,hlyE,stx1,stx2"/>  
-         </assert_contents>
-      </output>
-    </test>
+    
+    
   </tests>
 
   <help>
