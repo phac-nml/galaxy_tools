@@ -191,7 +191,7 @@
         name="cgmlst_profiles" 
         value="cgmlst-profiles-AE014613.csv"
         ftype="csv"
-        compare="sim_size">
+        compare="diff">
       </output>
       <output name="output_prediction_tab" 
         ftype="tabular"
@@ -231,7 +231,7 @@
         name="cgmlst_profiles" 
         value="cgmlst-profiles-13-1101.csv"
         ftype="csv"
-        compare="sim_size">
+        compare="diff">
       </output>
       <output 
         name="output_prediction_tab" 
