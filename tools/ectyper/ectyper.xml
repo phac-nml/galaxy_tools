@@ -106,11 +106,11 @@
     <test expect_num_outputs="1">
       <param name="input" value="Escherichia2.fastq" ftype="fastq"/>
       <output name="output_result" ftype="tabular">
-      </output>
         <assert_stderr>
             <has_text text="O22"/> 
             <has_text text="H8"/> 
         </assert_stderr>
+      </output>  
       <output name="output_result" ftype="tabular" >
           <assert_contents>
               <has_text_matching expression="O22"/>
