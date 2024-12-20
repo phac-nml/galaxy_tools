@@ -103,7 +103,7 @@
         <when value="default"/>
         <when value="custom">
           <param name="custom_list_of_serovars_file" type="data" format="text" optional="true" label="Custom list of serovars (optional)" 
-        help="if no file selected, the default one is used available at https://raw.githubusercontent.com/phac-nml/sistr_cmd/master/sistr/data/serovar-list.txt"
+        help="if no file selected, the default one is used available at https://raw.githubusercontent.com/phac-nml/sistr_cmd/v1.1.3/sistr/data/serovar-list.txt"
         />
         </when>
     </conditional>
