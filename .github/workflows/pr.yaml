@@ -36,7 +36,7 @@ jobs:
   # which are needed in subsequent steps.
   setup:
     name: Setup cache and determine changed repositories
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       galaxy-head-sha: ${{ steps.get-galaxy-sha.outputs.galaxy-head-sha }}
       repository-list: ${{ steps.discover.outputs.repository-list }}
@@ -108,7 +108,7 @@ jobs:
     name: Lint tool-list
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' || needs.setup.outputs.tool-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -154,7 +154,7 @@ jobs:
     name: Lint Python scripts
     needs: setup
     if: ${{ github.event_name == 'pull_request' && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -245,7 +245,7 @@ jobs:
     name: Check file sizes
     needs: setup
     if: ${{ github.event_name == 'pull_request' && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
       with:
@@ -274,7 +274,7 @@ jobs:
     name: Test tools
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -340,7 +340,7 @@ jobs:
     name: Combine chunked test results
     needs: [setup, test]
     if: ${{ always() && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ['3.7']
@@ -384,7 +384,7 @@ jobs:
     name: Deploy
     needs: [setup, lint, combine_outputs]
     if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'phac-nml' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ['3.7']
@@ -421,7 +421,7 @@ jobs:
     name: Report deploy status
     needs: [deploy]
     if: ${{ always() && needs.deploy.result != 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'phac-nml' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     # report to the PR if deployment failed
     - name: Get PR object
@@ -443,7 +443,7 @@ jobs:
     name: Check workflow success
     needs: [setup, lint, flake8, lintr, file_sizes, combine_outputs]
     if: ${{ always() && github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: Check tool lint status
       if: ${{ needs.lint.result != 'success' && needs.flake8.result != 'skipped' }}
