@@ -2,4 +2,6 @@ categories: ["Sequence Analysis"]
 description: SISTR in silico serotyping tool
 name: sistr_cmd
 owner: nml
+long_description: Salmonella In Silico Typing Resource (SISTR) command-line tool for serovar prediction
+remote_repository_url: https://github.com/phac-nml/sistr_cmd
 homepage_url: https://github.com/phac-nml/sistr_cmd
