@@ -3,6 +3,7 @@
   <macros>
     <import>macros.xml</import>
   </macros>
+  <expand macro="bio_tools"/>
   <expand macro="requirements"/>
   <version_command>mob_typer --version</version_command>
   <command detect_errors="exit_code">
@@ -114,7 +115,7 @@
 
 **Syntax**
 
-This tool provides *in-silico* predictions on plasmid typing including identification of replicon, relaxase and mate-pair formation protein types. MOB-typer also predicts mobility of a plasmid (Conjugative, Mobilizable, Non-mobilizable). Do not include multiple unrelated plasmids in the input FASTA file as they will be treated as a single plasmid.
+This tool provides *in silico* predictions on plasmid typing including identification of replicon, relaxase and mate-pair formation protein types. MOB-typer also predicts mobility of a plasmid (Conjugative, Mobilizable, Non-mobilizable). Do not include multiple unrelated plasmids in the input FASTA file as they will be treated as a single plasmid.
 
 For more information please visit https://github.com/phac-nml/mob-suite/. 
 

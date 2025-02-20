@@ -1,5 +1,10 @@
 <macros>
-  <token name="@VERSION@">3.0.3</token>
+  <token name="@VERSION@">3.1.9</token>
+  <xml name="bio_tools">
+    <xrefs>
+      <xref type="bio.tools">mob_suite</xref>
+    </xrefs>
+  </xml>
   <xml name="requirements">
   <requirements>
   <requirement type="package" version ="@VERSION@">mob_suite</requirement>
