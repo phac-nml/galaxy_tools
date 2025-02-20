@@ -56,9 +56,16 @@
    #if $adv_param.plasmid_orit
    --plasmid_orit '$adv_param.plasmid_orit'
    #end if
+
+   #if $adv_param.filter_db
+   --filter_db '$adv_param.filter_db'
+   #end if
+
     --mash_genome_neighbor_threshold '${adv_param.mash_genome_neighbor_threshold}'
     --primary_cluster_dist '${adv_param.primary_cluster_dist}'
     --secondary_cluster_dist '${adv_param.secondary_cluster_dist}'
+    --max_contig_size '${adv_param.max_contig_size}'
+    --max_plasmid_size '${adv_param.max_plasmid_size}'
 
     --min_length '${adv_param.min_length}'  
     --min_rep_evalue '${adv_param.min_rep_evalue}'
@@ -90,30 +97,34 @@
       <param name="mash_genome_neighbor_threshold" label="Mash distance selecting valid closed genomes to filter" type="float"  min="0.00001" max="1" value="0.002" help="(--mash_genome_neighbor_threshold)"/>
       <param name="primary_cluster_dist" label="MASH distance for assigning primary plasmid cluster id" type="float"  min="0.00001" max="1" value="0.06" help="(--primary_cluster_dist)"/>
       <param name="secondary_cluster_dist" label="MASH distance for assigning secondary plasmid cluster id" type="float"  min="0.00001" max="1" value="0.025" help="(--secondary_cluster_dist)"/>
+      <param name="max_contig_size" label="Maximum size of a contig to be considered a plasmid (bp)" type="integer"  min="1" max="1000000" value="450000" help="(--max_contig_size)"/> 
+      <param name="max_plasmid_size" label="Maximum size of a reconstructed plasmid (bp)" type="integer"  min="1" max="1000000" value="450000" help="(--max_plasmid_size)"/> 
       
-      <param name="min_rep_evalue" label="Minimum evalue threshold for replicon blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_mob_evalue" label="Minimum evalue threshold for relaxase tblastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_con_evalue" label="Minimum evalue threshold for contig blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_rpp_evalue" label="Minimum evalue threshold for repetitve elements blastn" type="float"  min="0.00001" max="1" value="0.00001"/>
-      <param name="min_length" label="Minimum length of contigs to classify" type="integer" value="1000"/>
-      <param name="min_rep_ident" label="Minimum sequence identity for replicons" type="integer"  min="0" max="100" value="80"/>
-      <param name="min_mob_ident" label="Minimum sequence identity for relaxases" type="integer"  min="0" max="100" value="80"/>
-      <param name="min_con_ident" label="Minimum sequence identity for contigs" type="integer"  min="0" max="100" value="80"/>
-      <param name="min_rpp_ident" label="Minimum sequence identity for repetitive elements" type="integer"  min="0" max="100" value="80"/>
+      <param name="min_rep_evalue" label="Minimum evalue threshold for replicon blastn" type="float"  min="0.00001" max="1" value="0.00001" help="(--min_rep_evalue)"/>
+      <param name="min_mob_evalue" label="Minimum evalue threshold for relaxase tblastn" type="float"  min="0.00001" max="1" value="0.00001" help="(--min_mob_evalue)"/>
+      <param name="min_con_evalue" label="Minimum evalue threshold for contig blastn" type="float"  min="0.00001" max="1" value="0.00001" help="(--min_con_evalue)"/>
+      <param name="min_rpp_evalue" label="Minimum evalue threshold for repetitve elements blastn" type="float"  min="0.00001" max="1" value="0.00001" help="(--min_rpp_evalue)"/>
+      <param name="min_length" label="Minimum length of contigs to classify (bp)" type="integer" value="1000" help="(--min_length)"/>
+      <param name="min_rep_ident" label="Minimum sequence identity for replicons" type="integer"  min="0" max="100" value="80" help="(--min_rep_ident)"/>
+      <param name="min_mob_ident" label="Minimum sequence identity for relaxases" type="integer"  min="0" max="100" value="80" help="(--min_mob_ident)"/>
+      <param name="min_con_ident" label="Minimum sequence identity for contigs" type="integer"  min="0" max="100" value="80" help="(--min_con_ident)"/>
+      <param name="min_rpp_ident" label="Minimum sequence identity for repetitive elements" type="integer"  min="0" max="100" value="80" help="(--min_rpp_ident)"/>
 
-      <param name="min_rep_cov" label="Minimum percentage coverage of replicon query by input assembly" type="integer"  min="0" max="100" value="80"/>
-      <param name="min_mob_cov" label="Minimum percentage coverage of relaxase query by input assembly" type="integer"  min="0" max="100" value="80"/>
-      <param name="min_con_cov" label="Minimum percentage coverage of assembly contig by the plasmid reference database to be considered" type="integer"  min="0" max="100" value="60"/>
-      <param name="min_rpp_cov" label="Minimum percentage coverage of contigs by repetitive elements" type="integer"  min="0" max="100" value="80"/>
+      <param name="min_rep_cov" label="Minimum percentage coverage of replicon query by input assembly" type="integer"  min="0" max="100" value="80" help="(--min_rep_cov)"/>
+      <param name="min_mob_cov" label="Minimum percentage coverage of relaxase query by input assembly" type="integer"  min="0" max="100" value="80" help="(--min_mob_cov)"/>
+      <param name="min_con_cov" label="Minimum percentage coverage of assembly contig by the plasmid reference database to be considered" type="integer"  min="0" max="100" value="60" help="(--min_con_cov)"/>
+      <param name="min_rpp_cov" label="Minimum percentage coverage of contigs by repetitive elements" type="integer"  min="0" max="100" value="80" help="(--min_rpp_cov)"/>
 
-      <param name="plasmid_db" optional="true" type="data" format="fasta" label="Reference Database of complete plasmids" help=""/>
-      <param name="plasmid_mash_db" optional="true" type="data" format="binary" label="Custom MASH database of plasmids" help="MASH sketch of the reference plasmids database"/>
-      <param name="plasmid_meta" type="data" optional="true" format="text" label="Plasmid cluster metadata file" help=""/>
-      <param name="plasmid_replicons" type="data" optional="true" format="fasta" label="FASTA file with plasmid replicons" help=""/>
-      <param name="repetitive_mask" type="data" optional="true" format="fasta" label="FASTA of known repetitive elements" help=""/>
-      <param name="plasmid_mob" type="data" optional="true" format="fasta" label="FASTA of plasmid relaxases" help=""/>
-      <param name="plasmid_mpf" type="data" optional="true" format="fasta" label="FASTA of known plasmid mate-pair proteins" help=""/>
-      <param name="plasmid_orit" type="data" optional="true" format="fasta" label="FASTA of known plasmid oriT dna sequences" help=""/>
+      <param name="plasmid_db" optional="true" type="data" format="fasta" label="Reference Database of complete plasmids" help="(--plasmid_db)"/>
+      <param name="plasmid_mash_db" optional="true" type="data" format="binary" label="Custom MASH database of plasmids" help="MASH sketch of the reference plasmids database" help="(--plasmid_mash_db)"/>
+      <param name="plasmid_meta" type="data" optional="true" format="text" label="Plasmid cluster metadata file" help="(--plasmid_meta)"/>
+      <param name="plasmid_replicons" type="data" optional="true" format="fasta" label="FASTA file with plasmid replicons" help="(--plasmid_replicons)"/>
+      <param name="repetitive_mask" type="data" optional="true" format="fasta" label="FASTA of known repetitive elements" help="(--reptitive_mask)"/>
+      <param name="plasmid_mob" type="data" optional="true" format="fasta" label="FASTA of plasmid relaxases" help="(--plasmid_mob)"/>
+      <param name="plasmid_mpf" type="data" optional="true" format="fasta" label="FASTA of known plasmid mate-pair proteins" help="(--plasmid_mpf)"/>
+      <param name="plasmid_orit" type="data" optional="true" format="fasta" label="FASTA of known plasmid oriT dna sequences" help="(--plasmid_orit)"/>
+      <param name="filter_db" type="data" optional="true" format="fasta" label="Path to fasta file to mask sequences" help="(--filter_db)"/>
+
       
       
     </section>  
