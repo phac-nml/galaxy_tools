@@ -115,8 +115,8 @@
       <param name="min_con_cov" label="Minimum percentage coverage of assembly contig by the plasmid reference database to be considered" type="integer"  min="0" max="100" value="60" help="(--min_con_cov)"/>
       <param name="min_rpp_cov" label="Minimum percentage coverage of contigs by repetitive elements" type="integer"  min="0" max="100" value="80" help="(--min_rpp_cov)"/>
 
-      <param name="plasmid_db" optional="true" type="data" format="fasta" label="Reference Database of complete plasmids" help="(--plasmid_db)"/>
-      <param name="plasmid_mash_db" optional="true" type="data" format="binary" label="Custom MASH database of plasmids" help="MASH sketch of the reference plasmids database" help="(--plasmid_mash_db)"/>
+      <param name="plasmid_db" optional="true" type="data" format="fasta" label="Reference custom database of complete plasmids" help="(--plasmid_db)"/>
+      <param name="plasmid_mash_db" optional="true" type="data" format="binary" label="Custom MASH database of plasmids" help="MASH sketch of the reference plasmids database (--plasmid_mash_db)"/>
       <param name="plasmid_meta" type="data" optional="true" format="text" label="Plasmid cluster metadata file" help="(--plasmid_meta)"/>
       <param name="plasmid_replicons" type="data" optional="true" format="fasta" label="FASTA file with plasmid replicons" help="(--plasmid_replicons)"/>
       <param name="repetitive_mask" type="data" optional="true" format="fasta" label="FASTA of known repetitive elements" help="(--reptitive_mask)"/>
@@ -180,7 +180,7 @@ A FASTA file with a single or multiple contigs (e.g. a draft genome assembly):
 
 Tab-delimited report listing information for each input contig on its cluster number, possible replicon, relaxase, and repetitive elements types, etc. Refer to https://github.com/phac-nml/mob-suite#mob-recon-contig-report-format for the description of each column.
 
-Note: Plasmid sequences will not be output if none are found. Some plasmid could be intergrated into a chromosome.
+**Note:** Plasmid sequences will not be output if none are found. Some plasmid could be intergrated into a chromosome.
 
 
   </help>

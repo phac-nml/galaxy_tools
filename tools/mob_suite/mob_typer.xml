@@ -74,7 +74,7 @@
   <inputs>
     <param name="input" type="data" format="fasta" label="Input" help="FASTA file with contig(s)"/>
     <section name="adv_param" title="Advanced parameters" expanded="False">
-      <param name="multi" type="boolean" truevalue="true" falsevalue="" checked="false" label="Treat each input sequence as an independant plasmid?" help="Treat each sequence in the FASTA file as a separate input (--multi)" />
+      <param name="multi" type="boolean" truevalue="true" falsevalue="" checked="false" label="Treat each input sequence as an independent plasmid?" help="Treat each sequence in the FASTA file as a separate input (--multi)" />
       <param name="biomarker_report_file" type="boolean" truevalue="true" falsevalue="" checked="false" label="Output BLAST biomarker report?" help="The report will report all biomarkers identified in a given query plasmid (--biomarker_report_file)" />
 
       <param name="min_rep_evalue_value" type="float" value="0.00001" min="0.00001" max="1" label="Minimum evalue threshold for replicon blastn" help="(--min_rep_evalue)"/> 
@@ -123,7 +123,7 @@
 
 **Syntax**
 
-This tool provides *in silico* predictions on plasmid typing including identification of replicon, relaxase and mate-pair formation protein types. MOB-typer also predicts mobility of a plasmid (Conjugative, Mobilizable, Non-mobilizable). Do not include multiple unrelated plasmids in the input FASTA file as they will be treated as a single plasmid.
+This tool provides *in silico* predictions on plasmid typing including identification of replicon, relaxase and mate-pair formation protein types. MOB-typer also predicts mobility of a plasmid (Conjugative, Mobilizable, Non-mobilizable) and potential host range. 
 
 For more information please visit https://github.com/phac-nml/mob-suite/. 
 
@@ -136,9 +136,9 @@ A FASTA file with a single or multiple contigs (e.g. plasmid.fasta):
 
 **Output:**
 
-Tab-delimited report listing identified plasmid(s) and their predicted mobility. Refer to https://github.com/phac-nml/mob-suite#mob-typer-report-file-format for the description of each column.
+Tab-delimited report listing identified plasmid(s) and their predicted mobility and host range and optionally a biomarker report (if selected). Refer to https://github.com/phac-nml/mob-suite#mob-typer-report-file-format for the description of each column.
 
-
+**Note:** Do not include multiple unrelated plasmids in the input FASTA file as they will be treated as a single plasmid or turn on the **--multi** parameter (i.e. *Treat each input sequence as an independent plasmid?*).
   </help>
   <citations>
     <citation type="bibtex">
