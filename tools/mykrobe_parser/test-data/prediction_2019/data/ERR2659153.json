@@ -1,0 +1,79 @@
+{
+    "ERR2659153": {
+        "susceptibility": {
+            "Ofloxacin": {
+                "predict": "S"
+            },
+            "Moxifloxacin": {
+                "predict": "S"
+            },
+            "Isoniazid": {
+                "predict": "S"
+            },
+            "Kanamycin": {
+                "predict": "S"
+            },
+            "Ethambutol": {
+                "predict": "S"
+            },
+            "Streptomycin": {
+                "predict": "S"
+            },
+            "Ciprofloxacin": {
+                "predict": "S"
+            },
+            "Pyrazinamide": {
+                "predict": "S"
+            },
+            "Rifampicin": {
+                "predict": "S"
+            },
+            "Amikacin": {
+                "predict": "S"
+            },
+            "Capreomycin": {
+                "predict": "S"
+            }
+        },
+        "phylogenetics": {
+            "phylo_group": {
+                "Mycobacterium_tuberculosis_complex": {
+                    "percent_coverage": 99.492,
+                    "median_depth": 75
+                }
+            },
+            "sub_complex": {
+                "Unknown": {
+                    "percent_coverage": -1,
+                    "median_depth": -1
+                }
+            },
+            "species": {
+                "Mycobacterium_africanum": {
+                    "percent_coverage": 64.411,
+                    "median_depth": 79.0
+                }
+            },
+            "lineage": {
+                "Unknown": {
+                    "percent_coverage": -1,
+                    "median_depth": -1
+                }
+            }
+        },
+        "kmer": 21,
+        "probe_sets": [
+            "tb-species-170421.fasta.gz",
+            "tb-hunt-probe-set-jan-03-2019.fasta.gz"
+        ],
+        "files": [
+            "ERR2659153_1.fastq",
+            "ERR2659153_2.fastq"
+        ],
+        "version": {
+            "mykrobe-predictor": "v0.10.0",
+            "mykrobe-atlas": "v0.10.0"
+        },
+        "genotype_model": "kmer_count"
+    }
+}
