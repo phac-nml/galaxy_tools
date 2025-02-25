@@ -138,7 +138,7 @@
     </collection>
   </outputs>
   <tests>
-    <test>
+    <test expect_num_outputs=4>
       <param name="input" value="Ecoli_strain_KV7_complete_LT795502.fasta" ftype="fasta"/>
       <section name="adv_param">
         <param name="unicycler_contigs" value="True"/>
