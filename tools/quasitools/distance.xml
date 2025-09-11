@@ -1,8 +1,9 @@
-<tool id="distance" name="Quasispecies Distance" version="0.7.0">
+<tool id="distance" name="Quasispecies Distance" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Calculate the evolutionary distance between viral quasispecies.</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         #for $bam_file in $bam_files
@@ -114,14 +115,5 @@ Outputs
 A CSV file containing a matrix of similarities or distances, as requested by the user.
 
     ]]></help>
-    <citations>
-        <citation type="bibtex">
-            @misc{GitHubquasitoolsdistance,
-            title = {quasitools distance},
-            publisher = {phac-nml},
-            journal = {GitHub repository},
-            url = {https://github.com/phac-nml/quasitools},
-            }
-        </citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

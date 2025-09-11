@@ -1,14 +1,17 @@
-<tool id="callcodonvar" name="Codon Variants" version="0.7.0">
+<tool id="callcodonvar" name="Codon Variants" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies codon variants and non-synonymous/synonymous mutations</description>
-    <requirements>
-          <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         cat $input_genes &&
 
-        ln -f -s ${input_bam.metadata.bam_index} ${input_bam}.bai &&
-        quasitools call codonvar $input_bam $ref_file $offset $input_genes
+        ln -s $input_bam '${input_bam.name}' &&
+        ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
+
+        quasitools call codonvar '${input_bam.name}' $ref_file $offset $input_genes
 
 		#if $var_file:
 			$var_file 
@@ -56,14 +59,5 @@ codon and the resulting AA variants. The report indicates whether the nucleotide
 a synonymous or non-synonymous mutation.
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscallcodonvar,
-			title = {quasitools callcodonvar},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

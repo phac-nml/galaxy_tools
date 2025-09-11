@@ -1,12 +1,14 @@
-<tool id="complexity_bam" name="Complexity BAM" version="0.7.0">
-    <requirements>
-        <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+<tool id="complexity_bam" name="Complexity BAM" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
-        ln -f -s '${input_bam.metadata.bam_index}' '${input_bam}.bai' &&
+        ln -s $input_bam '${input_bam.name}' &&
+        ln -s $input_bam.metadata.bam_index '${input_bam.name}.bai' &&
 
-        quasitools complexity bam '$ref_file' '$input_bam'  $k -f '$filter_size' -o output.csv
+        quasitools complexity bam '$ref_file' '${input_bam.name}'  $k -f '$filter_size' -o output.csv
 
     ]]></command>
     <inputs>
@@ -44,14 +46,5 @@ Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2
 
 
 ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscomplexity,
-			title = {quasitools complexity},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-	</citations>
+    <expand macro="citations" />
 </tool>

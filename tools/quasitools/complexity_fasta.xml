@@ -1,7 +1,8 @@
-<tool id="complexity_fasta" name="Complexity FASTA" version="0.7.0">    
-    <requirements>
-        <requirement type="package" version="0.7.0">quasitools</requirement>
-    </requirements>
+<tool id="complexity_fasta" name="Complexity FASTA" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">    
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         quasitools complexity fasta '$input_fasta' -o output.csv
@@ -38,14 +39,5 @@ Gregori, Josep, et al. "Viral quasispecies complexity measures." Virology 493 (2
 
 
 ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolscomplexity,
-			title = {quasitools complexity},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-	</citations>
+    <expand macro="citations" />
 </tool>

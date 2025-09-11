@@ -1,0 +1,58 @@
+<tool id="spatyper" name="Generate spa type identification" version="@VERSION@+galaxy1" profile="20.01">
+    <macros>
+        <token name="@VERSION@">0.3.3</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@VERSION@">spatyper</requirement>
+    </requirements>
+    <command detect_errors="aggressive"> <![CDATA[
+        spaTyper -f '${input}' --output '${output}' 
+    ]]> </command>
+    <inputs>
+        <param type="data" name="input" format="fasta" label="SPA Fasta file" help="Staphylococcus aureus - staphylococcal protein A fasta file. This will be assigned a type based on its repeat region."/>
+    </inputs>
+    <outputs>
+        <data name="output" format="tsv"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="input.fasta"/>
+            <output name="output" file="output.tsv" ftype="tsv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+::
+
+    USAGE: spaTyper [-h] [-r REPEAT_FILE] [-o REPEAT_ORDER_FILE] [-d FOLDER] [-f FASTA [FASTA ...]] [-g GLOB] [-e] [--output OUTPUT] [--version] [--debug] [--info]
+
+    spaTyper.py: Get spa types
+
+    Version: 0.3.3
+    License: GPLv3
+    Prints spa type to stdout
+
+    It will download sparepeats.fasta and spatypes.txt to repository directory 
+    if files not provided or already in directory. It can be loaded as a python
+    module. Python 3 version only.
+
+    Options: -h     show this help message and exit
+             -r     REPEAT_FILE (http://spa.ridom.de/dynamic/sparepeats.fasta)
+             -o     REPEAT_ORDER_FILE (http://spa.ridom.de/dynamic/spatypes.txt)
+             -d     Folder to save downloaded files from Ridom/Spa server
+             -f     List of one or more fasta files.
+             -g     Uses unix style pathname expansion to run spa typing on all files. If your shell autoexpands wildcards use -f.
+             -e     Do PCR product enrichment. [Default: False]
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{githubseqtk,
+  author = {HCGB},
+  year = {2020},
+  title = {spaTyper},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/HCGB-IGTP/spaTyper},
+}</citation>
+    </citations>
+</tool>

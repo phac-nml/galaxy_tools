@@ -1,8 +1,9 @@
-<tool id="hydra" name="Hydra pipeline" version="0.5.1">
+<tool id="hydra" name="Hydra pipeline" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Identifies drug resistance within an NGS dataset</description>
-    <requirements>
-          <requirement type="package" version="0.5.1">quasitools</requirement>
-    </requirements>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
 
         quasitools hydra
@@ -181,7 +182,7 @@
         <data format="csv" label="HyDRA: drug resistance output" name="output_dr" from_work_dir="output/dr_report.csv" />
         <data format="fastq" label="HyDRA: filtered reads output" name="output_filtered" from_work_dir="output/filtered.fastq" />
         <data format="vcf" label="HyDRA: variants output" name="output_hydra" from_work_dir="output/hydra.vcf" />
-        <data format="vcf" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.hmcf" />
+        <data format="txt" label="HyDRA: aa mutations output" name="output_aa_mt" from_work_dir="output/mutation_report.aavf" />
         <data format="txt" label="HyDRA: stats output" name="output_stats" from_work_dir="output/stats.txt" />
         <data format="fasta" label="HyDRA: consensus output" name="output_consensus" from_work_dir="output/consensus.fasta" >
             <filter>consensus['consensus_bool'] == "true_consensus"</filter>
@@ -221,9 +222,9 @@
             </output>
             <output name="output_aa_mt">
                 <assert_contents>
-                    <has_text_matching expression="#CHROM\sGENE\sTYPE\sWILDTYPE\sPOS\sMUTANT\sFILTER\sMUTANT_FREQ\sCOVERAGE\sINFO"/>
-                    <has_text_matching expression="hxb2_pol\sRT\smutation\sK\s101\sP\sPASS\s0.1423\s1574\sWC=aaa;MC=CCa;MCF=0.1423;CAT=NNRTI;SRVL=Yes" />
-                    <has_text_matching expression="hxb2_pol\sRT\smutation\sH\s221\sN\sPASS\s0.0113\s2475\sWC=cat;MC=Aat;MCF=0.0113;CAT=.;SRVL=." />
+                    <has_text_matching expression="#CHROM\tGENE\tPOS\tREF\tALT\tFILTER\tALT_FREQ\tCOVERAGE\tINFO"/>
+                    <has_text_matching expression="hxb2_pol\tRT\t101\tK\tP\tPASS\t0.1423\t1574\tRC=aaa;AC=CCa;ACF=0.1423;CAT=NNRTI;SRVL=Yes" />
+                    <has_text_matching expression="hxb2_pol\tRT\t101\tK\tT\tmf0.01\t0.0013\t1574\tRC=aaa;AC=aCa;ACF=0.0013;CAT=.;SRVL=." />
                 </assert_contents>
             </output>
            
@@ -280,7 +281,7 @@ The detailed output directory tree looks as follows:
         * dr_report.csv
         * filtered.fastq
         * hydra.vcf
-        * mutation_report.hmcf
+        * mutation_report.aavf
         * stats.txt
 
 The description of each of these directories/files are as follows:
@@ -292,7 +293,7 @@ The description of each of these directories/files are as follows:
     * __dr_report.csv__: A report detailing the drug resistant mutations found, above the reporting threshold (default: 1%).
     * __filtered.fastq__: The reads remaining after the filtering stage.
     * __hydra.vcf__: The variants found by the pipeline.
-    * __mutation_report.hmcf__: The AA mutations found by the pipeline.
+    * __mutation_report.aavf__: The AA mutations found by the pipeline.
     * __stats.txt__: A log file detailing size after filtering and major stages.
 
 The __dr_report.csv__ file lists all found drug resistant mutations (mutations included in the mutation database) which have frequency greater than the reporting threshold. An example of this file is given below.
@@ -302,30 +303,23 @@ Example: __dr_report.csv__
     Gene,Category,Surveillance,Wildtype,Position,Mutation,Mutation Frequency,Coverage
     RT,NNRTI,Yes,K,103,N,9.03,155
 
-The __mutation_report.hmcf__ files is our custom VCF like file which details all of the AA mutations found by the pipeline. An example if this file is given below.
+The __mutation_report.aavf__ file is in AAVF format (https://github.com/winhiv/aavf-spec), an amino acid variant format inspired by the VCF format. The __mutation_report.aavf__ file details all of the AA mutations found by the pipeline. An example if this file is given below.
 
-Example: __mutation_report.hmcf__
+Example: __mutation_report.aavf__
 
-    ##fileformat=HMCFv1
-    ##fileDate=20150008
-    ##source=HyDRA
-    ##reference=/home/ericenns/hydra/var/hxb2_pol.fas
-    ##INFO=<ID=MC,Number=.,Description="String">
-    ##INFO=<ID=MCF,Number=.,Description="String">
-    ##INFO=<ID=WC,Number=.,Description="String">
-    ##FILTER=<ID=mf0.01,Description="Mutant freq below 0.01">
-    #GENE   CATEGORY        SURVEILLANCE    TYPE    WILDTYPE        POS     MUTANT  FILTER  MUTANT_FREQ     COVERAGE INFO
-    RT      NNRTI   Yes     mutation        K       103     N       PASS    0.0903  155     WC=aaa;MC=aaC;MCF=0.0903
+    ##fileformat=AAVFv1.0
+    ##fileDate=20220615
+    ##source=quasitools:hydra
+    ##reference=hxb2_pol.fas
+    ##INFO=<ID=RC,Number=1,Type=String,Description="Reference Codon">
+    ##INFO=<ID=AC,Number=.,Type=String,Description="Alternate Codon">
+    ##INFO=<ID=ACF,Number=.,Type=Float,Description="Alternate Codon Frequency,for each Alternate Codon,in the same order aslisted.">
+    ##INFO=<ID=CAT,Number=.,Type=String,Description="Drug Resistance Category">
+    ##INFO=<ID=SRVL,Number=.,Type=String,Description="Drug Resistance Surveillance">
+    ##FILTER=<ID=af0.01,Description="Set if True; alt_freq<0.01">
+    #CHROM	GENE	POS	REF	ALT	FILTER	ALT_FREQ	COVERAGE	INFO
+    hxb2_pol	RT	101	K	P	PASS	0.1423	1574	RC=aaa;AC=CCa;ACF=0.1423;CAT=NNRTI;SRVL=Yes
 
     ]]></help>
-    <citations>
-		<citation type="bibtex">
-			@misc{GitHubquasitoolshydra,
-			title = {quasitools hydra},
-			publisher = {phac-nml},
-			journal = {GitHub repository},
-			url = {https://github.com/phac-nml/quasitools},
-			}
-		</citation>
-    </citations>
+    <expand macro="citations" />
 </tool>

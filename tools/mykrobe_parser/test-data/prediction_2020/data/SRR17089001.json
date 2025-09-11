@@ -1,0 +1,131 @@
+{
+    "SRR17089001": {
+        "susceptibility": {
+            "Ofloxacin": {
+                "predict": "S"
+            },
+            "Moxifloxacin": {
+                "predict": "S"
+            },
+            "Isoniazid": {
+                "predict": "S"
+            },
+            "Kanamycin": {
+                "predict": "S"
+            },
+            "Ethambutol": {
+                "predict": "S"
+            },
+            "Streptomycin": {
+                "predict": "S"
+            },
+            "Ciprofloxacin": {
+                "predict": "S"
+            },
+            "Pyrazinamide": {
+                "predict": "S"
+            },
+            "Rifampicin": {
+                "predict": "S"
+            },
+            "Amikacin": {
+                "predict": "S"
+            },
+            "Capreomycin": {
+                "predict": "S"
+            }
+        },
+        "phylogenetics": {
+            "phylo_group": {
+                "Mycobacterium_tuberculosis_complex": {
+                    "percent_coverage": 99.448,
+                    "median_depth": 240.0
+                }
+            },
+            "sub_complex": {
+                "Unknown": {
+                    "percent_coverage": -1,
+                    "median_depth": -1
+                }
+            },
+            "species": {
+                "Mycobacterium_africanum": {
+                    "percent_coverage": 54.809,
+                    "median_depth": 263
+                }
+            },
+            "lineage": {
+                "lineage": [
+                    "clade_animal_A3"
+                ],
+                "calls_summary": {
+                    "clade_animal_A3": {
+                        "good_nodes": 1,
+                        "tree_depth": 1,
+                        "genotypes": {
+                            "clade_animal_A3": 1
+                        }
+                    }
+                },
+                "calls": {
+                    "clade_animal_A3": {
+                        "clade_animal_A3": {
+                            "T154276G": {
+                                "variant": "ref-T154276G?var_name=T154276G&num_alts=2&ref=NC_000962.3&enum=0&gene=NA&mut=T154276G",
+                                "genotype": [
+                                    1,
+                                    1
+                                ],
+                                "genotype_likelihoods": [
+                                    -28853.072634655364,
+                                    -99999999,
+                                    -233.08196525549602
+                                ],
+                                "info": {
+                                    "coverage": {
+                                        "reference": {
+                                            "percent_coverage": 0.0,
+                                            "median_depth": 0,
+                                            "min_non_zero_depth": 0,
+                                            "kmer_count": 0,
+                                            "klen": 21
+                                        },
+                                        "alternate": {
+                                            "percent_coverage": 100.0,
+                                            "median_depth": 231,
+                                            "min_non_zero_depth": 227,
+                                            "kmer_count": 4627,
+                                            "klen": 21
+                                        }
+                                    },
+                                    "expected_depths": [
+                                        240.0
+                                    ],
+                                    "contamination_depths": [],
+                                    "filter": [],
+                                    "conf": 28620
+                                },
+                                "_cls": "Call.VariantCall"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "kmer": 21,
+        "probe_sets": [
+            "tb-species-170421.fasta.gz",
+            "tb-hunt-probe-set-jan-03-2019.fasta.gz",
+            "tb.lineage.20200930.probes.fa.gz"
+        ],
+        "files": [
+            "SRR17089001_1.fastq",
+            "SRR17089001_2.fastq"
+        ],
+        "version": {
+            "mykrobe-predictor": "v0.10.0",
+            "mykrobe-atlas": "v0.10.0"
+        },
+        "genotype_model": "kmer_count"
+    }
+}

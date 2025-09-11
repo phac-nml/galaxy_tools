@@ -1,4 +1,7 @@
-<tool id="mykrobe_parseR" name="mykrobe_parseR" version="0.1.4.1">
+<tool id="mykrobe_parseR" name="mykrobe_parseR" version="@VERSION@+galaxy2" profile="16.04">
+    <macros>
+        <token name="@VERSION@">0.1.4.1</token>
+    </macros>
     <requirements>
         <requirement type="package" version="3.4.1">r-base</requirement>
         <requirement type="package" version="1.5.0">r-jsonlite</requirement>
@@ -30,6 +33,9 @@
         #if $confidence
             -c "$confidence"
         #end if
+        #if $panel
+            -p "$panel"
+        #end if
         #if $run_name
             -n "$run_name"
         #end if
@@ -42,9 +48,13 @@
         multiple="true"
         label="JSON File(s) (.JSON or .TXT)"/>
     <param name="version" type="text"
-        argument="-v"
+        argument="-v"        
         optional="true"
         label="Mykrobe Workflow Version"/>
+    <param name="panel" type="select" label="Mykrobe Panel Version" multiple="false">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+    </param>
     <param name="depth" type="integer"
         argument="-D"
         optional="true"
@@ -61,14 +71,33 @@
         label="Name of Run"/>
     </inputs>
     <outputs>
-        <data name="output-jsondata" from_work_dir="output-jsondata.csv" format="csv" label="jsondata"/>
-        <data name="output-report" from_work_dir="output-report.csv" format="csv" label="report"/>
+        <data name="output_jsondata" from_work_dir="output-jsondata.csv" format="csv" label="Mykrobe jsondata"/>
+        <data name="output_report" from_work_dir="output-report.csv" format="csv" label="Mykrobe report"/>
     </outputs>
     <tests>
         <test>
-		<param name="input" value="test-data.json"/>
-		<output name="output-jsondata" ftype="csv" value="output-jsondata.csv" compare="sim_size"/>
-        	<output name="output-report" ftype="csv" value="output-report.csv" compare="sim_size"/>
+            <param name="input" value="prediction_2019/data/ERR031480_L6.json,prediction_2019/data/ERR125628_MBOV.json,prediction_2019/data/ERR181314_L9.json,prediction_2019/data/ERR234162_L3.json,prediction_2019/data/ERR2659153.json,prediction_2019/data/ERR266106_MCAN.json,prediction_2019/data/ERR2704812_L5.json,prediction_2019/data/ERR3335753_L1.json,prediction_2019/data/ERR4143897_MPIN.json,prediction_2019/data/ERR756348_L7.json,prediction_2019/data/ERR841495_L5.json,prediction_2019/data/SRR17089001.json,prediction_2019/data/SRR1710097_L2.json,prediction_2019/data/SRR3500411_MMUN.json,prediction_2019/data/SRR9157804.json"/>
+            <param name="panel" value="2019"/>
+            <output name="output_jsondata" ftype="csv" value="prediction_2019/output-jsondata.csv"/>
+            <output name="output_report" ftype="csv" value="prediction_2019/output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="prediction_2020/data/ERR031480_L6.json,prediction_2020/data/ERR125628_MBOV.json,prediction_2020/data/ERR181314_L9.json,prediction_2020/data/ERR234162_L3.json,prediction_2020/data/ERR2659153.json,prediction_2020/data/ERR266106_MCAN.json,prediction_2020/data/ERR2704812_L5.json,prediction_2020/data/ERR3335753_L1.json,prediction_2020/data/ERR4143897_MPIN.json,prediction_2020/data/ERR756348_L7.json,prediction_2020/data/ERR841495_L5.json,prediction_2020/data/SRR17089001.json,prediction_2020/data/SRR1710097_L2.json,prediction_2020/data/SRR3500411_MMUN.json,prediction_2020/data/SRR9157804.json"/>
+            <param name="panel" value="2020"/>
+            <output name="output_jsondata" ftype="csv" value="prediction_2020/output-jsondata.csv"/>
+            <output name="output_report" ftype="csv" value="prediction_2020/output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="single_2019/single2019.json"/>
+            <param name="panel" value="2019"/>
+            <output name="output_jsondata" ftype="csv" value="single_2019/output-jsondata.csv"/>
+            <output name="output_report" ftype="csv" value="single_2019/output-report.csv"/>
+        </test>
+        <test>
+            <param name="input" value="single_2020/single2020.json"/>
+            <param name="panel" value="2020"/>
+            <output name="output_jsondata" ftype="csv" value="single_2020/output-jsondata.csv"/>
+            <output name="output_report" ftype="csv" value="single_2020/output-report.csv"/>
         </test>
     </tests>
     <help><![CDATA[

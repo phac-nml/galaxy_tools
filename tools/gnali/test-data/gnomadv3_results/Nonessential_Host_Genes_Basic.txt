@@ -1,0 +1,2 @@
+HGNC_Symbol	Status
+COL6A5	HC LoF found

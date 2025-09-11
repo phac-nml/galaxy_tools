@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: Determines SPA type based on repeats in a submitted staphylococcal protein A fasta file. 
+name: spatyper
+owner: nml
+long_description: spatyper - Determines the type for Staphylococcus aureus based on the composition repetative region within staphylococcal protein A sequence (inputted as a .fasta). Calls in and uses a library of known spa repeat sequences (inputted as a multifasta file)
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/tools/spatyper
+homepage_url: https://github.com/HCGB-IGTP/spaTyper

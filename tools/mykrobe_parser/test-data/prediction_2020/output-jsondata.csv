@@ -1,0 +1,16 @@
+"file","phylo_group","species","phylo_group_per_covg","species_per_covg","phylo_group_depth","species_depth"
+"ERR031480_L6","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.776,89.738,136,167
+"ERR125628_MBOV","Mycobacterium_tuberculosis_complex","Mycobacterium_bovis",99.425,65.402,56,48
+"ERR181314_L9","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.672,75.016,171,90.5
+"ERR234162_L3","Mycobacterium_tuberculosis_complex","Mycobacterium_tuberculosis",99.797,99.33,157,142
+"ERR2659153","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.492,64.411,75,79
+"ERR266106_MCAN","Mycobacterium_tuberculosis_complex","Mycobacterium_tuberculosis",98.352,73.899,100,92
+"ERR2704812_L5","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",98.467,64.333,332,326
+"ERR3335753_L1","Mycobacterium_tuberculosis_complex","Mycobacterium_tuberculosis",99.69,98.335,236,220
+"ERR4143897_MPIN","Mycobacterium_tuberculosis_complex","Mycobacterium_microti",99.162,52.314,61,55
+"ERR756348_L7","Mycobacterium_tuberculosis_complex","Mycobacterium_tuberculosis",99.033,83.208,173,162
+"ERR841495_L5","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.715,57.895,137,123
+"SRR17089001","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.448,54.809,240,263
+"SRR1710097_L2","Mycobacterium_tuberculosis_complex","Mycobacterium_tuberculosis",99.686,98.909,420,403
+"SRR3500411_MMUN","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.568,62.167,114,94
+"SRR9157804","Mycobacterium_tuberculosis_complex","Mycobacterium_africanum",99.547,55.332,123,111
