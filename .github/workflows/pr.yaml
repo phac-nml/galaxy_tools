@@ -4,9 +4,7 @@ on:
     paths-ignore:
       - '.github/**'
       - 'deprecated/**'
-      - 'docs/**'
-    paths:
-      - 'tools/**'   
+      - 'docs/**'  
   push:
     branches:
       - development
@@ -16,8 +14,7 @@ on:
       - '.github/**'
       - 'deprecated/**'
       - 'docs/**'
-    paths:
-      - 'tools/**'  
+    
 env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_23.1
