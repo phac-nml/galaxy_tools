@@ -5,6 +5,7 @@ on:
       - '.github/**'
       - 'deprecated/**'
       - 'docs/**'  
+      - '*'
   push:
     branches:
       - development
@@ -14,6 +15,7 @@ on:
       - '.github/**'
       - 'deprecated/**'
       - 'docs/**'
+      - '*'
     
 env:
   GALAXY_FORK: galaxyproject
