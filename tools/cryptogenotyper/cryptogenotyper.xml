@@ -3,7 +3,7 @@
     classifies Cryptosporidium species subtypes based on SSU rRNA and gp60 gene markers from Sanger sequencing data.
   </description>
   <macros>
-   <token name="@VERSION@">1.0</token>
+   <token name="@VERSION@">1.5.0</token>
   </macros>
   <requirements>
     <requirement type="package" version ="@VERSION@">cryptogenotyper</requirement>
@@ -15,20 +15,23 @@
      #set $ref_file=''
 
      #if $db
-        ln -s '${db}' '${db.name}' &&
+        ln -sf '${db}' '${db.name}' &&
         #set $ref_file = $db.name
      #end if
 
      #if $primers['seqtype'] == 'contig'
-        ln -s '${$primers.abi_input['forward']}' '${primers.abi_input.name}_forward.ab1' &&
-        ln -s '${$primers.abi_input['reverse']}' '${primers.abi_input.name}_reverse.ab1' &&
+        #set $forward_name=$primers.input.forward.name.rsplit('.', 1)[0]
+        #set $reverse_name=$primers.input.reverse.name.rsplit('.', 1)[0]
+        ln -sf '${$primers.input['forward']}' '${forward_name}_forward.${primers.input.forward.ext}' &&
+        ln -sf '${$primers.input['reverse']}' '${reverse_name}_reverse.${primers.input.reverse.ext}' &&
         cryptogenotyper -i '.' -m '$marker' -t '$primers.seqtype' -f 'forward' -r 'reverse'
         #if $db
           --databasefile $ref_file
         #end if
      #else
-        ln -s '${primers.abi_input}' '${primers.abi_input.element_identifier}' &&
-        cryptogenotyper -i './${primers.abi_input.element_identifier}' -m '$marker' -t '$primers.seqtype'
+        #set $filename_no_ext=$primers.input.name.rsplit('.', 1)[0]
+        ln -sf '${primers.input}' '${filename_no_ext}.${primers.input.ext}' &&
+        cryptogenotyper -i './${primers.input.name}' -m '$marker' -t '$primers.seqtype'
         #if $db
           --databasefile $ref_file
         #end if
@@ -39,57 +42,236 @@
   </command>
   <inputs>
       <param name="marker" type="select" label="Marker">
-          <option value="18S">SSU rRNA</option>
+          <option value="18S">SSU rRNA (18S)</option>
           <option value="gp60">gp60</option>
       </param>
       <param name="db" type="data" optional="true" format="fasta" label="Reference Database File (optional):"/>
       <conditional name="primers">
         <param name="seqtype" type="select" label="Type of Sequences">
-            <option value="forward">Forward Only</option>
+            <option value="forward" selected="true">Forward Only</option>
             <option value="reverse">Reverse Only</option>
-            <option selected="true" value="contig">Contig</option>
+            <option value="contig">Contig</option>
         </param>
         <when value="contig">
-          <param name="abi_input" type="data_collection" collection_type="paired" format="ab1" label="Paired Sequencing File(s)"/>
+          <param name="input" type="data_collection" collection_type="paired" format="ab1,fasta" label="Paired Sequencing File(s)"/>
         </when>
         <when value="forward">
-          <param name="abi_input" type="data" format="ab1" label="Forward Sequencing File(s)"/>
+          <param name="input" type="data" format="ab1,fasta" label="Forward Sequencing File(s)"/>
         </when>
         <when value="reverse">
-          <param name="abi_input" type="data" format="ab1" label="Reverse Sequencing File(s)"/>
+          <param name="input" type="data" format="ab1,fasta" label="Reverse Sequencing File(s)"/>
         </when>
      </conditional>
+     <param name="show_log" type="boolean" truevalue="true" falsevalue="false" checked="false" label="Output run log?"></param>
      <param name="outputheader" type="boolean" truevalue="" falsevalue="--noheaderline" checked="true" label="Output header line in the report?">
      </param>
 
 
   </inputs>
   <outputs>
-    <data name="outfile" format="fasta" from_work_dir="result_cryptogenotyper_report.fa" label="${tool.name}:${on_string}:fastas"/>
-    <data name="outfile_report" format="tabular" from_work_dir="result_cryptogenotyper_report.txt" label="${tool.name}:${on_string}:reports"/>
+    <!-- For single files (forward/reverse mode) -->
+    <data name="outfile_single" format="fasta" from_work_dir="result_cryptogenotyper_report.fa" 
+     label="${tool.name} ${marker} extracted fasta from ${primers.input.name.split('.')[0]}">
+     <filter>primers['seqtype'] != 'contig'</filter>
+    </data>
+    <!-- For collections (contig mode) -->
+    <data name="outfile_collection" format="fasta" from_work_dir="result_cryptogenotyper_report.fa" 
+          label="${tool.name} ${marker} extracted fastas">
+        <filter>primers['seqtype'] == 'contig'</filter>
+    </data>
+
+    <!-- For single files (forward/reverse mode) -->
+    <data name="outfile_report_single" format="tabular" from_work_dir="result_cryptogenotyper_report.txt" 
+          label="${tool.name} ${marker} REPORT on ${primers.input.name.split('.')[0]}">
+        <filter>primers['seqtype'] != 'contig'</filter>
+    </data>
+    <!-- For collections (contig mode) -->
+    <data name="outfile_report_collection" format="tabular" from_work_dir="result_cryptogenotyper_report.txt" 
+          label="${tool.name} ${marker} REPORTS">
+        <filter>primers['seqtype'] == 'contig'</filter>
+    </data>
+
+    <!-- For single files (forward/reverse mode) -->
+    <data name="outfile_log_single" format="txt" from_work_dir="cryptogenotyper.log" 
+     label="${tool.name} Run ${marker} log on ${primers.input.name.split('.')[0]}">
+      <filter>show_log and primers['seqtype'] != 'contig'</filter>
+    </data>
+    <!-- For collections (contig mode) -->
+    <data name="outfile_log_collection" format="txt" from_work_dir="cryptogenotyper.log" 
+          label="${tool.name} ${marker} logs">
+        <filter>show_log and primers['seqtype'] == 'contig'</filter>
+    </data>
   </outputs>
 
   <tests>
+    <!--TEST 1-->
     <test expect_num_outputs="2">
       <param name="marker" value="18S"/>
-      <param name="seqtype" value="forward"/>
-      <param name="abi_input" value="P17705_Crypto16-2F-20170927_SSUF_G12_084.ab1"/>
-      <output name="outfile_report" ftype="tabular">
+      <conditional name="primers">
+            <param name="seqtype" value="forward"/>
+            <param name="input" value="P17705_Crypto16-2F-20170927_SSUF_G12_084.ab1"/>
+      </conditional>
+      <output name="outfile_report_single" ftype="tabular">
           <assert_contents>
               <has_text_matching expression="C.parvum"/>
           </assert_contents>
       </output>
     </test>
+    <!--TEST 2 -->
     <test expect_num_outputs="2">
       <param name="marker" value="gp60"/>
-      <param name="seqtype" value="forward"/>
-      <param name="abi_input"  value="P17705_gp60-Crypt14-1F-20170927_gp60F_G07_051.ab1"/>
-      <output name="outfile_report" ftype="tabular" >
+      <conditional name="primers">
+            <param name="seqtype" value="forward"/>
+            <param name="input" value="P17705_gp60-Crypt14-1F-20170927_gp60F_G07_051.ab1"/>
+      </conditional>
+      <output name="outfile_report_single" ftype="tabular" >
           <assert_contents>
               <has_text_matching expression="C.parvum"/>
           </assert_contents>
       </output>
     </test>
+    <!--TEST 3:Paired gp60 contig test -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="gp60"/>
+      <param name="primers|seqtype" value="contig"/>
+      <param name="primers|input">
+        <collection type="paired">
+          <element name="forward" value="P17705_gp60-Crypt14-1F-20170927_gp60F_G07_051.ab1"/>
+          <element name="reverse" value="P17705_gp60-Crypt14-1R-20170927_gp60R_H07_049.ab1"/>
+        </collection>
+      </param>
+      <output name="outfile_report_collection" ftype="tabular">
+        <assert_contents>
+          <has_text_matching expression="C.parvum"/>
+          <has_text_matching expression="IIaA15G2R1"/>
+        </assert_contents>
+      </output>
+    </test>
+    <!--TEST 4:Paired 18S contig test -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="18S"/>
+      <param name="primers|seqtype" value="contig"/>
+      <param name="primers|input">
+        <collection type="paired">
+          <element name="forward" value="P17705_Crypto16-2F-20170927_SSUF_G12_084.ab1"/>
+          <element name="reverse" value="P17705_Crypto16-2R-20170927_SSUR_H12_082.ab1"/>
+        </collection>
+      </param>
+      <output name="outfile_report_collection" ftype="tabular">
+        <assert_contents>
+          <has_text_matching expression="C.parvum"/>
+          <has_text_matching expression="Check for C. parvum TGA paralogs"/>
+        </assert_contents>
+      </output>
+    </test>
+
+ 
+    <!--TEST 5: 18S multi-fasta forward -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="18S"/>
+      <param name="primers|seqtype" value="forward"/>
+      <param name="primers|input" value="test_illumina_18S_F.fasta"/>
+      <output name="outfile_report_single" ftype="tabular">
+        <assert_contents>
+          <has_n_lines n="5"/>
+          <has_text_matching expression="C.hominis"/>
+          <has_text_matching expression="forward"/>
+        </assert_contents>
+      </output>
+    </test>
+
+    <!--TEST 6: 18S multi-fasta reverse -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="18S"/>
+      <param name="primers|seqtype" value="reverse"/>
+      <param name="primers|input" value="test_illumina_18S_R.fasta"/>
+      <output name="outfile_report_single" ftype="tabular">
+        <assert_contents>
+          <has_n_lines n="5"/>
+          <has_text_matching expression="C.hominis"/>
+          <has_text_matching expression="reverse"/>
+        </assert_contents>
+      </output>
+    </test>
+
+    <!--TEST 7: 18S multi-fasta contig -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="18S"/>
+      <param name="primers|seqtype" value="contig"/>
+      <param name="primers|input">
+        <collection type="paired">
+          <element name="forward" value="test_illumina_18S_F.fasta"/>
+          <element name="reverse" value="test_illumina_18S_R.fasta"/>
+        </collection>
+      </param>
+      <output name="outfile_report_collection" ftype="tabular">
+        <assert_contents>
+          <has_text_matching expression="C.hominis"/>
+          <has_text_matching expression="contig"/>
+        </assert_contents>
+      </output>
+    </test>
+
+    <!--TEST 8: gp60 multi-fasta forward -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="gp60"/>
+      <param name="primers|seqtype" value="forward"/>
+      <param name="primers|input" value="test_illumina_gp60_F1.fasta"/>
+      <output name="outfile_report_single" ftype="tabular">
+        <assert_contents>
+          <has_n_lines n="3"/>
+          <has_text_matching expression="C.parvum"/>
+          <has_text_matching expression="forward"/>
+          <has_text_matching expression="IIaA16G3R1"/>
+          <has_text_matching expression="IIaA15G2R2"/>
+          
+        </assert_contents>
+      </output>
+    </test>
+
+    <!--TEST 9: gp60 multi-fasta reverse -->
+    <test expect_num_outputs="2">
+      <param name="marker" value="gp60"/>
+      <param name="primers|seqtype" value="reverse"/>
+      <param name="primers|input" value="test_illumina_gp60_R1.fasta"/>
+      <output name="outfile_report_single" ftype="tabular">
+        <assert_contents>
+          <has_n_lines n="3"/>
+          <has_text_matching expression="C.parvum"/>
+          <has_text_matching expression="reverse"/>
+          <has_text_matching expression="IIaA3R1"/>
+          <has_text_matching expression="IIaA3R1"/>
+        </assert_contents>
+      </output>
+    </test>
+
+
+
+    <!--TEST 10: gp60 multi-fasta reverse -->
+     <test expect_num_outputs="3">
+      <param name="marker" value="gp60"/>
+      <param name="primers|seqtype" value="contig"/>
+      <param name="show_log" value="true"/>
+      <param name="primers|input">
+        <collection type="paired">
+          <element name="forward" value="test_illumina_gp60_F1.fasta"/>
+          <element name="reverse" value="test_illumina_gp60_R1.fasta"/>
+        </collection>
+      </param>
+      <output name="outfile_report_collection" ftype="tabular">
+        <assert_contents>
+          <has_text_matching expression="C.parvum"/>
+          <has_text_matching expression="contig"/>
+          <has_text_matching expression="IIaA16G3R1"/>
+          <has_text_matching expression="IIaA15G2R2"/>
+        </assert_contents>
+      </output>
+    </test>
+
+
+
+ 
+
   </tests>
 
 
@@ -98,30 +280,56 @@
 
 **Syntax**
 
-CryptoGenotyper is a standalone tool to *in-silico*  determine species and subtype based on SSU rRNA and gp60 markers.
-For more information please visit https://github.com/phac-nml/CryptoGenotyper.
+CryptoGenotyper is a standalone tool to *in-silico*  determine species and subtype based on SSU rRNA (18S) and gp60 markers.
+
+**❗ Important:** To process **multiple input files** and generate **a single** combined report, please import and use the workflows available `here`_.
+
+.. _here: https://github.com/phac-nml/CryptoGenotyper/tree/main/CryptoGenotyper/GalaxyWorkflows
+
+
+For a tutorial on how to use CryptoGenotyper, please refer to the `official tutorial`_.
+
+For more information, please visit https://github.com/phac-nml/CryptoGenotyper.
+
+.. _official tutorial: https://github.com/phac-nml/CryptoGenotyper/blob/docs/docs/CryptoGenotyperTutorial-CrownCopyright.pdf
 
 -----
 
 **Input:**
 
-AB1 file(s) representing *Cryptosporidium's* SSU rRNA or gp60 locus (forward, reverse, or contig (forward and reverse paired-end reads)).
-Optional: A custom reference database in .fa file format, to be used during the homology search for *Cryptosporidium* classification.
+AB1 or FASTA file(s) representing Cryptosporidium's SSU rRNA (18S) or gp60 locus can be provided as single-end reads (either forward or reverse only) or as paired-end reads in contig mode (both a forward and a reverse read for each sample).
+
+Optional: A custom reference database of SSU rRNA or gp60 locus in .fasta file format, to be used during the homology search for *Cryptosporidium* classification.
 
 
 **Output:**
 
-FASTA file containing the identification of the *Cryptosporidium* species/subtype and its corresponding sequence for each sample.
+A tabular report and a FASTA file containing the identification of the *Cryptosporidium* species/subtype and its corresponding sequence for each sample along with other relevant details. 
+The gp60 subtyping is based on the `Deciphering a cryptic minefield: a guide to Cryptosporidium gp60 subtyping publication`_.
+
+.. _`Deciphering a cryptic minefield: a guide to Cryptosporidium gp60 subtyping publication`: https://doi.org/10.1016/j.crpvbd.2025.100257
+
   </help>
   <citations>
     <citation type="bibtex">
-  @misc{githubCryptoGenotyper,
-  author = {Yanta C, Bessonov K, Robinson G, Troell K, Guy R},
+  @ARTICLE{githubCryptoGenotyper,
+  author = {Yanta, Christine A. and Bessonov, Kyrylo and Robinson, Guy and Troell, Karin and Guy, Rebecca A.},
   title = {CryptoGenotyper: a new bioinformatics tool to enhance Cryptosporidium identification},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  url = {https://github.com/phac-nml/CryptoGenotyper}
+  journal = {Food and waterborne parasitology},
+  year = {2021},
+  volume = {23},
+  url = {https://doi.org/10.1016/j.fawpar.2021.e00115}
     }</citation>
+  <citation type="bibtex">
+  @ARTICLE{RobinsonGp60,
+   author = {Robinson, Gillian and Chalmers, Rachel M. and Elwin, Kirsty and Guy, Richard A. and Bessonov, Konstantin and Troell, Kristina and Xiao, Lihua},
+   title = {Deciphering a cryptic minefield: A guide to Cryptosporidium gp60 subtyping},
+   journal = {Current Research in Parasitology and Vector-Borne Diseases},
+   year = {2025},
+   volume = {7},
+   url = {https://doi.org/10.1016/j.crpvbd.2025.100257}
+   }
+   }</citation>
   </citations>
 
 </tool>

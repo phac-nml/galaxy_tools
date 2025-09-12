@@ -4,7 +4,7 @@ on:
     paths-ignore:
       - '.github/**'
       - 'deprecated/**'
-      - 'docs/**'
+      - 'docs/**'  
       - '*'
   push:
     branches:
@@ -16,6 +16,7 @@ on:
       - 'deprecated/**'
       - 'docs/**'
       - '*'
+    
 env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_23.1
@@ -36,7 +37,7 @@ jobs:
   # which are needed in subsequent steps.
   setup:
     name: Setup cache and determine changed repositories
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       galaxy-head-sha: ${{ steps.get-galaxy-sha.outputs.galaxy-head-sha }}
       repository-list: ${{ steps.discover.outputs.repository-list }}
@@ -46,7 +47,7 @@ jobs:
       commit-range: ${{ steps.discover.outputs.commit-range }}
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.10']
     steps:
     - name: Print github context properties
       run: |
@@ -108,11 +109,11 @@ jobs:
     name: Lint tool-list
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' || needs.setup.outputs.tool-list != '' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.10']
     steps:
     - uses: actions/checkout@v3
       with:
@@ -154,11 +155,11 @@ jobs:
     name: Lint Python scripts
     needs: setup
     if: ${{ github.event_name == 'pull_request' && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.10']
     steps:
     - uses: actions/checkout@v3
       with:
@@ -189,7 +190,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-22.04]
         r-version: ['release']
     steps:
     - uses: actions/checkout@v3
@@ -245,7 +246,7 @@ jobs:
     name: Check file sizes
     needs: setup
     if: ${{ github.event_name == 'pull_request' && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
       with:
@@ -274,12 +275,12 @@ jobs:
     name: Test tools
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
         chunk: ${{ fromJson(needs.setup.outputs.chunk-list) }}
-        python-version: ['3.7']
+        python-version: ['3.10']
     services:
       postgres:
         image: postgres:11
@@ -340,10 +341,10 @@ jobs:
     name: Combine chunked test results
     needs: [setup, test]
     if: ${{ always() && needs.setup.outputs.repository-list != '' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.10']
     steps:
     - uses: actions/download-artifact@v4
       with:
@@ -384,10 +385,10 @@ jobs:
     name: Deploy
     needs: [setup, lint, combine_outputs]
     if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'phac-nml' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.10']
     steps:
     - uses: actions/checkout@v3
       with:
@@ -421,7 +422,7 @@ jobs:
     name: Report deploy status
     needs: [deploy]
     if: ${{ always() && needs.deploy.result != 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'phac-nml' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     # report to the PR if deployment failed
     - name: Get PR object
@@ -443,7 +444,7 @@ jobs:
     name: Check workflow success
     needs: [setup, lint, flake8, lintr, file_sizes, combine_outputs]
     if: ${{ always() && github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Check tool lint status
       if: ${{ needs.lint.result != 'success' && needs.flake8.result != 'skipped' }}
