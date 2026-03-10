@@ -1,7 +1,7 @@
-<tool id="staramr_search" name="staramr" version="@VERSION@+galaxy0" profile="16.04">
+<tool id="staramr_search" name="staramr" version="@VERSION@+galaxy0" profile="25.1">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-        <token name="@VERSION@">0.11.0</token>
+        <token name="@VERSION@">0.12.1</token>
     </macros>
     <xrefs>
         <xref type="bio.tools">staramr</xref>
@@ -332,7 +332,9 @@
     <tests>
         <test expect_num_outputs="9">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
-            <param name="use_pointfinder" value="salmonella" />
+            <conditional name="pointfinder_db">
+                <param name="use_pointfinder" value="salmonella" />
+            </conditional>
 
             <output name="summary" file="test1-summary.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
@@ -346,7 +348,9 @@
         </test>
         <test expect_num_outputs="9">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
-            <param name="use_pointfinder" value="escherichia_coli" />
+            <conditional name="pointfinder_db">
+                <param name="use_pointfinder" value="escherichia_coli" />
+            </conditional>
 
             <output name="summary" file="test1-summary-ecoli.tsv" ftype="tabular" />
             <output name="detailed_summary" file="test1-detailed-summary-ecoli.tsv" ftype="tabular" />
@@ -372,13 +376,17 @@
         </test>
         <test expect_num_outputs="8">
             <param name="genomes" value="16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
-            <param name="pid_threshold" value="99.8" />
+            <section name="advanced">
+                <param name="pid_threshold" value="99.8" />
+            </section>
 
             <output name="summary" file="test3-summary.tsv" ftype="tabular" />
         </test>
         <test expect_num_outputs="8">
             <param name="genomes" value="16S rc_gyrA rc_beta-lactam spaces (extra:characters).fsa" ftype="fasta" />
-            <param name="pid_threshold" value="99.8" />
+            <section name="advanced">
+                <param name="pid_threshold" value="99.8" />
+            </section>
 
             <output name="summary" file="test4-summary.tsv" ftype="tabular" />
         </test>
@@ -389,21 +397,37 @@
         </test>
         <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
-            <param name="exclude_genes_condition" value="none" />
-
+            <section name="advanced">
+                <conditional name="exclude_genes">
+                    <param name="exclude_genes_condition" value="none" />
+                </conditional>
+            </section>
             <output name="summary" file="test6-summary.tsv" ftype="tabular" />
         </test>
         <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
-            <param name="exclude_genes_condition" value="custom" />
-            <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
+            <section name="advanced">
+                <conditional name="exclude_genes">
+                    <param name="exclude_genes_condition" value="custom" />
+                </conditional>
+            </section>
+
+            <section name="advanced">
+                <conditional name="exclude_genes">
+                    <param name="exclude_genes_file" value="genes_to_exclude.tsv" />
+                </conditional>
+            </section>
 
             <output name="summary" file="test5-summary.tsv" ftype="tabular" />
         </test>
         <test expect_num_outputs="8">
             <param name="genomes" value="test-aminoglycoside.fsa" ftype="fasta" />
-            <param name="genome_size_lower_bound" value="1" />
-            <param name="genome_size_upper_bound" value="10" />
+            <section name="advanced">
+                <param name="genome_size_lower_bound" value="1" />
+            </section>
+            <section name="advanced">
+                <param name="genome_size_upper_bound" value="10" />
+            </section>
 
             <output name="summary" file="test8-summary.tsv" ftype="tabular"/>
         </test>
