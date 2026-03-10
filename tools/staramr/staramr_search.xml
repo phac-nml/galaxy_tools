@@ -340,10 +340,10 @@
             <output name="detailed_summary" file="test1-detailed-summary.tsv" ftype="tabular" />
             <output name="resfinder" file="test1-resfinder.tsv" ftype="tabular" />
             <output name="plasmidfinder" file="test1-plasmidfinder.tsv" ftype="tabular" />
-	    <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
+	        <output name="pointfinder" file="test1-pointfinder.tsv" ftype="tabular" />
             <output_collection name="blast_hits" type="list">
-                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
                 <element name="pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/pointfinder_16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
+                <element name="resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" file="test1-hits/resfinder_16S-rc_gyrA-rc_beta-lactam.fsa" ftype="fasta" />
             </output_collection>
         </test>
         <test expect_num_outputs="9">
