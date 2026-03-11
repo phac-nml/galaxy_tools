@@ -139,12 +139,14 @@
             <param name="exclude_negatives" type="boolean" label="Exclude negative (non-resistant) results" truevalue="--exclude-negatives" falsevalue="" />
             <param name="exclude_resistance_phenotypes" type="boolean" label="Exclude resistance phenotypes" truevalue="--exclude-resistance-phenotypes" falsevalue="" />
             <param name="mlst_scheme" type="select" label="MLST Scheme">
-		<option value="auto" selected="true">Automatic</option>
+                <option value="auto" selected="true">Automatic</option>
                 <option value="aactinomycetemcomitans">aactinomycetemcomitans</option>
                 <option value="abaumannii">abaumannii</option>
                 <option value="abaumannii_2">abaumannii_2</option>
                 <option value="achromobacter">achromobacter</option>
+                <option value="actinobacillus">actinobacillus</option>
                 <option value="aeromonas">aeromonas</option>
+                <option value="aparagallinarum">aparagallinarum</option>
                 <option value="aphagocytophilum">aphagocytophilum</option>
                 <option value="arcobacter">arcobacter</option>
                 <option value="bbacilliformis">bbacilliformis</option>
@@ -176,13 +178,13 @@
                 <option value="campylobacter_nonjejuni_9">campylobacter_nonjejuni_9</option>
                 <option value="cbotulinum">cbotulinum</option>
                 <option value="cdifficile">cdifficile</option>
+                <option value="cdiphtheriae">cdiphtheriae</option>
                 <option value="cfreundii">cfreundii</option>
                 <option value="chlamydiales">chlamydiales</option>
                 <option value="cmaltaromaticum">cmaltaromaticum</option>
                 <option value="cperfringens">cperfringens</option>
                 <option value="cronobacter">cronobacter</option>
                 <option value="csepticum">csepticum</option>
-                <option value="diphtheria_3">diphtheria_3</option>
                 <option value="dnodosus">dnodosus</option>
                 <option value="ecloacae">ecloacae</option>
                 <option value="ecoli">ecoli</option>
@@ -193,10 +195,12 @@
                 <option value="fpsychrophilum">fpsychrophilum</option>
                 <option value="gallibacterium">gallibacterium</option>
                 <option value="geotrichum">geotrichum</option>
+                <option value="halobacteria">halobacteria</option>
                 <option value="hcinaedi">hcinaedi</option>
                 <option value="helicobacter">helicobacter</option>
                 <option value="hinfluenzae">hinfluenzae</option>
                 <option value="hparasuis">hparasuis</option>
+                <option value="hsomni">hsomni</option>
                 <option value="hsuis">hsuis</option>
                 <option value="kaerogenes">kaerogenes</option>
                 <option value="kingella">kingella</option>
@@ -205,13 +209,16 @@
                 <option value="leptospira">leptospira</option>
                 <option value="leptospira_2">leptospira_2</option>
                 <option value="leptospira_3">leptospira_3</option>
+                <option value="lgarvieae">lgarvieae</option>
                 <option value="liberibacter">liberibacter</option>
                 <option value="listeria_2">listeria_2</option>
                 <option value="llactis_phage">llactis_phage</option>
                 <option value="lsalivarius">lsalivarius</option>
                 <option value="mabscessus">mabscessus</option>
                 <option value="magalactiae">magalactiae</option>
+                <option value="mamphoriforme">mamphoriforme</option>
                 <option value="manserisalpingitidis">manserisalpingitidis</option>
+                <option value="mbovis">mbovis</option>
                 <option value="mbovis_2">mbovis_2</option>
                 <option value="mcanis">mcanis</option>
                 <option value="mcaseolyticus">mcaseolyticus</option>
@@ -219,11 +226,15 @@
                 <option value="mflocculare">mflocculare</option>
                 <option value="mgallisepticum">mgallisepticum</option>
                 <option value="mgallisepticum_2">mgallisepticum_2</option>
+                <option value="mgenitalium">mgenitalium</option>
                 <option value="mhaemolytica">mhaemolytica</option>
+                <option value="mhominis">mhominis</option>
                 <option value="mhominis_3">mhominis_3</option>
                 <option value="mhyopneumoniae">mhyopneumoniae</option>
                 <option value="mhyorhinis">mhyorhinis</option>
+                <option value="mhyosynoviae">mhyosynoviae</option>
                 <option value="miowae">miowae</option>
+                <option value="morganella">morganella</option>
                 <option value="mplutonius">mplutonius</option>
                 <option value="mpneumoniae">mpneumoniae</option>
                 <option value="msciuri">msciuri</option>
@@ -243,23 +254,32 @@
                 <option value="pmultocida_2">pmultocida_2</option>
                 <option value="ppentosaceus">ppentosaceus</option>
                 <option value="pputida">pputida</option>
+                <option value="proteus">proteus</option>
+                <option value="providencia">providencia</option>
                 <option value="psalmonis">psalmonis</option>
+                <option value="pstuartii">pstuartii</option>
                 <option value="ranatipestifer">ranatipestifer</option>
                 <option value="rhodococcus">rhodococcus</option>
                 <option value="sagalactiae">sagalactiae</option>
+                <option value="salmonella">salmonella</option>
                 <option value="saureus">saureus</option>
                 <option value="sbsec">sbsec</option>
                 <option value="scanis">scanis</option>
+                <option value="scapitis">scapitis</option>
                 <option value="schromogenes">schromogenes</option>
                 <option value="sdysgalactiae">sdysgalactiae</option>
                 <option value="senterica_achtman_2">senterica_achtman_2</option>
                 <option value="sepidermidis">sepidermidis</option>
+                <option value="serratia">serratia</option>
                 <option value="sgallolyticus">sgallolyticus</option>
                 <option value="shaemolyticus">shaemolyticus</option>
                 <option value="shewanella">shewanella</option>
                 <option value="shominis">shominis</option>
+                <option value="siniae">siniae</option>
                 <option value="sinorhizobium">sinorhizobium</option>
                 <option value="smaltophilia">smaltophilia</option>
+                <option value="smitis">smitis</option>
+                <option value="sparasuis">sparasuis</option>
                 <option value="spneumoniae">spneumoniae</option>
                 <option value="spseudintermedius">spseudintermedius</option>
                 <option value="spyogenes">spyogenes</option>
@@ -273,6 +293,8 @@
                 <option value="taylorella">taylorella</option>
                 <option value="tenacibaculum">tenacibaculum</option>
                 <option value="tpallidum">tpallidum</option>
+                <option value="tpyogenes">tpyogenes</option>
+                <option value="tvaginalis">tvaginalis</option>
                 <option value="ureaplasma">ureaplasma</option>
                 <option value="vcholerae">vcholerae</option>
                 <option value="vcholerae_2">vcholerae_2</option>
@@ -282,6 +304,7 @@
                 <option value="vvulnificus">vvulnificus</option>
                 <option value="wolbachia">wolbachia</option>
                 <option value="xfastidiosa">xfastidiosa</option>
+                <option value="yersinia">yersinia</option>
                 <option value="ypseudotuberculosis_achtman_3">ypseudotuberculosis_achtman_3</option>
                 <option value="yruckeri">yruckeri</option>
             </param>
