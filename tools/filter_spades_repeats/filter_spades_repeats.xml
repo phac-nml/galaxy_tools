@@ -1,5 +1,8 @@
 <tool id="filter_spades_repeat" name="Filter SPAdes repeats" version="1.0.1">
 	<description>Remove short and repeat contigs/scaffolds</description>
+	<xrefs>
+    		<xref type="bio.tools">filter_spades_repeats</xref>
+        </xrefs>
 	<requirements>
 		<requirement type="package" version="1.6.924">perl-bioperl</requirement>
 	</requirements>
