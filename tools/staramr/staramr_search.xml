@@ -1,7 +1,7 @@
 <tool id="staramr_search" name="staramr" version="@VERSION@+galaxy0" profile="25.1">
     <description>Scans genome assemblies against the ResFinder, PlasmidFinder, and PointFinder databases searching for AMR genes.</description>
     <macros>
-        <token name="@VERSION@">0.12.1</token>
+        <token name="@VERSION@">0.12.2</token>
     </macros>
     <xrefs>
         <xref type="bio.tools">staramr</xref>
