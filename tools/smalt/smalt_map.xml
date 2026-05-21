@@ -4,6 +4,9 @@
       <token name="@VERSION@">0.7.6</token>
       <token name="@INPUT_TYPES@">fastq,fastq.gz,fastqsanger,fastqsanger.gz</token>
     </macros>
+    <xrefs>
+      <xref type="bio.tools">smalt</xref>
+    </xrefs>
     <requirements>
       <requirement type="package" version="@VERSION@">smalt</requirement>
       <requirement type="package" version="1.10">samtools</requirement>
