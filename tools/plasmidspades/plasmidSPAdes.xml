@@ -1,5 +1,8 @@
 <tool id="plasmidspades" name="plasmidspades" version="1.1">
   <description>genome assembler for plasmids</description>
+  <xrefs>
+    <xref type="bio.tools">plasmidspades</xref>
+  </xrefs>
   <requirements>
     <requirement type="package" version="3.9.0">spades</requirement>
   </requirements>

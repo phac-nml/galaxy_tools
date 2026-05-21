@@ -2,3 +2,4 @@ categories: [Assembly]
 description: Genome assembler for assemblying plasmid
 name: plasmidspades
 owner: nml
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/tools/plasmidspades
