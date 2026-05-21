@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<tool id="kat_@EXECUTABLE@" name="KAT @EXECUTABLE@" version="@VERSION@.2">
+<tool id="kat_@EXECUTABLE@" name="KAT @EXECUTABLE@" version="@VERSION@.2+galaxy1">
   <description> Estimates the coverage of each sequence in a file using K-mers from another sequence file(s).</description>
   <macros>
     <token name="@EXECUTABLE@">sect</token>
@@ -12,28 +12,28 @@
 
   cp "$db" db.fasta &&
   #if $single_or_paired.type == "single"
-    ln "$input_se" read.fastq && 
+    ln -s "$input_se" read.fastq &&
     kat sect 'db.fasta'
     read.fastq
   #elif $single_or_paired.type == "paired"
-    ln "$single_or_paired.forward_pe" read_1.fastq && ln "$single_or_paired.reverse_pe" read_2.fastq &&
+    ln -s "$single_or_paired.forward_pe" read_1.fastq && ln -s "$single_or_paired.reverse_pe" read_2.fastq &&
     kat sect 'db.fasta'
     read_1.fastq read_2.fastq
   #else
-    ln "$single_or_paired.fastq_collection.forward" read_1.fastq && ln "$single_or_paired.fastq_collection.reverse" read_2.fastq &&
+    ln -s "$single_or_paired.fastq_collection.forward" read_1.fastq && ln -s "$single_or_paired.fastq_collection.reverse" read_2.fastq &&
     kat sect 'db.fasta'
     read_1.fastq read_2.fastq
-  #end if  
+  #end if
 
   @THREADS@
 
   --mer_len $kmer
-  
-  
+
+
   $keep_counts
-  
+
   -o results
-  
+
   ]]></command>
   <inputs>
     <expand macro="macro_input" />
@@ -61,12 +61,12 @@
       <param name="keep_counts" value="True" />
       <output file="kat-sect-stats.tsv" name="stats" />
       <output file="kat-sect-counts.cvg" name="counts" />
-    </test>    
+    </test>
   </tests>
   <help><![CDATA[
   https://kat.readthedocs.io/en/latest/using.html#sect
 ]]>
-  
+
   </help>
   <expand macro="citations" />
 </tool>
