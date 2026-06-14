@@ -1,5 +1,8 @@
 <tool id="combine_stats" name="Combine AssemblyStats" version="1.0">
   <description>Combines List Collection Assembly Statistics </description>
+  <xrefs>
+    <xref type="bio.tools">combine_assembly_stats</xref>
+  </xrefs>
   <requirements>
     <requirement type="package" version="2.49">perl-getopt-long</requirement>
   </requirements>  
