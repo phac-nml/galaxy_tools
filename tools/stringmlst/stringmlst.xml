@@ -1,5 +1,8 @@
 <tool id="stringmlst" name="StringMLST" version="1.1.0">
   <description>k-mer tool for multilocus sequence typing</description>
+  <xrefs>
+    <xref type="bio.tools">stringmlst</xref>
+  </xrefs>
   <requirements>
     <requirement type="package" version="0.4.1">stringMLST</requirement>
     <requirement type="package" version="1.70">biopython</requirement>

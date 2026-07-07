@@ -2,3 +2,5 @@ categories: [Sequence Analysis]
 description: Rapid and accurate identification of the sequence type (ST)
 name: stringmlst
 owner: nml
+homepage_url: http://jordan.biology.gatech.edu/page/software/stringmlst/index.html
+remote_repository_url: https://github.com/phac-nml/galaxy_tools/tree/master/tools/stringmlst
