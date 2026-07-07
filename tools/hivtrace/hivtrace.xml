@@ -4,6 +4,11 @@
   <requirements>
     <requirement type="package" version="0.1.4">hivtrace</requirement>
   </requirements>
+  <xml name="xrefs">
+    <xrefs>
+      <xref type="bio.tools">hivtrace</xref>
+    </xrefs>
+  </xml>
   <stdio>
     <exit_code range="1:" />
   </stdio>
