@@ -2,6 +2,9 @@
     <macros>
         <token name="@VERSION@">0.1.4.1</token>
     </macros>
+    <xrefs>
+        <xref type="bio.tools">mykrobe_parser</xref>
+      </xrefs>
     <requirements>
         <requirement type="package" version="3.4.1">r-base</requirement>
         <requirement type="package" version="1.5.0">r-jsonlite</requirement>
