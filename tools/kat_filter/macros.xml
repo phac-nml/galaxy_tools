@@ -5,6 +5,11 @@
       <requirement type="package" version="2.3.1">kat</requirement>
     </requirements>
   </xml>
+  <xml name="biotools">
+    <xrefs>
+      <xref type="bio.tools">kat</xref>
+    </xrefs>
+  </xml>
   <xml name="stdio">
     <stdio>
       <exit_code range="1:" />
