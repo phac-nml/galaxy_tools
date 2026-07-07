@@ -1,5 +1,8 @@
 <tool id="srst2" name="SRST2" version="0.3.7">
     <description>Short Read Sequence Typing for Bacterial Pathogens</description>
+    <xrefs>
+        <xref type="bio.tools">srst2</xref>
+    </xrefs>
     <requirements>
         <requirement type="package" version="0.1.4.6">srst2</requirement>
         <requirement type="package" version="08-07-2014">vfdb</requirement>
